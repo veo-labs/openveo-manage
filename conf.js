@@ -13,8 +13,8 @@ module.exports = {
   },
   permissions: [
     {
-      id: 'manage-access-todo-page',
-      name: 'MANAGE.PERMISSIONS.ACCESS_TODO_PAGE_NAME'
+      id: 'manage-access-page',
+      name: 'MANAGE.PERMISSIONS.ACCESS_PAGE_NAME'
     }
   ],
   backOffice: {
@@ -24,17 +24,21 @@ module.exports = {
         label: 'MANAGE.MENU.MANAGE',
         subMenu: [
           {
-            label: 'MANAGE.MENU.TODO',
-            path: 'manage/todo',
-            permission: 'manage-access-todo-page'
+            label: 'MANAGE.MENU.MANAGE',
+            path: 'manage',
+            permission: 'manage-access-page'
           }
         ]
       }
     ],
     scriptLibFiles: {
-      base: [],
+      base: [
+        '/manage/lib/interact.js/dist/interact.min.js'
+      ],
       dev: [],
-      prod: []
+      prod: [
+        '/manage/be/js/libOpenveoManage.js'
+      ]
     },
     scriptFiles: {
       base: [],

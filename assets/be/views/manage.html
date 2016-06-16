@@ -2,23 +2,43 @@
   <h2 ng-bind="'MANAGE.TITLE' | translate"></h2>
   <div class="well well-lg" ng-bind="'MANAGE.INFO' | translate"></div>
 
-  <div class="todo" ng-bind="todo.datas"></div>
-
-  <div ui-tree="options">
-    <div ui-tree-nodes ng-model="devices">
-      <div class="col-sm-3" ng-repeat="device in devices" ui-tree-node ng-include="'devices_renderer.html'"></div>
-    </div>
-  </div>
-
-  <!-- Nested device template -->
-  <script type="text/ng-template" id="devices_renderer.html">
-    <div ui-tree-handle>
-      <span ng-bind='device.name'></span>
-    </div>
-    <div ui-tree-nodes="options" ng-model="device.devices" ng-class="{hidden: collapsed}">
-      <div ng-repeat="device in device.devices" ui-tree-node ng-include="'devices_renderer.html'">
+  <div class="devices row">
+    <!-- Devices groups -->
+    <div class="device-group col-sm-4 col-md-3" ng-repeat="group in vm.groups track by group.id">
+      <div class="dropzone well" ng-attr-data-id="{{ group.id }}">
+        <span class="title" ng-bind="group.name"></span>
+        <span class="count">
+          {{ group.devices.length }}
+          <img class="mini-box" src="/manage/be/images/mini_device.png">
+        </span>
+        <div class="boxes">
+          <img class="box first" src="/manage/be/images/device.png">
+          <div class="second">
+            <img class="box" src="/manage/be/images/device.png">
+            <img class="box" src="/manage/be/images/device.png">
+          </div>
+        </div>
       </div>
     </div>
-  </script>
+    <!-- Devices -->
+    <div class="device col-sm-4 col-md-3" ng-repeat="device in vm.devices track by device.id">
+      <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device.state">
+        <span class="title" ng-bind="device.name"></span>
+      </div>
+      <div class="new-group well" ng-show="device.state == 'can-drop'">
+          <span class="count">
+            2
+            <img class="mini-box" src="/manage/be/images/mini_device.png">
+          </span>
+        <div class="boxes">
+          <img class="box first" src="/manage/be/images/device.png">
+          <div class="second">
+            <img class="box" src="/manage/be/images/device.png">
+            <img class="box" src="/manage/be/images/device.png">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>

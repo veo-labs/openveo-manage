@@ -72,9 +72,11 @@ util.inherits(ManagePlugin, openVeoAPI.Plugin);
  *  - **Error** An error if something went wrong, null otherwise
  */
 ManagePlugin.prototype.init = function(callback) {
-  var database = openVeoAPI.applicationStorage.getDatabase();
+
+  // var database = openVeoAPI.applicationStorage.getDatabase();
   var asyncFunctions = [];
   var providers = [
+
     // Set new providers
     // new ExampleProvider(database)
   ];
@@ -104,6 +106,7 @@ ManagePlugin.prototype.init = function(callback) {
 ManagePlugin.prototype.start = function(callback) {
   if (!process.isWebService) {
 
+    // TODO
   }
 
   callback();

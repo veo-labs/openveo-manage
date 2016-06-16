@@ -1,11 +1,8 @@
 {
 	"MENU": {
-		"TODO": "Manage exemple",
 		"MANAGE": "Manage"
 	},
-	"TODO": {
-		"PAGE_TITLE": "Manage exemple"
-	},
-	"TITLE": "Manage",
+  "PAGE_TITLE": "Manage",
+  "TITLE": "Manage",
 	"INFO": "Le manage supervise l'ensemble des encodeurs connectés. Il permet de gérer des groupes d'encodeurs, de lancer et d'arrêter les enregistrements, de marquer des points d'intérêt dans la vidéo, ainsi que de planifier des enregistrements différés."
 }

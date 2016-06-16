@@ -1,11 +1,100 @@
-/**
- * Import all modules CSS
- */
-
 .manage {
-	.todo {
-		font-weight: bold;
-		text-transform: uppercase;
-		color: red;
-	}
+  // Common
+  .device .well, .device-group .well {
+    border-radius: 4px;
+    min-height: 173px;
+    background-color: white;
+
+    /*&.drop-target {
+      z-index: 2;
+      position: relative;
+    }
+    &.drag {
+      z-index: 3;
+      position: relative;
+    }*/
+    .title {
+      color: $blue;
+      font-weight: 700;
+    }
+  }
+
+  // Device
+  .device {
+    position: relative;
+    perspective: 600px;
+    z-index: 2;
+    .well {
+      float: left;
+      width: 100%;
+    }
+
+    &:hover .new-group {
+      transform: rotateX(-55deg);
+    }
+
+    .new-group {
+      position: relative;
+      float: none;
+      transform-style: preserve-3d;
+      transform: rotateX(-55deg);
+      transform-origin: 0 100%;
+
+      &.ng-animate {
+        display: block !important;
+      }
+
+      &.ng-hide-remove {
+        @include flipOut(0deg, -55deg);
+      }
+      &.ng-hide-add {
+        @include flipIn(-55deg, 0deg);
+      }
+
+      .count {
+        position: absolute;
+        right: 10px;
+      }
+    }
+  }
+
+  // Groups
+  .device-group, .new-group {
+    .well {
+      position: relative;
+    }
+    .title {
+      width: 80%;
+      display: inline-block;
+    }
+    .count {
+      color: $grey;
+      float: right;
+      position: relative;
+      right: -8px;
+    }
+    .boxes {
+      bottom: 35px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      .first {
+        vertical-align: middle;
+        display: block;
+        margin: 0 auto 15px auto;
+      }
+      .second {
+        text-align: center;
+        .box {
+          &:first-child {
+            margin-right: 5px;
+          }
+          &:last-child {
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,6 +1,8 @@
 {
   "name": "openveo-manage",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "interact.js": "1.2.6"
+  },
   "devDependencies": {}
 }

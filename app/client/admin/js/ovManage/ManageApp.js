@@ -12,14 +12,15 @@
   app.config(['$routeProvider', function($routeProvider) {
 
     // route example
-    $routeProvider.when('/manage/todo', {
+    $routeProvider.when('/manage', {
       templateUrl: '/manage/be/views/manage.html',
       controller: 'ManageController',
-      title: 'MANAGE.TODO.PAGE_TITLE',
-      access: 'manage-access-todo-page',
+      controllerAs: 'vm',
+      title: 'MANAGE.PAGE_TITLE',
+      access: 'manage-access-page',
       resolve: {
-        datas: ['manageService', function(manageService) {
-          return manageService.loadDatas();
+        results: ['manageService', function(manageService) {
+          return manageService.loadDevices();
         }]
       }
     });

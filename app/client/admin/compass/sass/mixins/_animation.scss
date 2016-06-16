@@ -30,3 +30,42 @@
   animation-fill-mode: #{$fill-mode};
   animation-delay: #{$delay};
 }
+
+/**
+ * Mixin used to manage device and boxes
+ */
+@mixin flipIn($deg0, $deg100){
+  animation: 0.6s flipIn ease;
+
+  @keyframes flipIn {
+    0% {
+      transform: rotateX($deg0);
+      transform-origin: 0 100%;
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+      transform: rotateX($deg100);
+      transform-origin: 0 0;
+    }
+  }
+}
+
+@mixin flipOut($deg0, $deg100) {
+  animation:0.6s flipOut ease;
+
+  @keyframes flipOut {
+    0% {
+      opacity: 0;
+      transform: rotateX($deg0);
+      transform-origin: 0 0;
+    }
+
+    100% {
+      transform: rotateX($deg100);
+      transform-origin: 0 100%;
+      opacity: 1;
+    }
+  }
+}
