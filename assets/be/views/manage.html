@@ -22,10 +22,13 @@
     </div>
     <!-- Devices -->
     <div class="device col-sm-4 col-md-3" ng-repeat="device in vm.devices track by device.id">
-      <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device.state">
+      <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
         <span class="title" ng-bind="device.name"></span>
+        <div class="equipments">
+          <span class=""></span>
+        </div>
       </div>
-      <div class="new-group well" ng-show="device.state == 'can-drop'">
+      <div class="new-group well" ng-show="device['ui-state'].indexOf('can-drop') > -1">
           <span class="count">
             2
             <img class="mini-box" src="/manage/be/images/mini_device.png">
@@ -42,3 +45,5 @@
   </div>
 
 </div>
+
+{{ vm.devices }}

@@ -12,33 +12,35 @@
     self.groups = results.groups;
 
     /**
-     * Define a state for a device
+     * Define an ui-state for a device
      *
      * @param target The target device or group
-     * @param {String} state The state to set for the device
+     * @param {String} uiState The ui-state to set for the device
      */
-    function setState(target, state) {
+    function setUiState(target, uiState) {
       var element = (angular.element(target).scope().device) ?
         angular.element(target).scope().device : angular.element(target).scope().groups;
 
-      if (!element.state) {
-        element.state = [];
+      if (!element['ui-state']) {
+        element['ui-state'] = [];
       }
-      element.state.push(state);
+      element['ui-state'].push(uiState);
       $scope.$apply();
+      console.log(element);
     }
 
     /**
-     * Remove a state for a device
+     * Remove a ui-state for a device
      *
      * @param target The target device or group
-     * @param {String} state The state to remove for the device
+     * @param {String} uiState The ui-state to remove for the device
      */
-    function removeState(target, state) {
+    function removeUiState(target, uiState) {
       var element = (angular.element(target).scope().device) ?
         angular.element(target).scope().device : angular.element(target).scope().groups;
+      var index = element['ui-state'].indexOf(uiState);
 
-      element.state.pop(state);
+      element['ui-state'].splice(index, 1);
       $scope.$apply();
     }
 
@@ -104,7 +106,7 @@
         transform: 'translate(' + x + 'px, ' + y + 'px)'
       });
 
-      removeState(target, 'can-drop');
+      removeUiState(target, 'can-drop');
     }
 
     /**
@@ -125,7 +127,7 @@
         onstart: function(event) {
           var element = angular.element(event.target);
 
-          setState(event.target, 'drag');
+          setUiState(event.target, 'drag');
 
           // Set transition duration for reset
           element.css({
@@ -143,7 +145,7 @@
           var target = event.target;
 
           if (!angular.element(target).hasClass('drop-target')) {
-            removeState(target, 'drag');
+            removeUiState(target, 'drag');
             resetPosition(target);
           }
         }
@@ -163,12 +165,12 @@
         overlap: 0.25,
 
         ondragenter: function(event) {
-          setState(event.target, 'can-drop');
-          setState(event.relatedTarget, 'drop-target');
+          setUiState(event.target, 'can-drop');
+          setUiState(event.relatedTarget, 'drop-target');
         },
         ondragleave: function(event) {
-          removeState(event.relatedTarget, 'drop-target');
-          removeState(event.target, 'can-drop');
+          removeUiState(event.relatedTarget, 'drop-target');
+          removeUiState(event.target, 'can-drop');
         },
         ondrop: function(event) {
           mergePosition(event.target, event.relatedTarget);
