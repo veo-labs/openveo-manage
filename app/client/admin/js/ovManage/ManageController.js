@@ -26,7 +26,6 @@
       }
       element['ui-state'].push(uiState);
       $scope.$apply();
-      console.log(element);
     }
 
     /**
