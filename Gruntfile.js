@@ -49,6 +49,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
+  grunt.loadNpmTasks('grunt-spritesmith');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-eslint');
@@ -64,7 +65,7 @@ module.exports = function(grunt) {
   grunt.registerTask('concatPlugin', ['uglify:dist', 'concat:lib', 'concat:js']);
 
   // Prepare project for production
-  grunt.registerTask('prod', ['compass:dist', 'concatPlugin']);
+  grunt.registerTask('prod', ['compass:dist', 'sprite', 'concatPlugin']);
 
   // Generate documentation
   grunt.registerTask('doc', ['remove:doc', 'mkdocs', 'yuidoc', 'rename:doc']);
