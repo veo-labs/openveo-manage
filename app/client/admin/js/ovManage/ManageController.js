@@ -10,6 +10,7 @@
 
     self.devices = results.devices;
     self.groups = results.groups;
+    self.refusedDevices = results.refusedDevices;
 
     /**
      * Define an ui-state for a device
@@ -19,7 +20,7 @@
      */
     function setUiState(target, uiState) {
       var element = (angular.element(target).scope().device) ?
-        angular.element(target).scope().device : angular.element(target).scope().groups;
+        angular.element(target).scope().device : angular.element(target).scope().group;
 
       if (!element['ui-state']) {
         element['ui-state'] = [];
@@ -36,7 +37,7 @@
      */
     function removeUiState(target, uiState) {
       var element = (angular.element(target).scope().device) ?
-        angular.element(target).scope().device : angular.element(target).scope().groups;
+        angular.element(target).scope().device : angular.element(target).scope().group;
       var index = element['ui-state'].indexOf(uiState);
 
       element['ui-state'].splice(index, 1);
@@ -184,6 +185,18 @@
         }
       });
     }
+
+    /**
+     * Add a refused device to the accepted device
+     * @param device
+     */
+    self.addToAcceptedDevice = function(device) {
+      manageService.acceptDevice(device).then(function(results) {
+        self.devices = results.devices;
+        self.refusedDevices = results.refusedDevices;
+        $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.REFUSED.REMOVE_SUCCESS'), 4000);
+      });
+    };
 
     draggable();
     dragDropDevice();

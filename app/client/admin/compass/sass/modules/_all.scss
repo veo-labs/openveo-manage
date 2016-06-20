@@ -1,4 +1,7 @@
+@import "sprite";
+
 .manage {
+
   // Common
   .device .well, .device-group .well {
     border-radius: 4px;
@@ -19,6 +22,59 @@
     .well {
       float: left;
       width: 100%;
+      position: relative;
+    }
+
+    .equipments {
+      position: absolute;
+      bottom: 60px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      text-align: center;
+      .camera {
+        display: inline-block;
+        vertical-align: middle;
+        &.ok {
+          @include sprite($camera-ok);
+        }
+        &.ko {
+          @include sprite($camera-ko);
+        }
+        &.disconnected {
+          @include sprite($camera-disconnected);
+        }
+      }
+      .box {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 15px;
+        &.ok {
+          @include sprite($device-ok);
+        }
+        &.ko {
+          @include sprite($device-ko);
+        }
+        &.disconnected {
+          @include sprite($device-disconnected);
+        }
+        &.starting {
+          @include sprite($device-starting);
+        }
+      }
+      .screen {
+        display: inline-block;
+        vertical-align: middle;
+        &.ok {
+          @include sprite($screen-ok);
+        }
+        &.ko {
+          @include sprite($screen-ko);
+        }
+        &.disconnected {
+          @include sprite($screen-disconnected);
+        }
+      }
     }
 
     &:hover .new-group {
@@ -46,14 +102,28 @@
       .count {
         position: absolute;
         right: 10px;
+        .mini-box {
+          display: inline-block;
+          vertical-align: middle;
+          @include sprite($mini-device);
+        }
       }
     }
   }
 
   // Groups
   .device-group, .new-group {
+    z-index: 3;
+    perspective: 600px;
     .well {
       position: relative;
+      transform-style: preserve-3d;
+      transition: all .6s ease;
+
+      &.can-drop {
+        transform: rotateX(-55deg);
+        transform-origin: 0 100%;
+      }
     }
     .title {
       width: 80%;
@@ -64,6 +134,11 @@
       float: right;
       position: relative;
       right: -8px;
+      .mini-box {
+        display: inline-block;
+        vertical-align: middle;
+        @include sprite($mini-device);
+      }
     }
     .boxes {
       bottom: 35px;
@@ -72,6 +147,7 @@
       right: 0;
       margin: auto;
       .first {
+        @include sprite($device-ok);
         vertical-align: middle;
         display: block;
         margin: 0 auto 15px auto;
@@ -79,6 +155,8 @@
       .second {
         text-align: center;
         .box {
+          @include sprite($device-ok);
+          display: inline-block;
           &:first-child {
             margin-right: 5px;
           }
@@ -86,6 +164,41 @@
             margin-left: 5px;
           }
         }
+      }
+    }
+  }
+
+  // Refused devices
+  .refused-device {
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      padding-left: 15px;
+      color: $blue;
+    }
+    .title {
+      color: $disable-grey !important;
+    }
+    .accept {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background-color: $green;
+      border: 0;
+      border-radius: 4px;
+      padding: 7px 17px;
+    }
+    button {
+      &:after{
+        content: '';
+        display: block;
+        width: 9px;
+        height: 16px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        transform: rotate(45deg);
+        border-radius: 3px;
+        margin-top: -2px;
       }
     }
   }

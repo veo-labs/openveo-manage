@@ -14,22 +14,23 @@
     // Mock
     var groups = [
 
-      // {
-      //   id: 21,
-      //   name: 'Groupe 1',
-      //   devices: [1, 2]
-      // }
+      {
+        id: 21,
+        name: 'Groupe 1',
+        devices: [1, 2]
+      }
     ];
 
     var devices = [
-      {
+
+      /* {
         id: 1,
         name: 'Veobox 1'
       },
       {
         id: 2,
         name: 'Veobox 2'
-      },
+      },*/
       {
         id: 3,
         name: 'Veobox 3'
@@ -56,6 +57,17 @@
       }
     ];
 
+    var refusedDevices = [
+      {
+        id: 44,
+        name: 'Veobox refused 44'
+      },
+      {
+        id: 45,
+        name: 'Veobox refused 45'
+      }
+    ];
+
     /**
      * Loads devices from server
      *
@@ -67,12 +79,14 @@
         return $http.get(basePath + 'devices').then(function(results) {
           devices = results.devices;
           groups = results.groups;
+          refusedDevices = results.refusedDevices;
         });
       }
 
       return $q.when({
         groups: groups,
-        devices: devices
+        devices: devices,
+        refusedDevices: refusedDevices
       });
     }
 
@@ -85,13 +99,12 @@
      * @method groupDevices
      */
     function groupDevices(draggableId, dropzoneId) {
-      // TODO tester si dropzone est un group
 
       // var deferred = $q.defer();
 
       // TODO : $http.post
 
-      // Add devices to a new group
+      // Add devices to group
       groups.push({
         id: parseInt(draggableId + dropzoneId),
         name: 'Groupe ' + draggableId + '_' + dropzoneId,
@@ -110,9 +123,30 @@
 
     }
 
+    /**
+     * Add a refused device to the accepted list of devices
+     *
+     * @param device
+     * @returns {*}
+     */
+    function acceptDevice(device) {
+
+      refusedDevices = refusedDevices.filter(function(refusedDevice) {
+        return (refusedDevice.id != device.id);
+      });
+
+      devices.push(device);
+
+      return $q.when({
+        refusedDevices: refusedDevices,
+        devices: devices
+      });
+    }
+
     return {
       loadDevices: loadDevices,
-      groupDevices: groupDevices
+      groupDevices: groupDevices,
+      acceptDevice: acceptDevice
     };
 
   }

@@ -5,17 +5,17 @@
   <div class="devices row">
     <!-- Devices groups -->
     <div class="device-group col-sm-4 col-md-3" ng-repeat="group in vm.groups track by group.id">
-      <div class="dropzone well" ng-attr-data-id="{{ group.id }}">
+      <div class="dropzone well" ng-attr-data-id="{{ group.id }}" ng-class="group['ui-state']">
         <span class="title" ng-bind="group.name"></span>
         <span class="count">
           {{ group.devices.length }}
-          <img class="mini-box" src="/manage/be/images/mini_device.png">
+          <span class="mini-box"></span>
         </span>
         <div class="boxes">
-          <img class="box first" src="/manage/be/images/device.png">
+          <span class="box first"></span>
           <div class="second">
-            <img class="box" src="/manage/be/images/device.png">
-            <img class="box" src="/manage/be/images/device.png">
+            <span class="box"></span>
+            <span class="box"></span>
           </div>
         </div>
       </div>
@@ -25,21 +25,37 @@
       <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
         <span class="title" ng-bind="device.name"></span>
         <div class="equipments">
-          <span class=""></span>
+          <span class="camera ok"></span>
+          <span class="box ok"></span>
+          <span class="screen ok"></span>
         </div>
       </div>
       <div class="new-group well" ng-show="device['ui-state'].indexOf('can-drop') > -1">
           <span class="count">
             2
-            <img class="mini-box" src="/manage/be/images/mini_device.png">
+            <span class="mini-box"></span>
           </span>
         <div class="boxes">
-          <img class="box first" src="/manage/be/images/device.png">
+          <span class="box first"></span>
           <div class="second">
-            <img class="box" src="/manage/be/images/device.png">
-            <img class="box" src="/manage/be/images/device.png">
+            <span class="box"></span>
+            <span class="box"></span>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Refused devices -->
+  <div class="refused-device row" ng-if="vm.refusedDevices.length">
+    <h3 ng-bind="'MANAGE.REFUSED.TITLE' | translate"></h3>
+    <div class="device col-sm-4 col-md-3" ng-repeat="device in vm.refusedDevices track by device.id">
+      <div class="well" ng-attr-data-id="{{ device.id }}">
+        <span class="title" ng-bind="device.name"></span>
+        <div class="equipments">
+          <span class="box disconnected"></span>
+        </div>
+        <button class="accept" ng-click="vm.addToAcceptedDevice(device)"></button>
       </div>
     </div>
   </div>
