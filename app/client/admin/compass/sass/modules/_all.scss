@@ -1,17 +1,15 @@
 @import "sprite";
+@import "device-detail";
 
-.manage {
-
-  // Common
-  .device .well, .device-group .well {
-    border-radius: 4px;
-    min-height: 173px;
-    background-color: white;
-
-    .title {
-      color: $blue;
-      font-weight: 700;
-    }
+.manage-container {
+  width: 100%;
+  padding-right: 0;
+  transition: all .5s ease;
+  &.small {
+    padding-right: 300px;
+  }
+  &.medium {
+    padding-right: 300px;
   }
 
   // Device
@@ -32,6 +30,7 @@
       right: 0;
       margin: auto;
       text-align: center;
+      z-index: 1;
       .camera {
         display: inline-block;
         vertical-align: middle;
@@ -75,6 +74,31 @@
           @include sprite($screen-disconnected);
         }
       }
+
+      @include progress(1);
+      .progress-radial {
+        position: absolute;
+        right: 0;
+        left: -3px;
+        bottom: -32px;
+        margin: auto;
+        width: 86px;
+        height: 86px;
+        border-radius: 50%;
+        border: 2px solid white;
+        background-color: $green;
+        z-index: -1;
+
+        .overlay {
+          position: absolute;
+          width: 64px;
+          height: 64px;
+          background-color: white;
+          border-radius: 50%;
+          margin-left: 9px;
+          margin-top: 9px;
+        }
+      }
     }
 
     &:hover .new-group {
@@ -115,6 +139,7 @@
   .device-group, .new-group {
     z-index: 3;
     perspective: 600px;
+    position: relative;
     .well {
       position: relative;
       transform-style: preserve-3d;
@@ -126,7 +151,7 @@
       }
     }
     .title {
-      width: 80%;
+      width: 78%;
       display: inline-block;
     }
     .count {
@@ -169,12 +194,12 @@
   }
 
   // Refused devices
-  .refused-device {
+  .refused-devices {
     h3 {
       font-size: 16px;
       font-weight: 700;
       padding-left: 15px;
-      color: $blue;
+      color: $dark-blue;
     }
     .title {
       color: $disable-grey !important;
@@ -200,6 +225,35 @@
         border-radius: 3px;
         margin-top: -2px;
       }
+    }
+  }
+
+  // Common
+  .device, .device-group {
+    &.small {
+      width: 50%;
+    }
+    &.medium {
+      width: 33.33333%;
+    }
+    .well {
+      min-height: 173px;
+      background-color: white;
+      transition-duration: .5s;
+    }
+    .selected {
+      background-color: $selected-grey;
+      .progress-radial {
+        border: 2px solid $selected-grey;
+        .overlay {
+          background-color: $selected-grey;
+        }
+      }
+    }
+
+    .title {
+      color: $dark-blue;
+      font-weight: 700;
     }
   }
 }

@@ -1,0 +1,116 @@
+.device-detail {
+  position: fixed;
+  right: 0;
+  top: 50px;
+  height: 100%;
+  width: 300px;
+  margin-right: -300px;
+  transition: all .5s ease;
+  background-color: $selected-grey;
+  overflow: hidden;
+
+  &.opened {
+    margin-right: 0;
+  }
+
+  .header {
+    background-color: $black-detail;
+    color: white;
+    font-weight: 500;
+    .menu {
+      margin: 0;
+      padding: 0;
+      .item {
+        display: inline-block;
+        & > span {
+          display: inline-block;
+          height: 40px;
+          line-height: 45px;
+          cursor: pointer;
+          text-align: center;
+          width: 75px;
+        }
+        &.action:hover ~ hr {
+          margin-left: 0 !important;
+        }
+        &.detail:hover ~ hr {
+          margin-left: 79px !important;
+        }
+        &.history:hover ~ hr {
+          margin-left: 158px !important;
+        }
+        &.detail.active ~ hr {
+          margin-left: 79px;
+        }
+        &.history.active ~ hr {
+          margin-left: 158px;
+        }
+      }
+      hr {
+        height: 5px;
+        width: 75px;
+        margin: 0;
+        background: $blue;
+        border: none;
+        transition: .3s ease-in-out;
+      }
+    }
+    .exit {
+      height: 21px;
+      width: 21px;
+      border: 1px solid white;
+      vertical-align: middle;
+      right: 10px;
+      top: 12px;
+      position: absolute;
+      cursor: pointer;
+
+      &:before, &:after {
+        position: absolute;
+        left: 9px;
+        top: 3px;
+        content: ' ';
+        height: 13px;
+        width: 1px;
+        background-color: white;
+      }
+      &:before {
+        transform: rotate(45deg);
+      }
+      &:after {
+        transform: rotate(-45deg);
+      }
+
+    }
+  }
+
+  // Content
+  .content {
+    position: relative;
+    height: 100%;
+    width: 900px;
+    transition: all .6s ease;
+    &.first {
+      left: 0;
+    }
+    &.second {
+      left: -300px;
+    }
+    &.third {
+      left: -600px;
+    }
+    .page {
+      position: absolute;
+      top: 0;
+      width: 300px;
+      display: inline-block;
+
+      &.detail-page {
+        left: 300px;
+      }
+      &.history-page {
+        left: 600px;
+      }
+    }
+  }
+}

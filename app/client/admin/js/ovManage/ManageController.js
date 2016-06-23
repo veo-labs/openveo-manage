@@ -5,12 +5,16 @@
   /**
    * Defines the manage controller
    */
-  function ManageController($scope, $filter, $timeout, results, manageService) {
-    var self = this;
+  function ManageController($scope, $filter, $timeout, $window, results, manageService, deviceService) {
+    var self = this,
+      openedDevice = null;
+
+    $scope.deviceSelected = false;
 
     self.devices = results.devices;
     self.groups = results.groups;
     self.refusedDevices = results.refusedDevices;
+    self.resize = 'normal';
 
     /**
      * Define an ui-state for a device
@@ -30,7 +34,7 @@
     }
 
     /**
-     * Remove a ui-state for a device
+     * Remove an ui-state for a device
      *
      * @param target The target device or group
      * @param {String} uiState The ui-state to remove for the device
@@ -43,6 +47,32 @@
       element['ui-state'].splice(index, 1);
       $scope.$apply();
     }
+
+    /**
+     * Remove an ui-state from all devices
+     * @param uiState
+     */
+    function clearUiState(uiState) {
+      var index;
+
+      self.groups.map(function(group) {
+        if (group['ui-state']) {
+          index = group['ui-state'].indexOf(uiState);
+          if (index > -1) {
+            group['ui-state'].splice(index, 1);
+          }
+        }
+      });
+      self.devices.map(function(device) {
+        if (device['ui-state']) {
+          index = device['ui-state'].indexOf(uiState);
+          if (index > -1) {
+            device['ui-state'].splice(index, 1);
+          }
+        }
+      });
+    }
+
 
     /**
      * Move element on drag
@@ -73,8 +103,8 @@
 
       // Set transition duration for reset
       element.css({
-        '-webkit-transition-duration': '1s',
-        'transition-duration': '1s',
+        '-webkit-transition-duration': '.5s',
+        'transition-duration': '.5s',
         '-webkit-transform': 'translate(0, 0)',
         transform: 'translate(0, 0)'
       });
@@ -187,6 +217,64 @@
     }
 
     /**
+     * Permits to organize the view when the details is opened/closed
+     *
+     * @param opening
+     */
+    function organizeLayout(opening) {
+
+      var screenWidth = $window.innerWidth,
+        containerWidth = parseInt(document.getElementsByClassName('manage-container')[0].offsetWidth + 30),
+        leftSpace = parseInt(screenWidth - containerWidth) / 2;
+
+      if (opening && leftSpace <= 300) {
+        if (containerWidth <= 750) {
+          self.resize = 'small';
+        } else {
+          self.resize = 'medium';
+        }
+      } else {
+        self.resize = 'normal';
+      }
+    }
+
+    /**
+     * Display the device/group detail on tile click
+     */
+    function clickDevice() {
+      interact('.device .well, .device-group .well').on('tap', function(event) {
+
+        var deviceId = event.currentTarget.getAttribute('data-id')
+          ;
+        if (!openedDevice) {
+          openedDevice = deviceId;
+          $scope.deviceSelected = true;
+          setUiState(event.currentTarget, 'selected');
+
+          // deviceService.setTarget(event.currentTarget);
+          // deviceService.getDetails(deviceId);
+        } else if (openedDevice == deviceId) {
+          openedDevice = null;
+          $scope.deviceSelected = false;
+          removeUiState(event.currentTarget, 'selected');
+
+          // deviceService.setTarget(event.currentTarget);
+        } else {
+          openedDevice = deviceId;
+          removeUiState(deviceService.getTarget(), 'selected');
+          clearUiState('selected');
+          setUiState(event.currentTarget, 'selected');
+
+          // deviceService.setTarget(event.currentTarget);
+          // deviceService.getDetails(deviceId);
+        }
+
+        organizeLayout($scope.deviceSelected);
+        $scope.$apply();
+      });
+    }
+
+    /**
      * Add a refused device to the accepted device
      * @param device
      */
@@ -198,11 +286,15 @@
       });
     };
 
+    // Manage drag and drop events
     draggable();
     dragDropDevice();
+
+    // Manage click events
+    clickDevice();
   }
 
   app.controller('ManageController', ManageController);
-  ManageController.$inject = ['$scope', '$filter', '$timeout', 'results', 'manageService'];
+  ManageController.$inject = ['$scope', '$filter', '$timeout', '$window', 'results', 'manageService', 'deviceService'];
 
 })(angular.module('ov.manage'));

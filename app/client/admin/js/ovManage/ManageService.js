@@ -33,27 +33,33 @@
       },*/
       {
         id: 3,
-        name: 'Veobox 3'
+        name: 'Veobox 3',
+        storage: 70
       },
       {
         id: 4,
-        name: 'Veobox 4'
+        name: 'Veobox 4',
+        storage: 59
       },
       {
         id: 5,
-        name: 'Veobox 5'
+        name: 'Veobox 5',
+        storage: 67
       },
       {
         id: 6,
-        name: 'Veobox 6'
+        name: 'Veobox 6',
+        storage: 14
       },
       {
         id: 7,
-        name: 'Veobox 7'
+        name: 'Veobox 7',
+        storage: 32
       },
       {
         id: 8,
-        name: 'Veobox 8'
+        name: 'Veobox 8',
+        storage: 95
       }
     ];
 

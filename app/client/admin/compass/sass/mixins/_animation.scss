@@ -69,3 +69,29 @@
     }
   }
 }
+
+// Mixin to manage progress bar
+@mixin progress($step) {
+  $barColor: tomato;
+  $backColor: #2f3439;
+
+  $loops: round(100 / $step);
+  $increment: 360 / $loops;
+  $half: round($loops / 2);
+  @for $i from 0 through $loops {
+    .progress-#{$i*$step} {
+      @if $i < $half {
+        $nextdeg: 90deg + ( $increment * $i );
+        background-image: linear-gradient(90deg, $light-green 50%, transparent 50%, transparent), linear-gradient($nextdeg, $green 50%, $light-green 50%, $light-green 50%);
+      } @else {
+        @if $i*$step <= 75 {
+          $nextdeg: -90deg + ( $increment * ( $i - $half ) );
+          background-image: linear-gradient($nextdeg, $orange 50%, transparent 50%, transparent), linear-gradient(270deg, $orange 50%, $light-green 50%, $light-green);
+        } @else {
+          $nextdeg: -90deg + ( $increment * ( $i - $half ) );
+          background-image: linear-gradient($nextdeg, $red 50%, transparent 50%, transparent), linear-gradient(270deg, $red 50%, $light-green 50%, $light-green);
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,8 @@
 /**
  * Initialize stylesheet with base CSS, mixins and helper, then your css, and extern css package
  */
+@import "compass/css3/transition";
+
 @import "base/base";
 
 // add support responsive

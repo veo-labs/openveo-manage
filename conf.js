@@ -45,7 +45,9 @@ module.exports = {
       dev: [
         '/manage/ovManage/ManageApp.js',
         '/manage/ovManage/ManageController.js',
-        '/manage/ovManage/ManageService.js'
+        '/manage/ovManage/ManageService.js',
+        '/manage/ovManage/DeviceController.js',
+        '/manage/ovManage/DeviceService.js'
       ],
       prod: [
         '/manage/be/js/openveoManage.js'
