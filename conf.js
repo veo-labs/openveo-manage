@@ -15,6 +15,10 @@ module.exports = {
     {
       id: 'manage-access-page',
       name: 'MANAGE.PERMISSIONS.ACCESS_PAGE_NAME'
+    },
+    {
+      id: 'manage-group-detail-access-page',
+      name: 'MANAGE.PERMISSIONS.GROUP_DETAIL.ACCESS_PAGE_NAME'
     }
   ],
   backOffice: {

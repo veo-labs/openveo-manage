@@ -1,67 +1,8 @@
-<div class="manage-container" ng-class="vm.resize">
+<div class="manage-container {{ manageAnimation }}" ng-class="vm.resize">
   <h2 ng-bind="'MANAGE.TITLE' | translate"></h2>
   <div class="well well-lg" ng-bind="'MANAGE.INFO' | translate"></div>
 
-  <div class="devices row">
-    <!-- Devices groups -->
-    <div class="device-group col-sm-4 col-md-3" ng-repeat="group in vm.groups track by group.id" ng-class="vm.resize">
-      <div class="dropzone well" ng-attr-data-id="{{ group.id }}" ng-class="group['ui-state']"> <!--ng-dblclick=""-->
-        <span class="title" ng-bind="group.name"></span>
-        <span class="count">
-          {{ group.devices.length }}
-          <span class="mini-box"></span>
-        </span>
-        <div class="boxes">
-          <span class="box first"></span>
-          <div class="second">
-            <span class="box"></span>
-            <span class="box"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Devices -->
-    <div class="device col-sm-4 col-md-3" ng-repeat="device in vm.devices track by device.id" ng-class="vm.resize">
-      <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
-        <span class="title" ng-bind="device.name"></span>
-        <div class="equipments">
-          <span class="camera ok"></span>
-          <span class="box ok"></span>
-          <span class="screen ok"></span>
-          <div class="progress-radial" ng-class="'progress-' + device['storage']">
-            <div class="overlay"></div>
-          </div>
-        </div>
-      </div>
-      <div class="new-group well" ng-show="device['ui-state'].indexOf('can-drop') > -1">
-          <span class="count">
-            2
-            <span class="mini-box"></span>
-          </span>
-        <div class="boxes">
-          <span class="box first"></span>
-          <div class="second">
-            <span class="box"></span>
-            <span class="box"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Refused devices -->
-  <div class="refused-devices row" ng-if="vm.refusedDevices.length">
-    <h3 ng-bind="'MANAGE.REFUSED.TITLE' | translate"></h3>
-    <div class="device col-sm-4 col-md-3" ng-repeat="device in vm.refusedDevices track by device.id" ng-class="vm.resize">
-      <div class="well" ng-attr-data-id="{{ device.id }}">
-        <span class="title" ng-bind="device.name"></span>
-        <div class="equipments">
-          <span class="box disconnected"></span>
-        </div>
-        <button class="accept" ng-click="vm.addToAcceptedDevice(device)"></button>
-      </div>
-    </div>
-  </div>
+  <ng-include src="'/manage/be/views/partial/devices.html'"></ng-include>
 
 </div>
 

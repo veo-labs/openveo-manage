@@ -5,7 +5,7 @@
   /**
    * Defines the manage controller
    */
-  function ManageController($scope, $filter, $timeout, $window, results, manageService, deviceService) {
+  function ManageController($scope, $filter, $timeout, $window, $location, results, manageService, deviceService) {
     var self = this,
       openedDevice = null;
 
@@ -242,10 +242,20 @@
      * Display the device/group detail on tile click
      */
     function clickDevice() {
-      interact('.device .well, .device-group .well').on('tap', function(event) {
 
-        var deviceId = event.currentTarget.getAttribute('data-id')
-          ;
+      // Avoid to fired the same event multiple times
+      var events = interact('.device > .well, .device-group > .well')._iEvents;
+      if (Object.keys(events).length && events.tap) {
+        delete events.tap;
+      }
+
+      interact('.device > .well, .device-group > .well').on('tap', function(event) {
+        if (event.double) {
+          return;
+        }
+
+        var deviceId = event.currentTarget.getAttribute('data-id');
+
         if (!openedDevice) {
           openedDevice = deviceId;
           $scope.deviceSelected = true;
@@ -261,7 +271,8 @@
           // deviceService.setTarget(event.currentTarget);
         } else {
           openedDevice = deviceId;
-          removeUiState(deviceService.getTarget(), 'selected');
+
+          // removeUiState(deviceService.getTarget(), 'selected');
           clearUiState('selected');
           setUiState(event.currentTarget, 'selected');
 
@@ -275,6 +286,26 @@
     }
 
     /**
+     * Go to the group detail page on double click
+     */
+    function dbClickGroupDevices() {
+
+      // Avoid to fired the same event multiple times
+      var events = interact('.device-group > .well')._iEvents;
+      if (Object.keys(events).length && events.doubletap) {
+        delete events.doubletap;
+      }
+
+      interact('.device-group > .well').on('doubletap', function(event) {
+        $scope.deviceSelected = false;
+        clearUiState('selected');
+        $location.path('manage/group-detail/' + event.currentTarget.getAttribute('data-id'));
+        $scope.$apply();
+      });
+    }
+
+
+    /**
      * Add a refused device to the accepted device
      * @param device
      */
@@ -286,15 +317,35 @@
       });
     };
 
+    /**
+     * Go to the previous page
+     */
+    self.back = function() {
+      $scope.deviceSelected = false;
+      clearUiState('selected');
+      $window.history.back();
+    };
+
     // Manage drag and drop events
     draggable();
     dragDropDevice();
 
     // Manage click events
     clickDevice();
+    dbClickGroupDevices();
+
   }
 
   app.controller('ManageController', ManageController);
-  ManageController.$inject = ['$scope', '$filter', '$timeout', '$window', 'results', 'manageService', 'deviceService'];
+  ManageController.$inject = [
+    '$scope',
+    '$filter',
+    '$timeout',
+    '$window',
+    '$location',
+    'results',
+    'manageService',
+    'deviceService'
+  ];
 
 })(angular.module('ov.manage'));

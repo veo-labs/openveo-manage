@@ -21,6 +21,10 @@
       float: left;
       width: 100%;
       position: relative;
+      cursor: pointer;
+      &.draggable {
+        cursor: move;
+      }
     }
 
     .equipments {
@@ -142,6 +146,7 @@
     position: relative;
     .well {
       position: relative;
+      cursor: pointer;
       transform-style: preserve-3d;
       transition: all .6s ease;
 
@@ -203,6 +208,9 @@
     }
     .title {
       color: $disable-grey !important;
+    }
+    .device .well {
+      background-color: $disabled-white;
     }
     .accept {
       position: absolute;
@@ -275,4 +283,45 @@
       font-weight: 700;
     }
   }
+
+  // Group detail page
+  .back {
+    cursor: pointer;
+    .arrow {
+      position: relative;
+      display: inline-block;
+      width: 14px;
+      height: 16px;
+      color: $blue;
+      border-bottom: 2px solid $dark-blue;
+      border-right: 2px solid $dark-blue;
+      border-radius: 1px;
+      &:before, &:after {
+        display: block;
+        content: "";
+        position: absolute;
+        left: 4px;
+        background: $dark-blue;
+        width: 11px;
+        height: 2px;
+        top: 2px;
+        border-radius: 1px;
+      }
+      &:before {
+        transform: rotate(-45deg);
+      }
+      &:after {
+        transform: rotate(45deg);
+        left: 11px;
+      }
+    }
+    .group-title {
+      display: inline-block;
+      margin-left: 15px;
+      color: $dark-blue;
+      font-weight: bold;
+      font-size: 20px;
+    }
+  }
+
 }
