@@ -79,8 +79,9 @@
         }
       }
 
-      @include progress(1);
-      .progress-radial {
+      @keyframes load{0%{stroke-dashoffset:0}}
+      .progress-storage {
+        display: inline-block;
         position: absolute;
         right: 0;
         left: -3px;
@@ -88,19 +89,29 @@
         margin: auto;
         width: 86px;
         height: 86px;
-        border-radius: 50%;
-        border: 2px solid white;
-        background-color: $green;
-        z-index: -1;
-
-        .overlay {
-          position: absolute;
-          width: 64px;
-          height: 64px;
-          background-color: white;
-          border-radius: 50%;
-          margin-left: 9px;
-          margin-top: 9px;
+        padding: 0;
+        & > li {
+          display: inline-block;
+          position: relative;
+          text-align: center;
+          svg {
+            width: 86px;
+            height: 86px;
+            &:nth-child(2) {
+              position: absolute;
+              left: 0;
+              top: 0;
+              transform: rotate(-90deg);
+            }
+            &:nth-child(2) path {
+              fill: none;
+              stroke-width: 25;
+              stroke-dasharray: 629;
+              stroke: #fff;
+              opacity: .9;
+              animation: load 7s;
+            }
+          }
         }
       }
     }
@@ -323,5 +334,4 @@
       font-size: 20px;
     }
   }
-
 }

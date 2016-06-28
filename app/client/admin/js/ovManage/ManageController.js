@@ -10,6 +10,7 @@
       openedDevice = null;
 
     $scope.deviceSelected = false;
+    $scope.absUrl = $location.absUrl();
 
     self.devices = results.devices;
     self.groups = results.groups;
