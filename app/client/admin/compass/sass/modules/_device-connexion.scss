@@ -1,0 +1,36 @@
+.demands {
+  .device-connexion {
+    background-color: white;
+    .title {
+      color: $dark-blue;
+      font-weight: 700;
+    }
+    .mac {
+      color: $grey;
+    }
+    .device {
+      @include sprite($device-ok);
+      margin: 20px auto;
+    }
+    .choice {
+      text-align: center;
+      .refused {
+        position: relative;
+        height: 28px;
+        width: 43px;
+        @include refusedButton();
+        @include cross(16px, 2px);
+        margin-right: 5px;
+        &:before, &:after {
+          left: 0;
+          right: 0;
+          margin: auto;
+          top: 7px;
+        }
+      }
+      .accept {
+        @include acceptButton();
+      }
+    }
+  }
+}

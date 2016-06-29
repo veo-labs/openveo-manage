@@ -65,22 +65,12 @@
       position: absolute;
       cursor: pointer;
 
+      @include cross(13px, 1px);
+
       &:before, &:after {
-        position: absolute;
         left: 9px;
         top: 3px;
-        content: ' ';
-        height: 13px;
-        width: 1px;
-        background-color: white;
       }
-      &:before {
-        transform: rotate(45deg);
-      }
-      &:after {
-        transform: rotate(-45deg);
-      }
-
     }
   }
 

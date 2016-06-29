@@ -1,5 +1,6 @@
 @import "sprite";
 @import "device-detail";
+@import "device-connexion";
 
 .manage-container {
   width: 100%;
@@ -109,7 +110,7 @@
               stroke-dasharray: 629;
               stroke: #fff;
               opacity: .9;
-              animation: load 7s;
+              animation: load .5s;
             }
           }
         }
@@ -224,26 +225,10 @@
       background-color: $disabled-white;
     }
     .accept {
+      @include acceptButton();
       position: absolute;
       bottom: 10px;
       right: 10px;
-      background-color: $green;
-      border: 0;
-      border-radius: 4px;
-      padding: 7px 17px;
-    }
-    button {
-      &:after{
-        content: '';
-        display: block;
-        width: 9px;
-        height: 16px;
-        border: solid white;
-        border-width: 0 3px 3px 0;
-        transform: rotate(45deg);
-        border-radius: 3px;
-        margin-top: -2px;
-      }
     }
   }
 
