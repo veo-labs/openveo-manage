@@ -24,6 +24,25 @@ function createConfDir(callback) {
 }
 
 /**
+ * Creates general configuration file if it does not exist.
+ */
+function createConf(callback) {
+  var confFile = path.join(confDir, 'manageConf.json');
+
+  fs.exists(confFile, function(exists) {
+    if (exists) {
+      process.stdout.write(confFile + ' already exists\n');
+      callback();
+    } else {
+      var conf = {
+        namespace: '/veobox'
+      };
+      fs.writeFile(confFile, JSON.stringify(conf, null, '\t'), {encoding: 'utf8'}, callback);
+    }
+  });
+}
+
+/**
  * Creates loggers configuration file if it does not exist.
  */
 function createLoggerConf(callback) {
@@ -51,6 +70,7 @@ function createLoggerConf(callback) {
 // Launch installation
 async.series([
   createConfDir,
+  createConf,
   createLoggerConf
 ], function(error, results) {
   if (error)
