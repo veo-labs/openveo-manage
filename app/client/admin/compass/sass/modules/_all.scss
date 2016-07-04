@@ -13,6 +13,13 @@
     padding-right: 300px;
   }
 
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    padding-left: 15px;
+    color: $dark-blue;
+  }
+
   // Device
   .device {
     position: relative;
@@ -212,12 +219,6 @@
 
   // Refused devices
   .refused-devices {
-    h3 {
-      font-size: 16px;
-      font-weight: 700;
-      padding-left: 15px;
-      color: $dark-blue;
-    }
     .title {
       color: $disable-grey !important;
     }

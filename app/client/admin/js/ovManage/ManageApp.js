@@ -3,7 +3,8 @@
 (function(angular) {
 
   var app = angular.module('ov.manage', [
-    'ov.i18n'
+    'ov.i18n',
+    'ov.socketIO'
   ]);
 
   app.run(['$rootScope', function($rootScope) {
@@ -57,5 +58,7 @@
     });
 
   }]);
+
+  app.constant('manageName', 'manage');
 
 })(angular);

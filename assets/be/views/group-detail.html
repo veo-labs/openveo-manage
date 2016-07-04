@@ -8,7 +8,7 @@
     </div>
 
     <div class="devices row">
-        <div class="device col-sm-4 col-md-3" ng-repeat="device in vm.devices track by device.id" ng-class="vm.resize">
+        <div class="device col-sm-4 col-md-3" ng-repeat="device in devices track by device.id" ng-class="vm.resize">
             <div class="well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
                 <span class="title" ng-bind="device.name"></span>
                 <div class="equipments">

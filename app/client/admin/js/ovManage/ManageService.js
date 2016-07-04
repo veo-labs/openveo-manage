@@ -8,8 +8,7 @@
    * @module ov.manage
    * @class ManageService
    */
-  function ManageService($http, $q) {
-    var basePath = '/be/';
+  function ManageService($http, $q, entityService, manageName) {
 
     // Mock
     var groups = [
@@ -21,58 +20,41 @@
       }
     ];
 
-    var devices = [
+    var devices = null;
 
-      /* {
-        id: 1,
-        name: 'Veobox 1'
-      },
-      {
-        id: 2,
-        name: 'Veobox 2'
-      },*/
-      {
-        id: 3,
-        name: 'Veobox 3',
-        storage: 70
-      },
-      {
-        id: 4,
-        name: 'Veobox 4',
-        storage: 59
-      },
-      {
-        id: 5,
-        name: 'Veobox 5',
-        storage: 67
-      },
-      {
-        id: 6,
-        name: 'Veobox 6',
-        storage: 14
-      },
-      {
-        id: 7,
-        name: 'Veobox 7',
-        storage: 32
-      },
-      {
-        id: 8,
-        name: 'Veobox 8',
-        storage: 95
-      }
-    ];
+    /**
+     * Ordering devices from its state
+     *
+     * @param devices
+     * @private
+     * @returns {{devices: Array, pendingDevices: Array, refusedDevices: Array}}
+     */
+    function orderDevices(devices) {
+      var filteredDevices = {
+        acceptedDevices: [],
+        pendingDevices: [],
+        refusedDevices: []
+      };
 
-    var refusedDevices = [
-      {
-        id: 44,
-        name: 'Veobox refused 44'
-      },
-      {
-        id: 45,
-        name: 'Veobox refused 45'
-      }
-    ];
+      devices.map(function(device) {
+        if (!device.groups) {
+          switch (device.state) {
+            case 'accepted':
+              filteredDevices.acceptedDevices.push(device);
+              break;
+            case 'pending':
+              filteredDevices.pendingDevices.push(device);
+              break;
+            case 'refused':
+              filteredDevices.refusedDevices.push(device);
+              break;
+            default:
+          }
+        }
+      });
+
+      return filteredDevices;
+    }
 
     /**
      * Loads devices from server
@@ -82,17 +64,21 @@
      */
     function loadDevices() {
       if (!devices) {
-        return $http.get(basePath + 'devices').then(function(results) {
-          devices = results.devices;
-          groups = results.groups;
-          refusedDevices = results.refusedDevices;
+        var results = entityService.getAllEntities('devices', manageName).then(function(workingDevices) {
+          devices = orderDevices(workingDevices.data.entities);
+          devices.groups = groups; // TODO : Manage groups
+
+          return devices;
         });
+
+        return results;
       }
 
       return $q.when({
         groups: groups,
-        devices: devices,
-        refusedDevices: refusedDevices
+        acceptedDevices: devices.acceptedDevices,
+        refusedDevices: devices.refusedDevices,
+        pendingDevices: devices.pendingDevices
       });
     }
 
@@ -124,40 +110,44 @@
 
       return $q.when({
         groups: groups,
-        devices: devices
+        acceptedDevices: devices.acceptedDevices
       });
 
     }
 
     /**
-     * Add a refused device to the accepted list of devices
+     * Update the lists of devices after an update device state
      *
-     * @param device
+     * @param {Object} device The updated device
+     * @param {String} state The initial state of the updated device
+     * @param {Boolean} accepted The updated device go to the accepted or refused list
      * @returns {*}
      */
-    function acceptDevice(device) {
-
-      refusedDevices = refusedDevices.filter(function(refusedDevice) {
-        return (refusedDevice.id != device.id);
+    function updateDevicesList(device, state, accepted) {
+      var index = devices[state].findIndex(function(workingDevice) {
+        return workingDevice.id == device.id;
       });
 
-      devices.push(device);
+      devices[state].splice(index, 1);
 
-      return $q.when({
-        refusedDevices: refusedDevices,
-        devices: devices
-      });
+      if (accepted) {
+        devices.acceptedDevices.push(device);
+      } else {
+        devices.refusedDevices.push(device);
+      }
+
+      return $q.when(devices);
     }
 
     return {
       loadDevices: loadDevices,
       groupDevices: groupDevices,
-      acceptDevice: acceptDevice
+      updateDevicesList: updateDevicesList
     };
 
   }
 
   app.factory('manageService', ManageService);
-  ManageService.$inject = ['$http', '$q'];
+  ManageService.$inject = ['$http', '$q', 'entityService', 'manageName'];
 
 })(angular.module('ov.manage'));

@@ -1,11 +1,13 @@
-<div class="demands col-sm-3" ng-repeat="device in devicesConnexion track by device.id">
-  <div class="device-connexion well">
-    <div class="title">Demande de connexion de la</div>
-    <div class="mac">@Mac: </div>
-    <div class="device"></div>
-    <div class="choice">
-      <button class="refused"></button>
-      <button class="accept"></button>
+<div ng-controller="DeviceController as vm">
+  <div class="demands col-sm-3" ng-repeat="device in devicesConnexion track by device.id">
+    <div class="device-connexion well">
+      <div class="title">Demande de connexion de la</div>
+      <div class="mac">@Mac: </div>
+      <div class="device"></div>
+      <div class="choice">
+        <button class="refused" ng-click="vm.addToRefusedDevices(device, 'pendingDevices')"></button>
+        <button class="accept" ng-click="vm.addToAcceptedDevices(device, 'pendingDevices')"></button>
+      </div>
     </div>
   </div>
 </div>

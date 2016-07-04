@@ -5,16 +5,17 @@
   /**
    * Defines the manage controller
    */
-  function ManageController($scope, $filter, $timeout, $window, $location, results, manageService, deviceService) {
+  function ManageController($scope, $filter, $timeout, $window, $location, results, manageService) {
     var self = this,
       openedDevice = null;
 
     $scope.deviceSelected = false;
     $scope.absUrl = $location.absUrl();
+    $scope.groups = results.groups;
+    $scope.acceptedDevices = results.acceptedDevices;
+    $scope.refusedDevices = results.refusedDevices;
+    $scope.pendingDevices = results.pendingDevices;
 
-    self.devices = results.devices;
-    self.groups = results.groups;
-    self.refusedDevices = results.refusedDevices;
     self.resize = 'normal';
 
     /**
@@ -56,7 +57,7 @@
     function clearUiState(uiState) {
       var index;
 
-      self.groups.map(function(group) {
+      $scope.groups.map(function(group) {
         if (group['ui-state']) {
           index = group['ui-state'].indexOf(uiState);
           if (index > -1) {
@@ -64,7 +65,7 @@
           }
         }
       });
-      self.devices.map(function(device) {
+      $scope.acceptedDevices.map(function(device) {
         if (device['ui-state']) {
           index = device['ui-state'].indexOf(uiState);
           if (index > -1) {
@@ -208,8 +209,8 @@
           $timeout(function() {
             manageService.groupDevices(angular.element(event.relatedTarget).attr('data-id'),
             angular.element(event.target).attr('data-id')).then(function(results) {
-              self.groups = results.groups;
-              self.devices = results.devices;
+              $scope.groups = results.groups;
+              $scope.acceptedDevices = results.acceptedDevices;
               $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.GROUP.ADD_SUCCESS'), 4000);
             });
           }, 500);
@@ -312,8 +313,8 @@
      */
     self.addToAcceptedDevice = function(device) {
       manageService.acceptDevice(device).then(function(results) {
-        self.devices = results.devices;
-        self.refusedDevices = results.refusedDevices;
+        $scope.acceptedDevices = results.acceptedDevices;
+        $scope.refusedDevices = results.refusedDevices;
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.REFUSED.REMOVE_SUCCESS'), 4000);
       });
     };
@@ -334,7 +335,6 @@
     // Manage click events
     clickDevice();
     dbClickGroupDevices();
-
   }
 
   app.controller('ManageController', ManageController);
@@ -345,8 +345,7 @@
     '$window',
     '$location',
     'results',
-    'manageService',
-    'deviceService'
+    'manageService'
   ];
 
 })(angular.module('ov.manage'));
