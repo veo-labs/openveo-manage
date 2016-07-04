@@ -2,14 +2,12 @@
 
 module.exports = {
   routes: {
-    public: {
-    },
-    private: {
-    },
-    ws: {
-    }
+    public: {},
+    private: {},
+    ws: {}
   },
   entities: {
+    devices: 'app/server/controllers/DeviceController'
   },
   permissions: [
     {
@@ -37,7 +35,8 @@ module.exports = {
     ],
     scriptLibFiles: {
       base: [
-        '/manage/lib/interact.js/dist/interact.min.js'
+        '/manage/lib/interact.js/dist/interact.min.js',
+        '/manage/lib/socket.io-client/socket.io.js'
       ],
       dev: [],
       prod: [
@@ -51,7 +50,8 @@ module.exports = {
         '/manage/ovManage/ManageController.js',
         '/manage/ovManage/ManageService.js',
         '/manage/ovManage/DeviceController.js',
-        '/manage/ovManage/DeviceService.js'
+        '/manage/ovManage/DeviceService.js',
+        '/manage/socket.io/SocketApp.js'
       ],
       prod: [
         '/manage/be/js/openveoManage.js'
