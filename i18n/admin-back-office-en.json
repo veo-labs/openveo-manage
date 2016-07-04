@@ -5,6 +5,9 @@
   "REFUSED": {
     "TITLE": "Refused encoders"
   },
+  "PENDING": {
+    "TITLE": "Pending encoders"
+  },
   "PAGE_TITLE": "Manage",
   "TITLE": "Manage",
   "INFO": "The manage oversees all connected encoders. Il allows to manage groups of encoders, start and stop recording, to score points of interest in the video, as well as to schedule timed recordings.",
