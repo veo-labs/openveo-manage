@@ -251,7 +251,7 @@
         delete events.tap;
       }
 
-      interact('.device > .well, .device-group > .well').on('tap', function(event) {
+      interact('.devices .device > .well, .devices .device-group > .well').on('tap', function(event) {
         if (event.double) {
           return;
         }

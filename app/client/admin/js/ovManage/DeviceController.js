@@ -31,9 +31,9 @@
      * @param state
      */
     self.addToAcceptedDevices = function(device, state) {
-      device.state = self.STATE_ACCEPTED;
+      var deviceToSave = {state: self.STATE_ACCEPTED};
 
-      entityService.updateEntity('devices', manageName, device.id, device).then(function() {
+      entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
         manageService.updateDevicesList(device, state, true).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         });
