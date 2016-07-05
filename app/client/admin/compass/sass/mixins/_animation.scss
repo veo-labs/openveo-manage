@@ -69,3 +69,11 @@
     }
   }
 }
+
+@mixin slideUp($from, $to) {
+  @keyframes slideUp {
+    from {bottom: $from;}
+    to {bottom: $to;}
+  }
+  animation: slideUp .5s ease;
+}

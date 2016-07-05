@@ -1,6 +1,14 @@
 .demands {
   .device-connexion {
     background-color: white;
+
+    &.new {
+      position: fixed;
+      right: 15px;
+      bottom: 0px;
+      margin-bottom: 0;
+      @include slideUp(-239px, 0px);
+    }
     .title {
       color: $dark-blue;
       font-weight: 700;
