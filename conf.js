@@ -7,7 +7,8 @@ module.exports = {
     ws: {}
   },
   entities: {
-    devices: 'app/server/controllers/DeviceController'
+    devices: 'app/server/controllers/DeviceController',
+    groups: 'app/server/controllers/GroupController'
   },
   permissions: [
     {
