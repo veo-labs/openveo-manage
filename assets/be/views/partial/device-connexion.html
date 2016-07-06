@@ -2,7 +2,7 @@
   <div class="demands col-sm-3" ng-repeat="device in devicesConnexion track by device.id">
     <div class="device-connexion new well">
       <div class="title">Demande de connexion de la</div>
-      <div class="mac">@Mac: </div>
+      <div class="mac" ng-bind="'@Mac: ' + device.id"></div>
       <div class="device"></div>
       <div class="choice">
         <button class="refused" ng-click="vm.addToRefusedDevices(device, 'pendingDevices')"></button>

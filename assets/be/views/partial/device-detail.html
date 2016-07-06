@@ -1,5 +1,5 @@
 <div ng-controller="DeviceController as vm">
-    <div class="device-detail" ng-class="{'opened' : deviceSelected}">
+    <div class="device-detail" ng-class="{'opened' : manage.deviceSelected}">
         <div class="header">
             <ul class="menu">
                 <li class="action item" ng-click="vm.setActivePage(0)" ng-class="{'active': vm.isActivePage(0)}">
@@ -17,13 +17,13 @@
         </div>
 
         <div class="content" ng-class="{'first': vm.isActivePage(0), 'second': vm.isActivePage(1), 'third': vm.isActivePage(2)}">
-            <div class="action-page page" ng-class="{'active': vm.isActivePage(0)}"> <!--ng-hide="!vm.isActivePage(0)"-->
+            <div class="action-page page" ng-class="{'active': vm.isActivePage(0)}">
                 action
             </div>
-            <div class="detail-page page" ng-class="{'active': vm.isActivePage(1)}"> <!--ng-hide="!vm.isActivePage(1)"-->
+            <div class="detail-page page" ng-class="{'active': vm.isActivePage(1)}">
                 detail
             </div>
-            <div class="history-page page" ng-class="{'active': vm.isActivePage(2)}"> <!--ng-hide="!vm.isActivePage(2)"-->
+            <div class="history-page page" ng-class="{'active': vm.isActivePage(2)}">
                 history
             </div>
         </div>

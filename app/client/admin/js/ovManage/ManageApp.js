@@ -40,7 +40,14 @@
       access: 'manage-access-page',
       resolve: {
         results: ['manageService', function(manageService) {
-          return manageService.loadDevices();
+          return manageService.getDevicesPromised();
+        }],
+        group: ['groupService', '$route', function(groupService, $route) {
+          var id = $route.current.params.id;
+          if (!id) {
+            return null;
+          }
+          return groupService.loadGroupDetails(id);
         }]
       }
     });
@@ -52,7 +59,12 @@
       access: 'manage-group-detail-access-page',
       resolve: {
         results: ['manageService', function(manageService) {
-          return manageService.loadDevices();
+          return manageService.getDevicesPromised();
+        }],
+        group: ['groupService', '$route', function(groupService, $route) {
+          var id = $route.current.params.id;
+
+          return groupService.loadGroupDetails(id);
         }]
       }
     });

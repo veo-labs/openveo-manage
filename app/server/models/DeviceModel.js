@@ -51,7 +51,8 @@ DeviceModel.prototype.add = function(data, callback) {
 
   var device = {
     id: data.id,
-    name: data.name || 'Device'
+    name: data.name || 'Device',
+    state: data.state
   };
   this.provider.add(device, function(error, addedCount, devices) {
     if (callback)

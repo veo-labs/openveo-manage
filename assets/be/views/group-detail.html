@@ -1,15 +1,15 @@
-<div class="manage-container {{ manageAnimation }}" ng-class="vm.resize">
+<div class="manage-container {{ manageAnimation }}" ng-class="manage.resize">
     <h2 ng-bind="'MANAGE.TITLE' | translate"></h2>
     <div class="well well-lg" ng-bind="'MANAGE.INFO' | translate"></div>
 
     <div class="back" ng-click="vm.back()">
         <span class="arrow"></span>
-        <h3 class="group-title" ng-bind="'TODO : name'"></h3>
+        <h3 class="group-title" ng-bind="groupDetails.group.name"></h3>
     </div>
 
     <div class="devices row">
-        <div class="device col-sm-4 col-md-3" ng-repeat="device in devices track by device.id" ng-class="vm.resize">
-            <div class="well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
+        <div class="device col-sm-4 col-md-3" ng-repeat="device in groupDetails.devices track by device.id" ng-class="manage.resize">
+            <div ng-controller="DeviceController as deviceCtrl" class="well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
                 <span class="title" ng-bind="device.name"></span>
                 <div class="equipments">
                     <span class="camera ok"></span>

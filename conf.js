@@ -52,6 +52,7 @@ module.exports = {
         '/manage/ovManage/ManageService.js',
         '/manage/ovManage/DeviceController.js',
         '/manage/ovManage/DeviceService.js',
+        '/manage/ovManage/GroupService.js',
         '/manage/socket.io/SocketApp.js'
       ],
       prod: [
