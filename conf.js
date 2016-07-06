@@ -8,7 +8,8 @@ module.exports = {
   },
   entities: {
     devices: 'app/server/controllers/DeviceController',
-    groups: 'app/server/controllers/GroupController'
+    groups: 'app/server/controllers/GroupController',
+    histories: 'app/server/controllers/HistoryController'
   },
   permissions: [
     {
