@@ -112,7 +112,7 @@
             }
             &:nth-child(2) path {
               fill: none;
-              stroke-width: 25;
+              stroke-width: 22;
               stroke-dasharray: 629;
               stroke: #fff;
               opacity: .9;
@@ -266,11 +266,8 @@
     }
     .selected {
       background-color: $selected-grey;
-      .progress-radial {
-        border: 2px solid $selected-grey;
-        .overlay {
-          background-color: $selected-grey;
-        }
+      .progress-storage > li svg:nth-child(2) path {
+        stroke: $selected-grey;
       }
     }
 

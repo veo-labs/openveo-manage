@@ -35,6 +35,23 @@
     }
 
     /**
+     * Load all groups devices from server
+     *
+     * @private
+     * @return {Promise} The promise used to retrieve groups from server
+     * @method loadGroups
+     */
+    function loadGroups() {
+      if (!groups) {
+        return entityService.getAllEntities('groups', manageName).then(function(groups) {
+          return groups.data.entities;
+        });
+      }
+
+      return $q.when(groups);
+    }
+
+    /**
      * Ordering devices from its state
      *
      * @param workingDevices
@@ -65,23 +82,6 @@
           groupsDevices.push(device);
         }
       });
-    }
-
-    /**
-     * Load all groups devices from server
-     *
-     * @private
-     * @return {Promise} The promise used to retrieve groups from server
-     * @method loadGroups
-     */
-    function loadGroups() {
-      if (!groups) {
-        return entityService.getAllEntities('groups', manageName).then(function(groups) {
-          return groups.data.entities;
-        });
-      }
-
-      return $q.when(groups);
     }
 
     /**
