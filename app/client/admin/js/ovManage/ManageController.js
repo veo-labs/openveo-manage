@@ -32,7 +32,8 @@
      * @param uiState
      */
     $scope.clearUiState = function(uiState) {
-      var index;
+      var index,
+        devices = ($scope.groupDetails) ? $scope.groupDetails.devices : $scope.acceptedDevices;
 
       $scope.groups.map(function(group) {
         if (group['ui-state']) {
@@ -42,7 +43,7 @@
           }
         }
       });
-      $scope.acceptedDevices.map(function(device) {
+      devices.map(function(device) {
         if (device['ui-state']) {
           index = device['ui-state'].indexOf(uiState);
           if (index > -1) {

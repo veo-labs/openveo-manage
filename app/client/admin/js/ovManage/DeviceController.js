@@ -5,7 +5,17 @@
   /**
    * Defines the device controller for displaying details
    */
-  function DeviceController($scope, $filter, $timeout, manageService, socketService, entityService, manageName) {
+  function DeviceController(
+    $scope,
+    $filter,
+    $timeout,
+    $window,
+    $location,
+    manageService,
+    socketService,
+    entityService,
+    manageName) {
+
     var self = this,
       openedDevice = null,
       socket,
@@ -56,32 +66,6 @@
       element['ui-state'].splice(index, 1);
       $scope.$apply();
     }
-
-    /**
-     * Remove an ui-state from all devices
-     * @param uiState
-     */
-    function clearUiState(uiState) {
-      var index;
-
-      $scope.groups.map(function(group) {
-        if (group['ui-state']) {
-          index = group['ui-state'].indexOf(uiState);
-          if (index > -1) {
-            group['ui-state'].splice(index, 1);
-          }
-        }
-      });
-      $scope.acceptedDevices.map(function(device) {
-        if (device['ui-state']) {
-          index = device['ui-state'].indexOf(uiState);
-          if (index > -1) {
-            device['ui-state'].splice(index, 1);
-          }
-        }
-      });
-    }
-
 
     /**
      * Move element on drag
@@ -192,6 +176,40 @@
     }
 
     /**
+     * Add devices to a group, group is created if does not exist
+     *
+     * @param draggableId
+     * @param dropzoneId
+     * @param isGroup
+     */
+    function addDeviceToGroup(draggableId, dropzoneId, isGroup) {
+
+      // Create the group if it's two devices
+      if (!isGroup) {
+        var group;
+
+        entityService.addEntity('groups', manageName, {}).then(function(result) {
+          group = result.data.entity;
+          entityService.updateEntity('devices', manageName, draggableId, {group: group.id}).then(function() {});
+          entityService.updateEntity('devices', manageName, dropzoneId, {group: group.id}).then(function() {});
+          manageService.addDevicesToGroup(draggableId, dropzoneId, group).then(function() {});
+
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
+        }, function() {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
+        });
+      } else {
+        entityService.updateEntity('devices', manageName, draggableId, {group: dropzoneId}).then(function() {
+          manageService.addDevicesToGroup(draggableId, dropzoneId).then(function() {});
+
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
+        }, function() {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
+        });
+      }
+    }
+
+    /**
      * Allow to drop element in dropzones
      */
     function dragDropDevice() {
@@ -212,14 +230,13 @@
           removeUiState(event.target, 'can-drop');
         },
         ondrop: function(event) {
+          var relatedTarget = angular.element(event.relatedTarget),
+            target = angular.element(event.target);
+
           mergePosition(event.target, event.relatedTarget);
           $timeout(function() {
-            manageService.groupDevices(angular.element(event.relatedTarget).attr('data-id'),
-              angular.element(event.target).attr('data-id')).then(function(results) {
-              $scope.groups = results.groups;
-              $scope.acceptedDevices = results.acceptedDevices;
-              $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.GROUP.ADD_SUCCESS'), 4000);
-            });
+            addDeviceToGroup(relatedTarget.attr('data-id'),
+              target.attr('data-id'), target.hasClass('group'));
           }, 500);
         }
       });
@@ -238,12 +255,12 @@
 
       if (opening && leftSpace <= 300) {
         if (containerWidth <= 750) {
-          self.resize = 'small';
+          $scope.manage.resize = 'small';
         } else {
-          self.resize = 'medium';
+          $scope.manage.resize = 'medium';
         }
       } else {
-        self.resize = 'normal';
+        $scope.manage.resize = 'normal';
       }
     }
 
@@ -253,12 +270,12 @@
     function clickDevice() {
 
       // Avoid to fired the same event multiple times
-      var events = interact('.device > .well, .device-group > .well')._iEvents;
+      var events = interact('.device > .well, .device-group > .group')._iEvents;
       if (Object.keys(events).length && events.tap) {
         delete events.tap;
       }
 
-      interact('.devices .device > .well, .devices .device-group > .well').on('tap', function(event) {
+      interact('.device > .well, .device-group > .group').on('tap', function(event) {
         if (event.double) {
           return;
         }
@@ -267,14 +284,14 @@
 
         if (!openedDevice) {
           openedDevice = deviceId;
-          $scope.deviceSelected = true;
+          $scope.manage.deviceSelected = true;
           setUiState(event.currentTarget, 'selected');
 
           // deviceService.setTarget(event.currentTarget);
           // deviceService.getDetails(deviceId);
         } else if (openedDevice == deviceId) {
           openedDevice = null;
-          $scope.deviceSelected = false;
+          $scope.manage.deviceSelected = false;
           removeUiState(event.currentTarget, 'selected');
 
           // deviceService.setTarget(event.currentTarget);
@@ -282,14 +299,14 @@
           openedDevice = deviceId;
 
           // removeUiState(deviceService.getTarget(), 'selected');
-          clearUiState('selected');
+          $scope.clearUiState('selected');
           setUiState(event.currentTarget, 'selected');
 
           // deviceService.setTarget(event.currentTarget);
           // deviceService.getDetails(deviceId);
         }
 
-        organizeLayout($scope.deviceSelected);
+        organizeLayout($scope.manage.deviceSelected);
         $scope.$apply();
       });
     }
@@ -300,15 +317,22 @@
     function dbClickGroupDevices() {
 
       // Avoid to fired the same event multiple times
-      var events = interact('.device-group > .well')._iEvents;
+      var events = interact('.device-group > .group')._iEvents;
       if (Object.keys(events).length && events.doubletap) {
         delete events.doubletap;
       }
 
-      interact('.device-group > .well').on('doubletap', function(event) {
-        $scope.deviceSelected = false;
-        clearUiState('selected');
-        $location.path('manage/group-detail/' + event.currentTarget.getAttribute('data-id'));
+      interact('.device-group > .group').on('doubletap', function(event) {
+        var groupId = event.currentTarget.getAttribute('data-id');
+
+        $scope.manage.deviceSelected = false;
+        $scope.clearUiState('selected');
+        $location.path('manage/group-detail/' + groupId);
+
+        // Set the selected group
+        $scope.groupDetail = $scope.groups.find(function(group) {
+          return group.id === groupId;
+        });
         $scope.$apply();
       });
     }
@@ -323,10 +347,10 @@
       var deviceToSave = {state: self.STATE_ACCEPTED};
 
       entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
-        
+
         // Ask for device detail
         socket.emit('device-detail', device.id);
-        manageService.updateDevicesList(device, state, true).then(function() {
+        manageService.updateDeviceState(device, state, true).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         });
       }, function() {
@@ -344,7 +368,7 @@
       device.state = self.STATE_REFUSED;
 
       entityService.updateEntity('devices', manageName, device.id, device).then(function() {
-        manageService.updateDevicesList(device, state, false).then(function() {
+        manageService.updateDeviceState(device, state, false).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         });
       }, function() {
@@ -386,6 +410,8 @@
     '$scope',
     '$filter',
     '$timeout',
+    '$window',
+    '$location',
     'manageService',
     'socketService',
     'entityService',
