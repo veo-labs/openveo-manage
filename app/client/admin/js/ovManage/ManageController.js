@@ -5,8 +5,9 @@
   /**
    * Defines the manage controller
    */
-  function ManageController($scope, $window, $location, results, group) {
-    var self = this;
+  function ManageController($scope, $window, $location, results, group, socketService) {
+    var self = this,
+      devicesId = [];
 
     $scope.groups = results.groups;
     $scope.acceptedDevices = results.acceptedDevices;
@@ -18,6 +19,9 @@
       absUrl: $location.absUrl()
     };
 
+    $scope.socket = socketService.getConnexion();
+    $scope.devicesConnexion = [];
+
     // Initialize group detail
     if (group) {
       $scope.groupDetails = {
@@ -25,6 +29,12 @@
         devices: group.devices
       };
     }
+
+    // Define hello listener
+    $scope.socket.on('hello', function(data) {
+      $scope.devicesConnexion.push(data);
+      $scope.$apply();
+    });
 
 
     /**
@@ -60,7 +70,14 @@
       $scope.manage.deviceSelected = false;
       $scope.clearUiState('selected');
       $window.history.back();
+      $scope.manage.absUrl = $location.absUrl();
     };
+
+    // Ask for devices storage
+    $scope.acceptedDevices.map(function(device) {
+      devicesId.push(device.id);
+    });
+    $scope.socket.emit('storage', devicesId);
 
   }
 
@@ -70,7 +87,8 @@
     '$window',
     '$location',
     'results',
-    'group'
+    'group',
+    'socketService'
   ];
 
 })(angular.module('ov.manage'));

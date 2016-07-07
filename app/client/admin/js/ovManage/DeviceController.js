@@ -12,28 +12,17 @@
     $window,
     $location,
     manageService,
-    socketService,
     entityService,
     manageName) {
 
     var self = this,
       openedDevice = null,
-      socket,
       activePage = 0;
 
     // Available state for device
     self.STATE_ACCEPTED = 'accepted';
     self.STATE_PENDING = 'pending';
     self.STATE_REFUSED = 'refused';
-
-    $scope.devicesConnexion = [];
-
-    // Get socket and define hello listener
-    socket = socketService.getConnexion();
-    socket.on('hello', function(data) {
-      $scope.devicesConnexion.push(data);
-      $scope.$apply();
-    });
 
     /**
      * Define an ui-state for a device
@@ -328,11 +317,7 @@
         $scope.manage.deviceSelected = false;
         $scope.clearUiState('selected');
         $location.path('manage/group-detail/' + groupId);
-
-        // Set the selected group
-        $scope.groupDetail = $scope.groups.find(function(group) {
-          return group.id === groupId;
-        });
+        $scope.manage.absUrl = $location.absUrl();
         $scope.$apply();
       });
     }
@@ -349,7 +334,7 @@
       entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
 
         // Ask for device detail
-        socket.emit('device-detail', device.id);
+        $scope.socket.emit('device-detail', device.id);
         manageService.updateDeviceState(device, state, true).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         });
@@ -413,7 +398,6 @@
     '$window',
     '$location',
     'manageService',
-    'socketService',
     'entityService',
     'manageName'
   ];
