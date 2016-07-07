@@ -1,7 +1,7 @@
 <div ng-controller="DeviceController as vm">
   <div class="demands col-sm-3" ng-repeat="device in devicesConnexion track by device.id">
     <div class="device-connexion new well">
-      <div class="title">Demande de connexion de la</div>
+      <div class="title" ng-bind="('MANAGE.CONNEXION.TITLE' | translate) + device.name"></div>
       <div class="mac" ng-bind="'@Mac: ' + device.id"></div>
       <div class="device"></div>
       <div class="choice">
