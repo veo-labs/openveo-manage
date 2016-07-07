@@ -7,7 +7,7 @@ var async = require('async');
 var openVeoAPI = require('@openveo/api');
 var DeviceProvider = process.requireManage('app/server/providers/DeviceProvider.js');
 var GroupProvider = process.requireManage('app/server/providers/GroupProvider.js');
-var SocketManager = process.requireManage('app/server/SocketManager.js');
+var SocketProviderManager = process.requireManage('app/server/services/SocketProviderManager.js');
 
 /**
  * Creates a ManagePlugin.
@@ -107,8 +107,7 @@ ManagePlugin.prototype.init = function(callback) {
  */
 ManagePlugin.prototype.start = function(callback) {
   if (!process.isWebService) {
-    var socketManager = new SocketManager();
-    socketManager.connect();
+    SocketProviderManager.load();
   }
 
   callback();
