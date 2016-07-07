@@ -323,6 +323,20 @@
     }
 
     /**
+     * Remove a device from the device connexion object on user response
+     *
+     * @param {int} id The device id to remove
+     */
+    function removeDeviceConnected(id) {
+      for (var i = 0; i < $scope.devicesConnexion.length; i++) {
+        if ($scope.devicesConnexion[i].id == id) {
+          $scope.devicesConnexion.splice(i, 1);
+          break;
+        }
+      }
+    }
+
+    /**
      * Add pending/refused device to the accepted list of devices
      *
      * @param device
@@ -335,6 +349,7 @@
 
         // Ask for device detail
         $scope.socket.emit('device-detail', device.id);
+        removeDeviceConnected(device.id);
         manageService.updateDeviceState(device, state, true).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         });
@@ -353,6 +368,7 @@
       device.state = self.STATE_REFUSED;
 
       entityService.updateEntity('devices', manageName, device.id, device).then(function() {
+        removeDeviceConnected(device.id);
         manageService.updateDeviceState(device, state, false).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         });
