@@ -1,8 +1,18 @@
 'use strict';
 
-function DeviceListener(socketManager) {
+/**
+ * Define functions for events from devices
+ *
+ * @param ioDevice
+ * @param ioClient
+ * @param deviceModel
+ * @constructor
+ */
+function DeviceListener(ioDevice, ioClient, deviceModel) {
 
-  this.socketManager = socketManager;
+  this.ioDevice = ioDevice;
+  this.ioClient = ioClient;
+  this.deviceModel = deviceModel;
 }
 
 module.exports = DeviceListener;
@@ -11,10 +21,12 @@ module.exports = DeviceListener;
  * Initialize the hello callback to connect a device
  *
  * @method hello
- * @private
+ * @async
  * @param {Object} data Data received from the device
+ * @param {Function} callback Function to call when it's done with :
+ *  - **Error** An error if something went wrong, device otherwise
  */
-DeviceListener.hello = function(data) {
+DeviceListener.prototype.hello = function(data, callback) {
   var self = this;
 
   // Retrieve device
@@ -24,20 +36,36 @@ DeviceListener.hello = function(data) {
     if (error || !device) {
       self.deviceModel.add(data, function(error, total, createdDevice) {
         if (error) {
-          self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
+          callback(error);
         } else {
-
-          // Cache the device if not present
-          addDevice.call(self, createdDevice);
+          callback(error, createdDevice);
         }
       });
-      self.ioClient.emit('hello', data);
     } else {
+      callback(error, device);
+    }
+  });
+};
 
-      // Cache the device if not present
-      addDevice.call(self, device);
+/**
+ * Set the name of a device
+ *
+ * @method settingsName
+ * @async
+ * @param {Object} name The name of the device
+ * @param {int} deviceId The id of the device we work on
+ * @param {Function} callback Function to call when it's done with :
+ *  - **Error** An error if something went wrong, null otherwise
+ */
+DeviceListener.prototype.settingsName = function(name, deviceId, callback) {
 
-      // TODO : Update device status
+  // update device name
+  this.deviceModel.update(deviceId, name, function(error) {
+
+    if (error) {
+      callback(error);
+    } else {
+      callback();
     }
   });
 };
