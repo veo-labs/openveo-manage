@@ -343,12 +343,15 @@
      * @param state
      */
     self.addToAcceptedDevices = function(device, state) {
-      var deviceToSave = {state: self.STATE_ACCEPTED};
+      var deviceToSave = {
+        name: device.name,
+        state: self.STATE_ACCEPTED
+      };
 
       entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
 
         // Ask for device detail
-        $scope.socket.emit('device-detail', device.id);
+        $scope.socket.emit('settings', [device.id]);
         removeDeviceConnected(device.id);
         manageService.updateDeviceState(device, state, self.STATE_ACCEPTED).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
@@ -365,7 +368,10 @@
      * @param state
      */
     self.addToRefusedDevices = function(device, state) {
-      var deviceToSave = {state: self.STATE_REFUSED};
+      var deviceToSave = {
+        name: device.name,
+        state: self.STATE_REFUSED
+      };
 
       entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
         removeDeviceConnected(device.id);
