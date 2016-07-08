@@ -17,7 +17,8 @@
     /**
      * Add a new device
      *
-     * @param device
+     * @param {Object} device The new device
+     * @method addDevice
      */
     function addDevice(device) {
       switch (device.state) {
@@ -54,7 +55,7 @@
     /**
      * Ordering devices from its state
      *
-     * @param workingDevices
+     * @param {Array} workingDevices The devices to order
      * @private
      * @method orderDevices
      */
@@ -133,6 +134,7 @@
      * Retrieve groups
      *
      * @returns {*}
+     * @method getGroups
      */
     function getGroups() {
       return groups;
@@ -141,8 +143,9 @@
     /**
      * Retrieve a group with its id
      *
-     * @param id
+     * @param {String} id The group id
      * @return group
+     * @method getGroup
      */
     function getGroup(id) {
       if (!groups) {
@@ -161,7 +164,8 @@
     /**
      * Define groups
      *
-     * @param data
+     * @param {Array} data An array of groups
+     * @method setGroups
      */
     function setGroups(data) {
       groups = data;
@@ -170,33 +174,43 @@
     /**
      * Add a group to the groups
      *
-     * @param group
+     * @param {Object} group The new group
+     * @method addGroup
      */
     function addGroup(group) {
       groups.push(group);
     }
 
     /**
-     * Delete a group from groups with its id
-     * @param id
+     * Update a device
+     *
+     * @param {Object} device The updated device
+     * @method updateDevice
      */
-    /* function removeGroup(id) {
+    function updateDevice(device) {
+      var index = devices.acceptedDevices.findIndex(function(workingDevice) {
+        return workingDevice.id == device.id;
+      });
 
-    }*/
+      devices.acceptedDevices[index] = device;
+    }
 
     /**
-     * Retrieve devices
+     * Retrieve all devices
      *
      * @returns {*}
+     * @method getDevices
      */
     function getDevices() {
       return devices;
     }
 
     /**
+     * Retrieve a device with its id
      *
-     * @param id
+     * @param {String} id tje device id
      * @returns {*|{}}
+     * @method getDevice
      */
     function getDevice(id) {
       if (!devices) {
@@ -215,8 +229,9 @@
     /**
      * Retrieve the group devices with group id
      *
-     * @param groupId
+     * @param {String} groupId the group id
      * @returns {Array}
+     * @method getDevicesByGroup
      */
     function getDevicesByGroup(groupId) {
       var groupDevices = [];
@@ -245,7 +260,8 @@
     /**
      * define devices
      *
-     * @param data
+     * @param {Array} data An array of devices
+     * @method setDevices
      */
     function setDevices(data) {
       devices = data;
@@ -282,9 +298,9 @@
     /**
      * Update the cache when devices are added to a group
      *
-     * @param draggableId
-     * @param dropzoneId
-     * @param group
+     * @param {String} draggableId A device id
+     * @param {String} dropzoneId A device or group id
+     * @param {Object} group The new group to add devices
      * @returns {*}
      * @method addDevicesToGroup
      */
@@ -329,6 +345,7 @@
       getDevicesByGroup: getDevicesByGroup,
       setDevices: setDevices,
       addDevice: addDevice,
+      updateDevice: updateDevice,
       getDevicesPromised: getDevicesPromised,
       updateDeviceState: updateDeviceState,
       addDevicesToGroup: addDevicesToGroup

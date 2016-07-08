@@ -5,9 +5,9 @@
   /**
    * Defines the manage controller
    */
-  function ManageController($scope, $window, $location, results, group, socketService) {
+  function ManageController($scope, $window, $location, results, group, socketService, manageService) {
     var self = this,
-      devicesId = [];
+      devicesIds = [];
 
     $scope.groups = results.groups;
     $scope.acceptedDevices = results.acceptedDevices;
@@ -30,12 +30,22 @@
       };
     }
 
-    // Define hello listener
-    $scope.socket.on('hello', function(data) {
-      $scope.devicesConnexion.push(data);
-      $scope.$apply();
-    });
+    /**
+     * Initialize all socket.io listeners
+     */
+    function initializeListeners() {
 
+      // Hello listener
+      $scope.socket.on('hello', function(device) {
+        $scope.devicesConnexion.push(device);
+        $scope.$apply();
+      });
+
+      // Storage listener
+      $scope.socket.on('settings.storage', function(device) {
+        manageService.updateDevice(device);
+      });
+    }
 
     /**
      * Remove an ui-state from all devices
@@ -73,11 +83,14 @@
       $scope.manage.absUrl = $location.absUrl();
     };
 
-    // Ask for devices storage
+    // Initialize socket.io listeners
+    initializeListeners();
+
+    // Asks for devices settings
     $scope.acceptedDevices.map(function(device) {
-      devicesId.push(device.id);
+      devicesIds.push(device.id);
     });
-    $scope.socket.emit('storage', devicesId);
+    $scope.socket.emit('settings', devicesIds);
 
   }
 
@@ -88,7 +101,8 @@
     '$location',
     'results',
     'group',
-    'socketService'
+    'socketService',
+    'manageService'
   ];
 
 })(angular.module('ov.manage'));
