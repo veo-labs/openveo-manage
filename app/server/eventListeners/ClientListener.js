@@ -17,16 +17,22 @@ function ClientListener(ioDevice, ioClient, deviceModel) {
 
 module.exports = ClientListener;
 
-/* ClientListener.prototype.storage = function(data, devices) {
-  var self = this,
-    device;
+/**
+ * Send an hello event to the client with the connected device
+ *
+ * @method hello
+ * @param {Object} device The new device
+ */
+ClientListener.prototype.hello = function(device) {
+  this.ioClient.emit('hello', device);
+};
 
-  data.forEach(function(deviceId) {
-    device = devices.find(function(device) {
-      return device.deviceId == deviceId;
-    });
-
-    // Ask for storage
-    self.ioDevice.sockets[device.socketId].emit('get', storage);
-  });
-};*/
+/**
+ * Send a storage event to the client with the updated device
+ *
+ * @method storage
+ * @param {Object} device The updated device with storage data
+ */
+ClientListener.prototype.storage = function(device) {
+  this.ioClient.emit('settings.storage', device);
+};
