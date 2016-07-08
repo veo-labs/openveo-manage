@@ -8,6 +8,7 @@
       bottom: 0px;
       margin-bottom: 0;
       @include slideUp(-239px, 0px);
+      z-index: 999;
     }
     .title {
       color: $dark-blue;
