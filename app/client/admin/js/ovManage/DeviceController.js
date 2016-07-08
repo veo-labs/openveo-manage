@@ -350,7 +350,7 @@
         // Ask for device detail
         $scope.socket.emit('device-detail', device.id);
         removeDeviceConnected(device.id);
-        manageService.updateDeviceState(device, state, true).then(function() {
+        manageService.updateDeviceState(device, state, self.STATE_ACCEPTED).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         });
       }, function() {
@@ -365,11 +365,11 @@
      * @param state
      */
     self.addToRefusedDevices = function(device, state) {
-      device.state = self.STATE_REFUSED;
+      var deviceToSave = {state: self.STATE_REFUSED};
 
-      entityService.updateEntity('devices', manageName, device.id, device).then(function() {
+      entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
         removeDeviceConnected(device.id);
-        manageService.updateDeviceState(device, state, false).then(function() {
+        manageService.updateDeviceState(device, state, self.STATE_REFUSED).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         });
       }, function() {

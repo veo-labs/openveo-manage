@@ -256,18 +256,21 @@
      *
      * @param {Object} device The updated device
      * @param {String} state The initial state of the updated device
-     * @param {Boolean} accepted The updated device go to the accepted or refused list
+     * @param {String} newState The new state of the device
      * @returns {Promise}
      * @method updateDeviceState
      */
-    function updateDeviceState(device, state, accepted) {
+    function updateDeviceState(device, state, newState) {
       var index = devices[state].findIndex(function(workingDevice) {
         return workingDevice.id == device.id;
       });
 
-      devices[state].splice(index, 1);
+      if (index !== -1) {
+        devices[state].splice(index, 1);
+      }
+      device.state = newState;
 
-      if (accepted) {
+      if (newState === 'accepted') {
         devices.acceptedDevices.push(device);
       } else {
         devices.refusedDevices.push(device);
