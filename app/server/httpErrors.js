@@ -30,5 +30,29 @@ module.exports = {
     code: 0x004,
     httpCode: 500,
     module: 'manage'
+  },
+  UPDATE_DEVICE_ERROR: {
+    code: 0x005,
+    httpCode: 500
+  },
+
+  // Authentication errors
+  UPDATE_DEVICE_FORBIDDEN: {
+    code: 0x200,
+    httpCode: 403
+  },
+
+  // Wrong parameters
+  GET_DEVICES_WRONG_PARAMETERS: {
+    code: 0x300,
+    httpCode: 400
+  },
+  UPDATE_DEVICE_MISSING_PARAMETERS: {
+    code: 0x301,
+    httpCode: 400
+  },
+  UPDATE_DEVICE_WRONG_PARAMETERS: {
+    code: 0x302,
+    httpCode: 400
   }
 };
