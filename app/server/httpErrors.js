@@ -25,5 +25,10 @@ module.exports = {
   NOT_ALLOWED: {
     code: 0x003,
     httpCode: 403
+  },
+  GET_DEVICES_ERROR: {
+    code: 0x004,
+    httpCode: 500,
+    module: 'manage'
   }
 };

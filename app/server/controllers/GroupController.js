@@ -9,6 +9,10 @@ var EntityController = openVeoAPI.controllers.EntityController;
 
 /**
  * Creates a GroupController
+ *
+ * @class GroupController
+ * @constructor
+ * @extends EntityController
  */
 function GroupController() {
   EntityController.call(this, GroupModel);

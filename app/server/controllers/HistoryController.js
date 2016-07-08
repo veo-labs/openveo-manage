@@ -9,6 +9,10 @@ var EntityController = openVeoAPI.controllers.EntityController;
 
 /**
  * Creates an HistoryController
+ *
+ * @class HistoryController
+ * @constructor
+ * @extends EntityController
  */
 function HistoryController() {
   EntityController.call(this, HistoryModel);
