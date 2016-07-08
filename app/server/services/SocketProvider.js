@@ -102,15 +102,75 @@ module.exports = SocketProvider;
  *
  * @method findDeviceIndex
  * @private
- * @param socketId
+ * @param {String} socketId The socket id
  * @returns {Object | undefined}
  */
 function findDeviceIndex(socketId) {
-  var self = this;
-
-  return self.devices.findIndex(function(value) {
+  return this.devices.findIndex(function(value) {
     return value.socketId == socketId;
   });
+}
+
+/**
+ * Retrieve a device with its socket id
+ *
+ * @method findDevice
+ * @private
+ * @param {String} socketId The socket id
+ * @returns {Object | null}
+ */
+function findDevice(socketId) {
+  var device;
+  var data = this.devices.find(function(value) {
+    return value.socketId == socketId;
+  });
+
+  if (typeof data !== 'undefined') {
+    device = data.device;
+  }
+
+  return device;
+}
+
+/**
+ * Retrieve a device with its id
+ *
+ * @method findDeviceById
+ * @private
+ * @param {String} deviceId The device id
+ * @returns {Object | null}
+ */
+function findDeviceById(deviceId) {
+  var device;
+  var data = this.devices.find(function(value) {
+    return value.device.id == deviceId;
+  });
+
+  if (typeof data !== 'undefined') {
+    device = data.device;
+  }
+
+  return device;
+}
+
+/**
+ * Retrieve a socket with a device id
+ *
+ * @method findSocket
+ * @private
+ * @param {String} deviceId The device id
+ * @returns {Object | null}
+ */
+function findSocket(deviceId) {
+  var data = this.devices.find(function(value) {
+    return value.device.id == deviceId;
+  });
+
+  if (typeof data !== 'undefined') {
+    return this.ioDevice.sockets[data.socketId];
+  }
+
+  return null;
 }
 
 /**
@@ -118,8 +178,8 @@ function findDeviceIndex(socketId) {
  *
  * @method addDevice
  * @private
- * @param socketId
- * @param device
+ * @param {String} socketId the socket id
+ * @param {Object} device The new device
  */
 function addDevice(socketId, device) {
   var index = findDeviceIndex.call(this, socketId);
@@ -136,8 +196,8 @@ function addDevice(socketId, device) {
  * Set the name of a device
  *
  * @method setDeviceName
- * @param socketId
- * @param name
+ * @param {String} socketId the socket id
+ * @param {String} name The new name for the device
  */
 function setDeviceName(socketId, name) {
   var index = findDeviceIndex.call(this, socketId);
@@ -148,11 +208,27 @@ function setDeviceName(socketId, name) {
 }
 
 /**
+ * Set a percent with the storage data
+ *
+ * @method setDeviceStorage
+ * @param {String} socketId The socket id
+ * @param {Object} storage The storage data for the device
+ */
+function setDeviceStorage(socketId, storage) {
+  var index = findDeviceIndex.call(this, socketId);
+
+  if (index >= 0) {
+    this.devices[index].device.storage = (parseInt(storage.used) /
+      (parseInt(storage.free) + parseInt(storage.used))) * 100;
+  }
+}
+
+/**
  * Remove an in-memory stored device when a device is disconnected
  *
  * @method removeDevice
  * @private
- * @param socketId
+ * @param {String} socketId The socket id
  */
 function removeDevice(socketId) {
   var index = findDeviceIndex.call(this, socketId);
@@ -169,15 +245,14 @@ function removeDevice(socketId) {
  * @private
  */
 function clientConnect() {
-
-  // var self = this;
+  var self = this;
 
   this.ioClient.on('connection', function(socket) {
 
-    /* socket.on('storage', function(data) {
-      console.log(self.devices);
-      self.clientListener.storage(data, self.devices);
-    });*/
+    // Listening for device needed updating settings (storage/presets)
+    socket.on('settings', function(data) {
+      self.devicesSettings(data);
+    });
   });
 }
 
@@ -188,7 +263,6 @@ function clientConnect() {
  * @private
  */
 function deviceConnect() {
-
   var self = this;
 
   // Connected clients
@@ -198,34 +272,42 @@ function deviceConnect() {
 
     // Event on device start
     socket.on('hello', function(data) {
-      self.deviceListener.hello(data, function(error, device) {
+      self.deviceListener.hello(data, socket, function(error, device) {
         if (error) {
           self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
         } else {
           addDevice.call(self, socket.id, device);
-
-          // Asks for device name
-          socket.emit('get', 'settings.name');
         }
       });
     });
 
-    // Listen device name
+    // Listening for device name
     socket.on('settings.name', function(data) {
-      var index = findDeviceIndex.call(self, socket.id),
-        device = self.devices[index].device;
+      var device = findDevice.call(self, socket.id);
 
       self.deviceListener.settingsName(data, device.id, function(error) {
         if (error) {
           self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
-        } else {
+        } else if (device.name.length === 0 && device.state === DeviceModel.STATE_PENDING) {
           setDeviceName.call(self, socket.id, data.name);
-
-          if (device.state === DeviceModel.STATE_PENDING) {
-            self.ioClient.emit('hello', device);
-          }
+          self.clientListener.hello(device);
         }
       });
+    });
+
+    // Listening for device storage
+    socket.on('settings.storage', function(data) {
+      var device;
+
+      setDeviceStorage.call(self, socket.id, data);
+      device = findDevice.call(self, socket.id);
+      self.clientListener.storage(device);
+    });
+
+    // Listening for device equipments
+    socket.on('settings.presets', function(data) {
+
+      // var device = findDevice.call(self, socket.id);
     });
 
     // Disconnect event
@@ -255,8 +337,48 @@ SocketProvider.prototype.connect = function(callback) {
 /**
  * Get all connected devices
  *
+ * @method getDevices
  * @returns {Array} An array of devices
  */
 SocketProvider.prototype.getDevices = function() {
-  return this.devices;
+  var devices = [];
+
+  this.devices.map(function(data) {
+    devices.push(data.device);
+  });
+
+  return devices;
+};
+
+/**
+ * Asks for devices settings
+ *
+ * @method deviceSettings
+ * @param {Array} deviceIds An array of device ids
+ */
+SocketProvider.prototype.devicesSettings = function(deviceIds) {
+  var self = this,
+    socket;
+
+  deviceIds.map(function(id) {
+    socket = findSocket.call(self, id);
+
+    // Asks for device settings
+    self.deviceListener.settings(socket);
+  });
+};
+
+/**
+ * Update a device with the given data
+ *
+ * @method updateDevice
+ * @param {String} deviceId the device id
+ * @param {Object} data The new data of the device
+ */
+SocketProvider.prototype.updateDevice = function(deviceId, data) {
+  var device = findDeviceById.call(this, deviceId);
+
+  for (var key in data) {
+    device[key] = data[key];
+  }
 };

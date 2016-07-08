@@ -23,10 +23,11 @@ module.exports = DeviceListener;
  * @method hello
  * @async
  * @param {Object} data Data received from the device
+ * @param {Object} socket The socket linked to the device
  * @param {Function} callback Function to call when it's done with :
  *  - **Error** An error if something went wrong, device otherwise
  */
-DeviceListener.prototype.hello = function(data, callback) {
+DeviceListener.prototype.hello = function(data, socket, callback) {
   var self = this;
 
   // Retrieve device
@@ -38,10 +39,18 @@ DeviceListener.prototype.hello = function(data, callback) {
         if (error) {
           callback(error);
         } else {
+          createdDevice.status = 'ok';
+
+          // Asks for device settings
+          socket.emit('get', 'settings.name');
           callback(error, createdDevice);
         }
       });
     } else {
+      device.status = 'ok';
+
+      // Asks for device settings
+      self.settings(socket);
       callback(error, device);
     }
   });
@@ -61,11 +70,21 @@ DeviceListener.prototype.settingsName = function(name, deviceId, callback) {
 
   // update device name
   this.deviceModel.update(deviceId, name, function(error) {
-
     if (error) {
       callback(error);
     } else {
       callback();
     }
   });
+};
+
+/**
+ * Request for getting device storage and presets
+ *
+ * @method settings
+ * @param {Object} socket The socket.io object
+ */
+DeviceListener.prototype.settings = function(socket) {
+  socket.emit('get', 'settings.storage');
+  socket.emit('get', 'settings.presets');
 };
