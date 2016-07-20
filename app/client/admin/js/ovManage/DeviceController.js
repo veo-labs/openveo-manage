@@ -16,8 +16,7 @@
     manageName) {
 
     var self = this,
-      openedDevice = null,
-      activePage = 0;
+      openedDevice = null;
 
     // Available state for device
     self.STATE_ACCEPTED = 'accepted';
@@ -381,25 +380,6 @@
       }, function() {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
       });
-    };
-
-    /**
-     * Define the active page index
-     *
-     * @param index
-     */
-    self.setActivePage = function(index) {
-      activePage = index;
-    };
-
-    /**
-     * Determine if the passed index is the active page index
-     *
-     * @param index
-     * @returns {boolean}
-     */
-    self.isActivePage = function(index) {
-      return activePage === index;
     };
 
     // Manage drag and drop events

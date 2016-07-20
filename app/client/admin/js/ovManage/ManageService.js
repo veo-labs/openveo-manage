@@ -258,7 +258,7 @@
     }
 
     /**
-     * define devices
+     * Define devices
      *
      * @param {Array} data An array of devices
      * @method setDevices
