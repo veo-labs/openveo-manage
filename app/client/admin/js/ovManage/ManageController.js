@@ -15,7 +15,8 @@
     $scope.pendingDevices = results.pendingDevices;
     $scope.manage = {
       resize: 'normal',
-      deviceSelected: false,
+      openedDevice: null,
+      showDetail: false,
       absUrl: $location.absUrl()
     };
 
@@ -44,6 +45,11 @@
       // Storage listener
       $scope.socket.on('settings.storage', function(device) {
         manageService.updateDevice(device);
+      });
+
+      // Device details listener
+      $scope.socket.on('device.details', function(data) {
+
       });
     }
 
@@ -74,10 +80,32 @@
     };
 
     /**
+     * Permits to organize the view when the details is opened/closed
+     *
+     * @param opening
+     */
+    $scope.organizeLayout = function(opening) {
+
+      var screenWidth = $window.innerWidth,
+        containerWidth = parseInt(document.getElementsByClassName('manage-container')[0].offsetWidth + 30),
+        leftSpace = parseInt(screenWidth - containerWidth) / 2;
+
+      if (opening && leftSpace <= 300) {
+        if (containerWidth <= 750) {
+          $scope.manage.resize = 'small';
+        } else {
+          $scope.manage.resize = 'medium';
+        }
+      } else {
+        $scope.manage.resize = 'normal';
+      }
+    };
+
+    /**
      * Go to the previous page
      */
     self.back = function() {
-      $scope.manage.deviceSelected = false;
+      $scope.manage.showDetail = false;
       $scope.clearUiState('selected');
       $window.history.back();
       $scope.manage.absUrl = $location.absUrl();

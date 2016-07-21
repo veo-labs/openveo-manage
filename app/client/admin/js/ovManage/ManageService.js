@@ -162,6 +162,70 @@
     }
 
     /**
+     * Retrieve the group devices with group id
+     *
+     * @param {String} groupId the group id
+     * @returns {Array}
+     * @method getDevicesByGroup
+     */
+    function getDevicesByGroup(groupId) {
+      var groupDevices = [];
+
+      if (!groupsDevices) {
+        return loadDevices(false).then(function() {
+          groupsDevices.map(function(device) {
+            if (device.group == groupId) {
+              groupDevices.push(device);
+            }
+          });
+
+          return groupDevices;
+        });
+      }
+
+      groupsDevices.map(function(device) {
+        if (device.group == groupId) {
+          groupDevices.push(device);
+        }
+      });
+
+      return groupDevices;
+    }
+
+    /**
+     * Retrieve a group with complete devices with its id
+     *
+     * @param {String} id The group id
+     * @return group
+     * @method getGroup
+     */
+    function getGroupWithFullDevices(id) {
+      var devices = [];
+
+      if (!groups) {
+        return loadDevices().then(function() {
+          return groups.find(function(group) {
+            if (group.id == id) {
+              devices = getDevicesByGroup(group.id);
+              group.devices = devices;
+
+              return group;
+            }
+          });
+        });
+      }
+
+      return groups.find(function(group) {
+        if (group.id == id) {
+          devices = getDevicesByGroup(group.id);
+          group.devices = devices;
+
+          return group;
+        }
+      });
+    }
+
+    /**
      * Define groups
      *
      * @param {Array} data An array of groups
@@ -208,53 +272,22 @@
     /**
      * Retrieve a device with its id
      *
-     * @param {String} id tje device id
+     * @param {String} id the device id
      * @returns {*|{}}
      * @method getDevice
      */
     function getDevice(id) {
       if (!devices) {
         return loadDevices(false).then(function() {
-          return devices.find(function(device) {
+          return devices.acceptedDevices.find(function(device) {
             return device.id == id;
           });
         });
       }
 
-      return devices.find(function(device) {
+      return devices.acceptedDevices.find(function(device) {
         return device.id == id;
       });
-    }
-
-    /**
-     * Retrieve the group devices with group id
-     *
-     * @param {String} groupId the group id
-     * @returns {Array}
-     * @method getDevicesByGroup
-     */
-    function getDevicesByGroup(groupId) {
-      var groupDevices = [];
-
-      if (!groupsDevices) {
-        return loadDevices(false).then(function() {
-          groupsDevices.map(function(device) {
-            if (device.group == groupId) {
-              groupDevices.push(device);
-            }
-          });
-
-          return groupDevices;
-        });
-      }
-
-      groupsDevices.map(function(device) {
-        if (device.group == groupId) {
-          groupDevices.push(device);
-        }
-      });
-
-      return groupDevices;
     }
 
     /**
@@ -338,6 +371,7 @@
     return {
       getGroups: getGroups,
       getGroup: getGroup,
+      getGroupWithFullDevices: getGroupWithFullDevices,
       setGroups: setGroups,
       addGroup: addGroup,
       getDevices: getDevices,

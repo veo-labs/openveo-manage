@@ -9,14 +9,13 @@
     $scope,
     $filter,
     $timeout,
-    $window,
     $location,
     manageService,
     entityService,
-    manageName) {
+    manageName,
+    deviceService) {
 
-    var self = this,
-      openedDevice = null;
+    var self = this;
 
     // Available state for device
     self.STATE_ACCEPTED = 'accepted';
@@ -231,28 +230,6 @@
     }
 
     /**
-     * Permits to organize the view when the details is opened/closed
-     *
-     * @param opening
-     */
-    function organizeLayout(opening) {
-
-      var screenWidth = $window.innerWidth,
-        containerWidth = parseInt(document.getElementsByClassName('manage-container')[0].offsetWidth + 30),
-        leftSpace = parseInt(screenWidth - containerWidth) / 2;
-
-      if (opening && leftSpace <= 300) {
-        if (containerWidth <= 750) {
-          $scope.manage.resize = 'small';
-        } else {
-          $scope.manage.resize = 'medium';
-        }
-      } else {
-        $scope.manage.resize = 'normal';
-      }
-    }
-
-    /**
      * Display the device/group detail on tile click
      */
     function clickDevice() {
@@ -268,33 +245,29 @@
           return;
         }
 
-        var deviceId = event.currentTarget.getAttribute('data-id');
+        var deviceId = event.currentTarget.getAttribute('data-id'),
+          currentTarget = angular.element(event.currentTarget);
 
-        if (!openedDevice) {
-          openedDevice = deviceId;
-          $scope.manage.deviceSelected = true;
+        if (!$scope.manage.openedDevice) {
+
+          // Set the selected device
+          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
+          $scope.manage.openedDevice = deviceId;
+          $scope.manage.showDetail = true;
           setUiState(event.currentTarget, 'selected');
-
-          // deviceService.setTarget(event.currentTarget);
-          // deviceService.getDetails(deviceId);
-        } else if (openedDevice == deviceId) {
-          openedDevice = null;
-          $scope.manage.deviceSelected = false;
+        } else if ($scope.manage.openedDevice == deviceId) {
+          deviceService.manageDeviceDetails();
+          $scope.manage.openedDevice = null;
+          $scope.manage.showDetail = false;
           removeUiState(event.currentTarget, 'selected');
-
-          // deviceService.setTarget(event.currentTarget);
         } else {
-          openedDevice = deviceId;
-
-          // removeUiState(deviceService.getTarget(), 'selected');
+          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
+          $scope.manage.openedDevice = deviceId;
           $scope.clearUiState('selected');
           setUiState(event.currentTarget, 'selected');
-
-          // deviceService.setTarget(event.currentTarget);
-          // deviceService.getDetails(deviceId);
         }
 
-        organizeLayout($scope.manage.deviceSelected);
+        $scope.organizeLayout($scope.manage.showDetail);
         $scope.$apply();
       });
     }
@@ -313,7 +286,7 @@
       interact('.device-group > .group').on('doubletap', function(event) {
         var groupId = event.currentTarget.getAttribute('data-id');
 
-        $scope.manage.deviceSelected = false;
+        $scope.manage.showDetail = false;
         $scope.clearUiState('selected');
         $location.path('manage/group-detail/' + groupId);
         $scope.manage.absUrl = $location.absUrl();
@@ -397,11 +370,11 @@
     '$scope',
     '$filter',
     '$timeout',
-    '$window',
     '$location',
     'manageService',
     'entityService',
-    'manageName'
+    'manageName',
+    'deviceService'
   ];
 
 })(angular.module('ov.manage'));
