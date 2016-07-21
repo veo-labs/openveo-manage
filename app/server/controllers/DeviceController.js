@@ -67,20 +67,8 @@ DeviceController.prototype.updateEntityAction = function(request, response, next
   if (request.params.id && request.body) {
     var model = new this.Entity(request.user),
       entityId = request.params.id,
-      params,
+      params = request.body,
       socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
-
-    try {
-      params = openVeoAPI.util.shallowValidateObject(request.body, {
-        name: {type: 'string'},
-        state: {type: 'string'}
-      });
-    } catch (error) {
-      return next(errors.UPDATE_DEVICE_WRONG_PARAMETERS);
-    }
-    if (DeviceModel.availableStates.indexOf(request.body.state) < 0) {
-      return next(new Error('Invalid device state ' + request.body.state));
-    }
 
     model.update(entityId, params, function(error, updateCount) {
       if (error && (error instanceof AccessError))
