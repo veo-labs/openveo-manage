@@ -12,9 +12,9 @@
             <div class="well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
                 <span class="title" ng-bind="device.name"></span>
                 <div class="equipments">
-                    <span class="camera" ng-bind="device.cameraStatus || 'disconnected'"></span>
-                    <span class="box" ng-bind="device.status || 'disconnected'"></span>
-                    <span class="screen" ng-bind="device.desktopStatus || 'disconnected'"></span>
+                    <span class="camera" ng-class="device.cameraStatus || 'disconnected'"></span>
+                    <span class="box" ng-class="device.status || 'disconnected'"></span>
+                    <span class="screen" ng-class="device.desktopStatus || 'disconnected'"></span>
                     <ul class="progress-storage">
                         <li data-storage="{{ device['storage'] || 0 }}">
                             <svg viewBox="-10 -10 220 220">
