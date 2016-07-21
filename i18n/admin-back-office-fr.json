@@ -17,6 +17,11 @@
   "DETAIL": {
     "ACTION": "Action",
     "DETAIL": "Détail",
-    "HISTORY": "Historique"
+    "HISTORY": "Historique",
+    "STATE": "Etat",
+    "TABLE": {
+      "NAME": "Nom",
+      "STATUS": "Statut"
+    }
   }
 }
