@@ -94,9 +94,38 @@
       top: 0;
       width: 300px;
       display: inline-block;
+      padding: 25px 20px;
 
       &.detail-page {
         left: 300px;
+
+        .name {
+          color: $dark-blue;
+          font-weight: 700;
+          margin-bottom: 15px;
+          display: block;
+        }
+        .state {
+          padding-bottom: 15px;
+          border-bottom: 1px solid $border-grey;
+          display: block;
+        }
+        .action {
+          margin-top: 20px;
+
+          .table {
+            th {
+              font-weight: normal;
+            }
+            thead {
+              color: white;
+              th {
+                background-color: $black-detail;
+                background-image: none;
+              }
+            }
+          }
+        }
       }
       &.history-page {
         left: 600px;
