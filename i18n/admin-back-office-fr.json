@@ -21,7 +21,9 @@
     "STATE": "Etat",
     "TABLE": {
       "NAME": "Nom",
-      "STATUS": "Statut"
+      "STATUS": "Statut",
+      "DATE": "Date",
+      "MESSAGE": "Message"
     }
   }
 }

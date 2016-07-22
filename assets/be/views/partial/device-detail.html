@@ -53,7 +53,20 @@
                 </div>
             </div>
             <div class="history-page page" ng-class="{'active': vm.isActivePage(2)}">
-                history
+                <table class="table" border="0">
+                    <thead>
+                    <tr>
+                        <th ov-sort-table order="'date'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.TABLE.DATE' | translate }}</th>
+                        <th ov-sort-table order="'message'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.TABLE.MESSAGE' | translate }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="history in vm.selectedDevice.history | orderBy:order:reverse track by history.id">
+                        <th ng-bind="device.date"></th>
+                        <th ng-bind="device.message"></th>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
