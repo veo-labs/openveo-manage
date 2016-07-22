@@ -4,11 +4,11 @@
 
     <div class="back" ng-click="vm.back()">
         <span class="arrow"></span>
-        <h3 class="group-title" ng-bind="groupDetails.group.name"></h3>
+        <h3 class="group-title" ng-bind="group.name"></h3>
     </div>
 
     <div ng-controller="DeviceController as deviceCtrl" class="devices row">
-        <div class="device col-sm-4 col-md-3" ng-repeat="device in groupDetails.devices track by device.id" ng-class="manage.resize">
+        <div class="device col-sm-4 col-md-3" ng-repeat="device in acceptedDevices track by device.id" ng-class="manage.resize">
             <div class="well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
                 <span class="title" ng-bind="device.name"></span>
                 <div class="equipments">

@@ -9,8 +9,14 @@
     var self = this,
       devicesIds = [];
 
+    // Initialize data
+    if (group) {
+      $scope.acceptedDevices = group.devices;
+      $scope.group = group.group;
+    } else {
+      $scope.acceptedDevices = results.acceptedDevices;
+    }
     $scope.groups = results.groups;
-    $scope.acceptedDevices = results.acceptedDevices;
     $scope.refusedDevices = results.refusedDevices;
     $scope.pendingDevices = results.pendingDevices;
     $scope.manage = {
@@ -22,14 +28,6 @@
 
     $scope.socket = socketService.getConnexion();
     $scope.devicesConnexion = [];
-
-    // Initialize group detail
-    if (group) {
-      $scope.groupDetails = {
-        group: group.group,
-        devices: group.devices
-      };
-    }
 
     /**
      * Initialize all socket.io listeners
@@ -58,8 +56,7 @@
      * @param uiState
      */
     $scope.clearUiState = function(uiState) {
-      var index,
-        devices = ($scope.groupDetails) ? $scope.groupDetails.devices : $scope.acceptedDevices;
+      var index;
 
       $scope.groups.map(function(group) {
         if (group['ui-state']) {
@@ -69,7 +66,7 @@
           }
         }
       });
-      devices.map(function(device) {
+      $scope.acceptedDevices.map(function(device) {
         if (device['ui-state']) {
           index = device['ui-state'].indexOf(uiState);
           if (index > -1) {

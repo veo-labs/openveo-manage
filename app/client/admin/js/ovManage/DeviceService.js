@@ -17,11 +17,12 @@
      *
      * @param {String} deviceId the device or group id
      * @param {Boolean} isGroup True if the id sent is a group id
+     * @param {Boolean | null} isDetail True if the page the the group detail
      * @method setSelectedDevice
      */
-    function setSelectedDevice(deviceId, isGroup) {
+    function setSelectedDevice(deviceId, isGroup, isDetail) {
       if (!isGroup) {
-        selectedDevice = manageService.getDevice(deviceId);
+        selectedDevice = manageService.getDevice(deviceId, isDetail);
       } else {
         selectedDevice = manageService.getGroupWithFullDevices(deviceId);
       }
@@ -49,13 +50,14 @@
      *
      * @param {String | null} deviceId the device or group id
      * @param {Boolean | null} isGroup True if the id sent is a group id
+     * @param {Boolean | null} isDetail True if the page the the group detail
      * @method manageDeviceDetails
      */
-    function manageDeviceDetails(deviceId, isGroup) {
+    function manageDeviceDetails(deviceId, isGroup, isDetail) {
 
       // if device id is not defined clear the selected device
       if (deviceId) {
-        setSelectedDevice(deviceId, isGroup);
+        setSelectedDevice(deviceId, isGroup, isDetail);
 
         // Send an event to load the selected device from controller
         $rootScope.$broadcast('device.details');

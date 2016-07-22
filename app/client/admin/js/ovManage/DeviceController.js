@@ -246,12 +246,13 @@
         }
 
         var deviceId = event.currentTarget.getAttribute('data-id'),
-          currentTarget = angular.element(event.currentTarget);
+          currentTarget = angular.element(event.currentTarget),
+          isDetail = ($location.url().indexOf('detail') >= 0) ? true : false;
 
         if (!$scope.manage.openedDevice) {
 
           // Set the selected device
-          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
+          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'), isDetail);
           $scope.manage.openedDevice = deviceId;
           $scope.manage.showDetail = true;
           setUiState(event.currentTarget, 'selected');
@@ -261,7 +262,7 @@
           $scope.manage.showDetail = false;
           removeUiState(event.currentTarget, 'selected');
         } else {
-          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
+          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'), isDetail);
           $scope.manage.openedDevice = deviceId;
           $scope.clearUiState('selected');
           setUiState(event.currentTarget, 'selected');

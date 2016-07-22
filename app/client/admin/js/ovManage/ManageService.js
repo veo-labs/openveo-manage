@@ -92,7 +92,7 @@
      * @method loadDevices
      */
     function loadDevices() {
-      if (!devices || !groups) {
+      if (!devices || !groups || !groupsDevices) {
         var promises = {
           workingDevices: entityService.getAllEntities('devices', manageName),
           workingGroups: loadGroups()
@@ -149,11 +149,7 @@
      */
     function getGroup(id) {
       if (!groups) {
-        return loadDevices().then(function() {
-          return groups.find(function(group) {
-            return group.id == id;
-          });
-        });
+        loadDevices();
       }
 
       return groups.find(function(group) {
@@ -172,15 +168,7 @@
       var groupDevices = [];
 
       if (!groupsDevices) {
-        return loadDevices(false).then(function() {
-          groupsDevices.map(function(device) {
-            if (device.group == groupId) {
-              groupDevices.push(device);
-            }
-          });
-
-          return groupDevices;
-        });
+        loadDevices();
       }
 
       groupsDevices.map(function(device) {
@@ -203,16 +191,7 @@
       var devices = [];
 
       if (!groups) {
-        return loadDevices().then(function() {
-          return groups.find(function(group) {
-            if (group.id == id) {
-              devices = getDevicesByGroup(group.id);
-              group.devices = devices;
-
-              return group;
-            }
-          });
-        });
+        loadDevices();
       }
 
       return groups.find(function(group) {
@@ -273,21 +252,24 @@
      * Retrieve a device with its id
      *
      * @param {String} id the device id
+     * @param {Boolean} isDetail Specify in which collection the device must be find
      * @returns {*|{}}
      * @method getDevice
      */
-    function getDevice(id) {
-      if (!devices) {
-        return loadDevices(false).then(function() {
-          return devices.acceptedDevices.find(function(device) {
-            return device.id == id;
-          });
-        });
+    function getDevice(id, isDetail) {
+      if (!devices || !groupsDevices) {
+        loadDevices();
       }
 
-      return devices.acceptedDevices.find(function(device) {
-        return device.id == id;
-      });
+      if (!isDetail) {
+        return devices.acceptedDevices.find(function(device) {
+          return device.id == id;
+        });
+      } else {
+        return groupsDevices.find(function(device) {
+          return device.id == id;
+        });
+      }
     }
 
     /**
