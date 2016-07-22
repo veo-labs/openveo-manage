@@ -339,19 +339,19 @@
         group.devices.push(draggableId, dropzoneId);
         groups.push(group);
 
-        devices.acceptedDevices.splice(index, 1);
+        devices.acceptedDevices[index].group = group.id;
         index = devices.acceptedDevices.findIndex(function(workingDevice) {
           return workingDevice.id == dropzoneId;
         });
-        devices.acceptedDevices.splice(index, 1);
+
+        devices.acceptedDevices[index].group = group.id;
       } else {
         groups.map(function(group) {
           if (group.id == dropzoneId) {
             group.devices.push(draggableId);
+            devices.acceptedDevices[index].group = group.id;
           }
         });
-
-        devices.acceptedDevices.splice(index, 1);
       }
 
       return $q.when({
