@@ -40,6 +40,7 @@
       $scope.manage.showDetail = false;
       $scope.manage.openedDevice = null;
       self.selectedDevice = null;
+      deviceService.clearSelectedDevice();
       $scope.organizeLayout(false);
     };
 
@@ -52,6 +53,11 @@
     // Listen event to remove the selected device
     $scope.$on('closeDeviceDetails', function(event) {
       self.selectedDevice = null;
+    });
+
+    // Listen event to close device details window
+    $scope.$on('close.window', function(event) {
+      self.closeDetail();
     });
 
   }

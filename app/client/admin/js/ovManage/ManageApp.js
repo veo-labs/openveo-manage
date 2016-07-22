@@ -42,12 +42,12 @@
         results: ['manageService', function(manageService) {
           return manageService.getDevicesPromised();
         }],
-        group: ['groupService', '$route', function(groupService, $route) {
+        group: ['manageService', '$route', function(manageService, $route) {
           var id = $route.current.params.id;
           if (!id) {
             return null;
           }
-          return groupService.loadGroupDetails(id);
+          return manageService.getGroup(id);
         }]
       }
     });
@@ -61,10 +61,10 @@
         results: ['manageService', function(manageService) {
           return manageService.getDevicesPromised();
         }],
-        group: ['groupService', '$route', function(groupService, $route) {
+        group: ['manageService', '$route', function(manageService, $route) {
           var id = $route.current.params.id;
 
-          return groupService.loadGroupDetails(id);
+          return manageService.getGroup(id);
         }]
       }
     });

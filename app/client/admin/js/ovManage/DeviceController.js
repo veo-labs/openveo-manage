@@ -25,7 +25,7 @@
     /**
      * Define an ui-state for a device
      *
-     * @param target The target device or group
+     * @param {Object} target The target device or group
      * @param {String} uiState The ui-state to set for the device
      */
     function setUiState(target, uiState) {
@@ -42,7 +42,7 @@
     /**
      * Remove an ui-state for a device
      *
-     * @param target The target device or group
+     * @param {Object} target The target device or group
      * @param {String} uiState The ui-state to remove for the device
      */
     function removeUiState(target, uiState) {
@@ -56,6 +56,7 @@
 
     /**
      * Move element on drag
+     *
      * @param {Object} event the user Event related to the dragEvent
      */
     function dragMoveListener(event) {
@@ -76,6 +77,7 @@
 
     /**
      * Reset the device element to its initial position
+     *
      * @param {Object} target the element to reset position
      */
     function resetPosition(target) {
@@ -100,8 +102,8 @@
     /**
      * Set position of the target element to the dropzone element
      *
-     * @param target
-     * @param relatedTarget
+     * @param {Object} target the dropzone element
+     * @param {Object} relatedTarget target the dragged element to move
      */
     function mergePosition(target, relatedTarget) {
       var x = parseInt(target.getBoundingClientRect().left) -
@@ -165,9 +167,9 @@
     /**
      * Add devices to a group, group is created if does not exist
      *
-     * @param draggableId
-     * @param dropzoneId
-     * @param isGroup
+     * @param {String} draggableId The id of the device to add to a group
+     * @param {String} dropzoneId The id of the device or group
+     * @param {Boolean} isGroup True if the dropzone is a group
      */
     function addDeviceToGroup(draggableId, dropzoneId, isGroup) {
 
@@ -246,13 +248,12 @@
         }
 
         var deviceId = event.currentTarget.getAttribute('data-id'),
-          currentTarget = angular.element(event.currentTarget),
-          isDetail = ($location.url().indexOf('detail') >= 0) ? true : false;
+          currentTarget = angular.element(event.currentTarget);
 
         if (!$scope.manage.openedDevice) {
 
           // Set the selected device
-          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'), isDetail);
+          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
           $scope.manage.openedDevice = deviceId;
           $scope.manage.showDetail = true;
           setUiState(event.currentTarget, 'selected');
@@ -262,7 +263,7 @@
           $scope.manage.showDetail = false;
           removeUiState(event.currentTarget, 'selected');
         } else {
-          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'), isDetail);
+          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
           $scope.manage.openedDevice = deviceId;
           $scope.clearUiState('selected');
           setUiState(event.currentTarget, 'selected');
@@ -312,8 +313,8 @@
     /**
      * Add pending/refused device to the accepted list of devices
      *
-     * @param device
-     * @param state
+     * @param {Object} device The device object
+     * @param {String} state The old state of the device
      */
     self.addToAcceptedDevices = function(device, state) {
       var deviceToSave = {
@@ -337,8 +338,8 @@
     /**
      * Add the new device to the refused list of devices
      *
-     * @param device
-     * @param state
+     * @param {Object} device The device object
+     * @param {String} state The old state of the device
      */
     self.addToRefusedDevices = function(device, state) {
       var deviceToSave = {
@@ -349,6 +350,24 @@
       entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
         removeDeviceConnected(device.id);
         manageService.updateDeviceState(device, state, self.STATE_REFUSED).then(function() {
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
+        });
+      }, function() {
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
+      });
+    };
+
+    /**
+     * Remove a device from a group
+     *
+     * @param {String} deviceId The id of the device to remove from the group
+     * @param {String} groupId The id of the group from the device will be removed
+     */
+    $scope.removeFromGroup = function(deviceId, groupId) {
+
+      entityService.updateEntity('devices', manageName, deviceId, {group: null}).then(function() {
+
+        manageService.removeDeviceFromGroup(deviceId, groupId).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         });
       }, function() {

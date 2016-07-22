@@ -11,11 +11,9 @@
 
     // Initialize data
     if (group) {
-      $scope.acceptedDevices = group.devices;
-      $scope.group = group.group;
-    } else {
-      $scope.acceptedDevices = results.acceptedDevices;
+      $scope.group = group;
     }
+    $scope.acceptedDevices = results.acceptedDevices;
     $scope.groups = results.groups;
     $scope.refusedDevices = results.refusedDevices;
     $scope.pendingDevices = results.pendingDevices;
