@@ -34,19 +34,19 @@
                 </div>
                 <div class="action" ng-if="vm.selectedDevice.devices.length">
                     <div class="name" ng-bind="'MANAGE.DETAIL.ACTION' | translate"></div>
-                    <table class="table table-bordered">
+                    <table class="table" border="0">
                         <thead>
                             <tr>
-                                <th ng-bind="'MANAGE.DETAIL.TABLE.NAME' | translate"></th>
-                                <th ng-bind="'MANAGE.DETAIL.TABLE.STATUS' | translate"></th>
-                                <th class=""></th>
+                                <th ov-sort-table order="'name'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.TABLE.NAME' | translate }}</th>
+                                <th ov-sort-table order="'status'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.TABLE.STATUS' | translate }}</th>
+                                <th class="trash"></th>
                             </tr>
                         </thead>
-                        <tbody ng-repeat="device in vm.selectedDevice.devices track by device.id">
-                            <tr>
+                        <tbody>
+                            <tr ng-repeat="device in vm.selectedDevice.devices | orderBy:order:reverse track by device.id">
                                 <th ng-bind="device.name"></th>
-                            <th ng-bind="device.status"></th>
-                                <th></th>
+                                <th ng-bind="device.status"></th>
+                                <th class="cross"></th>
                             </tr>
                         </tbody>
                     </table>
