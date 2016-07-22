@@ -65,7 +65,7 @@
       position: absolute;
       cursor: pointer;
 
-      @include cross(13px, 1px);
+      @include cross(13px, 1px, white);
 
       &:before, &:after {
         left: 9px;
@@ -113,15 +113,59 @@
         .action {
           margin-top: 20px;
 
+          table, thead, tbody, th {
+            border: none;
+          }
+
           .table {
             th {
               font-weight: normal;
             }
             thead {
-              color: white;
               th {
                 background-color: $black-detail;
                 background-image: none;
+                position: relative;
+                padding: 0;
+                @include sortTable();
+
+                a {
+                  color: white;
+                  display: block;
+                  padding: 0 10px;
+                  text-decoration: none;
+                  border-right: 1px solid white;
+                }
+                &:last-child a {
+                  border-right: none;
+                }
+              }
+            }
+            tbody {
+              font-size: 12px;
+              color: $black-detail;
+              tr {
+                &:nth-child(odd) {
+                  background-color: $table-odd-grey;
+                }
+                &:nth-child(even) {
+                  background-color: $table-even-grey;
+                }
+                &:last-child {
+                  border-bottom: 1px solid $border-grey;
+                }
+                th {
+                  border-right: 1px solid $border-grey;
+                  padding: 5px 10px;
+                  &:last-child {
+                    border-right: none;
+                  }
+                  &.cross {
+                    text-align: center;
+                    cursor: pointer;
+                    @include cross(15px, 1px, $black-detail);
+                  }
+                }
               }
             }
           }

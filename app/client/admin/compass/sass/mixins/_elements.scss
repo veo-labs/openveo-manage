@@ -34,18 +34,51 @@
   }
 }
 
-@mixin cross($height, $width) {
+@mixin cross($height, $width, $color) {
   &:before, &:after {
     position: absolute;
     content: ' ';
     height: $height;
     width: $width;
-    background-color: white;
+    background-color: $color;
   }
   &:before {
     transform: rotate(45deg);
   }
   &:after {
     transform: rotate(-45deg);
+  }
+}
+
+@mixin sortTable() {
+  .sort {
+    position: absolute;
+    top: 12px;
+    right: 25px;
+    .caret, .caret-top {
+      opacity: .5;
+      &.active {
+        opacity: 1;
+      }
+    }
+  }
+  .caret-top, .caret {
+    position: absolute;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }
+  .caret {
+    top: 8px;
+    border-top: 5px dashed;
+    border-bottom: 5px solid \9; // IE8
+  }
+  .caret-top {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-bottom: 5px dashed;
+    border-top: 5px solid \9; // IE8
   }
 }

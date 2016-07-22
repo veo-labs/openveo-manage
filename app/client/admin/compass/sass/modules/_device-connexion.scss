@@ -28,7 +28,7 @@
         height: 28px;
         width: 43px;
         @include refusedButton();
-        @include cross(16px, 2px);
+        @include cross(16px, 2px, white);
         margin-right: 5px;
         &:before, &:after {
           left: 0;
