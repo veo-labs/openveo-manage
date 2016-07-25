@@ -17,7 +17,7 @@
         </div>
     </div>
     <!-- Devices -->
-    <div class="device col-sm-4 col-md-3" ng-repeat="device in acceptedDevices track by device.id" ng-class="manage.resize" ng-if="!device.group">
+    <div class="device accepted col-sm-4 col-md-3" ng-repeat="device in acceptedDevices track by device.id" ng-class="manage.resize" ng-if="!device.group">
         <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
             <span class="title" ng-bind="device.name"></span>
             <div class="equipments">

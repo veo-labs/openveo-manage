@@ -237,12 +237,12 @@
     function clickDevice() {
 
       // Avoid to fired the same event multiple times
-      var events = interact('.device > .well, .device-group > .group')._iEvents;
+      var events = interact('.device.accepted > .well, .device-group > .group')._iEvents;
       if (Object.keys(events).length && events.tap) {
         delete events.tap;
       }
 
-      interact('.device > .well, .device-group > .group').on('tap', function(event) {
+      interact('.device.accepted > .well, .device-group > .group').on('tap', function(event) {
         if (event.double) {
           return;
         }
