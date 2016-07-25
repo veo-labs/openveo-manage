@@ -6,26 +6,25 @@
    * Defines the manage controller
    */
   function ManageController($scope, $window, $location, results, group, socketService, manageService) {
-    var self = this,
-      devicesIds = [];
+    var devicesIds = [];
 
     // Initialize data
     if (group) {
-      $scope.group = group;
+      $scope.group = group; // Information of the group on detail page
     }
     $scope.acceptedDevices = results.acceptedDevices;
     $scope.groups = results.groups;
     $scope.refusedDevices = results.refusedDevices;
     $scope.pendingDevices = results.pendingDevices;
     $scope.manage = {
-      resize: 'normal',
-      openedDevice: null,
-      showDetail: false,
-      absUrl: $location.absUrl()
+      resize: 'normal', // Permits to resize the devices tiles (normal/medium/small)
+      openedDevice: null, // Contain the id of the selected device
+      showDetail: false, // Used to add a class to the selected device
+      absUrl: $location.absUrl() // The URL of the current page
     };
 
     $scope.socket = socketService.getConnexion();
-    $scope.devicesConnexion = [];
+    $scope.devicesConnexion = []; // Store all the new pending connexions
 
     /**
      * Initialize all socket.io listeners
@@ -99,9 +98,11 @@
     /**
      * Go to the previous page
      */
-    self.back = function() {
+    $scope.back = function() {
       $scope.manage.showDetail = false;
+      $scope.manage.openedDevice = null;
       $scope.clearUiState('selected');
+      $scope.organizeLayout(false);
       $window.history.back();
       $scope.manage.absUrl = $location.absUrl();
     };

@@ -154,6 +154,25 @@
     }
 
     /**
+     * Remove a group with its id and clear the devices
+     *
+     * @param id
+     * @method removeGroup
+     */
+    function removeGroup(id) {
+      var group = getGroup(id),
+        groupIndex = groups.findIndex(function(groupId) {
+          return id == groupId;
+        });
+
+      group.devices.map(function(device) {
+        delete device.group;
+      });
+
+      groups.splice(groupIndex, 1);
+    }
+
+    /**
      * Retrieve the group devices with group id
      *
      * @param {String} groupId the group id
@@ -372,24 +391,9 @@
       var defer = $q.defer(),
         group = getGroup(groupId),
         device = getDevice(deviceId, true),
-
-        // groupIndex = -1,
         deviceIndex = group.devices.findIndex(function(id) {
           return id == deviceId;
         });
-
-      // If the group contains 2 devices it is removed
-      /* if (group.devices.length == 2) {
-        groupIndex = groups.findIndex(function(worgingGroup) {
-          return workingGroup.id = groupId;
-        });
-        for (var i = 0; i < 2; i++) {
-
-        }
-        group.splice(groupIndex, )
-      } else {
-
-      }*/
 
       group.devices.splice(deviceIndex, 1);
       delete device.group;
@@ -408,6 +412,7 @@
       getGroupWithFullDevices: getGroupWithFullDevices,
       setGroups: setGroups,
       addGroup: addGroup,
+      removeGroup: removeGroup,
       getDevices: getDevices,
       getDevice: getDevice,
       getDevicesByGroup: getDevicesByGroup,
