@@ -229,6 +229,21 @@ function setDeviceStorage(socketId, storage) {
 }
 
 /**
+ * Set the presets of a device
+ *
+ * @method setDevicesPresets
+ * @param {String} socketId The socket id
+ * @param {Object} presets The presets of the device
+ */
+function setDevicePresets(socketId, presets) {
+  var index = findDeviceIndex.call(this, socketId);
+
+  if (index >= 0) {
+    this.devices[index].device.presets = presets;
+  }
+}
+
+/**
  * Remove an in-memory stored device when a device is disconnected
  *
  * @method removeDevice
@@ -254,9 +269,18 @@ function clientConnect() {
 
   this.ioClient.on('connection', function(socket) {
 
-    // Listening for device needed updating settings (storage/presets)
+    // Listening for device needed updating settings (storage)
     socket.on('settings', function(data) {
       self.devicesSettings(data);
+    });
+
+    // Listening for devices presets need
+    socket.on('settings.presets', function(data) {
+      var deviceSocket = findSocket.call(self, data);
+
+      // Asks for device presets
+      if (deviceSocket)
+        self.deviceListener.presets(deviceSocket);
     });
   });
 }
@@ -302,17 +326,19 @@ function deviceConnect() {
 
     // Listening for device storage
     socket.on('settings.storage', function(data) {
-      var device;
+      var device = findDevice.call(self, socket.id);
 
       setDeviceStorage.call(self, socket.id, data);
-      device = findDevice.call(self, socket.id);
-      self.clientListener.storage(device);
+      self.clientListener.update(device);
     });
 
     // Listening for device equipments
     socket.on('settings.presets', function(data) {
+      var device = findDevice.call(self, socket.id);
 
-      // var device = findDevice.call(self, socket.id);
+      setDevicePresets.call(self, socket.id, data);
+      console.log(self.devices);
+      self.clientListener.update(device);
     });
 
     // Disconnect event

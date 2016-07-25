@@ -28,11 +28,11 @@ ClientListener.prototype.hello = function(device) {
 };
 
 /**
- * Send a storage event to the client with the updated device
+ * Send an event to the client with the updated device
  *
- * @method storage
+ * @method update
  * @param {Object} device The updated device with storage data
  */
-ClientListener.prototype.storage = function(device) {
-  this.ioClient.emit('settings.storage', device);
+ClientListener.prototype.update = function(device) {
+  this.ioClient.emit('update', device);
 };
