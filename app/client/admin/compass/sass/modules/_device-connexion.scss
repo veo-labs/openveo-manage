@@ -1,12 +1,20 @@
+.demands-container {
+  position: fixed;
+  right: 0;
+  bottom: 0px;
+  z-index: 999;
+}
+
 .demands {
+  position: relative;
   .device-connexion {
     background-color: white;
 
     &.new {
-      position: fixed;
+      position: relative;
       right: 15px;
       bottom: 0px;
-      margin-bottom: 0;
+      margin-bottom: 5px;
       @include slideUp(-239px, 0px);
       z-index: 999;
     }
