@@ -189,6 +189,11 @@ function addDevice(socketId, device) {
       socketId: socketId,
       device: device
     });
+  } else {
+    this.devices[index] = {
+      socketId: socketId,
+      device: device
+    };
   }
 }
 
@@ -329,9 +334,25 @@ function deviceConnect() {
  *  - **Error** An error if something went wrong, null otherwise
  */
 SocketProvider.prototype.connect = function(callback) {
+  var self = this;
+
   deviceConnect.call(this);
   clientConnect.call(this);
-  callback();
+
+  // Prepare cache on data start
+  this.deviceModel.get(null, function(error, entities) {
+    if (error)
+      callback(error);
+
+    entities.map(function(device) {
+      self.devices.push({
+        socketId: null,
+        device: device
+      });
+    });
+    callback();
+  });
+
 };
 
 /**
@@ -364,7 +385,8 @@ SocketProvider.prototype.devicesSettings = function(deviceIds) {
     socket = findSocket.call(self, id);
 
     // Asks for device settings
-    self.deviceListener.settings(socket);
+    if (socket)
+      self.deviceListener.settings(socket);
   });
 };
 
