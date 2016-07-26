@@ -24,6 +24,13 @@
       "STATUS": "Statut",
       "DATE": "Date",
       "MESSAGE": "Message"
-    }
+    },
+    "PRESET": "Sélectionner un préréglage",
+    "START": "Démarrer",
+    "PLANNING": "Plannification",
+    "BEGIN": "Début",
+    "END": "Fin",
+    "RECORD": "Enregistrer",
+    "REMOVE_DEVICE": "Supprimer l'encodeur"
   }
 }

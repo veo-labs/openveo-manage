@@ -24,6 +24,13 @@
       "STATUS": "Status",
       "DATE": "Date",
       "MESSAGE": "Message"
-    }
+    },
+    "PRESET": "Select a preset",
+    "START": "Start",
+    "PLANNING": "Planning",
+    "BEGIN": "Begin",
+    "END": "End",
+    "RECORD": "Record",
+    "REMOVE_DEVICE": "Remove encoder"
   }
 }
