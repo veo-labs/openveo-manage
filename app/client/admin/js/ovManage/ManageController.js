@@ -5,7 +5,18 @@
   /**
    * Defines the manage controller
    */
-  function ManageController($scope, $window, $location, results, group, socketService, manageService) {
+  function ManageController(
+    $scope,
+    $window,
+    $location,
+    $filter,
+    results,
+    group,
+    socketService,
+    manageService,
+    entityService,
+    manageName) {
+
     var devicesIds = [];
 
     // Initialize data
@@ -102,6 +113,51 @@
       $scope.manage.absUrl = $location.absUrl();
     };
 
+    /**
+     * Remove a device from a group
+     *
+     * @param {String} deviceId The id of the device to remove from the group
+     * @param {String} groupId The id of the group from the device will be removed
+     */
+    $scope.removeFromGroup = function(deviceId, groupId) {
+      var group = null;
+
+      if (!$scope.group) {
+        group = manageService.getGroup(groupId);
+      } else {
+        group = $scope.group;
+      }
+
+      // If there is only 2 devices the group is removed
+      if (group.devices.length == 2) {
+        entityService.removeEntity('groups', manageName, groupId).then(function() {
+          entityService.updateEntity('devices', manageName, group.devices[0].id,
+            {group: null}).then(function() {});
+          entityService.updateEntity('devices', manageName, group.devices[1].id,
+            {group: null}).then(function() {});
+          manageService.removeGroup(groupId);
+
+          if (!$scope.group) {
+            $scope.$broadcast('close.window');
+          } else {
+            $scope.back();
+          }
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_GROUP_SUCCESS'), 4000);
+        }, function() {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_ERROR'), 4000);
+        });
+      } else {
+        entityService.updateEntity('devices', manageName, deviceId, {group: null}).then(function() {
+          manageService.removeDeviceFromGroup(deviceId, groupId).then(function() {
+            $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
+          });
+        }, function() {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_ERROR'), 4000);
+        });
+      }
+    };
+
+
     // Initialize socket.io listeners
     initializeListeners();
 
@@ -118,10 +174,13 @@
     '$scope',
     '$window',
     '$location',
+    '$filter',
     'results',
     'group',
     'socketService',
-    'manageService'
+    'manageService',
+    'entityService',
+    'manageName'
   ];
 
 })(angular.module('ov.manage'));

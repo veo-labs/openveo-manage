@@ -371,38 +371,6 @@
       });
     };
 
-    /**
-     * Remove a device from a group
-     *
-     * @param {String} deviceId The id of the device to remove from the group
-     * @param {String} groupId The id of the group from the device will be removed
-     */
-    $scope.removeFromGroup = function(deviceId, groupId) {
-
-      // If there is only 2 devices the group is removed
-      if ($scope.group.devices.length == 2) {
-        entityService.removeEntity('groups', manageName, groupId).then(function() {
-          entityService.updateEntity('devices', manageName, $scope.group.devices[0].id,
-            {group: null}).then(function() {});
-          entityService.updateEntity('devices', manageName, $scope.group.devices[1].id,
-            {group: null}).then(function() {});
-          manageService.removeGroup(groupId);
-          $scope.back();
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_GROUP_SUCCESS'), 4000);
-        }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_ERROR'), 4000);
-        });
-      } else {
-        entityService.updateEntity('devices', manageName, deviceId, {group: null}).then(function() {
-          manageService.removeDeviceFromGroup(deviceId, groupId).then(function() {
-            $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
-          });
-        }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_ERROR'), 4000);
-        });
-      }
-    };
-
     // Manage drag and drop events
     draggable();
     dragDropDevice();

@@ -88,7 +88,7 @@
                             <tr ng-repeat="device in vm.selectedDevice.devices | orderBy:order:reverse track by device.id">
                                 <th ng-bind="device.name"></th>
                                 <th ng-bind="device.status"></th>
-                                <th class="cross"></th>
+                                <th class="cross" ng-click="removeFromGroup(device.id, vm.selectedDevice.id)"></th>
                             </tr>
                         </tbody>
                     </table>
