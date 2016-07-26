@@ -154,25 +154,6 @@
     }
 
     /**
-     * Remove a group with its id and clear the devices
-     *
-     * @param id
-     * @method removeGroup
-     */
-    function removeGroup(id) {
-      var group = getGroup(id),
-        groupIndex = groups.findIndex(function(groupId) {
-          return id == groupId;
-        });
-
-      group.devices.map(function(device) {
-        delete device.group;
-      });
-
-      groups.splice(groupIndex, 1);
-    }
-
-    /**
      * Retrieve the group devices with group id
      *
      * @param {String} groupId the group id
@@ -201,6 +182,28 @@
       });
 
       return groupDevices;
+    }
+
+    /**
+     * Remove a group with its id and clear the devices
+     *
+     * @param id
+     * @method removeGroup
+     */
+    function removeGroup(id) {
+      var devices = getDevicesByGroup(id),
+        groupIndex = groups.findIndex(function(groupId) {
+          return id == groupId;
+        });
+
+      // Update devices belonging to the group
+      devices.map(function(device) {
+        entityService.updateEntity('devices', manageName, device.id, {group: null}).then(function() {
+          delete device.group;
+        });
+      });
+
+      groups.splice(groupIndex, 1);
     }
 
     /**
@@ -299,6 +302,20 @@
       return devices.acceptedDevices.find(function(device) {
         return device.id == id;
       });
+    }
+
+    /**
+     * Remove a device with its id
+     *
+     * @param id
+     * @method removeDevice
+     */
+    function removeDevice(id) {
+      var deviceIndex = devices.acceptedDevices.findIndex(function(workingDevice) {
+        return id == workingDevice.id;
+      });
+
+      devices.acceptedDevices.splice(deviceIndex, 1);
     }
 
     /**
@@ -415,6 +432,7 @@
       removeGroup: removeGroup,
       getDevices: getDevices,
       getDevice: getDevice,
+      removeDevice: removeDevice,
       getDevicesByGroup: getDevicesByGroup,
       setDevices: setDevices,
       addDevice: addDevice,

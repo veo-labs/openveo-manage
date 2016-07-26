@@ -103,11 +103,25 @@ module.exports = SocketProvider;
  * @method findDeviceIndex
  * @private
  * @param {String} socketId The socket id
- * @returns {Object | undefined}
+ * @returns {int | -1}
  */
 function findDeviceIndex(socketId) {
   return this.devices.findIndex(function(value) {
     return value.socketId == socketId;
+  });
+}
+
+/**
+ * Retrieve a device index with its socket id
+ *
+ * @method findDeviceIndexById
+ * @private
+ * @param {String} deviceId The device id
+ * @returns {int | -1}
+ */
+function findDeviceIndexById(deviceId) {
+  return this.devices.findIndex(function(value) {
+    return value.device.id == deviceId;
   });
 }
 
@@ -337,7 +351,6 @@ function deviceConnect() {
       var device = findDevice.call(self, socket.id);
 
       setDevicePresets.call(self, socket.id, data);
-      console.log(self.devices);
       self.clientListener.update(device);
     });
 
@@ -428,5 +441,19 @@ SocketProvider.prototype.updateDevice = function(deviceId, data) {
 
   for (var key in data) {
     device[key] = data[key];
+  }
+};
+
+/**
+ * Remove an in-memory stored device with its id
+ *
+ * @method removeDeviceById
+ * @param {String} deviceId The device id
+ */
+SocketProvider.prototype.removeDeviceById = function(deviceId) {
+  var index = findDeviceIndexById.call(this, deviceId);
+
+  if (index >= 0) {
+    this.devices.splice(index, 1);
   }
 };

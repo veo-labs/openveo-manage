@@ -37,14 +37,9 @@
         $scope.$apply();
       });
 
-      // Storage listener
-      $scope.socket.on('settings.storage', function(device) {
+      // Device update listener
+      $scope.socket.on('update', function(device) {
         manageService.updateDevice(device);
-      });
-
-      // Device details listener
-      $scope.socket.on('device.details', function(data) {
-
       });
     }
 

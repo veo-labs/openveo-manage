@@ -5,7 +5,7 @@
   /**
    * Defines the device detail controller
    */
-  function DeviceDetailController($scope, deviceService) {
+  function DeviceDetailController($scope, $filter, deviceService, manageService, entityService, manageName) {
 
     var self = this,
       activePage = 0;
@@ -44,6 +44,36 @@
       $scope.organizeLayout(false);
     };
 
+    /**
+     * Remove a device
+     *
+     * @param id
+     */
+    self.removeDevice = function(id) {
+      if ($scope.group && $scope.group.devices.length == 2) {
+        entityService.removeEntity('devices', manageName, id).then(function() {
+          entityService.removeEntity('groups', manageName, $scope.group.id).then(function() {
+            manageService.removeDevice(id);
+            manageService.removeGroup($scope.group.id);
+            self.closeDetail();
+            $scope.back();
+            $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_SUCCESS'), 4000);
+          });
+        }, function() {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_ERROR'), 4000);
+        });
+      } else {
+        entityService.removeEntity('devices', manageName, id).then(function() {
+          manageService.removeDevice(id);
+          self.closeDetail();
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_SUCCESS'), 4000);
+        }, function() {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_ERROR'), 4000);
+        });
+      }
+
+    };
+
     // Listen event to load the selected device details
     $scope.$on('device.details', function(event) {
       self.selectedDevice = deviceService.getSelectedDevice();
@@ -65,7 +95,11 @@
   app.controller('DeviceDetailController', DeviceDetailController);
   DeviceDetailController.$inject = [
     '$scope',
-    'deviceService'
+    '$filter',
+    'deviceService',
+    'manageService',
+    'entityService',
+    'manageName'
   ];
 
 })(angular.module('ov.manage'));

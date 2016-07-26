@@ -81,7 +81,6 @@ DeviceController.prototype.updateEntityAction = function(request, response, next
 
         // Update cached device
         socketProvider.updateDevice(entityId, params);
-
         response.send({error: null, status: 'ok'});
       }
     });
@@ -89,6 +88,37 @@ DeviceController.prototype.updateEntityAction = function(request, response, next
 
     // Missing id of the device or the datas
     next(errors.UPDATE_DEVICE_MISSING_PARAMETERS);
+  }
+};
 
+/**
+ * Removes a device.
+ *
+ * Parameters :
+ *  - **id** The id of the device to remove
+ *
+ * @method removeEntityAction
+ */
+DeviceController.prototype.removeEntityAction = function(request, response, next) {
+  if (request.params.id) {
+    var model = new this.Entity(request.user),
+      entityId = request.params.id,
+      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
+
+    model.remove(entityId, function(error, deleteCount) {
+      if (error) {
+        process.logger.error(error.message, {error: error, method: 'removeEntityAction'});
+        next(errors.REMOVE_ENTITY_ERROR);
+      } else {
+
+        // Update cached device
+        socketProvider.removeDeviceById(entityId);
+        response.send({error: null, status: 'ok'});
+      }
+    });
+  } else {
+
+    // Missing id of the device or the datas
+    next(errors.REMOVE_DEVICE_MISSING_PARAMETERS);
   }
 };
