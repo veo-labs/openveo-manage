@@ -152,6 +152,68 @@
         }
       }
 
+      .title {
+        color: $dark-blue;
+        font-weight: 700;
+      }
+
+      &.action-page {
+        .preset {
+          padding-bottom: 25px;
+          border-bottom: 1px solid $border-grey;
+          position: relative;
+          margin-bottom: 20px;
+
+          select {
+            position: absolute;
+            right: 0;
+          }
+        }
+        .action {
+          border-bottom: 1px solid $border-grey;
+          margin-bottom: 20px;
+          .start {
+            display: block;
+            margin: 10px auto 20px auto;
+          }
+        }
+        .planning {
+          border-bottom: 1px solid $border-grey;
+          margin-bottom: 20px;
+          padding-bottom: 20px;
+          .title {
+            margin-bottom: 10px;
+          }
+          .begin, .end {
+            font-size: 12px;
+          }
+          .begin-block, .end-block {
+            .date {
+              padding: 6px;
+              width: 35%;
+              float: left;
+              margin-right: 10px;
+            }
+            .datepicker {
+              float: left;
+            }
+            .uib-timepicker {
+              top: -2px;
+              right: -25px;
+              position: relative;
+            }
+          }
+          .record {
+            margin: 15px auto 20px auto;
+            display: block;
+          }
+        }
+        .remove {
+          margin: 0 auto;
+          display: block;
+        }
+      }
+
       &.detail-page {
         left: 300px;
 
