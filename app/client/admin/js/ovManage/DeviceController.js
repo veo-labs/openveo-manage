@@ -257,11 +257,13 @@
           $scope.manage.openedDevice = deviceId;
           $scope.manage.showDetail = true;
           setUiState(event.currentTarget, 'selected');
+          $scope.organizeLayout($scope.manage.showDetail);
         } else if ($scope.manage.openedDevice == deviceId) {
           deviceService.manageDeviceDetails();
           $scope.manage.openedDevice = null;
           $scope.manage.showDetail = false;
           removeUiState(event.currentTarget, 'selected');
+          $scope.organizeLayout($scope.manage.showDetail);
         } else {
           $scope.manage.showDetail = false;
           $scope.manage.openedDevice = deviceId;
@@ -275,7 +277,6 @@
           }, 500);
         }
 
-        $scope.organizeLayout($scope.manage.showDetail);
         $scope.$apply();
       });
     }
