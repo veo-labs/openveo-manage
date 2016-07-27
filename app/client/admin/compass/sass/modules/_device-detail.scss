@@ -110,6 +110,15 @@
             position: relative;
             padding: 0;
             @include sortTable();
+            &.trash {
+              color: white;
+              & > i{
+                text-align: center;
+                margin: 0 auto;
+                display: block;
+                top: -11px;
+              }
+            }
 
             a {
               color: white;
@@ -196,11 +205,21 @@
             }
             .datepicker {
               float: left;
+              background-color: white;
+              border: none;
+              width: 35px;
+              height: 32px;
+              font-size: 26px;
+              margin-left: -3px;
             }
             .uib-timepicker {
               top: -2px;
-              right: -25px;
+              right: -9px;
               position: relative;
+
+              .uib-separator {
+                padding: 0 7px;
+              }
             }
           }
           .record {

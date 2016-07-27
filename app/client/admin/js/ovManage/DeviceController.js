@@ -269,7 +269,7 @@
           removeUiState(event.currentTarget, 'selected');
         } else {
           $scope.manage.showDetail = false;
-          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
+
           if (!currentTarget.hasClass('group')) {
             $scope.socket.emit('settings.presets', [deviceId]);
           }
@@ -279,6 +279,7 @@
 
           // Add a latency to visualize the change of device detail
           $timeout(function() {
+            deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
             $scope.manage.showDetail = true;
           }, 500);
         }
