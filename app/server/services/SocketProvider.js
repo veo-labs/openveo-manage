@@ -258,17 +258,19 @@ function setDevicePresets(socketId, presets) {
 }
 
 /**
- * Remove an in-memory stored device when a device is disconnected
+ * Update an in-memory stored device when a device is disconnected
  *
- * @method removeDevice
+ * @method disconnectDevice
  * @private
  * @param {String} socketId The socket id
  */
-function removeDevice(socketId) {
+function disconnectDevice(socketId) {
   var index = findDeviceIndex.call(this, socketId);
 
   if (index >= 0) {
-    this.devices.splice(index, 1);
+    this.devices[index].device.status = 'disconnected';
+    delete this.devices[index].device.presets;
+    delete this.devices[index].device.storage;
   }
 }
 
@@ -283,7 +285,7 @@ function clientConnect() {
 
   this.ioClient.on('connection', function(socket) {
 
-    // Listening for device needed updating settings (storage)
+    // Listening for device needed updating settings
     socket.on('settings', function(data) {
       self.devicesSettings(data);
     });
@@ -308,9 +310,6 @@ function clientConnect() {
 function deviceConnect() {
   var self = this;
 
-  // Connected clients
-  // console.log(Object.keys(self.ioClient.sockets).length);
-
   this.ioDevice.on('connection', function(socket) {
 
     // Event on device start
@@ -328,7 +327,7 @@ function deviceConnect() {
     socket.on('settings.name', function(data) {
       var device = findDevice.call(self, socket.id);
 
-      self.deviceListener.settingsName(data, device.id, function(error) {
+      self.deviceListener.setName(data, device.id, function(error) {
         if (error) {
           self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
         } else if (device.name.length === 0 && device.state === DeviceModel.STATE_PENDING) {
@@ -356,9 +355,10 @@ function deviceConnect() {
 
     // Disconnect event
     socket.on('disconnect', function() {
-      removeDevice.call(self, socket.id);
+      var device = findDevice.call(self, socket.id);
 
-      // TODO : Send event to client to inform it
+      disconnectDevice.call(self, socket.id);
+      self.clientListener.update(device);
     });
 
   });
@@ -378,7 +378,7 @@ SocketProvider.prototype.connect = function(callback) {
   deviceConnect.call(this);
   clientConnect.call(this);
 
-  // Prepare cache on data start
+  // Prepare cache on server start
   this.deviceModel.get(null, function(error, entities) {
     if (error)
       callback(error);
@@ -395,7 +395,7 @@ SocketProvider.prototype.connect = function(callback) {
 };
 
 /**
- * Get all connected devices
+ * Get all devices
  *
  * @method getDevices
  * @returns {Array} An array of devices
@@ -411,9 +411,9 @@ SocketProvider.prototype.getDevices = function() {
 };
 
 /**
- * Asks for devices settings
+ * Asks for devices storage
  *
- * @method deviceSettings
+ * @method devicesSettings
  * @param {Array} deviceIds An array of device ids
  */
 SocketProvider.prototype.devicesSettings = function(deviceIds) {

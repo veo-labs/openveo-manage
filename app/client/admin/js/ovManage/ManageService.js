@@ -266,11 +266,13 @@
      * @method updateDevice
      */
     function updateDevice(device) {
-      var index = devices.acceptedDevices.findIndex(function(workingDevice) {
-        return workingDevice.id == device.id;
-      });
+      if (device) {
+        var index = devices.acceptedDevices.findIndex(function(workingDevice) {
+          return workingDevice.id == device.id;
+        });
 
-      devices.acceptedDevices[index] = device;
+        devices.acceptedDevices[index] = device;
+      }
     }
 
     /**

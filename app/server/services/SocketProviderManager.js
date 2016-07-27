@@ -63,7 +63,7 @@ SocketProviderManager.getSocketProviderByNamespace = function(namespace) {
 };
 
 /**
- * Retrieve the connected devices for a SocketProvider
+ * Retrieve the devices for a SocketProvider
  *
  * @param namespace
  * @returns {Array} An array of connected devices

@@ -1,5 +1,7 @@
 'use strict';
 
+var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
+
 /**
  * Define functions for events from devices
  *
@@ -47,10 +49,13 @@ DeviceListener.prototype.hello = function(data, socket, callback) {
         }
       });
     } else {
-      device.status = 'ok';
+      if (device.state === DeviceModel.STATE_ACCEPTED) {
+        device.status = 'ok';
 
-      // Asks for device settings
-      self.settings(socket);
+        // Asks for device settings
+        self.settings(socket);
+      }
+
       callback(error, device);
     }
   });
@@ -59,14 +64,14 @@ DeviceListener.prototype.hello = function(data, socket, callback) {
 /**
  * Set the name of a device
  *
- * @method settingsName
+ * @method setName
  * @async
  * @param {Object} name The name of the device
  * @param {int} deviceId The id of the device we work on
  * @param {Function} callback Function to call when it's done with :
  *  - **Error** An error if something went wrong, null otherwise
  */
-DeviceListener.prototype.settingsName = function(name, deviceId, callback) {
+DeviceListener.prototype.setName = function(name, deviceId, callback) {
 
   // update device name
   this.deviceModel.update(deviceId, name, function(error) {
@@ -79,13 +84,14 @@ DeviceListener.prototype.settingsName = function(name, deviceId, callback) {
 };
 
 /**
- * Request for getting device storage and presets
+ * Request for getting device settings
  *
  * @method settings
  * @param {Object} socket The socket.io object
  */
 DeviceListener.prototype.settings = function(socket) {
   socket.emit('get', 'settings.storage');
+  socket.emit('get', 'inputs');
 };
 
 /**

@@ -34,10 +34,10 @@ util.inherits(DeviceController, EntityController);
 DeviceController.prototype.getEntitiesAction = function(request, response, next) {
   var model = new this.Entity(request.user),
     socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace),
-    connectedDevices = socketProvider.getDevices(),
+    devices = socketProvider.getDevices(),
     deviceIds = [];
 
-  connectedDevices.map(function(device) {
+  devices.map(function(device) {
     deviceIds.push(device.id);
   });
 
@@ -47,7 +47,7 @@ DeviceController.prototype.getEntitiesAction = function(request, response, next)
       next(errors.GET_DEVICES_ERROR);
     } else {
       response.send({
-        entities: openVeoAPI.util.joinArray(connectedDevices, entities)
+        entities: openVeoAPI.util.joinArray(devices, entities)
       });
     }
   });
