@@ -5,7 +5,15 @@
   /**
    * Defines the device detail controller
    */
-  function DeviceDetailController($scope, $filter, deviceService, manageService, entityService, manageName) {
+  function DeviceDetailController(
+    $scope,
+    $filter,
+    $uibModal,
+    deviceService,
+    manageService,
+    entityService,
+    manageName
+  ) {
 
     var self = this,
       activePage = 0;
@@ -71,7 +79,32 @@
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_ERROR'), 4000);
         });
       }
+    };
 
+    /**
+     * Open a modal, apply callback on OK promise and remove device
+     *
+     * @param id
+     */
+    self.openRemoveModal = function(id) {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'removeModal.html',
+        controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
+          $scope.ok = function() {
+            $uibModalInstance.close(true);
+          };
+
+          $scope.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+          };
+        }]
+      });
+
+      modalInstance.result.then(function() {
+        self.removeDevice(id);
+      }, function() {
+        // Do nothing
+      });
     };
 
     // Listen event to load the selected device details
@@ -96,6 +129,7 @@
   DeviceDetailController.$inject = [
     '$scope',
     '$filter',
+    '$uibModal',
     'deviceService',
     'manageService',
     'entityService',
