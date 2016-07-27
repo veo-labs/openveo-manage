@@ -63,12 +63,19 @@
                 <button ng-if="!vm.selectedDevice.devices.length" class="btn btn-primary remove" ng-click="vm.openRemoveModal(vm.selectedDevice.id)" ng-bind="'MANAGE.DETAIL.REMOVE_DEVICE' | translate"></button>
             </div>
             <div class="detail-page page" ng-class="{'active': vm.isActivePage(1)}">
-                <div class="">
+                <div class="status">
                     <span class="name" ng-bind="vm.selectedDevice.name"></span>
-                    <span class="pencil"></span>
+                    <i class="pencil glyphicon glyphicon-pencil" ng-show="!vm.selectedDevice.displayInputName" ng-click="vm.displayDeviceNameForm()"></i>
+                    <form name="vm.deviceNameForm" novalidate ng-show="vm.selectedDevice.displayInputName">
+                        <input type="text" class="form-control input-name" ng-model="vm.selectedDeviceName" required>
+                        <span>
+                            <button type="submit" class="btn btn-primary ng-binding" ng-disabled="vm.deviceNameForm.$invalid || vm.deviceNameForm.$waiting" ng-bind="'CORE.UI.FORM_SAVE' | translate" ng-click="vm.updateName(vm.selectedDeviceName)">Enregistrer</button>
+                            <button type="button" class="btn btn-default ng-binding" ng-disabled="vm.deviceNameForm.$waiting" ng-click="vm.selectedDevice.displayInputName = !vm.selectedDevice.displayInputName" ng-bind="'CORE.UI.FORM_CANCEL' | translate">Annuler</button>
+                        </span>
+                    </form>
                     <div class="state" ng-bind="('MANAGE.DETAIL.STATE' | translate) + ': '"></div>
                 </div>
-                <div class="" ng-if="!vm.selectedDevice.devices.length">
+                <div class="infos" ng-if="!vm.selectedDevice.devices.length">
                     test
                 </div>
                 <div class="storage" ng-if="!vm.selectedDevice.devices.length">

@@ -107,10 +107,40 @@
       });
     };
 
-    // Listen event to load the selected device details
+    self.displayDeviceNameForm = function() {
+      self.selectedDeviceName = self.selectedDevice.name;
+      self.selectedDevice.displayInputName = !self.selectedDevice.displayInputName;
+    };
+
+    /**
+     * Update device name and send event to device
+     *
+     * @param name
+     */
+    self.updateName = function(name) {
+      var model = (self.selectedDevice.devices) ? 'groups' : 'devices';
+
+      entityService.updateEntity(model, manageName, self.selectedDevice.id, {name: name}).then(function() {
+        self.selectedDevice.name = name;
+        manageService.updateDevice(self.selectedDevice);
+        self.selectedDevice.displayInputName = !self.selectedDevice.displayInputName;
+
+        // Send event to save the new name (not for groups)
+        if (!self.selectedDevice.devices) {
+          $scope.socket.emit('update.name', {id: self.selectedDevice.id, name: name});
+        }
+        $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.UPDATE_NAME_SUCCESS'), 4000);
+      }, function() {
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.UPDATE_NAME_ERROR'), 4000);
+      });
+    };
+
+    // Listen event to load the selected device details and ask for presets
     $scope.$on('device.details', function(event) {
       self.selectedDevice = deviceService.getSelectedDevice();
-      $scope.socket.emit('device.details', [self.selectedDevice.id]);
+      if (!self.selectedDevice.devices) {
+        $scope.socket.emit('settings.presets', [self.selectedDevice.id]);
+      }
     });
 
     // Listen event to remove the selected device

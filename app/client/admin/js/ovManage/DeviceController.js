@@ -254,11 +254,6 @@
 
           // Set the selected device
           deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
-
-          // Ask for device preset if its not a group
-          if (!currentTarget.hasClass('group')) {
-            $scope.socket.emit('settings.presets', [deviceId]);
-          }
           $scope.manage.openedDevice = deviceId;
           $scope.manage.showDetail = true;
           setUiState(event.currentTarget, 'selected');
@@ -269,10 +264,6 @@
           removeUiState(event.currentTarget, 'selected');
         } else {
           $scope.manage.showDetail = false;
-
-          if (!currentTarget.hasClass('group')) {
-            $scope.socket.emit('settings.presets', [deviceId]);
-          }
           $scope.manage.openedDevice = deviceId;
           $scope.clearUiState('selected');
           setUiState(event.currentTarget, 'selected');

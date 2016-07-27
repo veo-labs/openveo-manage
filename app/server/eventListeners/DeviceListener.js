@@ -62,7 +62,7 @@ DeviceListener.prototype.hello = function(data, socket, callback) {
 };
 
 /**
- * Set the name of a device
+ * Set the name of a device on the first connexion
  *
  * @method setName
  * @async
@@ -102,4 +102,15 @@ DeviceListener.prototype.settings = function(socket) {
  */
 DeviceListener.prototype.presets = function(socket) {
   socket.emit('get', 'settings.presets');
+};
+
+/**
+ * Send request for updating the device name
+ *
+ * @method updateName
+ * @param socket
+ * @param name
+ */
+DeviceListener.prototype.updateName = function(socket, name) {
+  socket.emit('settings.name', name);
 };

@@ -235,13 +235,33 @@
 
       &.detail-page {
         left: 300px;
-
-        .name {
-          color: $dark-blue;
-          font-weight: 700;
-          margin-bottom: 15px;
-          display: block;
+        .status {
+          .name {
+            color: $dark-blue;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: inline-block;
+            height: 19px;
+          }
+          .pencil {
+            float: right;
+            font-size: 15px;
+            padding: 10px;
+            cursor: pointer;
+            right: -10px;
+            top: -5px;
+          }
+          input {
+            display: inline-block;
+            width: 200px;
+            position: absolute;
+            top: 17px;
+            left: 20px;
+            padding: 5px 10px;
+            font-weight: 700;
+          }
         }
+
         .state {
           padding-bottom: 15px;
           border-bottom: 1px solid $border-grey;

@@ -298,6 +298,15 @@ function clientConnect() {
       if (deviceSocket)
         self.deviceListener.presets(deviceSocket);
     });
+
+    // Listening for device update name
+    socket.on('update.name', function(data) {
+      var deviceSocket = findSocket.call(self, data.id);
+
+      // Send the new device name
+      if (deviceSocket)
+        self.deviceListener.updateName(deviceSocket, data.name);
+    });
   });
 }
 
