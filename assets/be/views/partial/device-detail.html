@@ -1,4 +1,4 @@
-<div ng-controller="DeviceDetailController as vm">
+<div ng-controller="DeviceDetailController as vm">{{vm.selectedDevice}}
     <div class="device-detail" ng-class="{'opened' : manage.showDetail}">
         <div class="header">
             <ul class="menu">
@@ -18,17 +18,17 @@
 
         <div class="content" ng-class="{'first': vm.isActivePage(0), 'second': vm.isActivePage(1), 'third': vm.isActivePage(2)}">
             <div class="action-page page" ng-class="{'active': vm.isActivePage(0)}">
-                <div class="preset" ng-if="!vm.selectedDevice.devices.length">
+                <div class="preset" ng-if="!vm.selectedDevice.devices.length && vm.displayAction">
                     <span class="title" ng-bind="'MANAGE.DETAIL.PRESET' | translate"></span>
                     <select ng-model="vm.selectedPreset" ng-options="preset.profile as ('P' + preset.profile) for preset in vm.selectedDevice.presets |orderBy:'profile'">
                         <option value="" selected hidden />
                     </select>
                 </div>
-                <div class="action" ng-if="!vm.selectedDevice.group">
+                <div class="action" ng-if="!vm.selectedDevice.group && vm.displayAction">
                     <div class="title" ng-bind="'MANAGE.DETAIL.ACTION' | translate"></div>
                     <button class="start btn btn-primary" ng-bind="'MANAGE.DETAIL.START' | translate"></button>
                 </div>
-                <div class="planning" ng-if="!vm.selectedDevice.group">
+                <div class="planning" ng-if="!vm.selectedDevice.group && vm.displayAction">
                     <div class="title" ng-bind="'MANAGE.DETAIL.PLANNING' | translate"></div>
                     <div class="begin-block">
                         <div class="begin" ng-bind="('MANAGE.DETAIL.BEGIN' | translate) + ' :'"></div>

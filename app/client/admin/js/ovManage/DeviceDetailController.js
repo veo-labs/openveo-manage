@@ -20,6 +20,7 @@
 
     // The stored selected device
     self.selectedDevice = null;
+    self.displayAction = false;
 
     /**
      * Define the active page index
@@ -135,9 +136,29 @@
       });
     };
 
+    /**
+     * Add verifications to display actions in device detail window
+     *
+     * @returns {boolean}
+     */
+    self.isDisplayAction = function() {
+      if (self.selectedDevice) {
+        if (self.selectedDevice.devices) {
+          self.displayAction = true;
+        } else if (!self.selectedDevice.status || self.selectedDevice.status === 'disconnected') {
+          self.displayAction = false;
+        } else {
+          self.displayAction = true;
+        }
+      }
+
+      return self.displayAction;
+    };
+
     // Listen event to load the selected device details and ask for presets
     $scope.$on('device.details', function(event) {
       self.selectedDevice = deviceService.getSelectedDevice();
+      self.isDisplayAction();
       if (!self.selectedDevice.devices) {
         $scope.socket.emit('settings.presets', [self.selectedDevice.id]);
       }
