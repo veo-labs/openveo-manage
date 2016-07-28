@@ -8,7 +8,7 @@
    * @module ov.manage
    * @class DeviceService
    */
-  function DeviceService($http, $q, $rootScope, manageService, entityService, manageName) {
+  function DeviceService($q, $rootScope, manageService, entityService, manageName) {
 
     var selectedDevice = null;
 
@@ -17,14 +17,20 @@
      *
      * @param {String} deviceId the device or group id
      * @param {Boolean} isGroup True if the id sent is a group id
+     * @returns {promise|r.promise|*}
      * @method setSelectedDevice
      */
     function setSelectedDevice(deviceId, isGroup) {
+      var deferred = $q.defer();
+
       if (!isGroup) {
-        selectedDevice = manageService.getDevice(deviceId);
+        selectedDevice = angular.copy(manageService.getDevice(deviceId));
       } else {
-        selectedDevice = manageService.getGroupWithFullDevices(deviceId);
+        selectedDevice = angular.copy(manageService.getGroupWithFullDevices(deviceId));
       }
+      deferred.resolve();
+
+      return deferred.promise;
     }
 
     /**
@@ -49,22 +55,26 @@
      *
      * @param {String | null} deviceId the device or group id
      * @param {Boolean | null} isGroup True if the id sent is a group id
+     * @returns {Object | null}
      * @method manageDeviceDetails
      */
     function manageDeviceDetails(deviceId, isGroup) {
 
       // if device id is not defined clear the selected device
       if (deviceId) {
-        setSelectedDevice(deviceId, isGroup);
+        setSelectedDevice(deviceId, isGroup).then(function() {
 
-        // Send an event to load the selected device from controller
-        $rootScope.$broadcast('device.details');
+          // Send an event to load the selected device from controller
+          $rootScope.$broadcast('device.details');
+        });
       } else {
         clearSelectedDevice();
 
         // Send an event to clear the selected device from controller
         $rootScope.$broadcast('closeDeviceDetails');
       }
+
+      return selectedDevice;
     }
 
     return {
@@ -77,7 +87,6 @@
 
   app.factory('deviceService', DeviceService);
   DeviceService.$inject = [
-    '$http',
     '$q',
     '$rootScope',
     'manageService',

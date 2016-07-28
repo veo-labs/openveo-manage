@@ -1,7 +1,7 @@
 <div ng-controller="DeviceController as deviceCtrl" class="devices row">
     <!-- Devices groups -->
     <div class="device-group col-sm-4 col-md-3" ng-repeat="group in groups track by group.id" ng-class="manage.resize">
-        <div class="dropzone well group" ng-attr-data-id="{{ group.id }}" ng-class="group['ui-state']">
+        <div class="dropzone well group" ng-attr-data-id="{{ group.id }}" ng-class="group['ui-state']" ng-attr-data-selected="{{ group.isSelected }}">
             <span class="title" ng-bind="group.name"></span>
             <span class="count">
               {{ group.devices.length }}
@@ -18,7 +18,7 @@
     </div>
     <!-- Devices -->
     <div class="device accepted col-sm-4 col-md-3" ng-repeat="device in acceptedDevices track by device.id" ng-class="manage.resize" ng-if="!device.group">
-        <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
+        <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']" ng-attr-data-selected="{{ device.isSelected }}">
             <span class="title" ng-bind="device.name"></span>
             <div class="equipments">
                 <span class="camera" ng-class="device.cameraStatus || 'disconnected'"></span>

@@ -276,7 +276,7 @@
       background-color: white;
       transition-duration: .5s;
     }
-    .selected {
+    [data-selected=true] {
       background-color: $selected-grey;
       .progress-storage > li svg:nth-child(2) path {
         stroke: $selected-grey;

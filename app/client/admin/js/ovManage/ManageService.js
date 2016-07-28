@@ -359,6 +359,32 @@
     }
 
     /**
+     * Permits the set an attribute to the selected device
+     *
+     * @param {String} id The id of the device to test
+     * @param {Object} selectedDevice The actual selected device
+     * @param {String} lastSelectedId The last selected device known
+     * @method manageSelectedDevice
+     */
+    function manageSelectedDevice(id, selectedDevice, lastSelectedId) {
+      var device = (getDevice(id)) ? getDevice(id) : getGroup(id),
+        lastDevice = null;
+
+      // Remove the last selected device state if defined
+      if (lastSelectedId) {
+        lastDevice = (getDevice(lastSelectedId)) ? getDevice(lastSelectedId) : getGroup(lastSelectedId);
+        lastDevice.isSelected = false;
+      }
+
+      // Verify if the device is selected or not
+      if (selectedDevice && id === selectedDevice.id) {
+        device.isSelected = true;
+      } else {
+        device.isSelected = false;
+      }
+    }
+
+    /**
      * Update the cache when devices are added to a group
      *
      * @param {String} draggableId A device id
@@ -441,6 +467,7 @@
       updateDevice: updateDevice,
       getDevicesPromised: getDevicesPromised,
       updateDeviceState: updateDeviceState,
+      manageSelectedDevice: manageSelectedDevice,
       addDevicesToGroup: addDevicesToGroup,
       removeDeviceFromGroup: removeDeviceFromGroup
     };

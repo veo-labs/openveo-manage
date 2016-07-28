@@ -22,6 +22,8 @@
     self.STATE_PENDING = 'pending';
     self.STATE_REFUSED = 'refused';
 
+    self.lastDeviceSelected = null;
+
     /**
      * Define an ui-state for a device
      *
@@ -29,8 +31,8 @@
      * @param {String} uiState The ui-state to set for the device
      */
     function setUiState(target, uiState) {
-      var element = (angular.element(target).scope().device) ?
-        angular.element(target).scope().device : angular.element(target).scope().group;
+      var element = (angular.element(target).scope().$parent.device) ?
+        angular.element(target).scope().$parent.device : angular.element(target).scope().group;
 
       if (!element['ui-state']) {
         element['ui-state'] = [];
@@ -248,31 +250,37 @@
         }
 
         var deviceId = event.currentTarget.getAttribute('data-id'),
-          currentTarget = angular.element(event.currentTarget);
+          currentTarget = angular.element(event.currentTarget),
+          selectedDevice;
 
         if (!$scope.manage.openedDevice) {
 
           // Set the selected device
-          deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
+          selectedDevice = deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
+          manageService.manageSelectedDevice(deviceId, selectedDevice);
+          self.lastDeviceSelected = deviceId;
+
           $scope.manage.openedDevice = deviceId;
           $scope.manage.showDetail = true;
-          setUiState(event.currentTarget, 'selected');
           $scope.organizeLayout($scope.manage.showDetail);
         } else if ($scope.manage.openedDevice == deviceId) {
-          deviceService.manageDeviceDetails();
+          selectedDevice = deviceService.manageDeviceDetails();
+          manageService.manageSelectedDevice(deviceId, selectedDevice);
+          self.lastDeviceSelected = null;
+
           $scope.manage.openedDevice = null;
           $scope.manage.showDetail = false;
-          removeUiState(event.currentTarget, 'selected');
           $scope.organizeLayout($scope.manage.showDetail);
         } else {
-          $scope.manage.showDetail = false;
           $scope.manage.openedDevice = deviceId;
-          $scope.clearUiState('selected');
-          setUiState(event.currentTarget, 'selected');
+          $scope.manage.showDetail = false;
 
           // Add a latency to visualize the change of device detail
           $timeout(function() {
-            deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
+            selectedDevice = deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
+            manageService.manageSelectedDevice(deviceId, selectedDevice, self.lastDeviceSelected);
+            self.lastDeviceSelected = deviceId;
+
             $scope.manage.showDetail = true;
           }, 500);
         }
