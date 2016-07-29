@@ -20,6 +20,7 @@
     "url": "https://github.com/veo-labs/openveo-manage.git"
   },
   "dependencies": {
+    "node-schedule": "1.1.1",
     "socket.io": "1.4.6"
   },
   "devDependencies": {
