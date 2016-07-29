@@ -31,6 +31,12 @@
     "BEGIN": "Begin",
     "END": "End",
     "RECORD": "Record",
-    "REMOVE_DEVICE": "Remove encoder"
+    "REMOVE_DEVICE": "Remove encoder",
+    "DEVICE": {
+      "READY": "Ready",
+      "DISCONNECTED": "Disconnected",
+      "RECORDING": "Recording",
+      "STARTING": "Recording starting"
+    }
   }
 }

@@ -31,6 +31,12 @@
     "BEGIN": "Début",
     "END": "Fin",
     "RECORD": "Enregistrer",
-    "REMOVE_DEVICE": "Supprimer l'encodeur"
+    "REMOVE_DEVICE": "Supprimer l'encodeur",
+    "DEVICE": {
+      "READY": "Prêt",
+      "DISCONNECTED": "Déconnecté",
+      "RECORDING": "En cours d'enregistrement",
+      "STARTING": "Démarrage de l'enregistrement"
+    }
   }
 }
