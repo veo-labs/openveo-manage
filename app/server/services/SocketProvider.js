@@ -237,8 +237,28 @@ function setDeviceStorage(socketId, storage) {
   var index = findDeviceIndex.call(this, socketId);
 
   if (index >= 0) {
-    this.devices[index].device.storage = (parseInt(storage.used) /
-      (parseInt(storage.free) + parseInt(storage.used))) * 100;
+    this.devices[index].device.storage = {
+      free: parseInt(storage.free),
+      used: parseInt(storage.used),
+      total: parseInt(storage.free) + parseInt(storage.used),
+      percent: (parseInt(storage.used) /
+      (parseInt(storage.free) + parseInt(storage.used))) * 100
+    };
+  }
+}
+
+/**
+ * Set the inputs of a device
+ *
+ * @method setDeviceInputs
+ * @param {String} socketId the socket id
+ * @param {Object} inputs The inputs (camera, desktop) connected to the device
+ */
+function setDeviceInputs(socketId, inputs) {
+  var index = findDeviceIndex.call(this, socketId);
+
+  if (index >= 0) {
+    this.devices[index].device.inputs = inputs;
   }
 }
 
@@ -285,18 +305,9 @@ function clientConnect() {
 
   this.ioClient.on('connection', function(socket) {
 
-    // Listening for device needed updating settings
+    // Listening for device needed updating settings (storage, inputs, presets)
     socket.on('settings', function(data) {
       self.devicesSettings(data);
-    });
-
-    // Listening for devices presets need
-    socket.on('settings.presets', function(data) {
-      var deviceSocket = findSocket.call(self, data);
-
-      // Asks for device presets
-      if (deviceSocket)
-        self.deviceListener.presets(deviceSocket);
     });
 
     // Listening for device update name
@@ -347,10 +358,18 @@ function deviceConnect() {
     });
 
     // Listening for device storage
-    socket.on('settings.storage', function(data) {
+    socket.on('storage', function(data) {
       var device = findDevice.call(self, socket.id);
 
       setDeviceStorage.call(self, socket.id, data);
+      self.clientListener.update(device);
+    });
+
+    // Listening for device inputs
+    socket.on('inputs', function(data) {
+      var device = findDevice.call(self, socket.id);
+
+      setDeviceInputs.call(self, socket.id, data);
       self.clientListener.update(device);
     });
 
@@ -393,6 +412,8 @@ SocketProvider.prototype.connect = function(callback) {
       callback(error);
 
     entities.map(function(device) {
+      device.status = 'disconnected';
+
       self.devices.push({
         socketId: null,
         device: device

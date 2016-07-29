@@ -90,17 +90,8 @@ DeviceListener.prototype.setName = function(name, deviceId, callback) {
  * @param {Object} socket The socket.io object
  */
 DeviceListener.prototype.settings = function(socket) {
-  socket.emit('get', 'settings.storage');
+  socket.emit('get', 'storage');
   socket.emit('get', 'inputs');
-};
-
-/**
- * Request for getting device presets
- *
- * @method presets
- * @param {Object} socket The socket.io object
- */
-DeviceListener.prototype.presets = function(socket) {
   socket.emit('get', 'settings.presets');
 };
 

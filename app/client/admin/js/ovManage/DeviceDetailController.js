@@ -155,13 +155,11 @@
       return self.displayAction;
     };
 
-    // Listen event to load the selected device details and ask for presets
+    // Listen event to load the selected device details on window opening
     $scope.$on('device.details', function(event) {
       self.selectedDevice = deviceService.getSelectedDevice();
+      deviceService.updateState();
       self.isDisplayAction();
-      if (!self.selectedDevice.devices) {
-        $scope.socket.emit('settings.presets', [self.selectedDevice.id]);
-      }
     });
 
     // Listen event to remove the selected device

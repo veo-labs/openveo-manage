@@ -24,9 +24,9 @@
       var deferred = $q.defer();
 
       if (!isGroup) {
-        selectedDevice = angular.copy(manageService.getDevice(deviceId));
+        selectedDevice = manageService.getDevice(deviceId);
       } else {
-        selectedDevice = angular.copy(manageService.getGroupWithFullDevices(deviceId));
+        selectedDevice = manageService.getGroupWithFullDevices(deviceId);
       }
       deferred.resolve();
 
@@ -48,6 +48,59 @@
      */
     function clearSelectedDevice() {
       selectedDevice = null;
+    }
+
+    /**
+     * Manage the state of a device or a group of devices
+     *
+     * @returns {boolean}
+     */
+    function updateState() {
+      var isGroup = selectedDevice.devices,
+        groupReady = false;
+
+      if (isGroup) {
+        selectedDevice.devices.map(function(device) {
+          switch (device.status) {
+            case 'ko':
+              selectedDevice.state = 'MANAGE.DEVICE.ERROR';
+              return false;
+            case 'recording':
+              selectedDevice.state = 'MANAGE.DEVICE.RECORDING';
+              return false;
+            case 'starting':
+              selectedDevice.state = 'MANAGE.DEVICE.STARTING';
+              return false;
+            default:
+              if (device.status == 'ok') {
+                groupReady = true;
+              }
+          }
+        });
+        if (groupReady) {
+          selectedDevice.state = 'MANAGE.DEVICE.READY';
+        } else {
+          selectedDevice.state = 'MANAGE.DEVICE.DISCONNECTED';
+        }
+      }
+
+      switch (selectedDevice.status) {
+        case 'ok':
+          selectedDevice.state = 'MANAGE.DEVICE.READY';
+          break;
+        case 'ko':
+          selectedDevice.state = 'MANAGE.DEVICE.ERROR';
+          break;
+        case 'recording':
+          selectedDevice.state = 'MANAGE.DEVICE.RECORDING';
+          break;
+        case 'starting':
+          selectedDevice.state = 'MANAGE.DEVICE.STARTING';
+          break;
+        default:
+          selectedDevice.state = 'MANAGE.DEVICE.DISCONNECTED';
+      }
+      return false;
     }
 
     /**
@@ -80,7 +133,8 @@
     return {
       manageDeviceDetails: manageDeviceDetails,
       getSelectedDevice: getSelectedDevice,
-      clearSelectedDevice: clearSelectedDevice
+      clearSelectedDevice: clearSelectedDevice,
+      updateState: updateState
     };
 
   }
