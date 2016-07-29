@@ -22,6 +22,14 @@
     self.selectedDevice = null;
     self.displayAction = false;
 
+    // Datepicker options
+    self.popupBegin = {
+      opened: false
+    };
+    self.popupEnd = {
+      opened: false
+    };
+
     /**
      * Define the active page index
      *

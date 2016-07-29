@@ -32,14 +32,14 @@
                     <div class="title" ng-bind="'MANAGE.DETAIL.PLANNING' | translate"></div>
                     <div class="begin-block">
                         <div class="begin" ng-bind="('MANAGE.DETAIL.BEGIN' | translate) + ' :'"></div>
-                        <input class="date" type="text" uib-datepicker-popup="{{format}}" ng-model="vm.beginDate" is-open="popupBegin.opened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
-                        <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.openBegin()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <input class="date" type="text" uib-datepicker-popup="dd/MM/yyyy" ng-model="vm.beginDate" is-open="vm.popupBegin.opened" min-date="minDate" show-button-bar="false" show-weeks="false" ng-required="true" close-text="Close" />
+                        <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.popupBegin.opened = !vm.popupBegin.opened"><i class="glyphicon glyphicon-calendar"></i></button>
                         <uib-timepicker class="time" ng-model="vm.beginTime" show-spinners="false" ng-change="changed()" show-meridian="false"></uib-timepicker>
                     </div>
                     <div class="end-block">
                         <div class="end" ng-bind="('MANAGE.DETAIL.END' | translate) + ' :'"></div>
-                        <input class="date" type="text" uib-datepicker-popup="{{format}}" ng-model="vm.endDate" is-open="popupEnd.opened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
-                        <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.openEnd()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <input class="date" type="text" uib-datepicker-popup="dd/MM/yyyy" ng-model="vm.endDate" is-open="vm.popupEnd.opened" min-date="minDate" show-button-bar="false" show-weeks="false" ng-required="true" close-text="Close" />
+                        <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"><i class="glyphicon glyphicon-calendar"></i></button>
                         <uib-timepicker class="time" ng-model="vm.endTime" show-spinners="false" ng-change="changed()" show-meridian="false"></uib-timepicker>
                     </div>
                     <button class="record btn btn-primary" ng-bind="'MANAGE.DETAIL.RECORD' | translate"></button>

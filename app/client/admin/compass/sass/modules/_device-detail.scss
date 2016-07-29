@@ -212,6 +212,13 @@
               font-size: 26px;
               margin-left: -3px;
             }
+            .uib-datepicker {
+              .btn {
+                border: none;
+                padding: 6px 12px;
+                font-size: 13px;
+              }
+            }
             .uib-timepicker {
               top: -2px;
               right: -9px;
