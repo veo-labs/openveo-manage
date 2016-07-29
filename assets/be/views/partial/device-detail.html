@@ -73,13 +73,19 @@
                             <button type="button" class="btn btn-default ng-binding" ng-disabled="vm.deviceNameForm.$waiting" ng-click="vm.selectedDevice.displayInputName = !vm.selectedDevice.displayInputName" ng-bind="'CORE.UI.FORM_CANCEL' | translate">Annuler</button>
                         </span>
                     </form>
-                    <div class="state" ng-bind="('MANAGE.DETAIL.STATE' | translate) + ': '"></div>
+                    <div class="state">
+                        {{ ('MANAGE.DETAIL.STATE' | translate) + ' : ' }}
+                        <span ng-class="vm.selectedDevice.status">{{ vm.selectedDevice.state | translate }}</span>
+                    </div>
                 </div>
-                <div class="infos" ng-if="!vm.selectedDevice.devices.length">
-                    test
+                <div class="infos" ng-if="!vm.selectedDevice.devices.length && vm.selectedDevice.status !== 'disconnected'">
+                    <div class="ip" ng-bind="'IP : '"></div>
+                    <div class="mac" ng-bind="'@MAC : ' + vm.selectedDevice.id"></div>
+                    <div class="url" ng-bind="'URL : '"></div>
                 </div>
-                <div class="storage" ng-if="!vm.selectedDevice.devices.length">
-                    test
+                <div class="storage" ng-if="!vm.selectedDevice.devices.length && vm.selectedDevice.status !== 'disconnected'">
+                    <span class="text" ng-bind="('MANAGE.DEVICE.SPACE' | translate) + ' : '"></span>
+                    <span ng-bind="vm.selectedDevice.storage.used + ' Go / ' + vm.selectedDevice.storage.total + ' Go'"></span>
                 </div>
                 <div class="action" ng-if="vm.selectedDevice.devices.length">
                     <div class="name" ng-bind="'MANAGE.DETAIL.ACTION' | translate"></div>

@@ -266,9 +266,32 @@
           padding-bottom: 15px;
           border-bottom: 1px solid $border-grey;
           display: block;
+          .ok {
+            color: $green;
+          }
+          .ko {
+            color: $red;
+          }
+          .stating {
+            color: $orange;
+          }
+          .recording {
+            color: $dark-blue;
+          }
         }
         .action {
           margin-top: 20px;
+          .name {
+            color: $dark-blue;
+            font-weight: 700;
+            margin-bottom: 15px;
+          }
+        }
+        .infos {
+          margin-top: 15px;
+          padding-bottom: 15px;
+          margin-bottom: 15px;
+          border-bottom: 1px solid $border-grey;
         }
       }
       &.history-page {
