@@ -18,48 +18,52 @@
 
         <div class="content" ng-class="{'first': vm.isActivePage(0), 'second': vm.isActivePage(1), 'third': vm.isActivePage(2)}">
             <div class="action-page page" ng-class="{'active': vm.isActivePage(0)}">
-                <div class="preset" ng-if="!vm.selectedDevice.devices.length && vm.displayAction">
-                    <span class="title" ng-bind="'MANAGE.DETAIL.PRESET' | translate"></span>
-                    <select ng-model="vm.selectedPreset" ng-options="preset.profile as ('P' + preset.profile) for preset in vm.selectedDevice.presets |orderBy:'profile'">
-                        <option value="" selected hidden />
-                    </select>
-                </div>
-                <div class="action" ng-if="!vm.selectedDevice.group && vm.displayAction">
-                    <div class="title" ng-bind="'MANAGE.DETAIL.ACTION' | translate"></div>
-                    <button class="start btn btn-primary" ng-bind="'MANAGE.DETAIL.START' | translate"></button>
-                </div>
-                <div class="planning" ng-if="!vm.selectedDevice.group && vm.displayAction">
-                    <div class="title" ng-bind="'MANAGE.DETAIL.PLANNING' | translate"></div>
-                    <div class="begin-block">
-                        <div class="begin" ng-bind="('MANAGE.DETAIL.BEGIN' | translate) + ' :'"></div>
-                        <input class="date" type="text" uib-datepicker-popup="dd/MM/yyyy" ng-model="vm.beginDate" is-open="vm.popupBegin.opened" min-date="minDate" show-button-bar="false" show-weeks="false" ng-required="true" close-text="Close" />
-                        <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.popupBegin.opened = !vm.popupBegin.opened"><i class="glyphicon glyphicon-calendar"></i></button>
-                        <uib-timepicker class="time" ng-model="vm.beginTime" show-spinners="false" ng-change="changed()" show-meridian="false"></uib-timepicker>
+                <form name="vm.deviceSchedule" novalidate>
+                    <div class="preset" ng-if="!vm.selectedDevice.devices.length && vm.displayAction" ng-class="{'disabled': !vm.selectedDevice.presets}">
+                        <span class="title" ng-bind="'MANAGE.DETAIL.PRESET' | translate"></span>
+                        <select ng-model="vm.deviceSchedule.preset" ng-options="preset.profile as ('P' + preset.profile) for preset in vm.selectedDevice.presets |orderBy:'profile'" ng-disabled="!vm.selectedDevice.presets">
+                            <option value="" selected hidden />
+                        </select>
                     </div>
-                    <div class="end-block">
-                        <div class="end" ng-bind="('MANAGE.DETAIL.END' | translate) + ' :'"></div>
-                        <input class="date" type="text" uib-datepicker-popup="dd/MM/yyyy" ng-model="vm.endDate" is-open="vm.popupEnd.opened" min-date="minDate" show-button-bar="false" show-weeks="false" ng-required="true" close-text="Close" />
-                        <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"><i class="glyphicon glyphicon-calendar"></i></button>
-                        <uib-timepicker class="time" ng-model="vm.endTime" show-spinners="false" ng-change="changed()" show-meridian="false"></uib-timepicker>
+                    <div class="action" ng-if="!vm.selectedDevice.group && vm.displayAction">
+                        <div class="title" ng-bind="'MANAGE.DETAIL.ACTION' | translate"></div>
+                        <button class="start btn btn-primary"  ng-click="vm.startRecord()" ng-bind="'MANAGE.DETAIL.START' | translate"></button>
+                        <button class="stop btn" ng-if="vm.deviceRecording" ng-click="" ng-bind="'MANAGE.DEVICE.STOP_RECORDING' | translate"></button>
+                        <button class="tag btn btn-primary" ng-if="vm.deviceRecording" ng-click="" ng-bind="'MANAGE.DEVICE.TAG' | translate"></button>
                     </div>
-                    <button class="record btn btn-primary" ng-bind="'MANAGE.DETAIL.RECORD' | translate"></button>
-                    <table class="table" border="0">
-                        <thead>
-                        <tr>
-                            <th ov-sort-table order="'begin'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.BEGIN' | translate }}</th>
-                            <th ov-sort-table order="'end'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.END' | translate }}</th>
-                            <th class="trash"><i class="glyphicon glyphicon-trash"></i></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="record in vm.selectedDevice.records | orderBy:order:reverse track by device.id">
-                            <th ng-bind="record.begin"></th>
-                            <th ng-bind="record.end"></th>
-                            <th class="cross"></th>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <div class="planning" ng-if="!vm.selectedDevice.group && vm.displayAction">
+                        <div class="title" ng-bind="'MANAGE.DETAIL.PLANNING' | translate"></div>
+                        <div class="begin-block">
+                            <div class="begin" ng-bind="('MANAGE.DETAIL.BEGIN' | translate) + ' :'"></div>
+                            <input class="date" type="text" uib-datepicker-popup="dd/MM/yyyy" ng-model="vm.deviceSchedule.beginDate" is-open="vm.popupBegin.opened" min-date="vm.popupBegin.minDate" show-button-bar="false" show-weeks="false" ng-required="true" close-text="Close" required/>
+                            <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.popupBegin.opened = !vm.popupBegin.opened"><i class="glyphicon glyphicon-calendar"></i></button>
+                            <uib-timepicker class="time" ng-model="vm.deviceSchedule.beginTime" show-spinners="false" show-meridian="false" required></uib-timepicker>
+                        </div>
+                        <div class="end-block">
+                            <div class="end" ng-bind="('MANAGE.DETAIL.END' | translate) + ' :'"></div>
+                            <input class="date" type="text" uib-datepicker-popup="dd/MM/yyyy" ng-model="vm.deviceSchedule.endDate" is-open="vm.popupEnd.opened" min-date="vm.beginDate" show-button-bar="false" show-weeks="false" ng-required="true" close-text="Close" required/>
+                            <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"><i class="glyphicon glyphicon-calendar"></i></button>
+                            <uib-timepicker class="time" ng-model="vm.deviceSchedule.endTime" show-spinners="false" show-meridian="false" required></uib-timepicker>
+                        </div>
+                        <button class="record btn btn-primary" ng-disabled="vm.deviceSchedule.$invalid" ng-click="vm.saveSchedule(vm.selectedDevice.id)" ng-bind="'MANAGE.DETAIL.RECORD' | translate"></button>
+                        <table class="table" border="0">
+                            <thead>
+                            <tr>
+                                <th ov-sort-table order="'begin'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.BEGIN' | translate }}</th>
+                                <th ov-sort-table order="'end'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.END' | translate }}</th>
+                                <th class="trash"><i class="glyphicon glyphicon-trash"></i></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="schedule in vm.selectedDevice.schedules | orderBy:order:reverse track by schedule.id">
+                                <th ng-bind="schedule.dateBegin | date:'dd/MM/yyyy HH:mm'"></th>
+                                <th ng-bind="schedule.dateEnd | date:'dd/MM/yyyy HH:mm'"></th>
+                                <th class="cross" ng-click="vm.removeSchedule(schedule.id)"></th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
                 <button ng-if="!vm.selectedDevice.devices.length && !vm.selectedDevice.group" class="btn btn-primary remove" ng-click="vm.openRemoveModal(vm.selectedDevice.id)" ng-bind="'MANAGE.DETAIL.REMOVE_DEVICE' | translate"></button>
             </div>
             <div class="detail-page page" ng-class="{'active': vm.isActivePage(1)}">
@@ -75,7 +79,7 @@
                     </form>
                     <div class="state">
                         {{ ('MANAGE.DETAIL.STATE' | translate) + ' : ' }}
-                        <span ng-class="vm.selectedDevice.status">{{ vm.selectedDevice.state | translate }}</span>
+                        <span ng-class="vm.selectedDevice.status" ng-bind="vm.selectedDevice.state | translate"></span>
                     </div>
                 </div>
                 <div class="infos" ng-if="!vm.selectedDevice.devices.length && vm.selectedDevice.status !== 'disconnected'">
@@ -85,7 +89,7 @@
                 </div>
                 <div class="storage" ng-if="!vm.selectedDevice.devices.length && vm.selectedDevice.status !== 'disconnected'">
                     <span class="text" ng-bind="('MANAGE.DEVICE.SPACE' | translate) + ' : '"></span>
-                    <span ng-bind="vm.selectedDevice.storage.used + ' Go / ' + vm.selectedDevice.storage.total + ' Go'"></span>
+                    <span ng-bind="(vm.selectedDevice.storage.used | number : '1') + ' Go / ' + (vm.selectedDevice.storage.total | number : '1') + ' Go'"></span>
                 </div>
                 <div class="action" ng-if="vm.selectedDevice.devices.length">
                     <div class="name" ng-bind="'MANAGE.DETAIL.ACTION' | translate"></div>

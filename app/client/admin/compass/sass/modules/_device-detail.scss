@@ -172,6 +172,9 @@
           border-bottom: 1px solid $border-grey;
           position: relative;
           margin-bottom: 20px;
+          &.disabled {
+            opacity: .6;
+          }
 
           select {
             position: absolute;

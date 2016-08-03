@@ -16,7 +16,8 @@
   ) {
 
     var self = this,
-      activePage = 0;
+      activePage = 0,
+      today = new Date();
 
     // The stored selected device
     self.selectedDevice = null;
@@ -24,7 +25,8 @@
 
     // Datepicker options
     self.popupBegin = {
-      opened: false
+      opened: false,
+      minDate: today
     };
     self.popupEnd = {
       opened: false
@@ -116,6 +118,9 @@
       });
     };
 
+    /**
+     * Display the input to update the device name
+     */
     self.displayDeviceNameForm = function() {
       self.selectedDeviceName = self.selectedDevice.name;
       self.selectedDevice.displayInputName = !self.selectedDevice.displayInputName;
@@ -162,6 +167,77 @@
 
       return self.displayAction;
     };
+
+    /**
+     * Permits to merge date and time for a schedule
+     *
+     * @param {DateTime} date The date (begin or end) defined for a schedule
+     * @param {DateTime} time The time (begin or end) defined for a schedule
+     */
+    function mergeDateTime(date, time) {
+      var hours = time.getHours(),
+        minutes = time.getMinutes();
+
+      date.setHours(hours, minutes);
+
+      return date;
+    }
+
+    /**
+     * Save a schedule for a device or a group of devices TODO: node-schedule for CRON
+     *
+     * @param id
+     */
+    self.saveSchedule = function(id) {
+      var dateTimeBegin = mergeDateTime(self.deviceSchedule.beginDate, self.deviceSchedule.beginTime),
+        dateTimeEnd = mergeDateTime(self.deviceSchedule.endDate, self.deviceSchedule.endTime),
+        scheduleToSave = {
+          dateBegin: dateTimeBegin,
+          dateEnd: dateTimeEnd,
+          preset: self.deviceSchedule.preset
+        },
+        isGroup = self.selectedDevice.devices,
+        schedules = [];
+
+      // Prepare to save
+      if (self.selectedDevice.schedules) {
+        self.selectedDevice.schedules.map(function(schedule) {
+          schedules.push(schedule.id);
+        });
+      }
+
+      if (self.deviceSchedule.$valid) {
+        entityService.addEntity('schedules', manageName, scheduleToSave).then(function(result) {
+          schedules.push(result.data.entity.id);
+          entityService.updateEntity('devices', manageName, id, {schedules: schedules}).then(function() {});
+          manageService.addSchedule(id, result.data.entity, isGroup).then(function(device) {
+            self.selectedDevice = device;
+          });
+
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
+        }, function() {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
+        });
+      }
+    };
+
+    /* self.startRecord = function() {
+      var ids = [];
+
+      // Verify if the device is a group
+      if (self.selectedDevice.devices) {
+        //self.selectedDevice.devices.
+        $scope.socket.emit('session.start', {
+          id: self.selectedDevice.id,
+          preset: (self.deviceSchedule.preset) ? self.deviceSchedule.preset : null
+        });
+      } else {
+        $scope.socket.emit('session.start', {
+          id: self.selectedDevice.id,
+          preset: (self.deviceSchedule.preset) ? self.deviceSchedule.preset : null
+        });
+      }
+    };*/
 
     // Listen event to load the selected device details on window opening
     $scope.$on('device.details', function(event) {

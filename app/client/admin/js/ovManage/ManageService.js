@@ -427,8 +427,8 @@
     /**
      * Remove a device from its group
      *
-     * @param deviceId
-     * @param groupId
+     * @param {String} deviceId The device id
+     * @param {String} groupId The group id
      * @returns {r.promise|*|promise}
      * @method removeDeviceFromGroup
      */
@@ -451,6 +451,28 @@
       return defer.promise;
     }
 
+    /**
+     *
+     *
+     * @param {String} deviceId The device id
+     * @param {Object} schedule The new schedule to add to the device
+     * @returns {*|r.promise|promise}
+     * @method addSchedule
+     */
+    function addSchedule(deviceId, schedule) {
+      var defer = $q.defer(),
+        device = (getDevice(deviceId)) ? getDevice(deviceId) : getGroup(deviceId);
+
+      if (!device.schedules) {
+        device.schedules = [];
+      }
+
+      device.schedules.push(schedule);
+      defer.resolve(device);
+
+      return defer.promise;
+    }
+
     return {
       getGroups: getGroups,
       getGroup: getGroup,
@@ -469,7 +491,8 @@
       updateDeviceState: updateDeviceState,
       manageSelectedDevice: manageSelectedDevice,
       addDevicesToGroup: addDevicesToGroup,
-      removeDeviceFromGroup: removeDeviceFromGroup
+      removeDeviceFromGroup: removeDeviceFromGroup,
+      addSchedule: addSchedule
     };
 
   }

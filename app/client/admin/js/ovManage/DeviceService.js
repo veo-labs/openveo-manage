@@ -13,6 +13,26 @@
     var selectedDevice = null;
 
     /**
+     * Get a specific schedule with its id provide by a device
+     *
+     * @param {Array} scheduleIds An array of schedule ids link to a device
+     * @returns {*}
+     */
+    function getSchedules(scheduleIds) {
+      var param = {
+        filter: {
+          id: {
+            $in: scheduleIds
+          }
+        }
+      };
+
+      return entityService.getEntities('schedules', manageName, param, null).then(function(schedules) {
+        return schedules.data.rows;
+      });
+    }
+
+    /**
      * Define the selected device to display in the detail window
      *
      * @param {String} deviceId the device or group id
@@ -28,9 +48,24 @@
       } else {
         selectedDevice = manageService.getGroupWithFullDevices(deviceId);
       }
-      deferred.resolve();
 
-      return deferred.promise;
+      // Retrieve device schedules
+      if (selectedDevice.schedules) {
+        return getSchedules(selectedDevice.schedules).then(function(schedules) {
+          selectedDevice.schedules = schedules;
+          deferred.resolve();
+
+          return deferred.promise;
+        }, function() {
+          deferred.reject();
+
+          return deferred.promise;
+        });
+      } else {
+        deferred.resolve();
+
+        return deferred.promise;
+      }
     }
 
     /**

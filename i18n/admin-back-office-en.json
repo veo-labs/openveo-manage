@@ -38,6 +38,7 @@
     "DISCONNECTED": "Disconnected",
     "RECORDING": "Recording",
     "STARTING": "Recording starting",
-    "SPACE": "Disk space"
+    "SPACE": "Disk space",
+    "ERROR": "Error"
   }
 }
