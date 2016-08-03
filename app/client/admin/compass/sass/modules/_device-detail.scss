@@ -276,10 +276,10 @@
           padding-bottom: 15px;
           border-bottom: 1px solid $border-grey;
           display: block;
-          .ok {
+          .stopped {
             color: $green;
           }
-          .ko {
+          .error {
             color: $red;
           }
           .stating {
@@ -302,6 +302,9 @@
           padding-bottom: 15px;
           margin-bottom: 15px;
           border-bottom: 1px solid $border-grey;
+        }
+        .storage > .text {
+          font-weight: bold;
         }
       }
       &.history-page {
