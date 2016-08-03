@@ -452,7 +452,7 @@
     }
 
     /**
-     *
+     * Add the schedule to the device or group and create the cron
      *
      * @param {String} deviceId The device id
      * @param {Object} schedule The new schedule to add to the device
@@ -468,6 +468,7 @@
       }
 
       device.schedules.push(schedule);
+
       defer.resolve(device);
 
       return defer.promise;

@@ -97,7 +97,7 @@
       if (isGroup) {
         selectedDevice.devices.map(function(device) {
           switch (device.status) {
-            case 'ko':
+            case 'error':
               selectedDevice.state = 'MANAGE.DEVICE.ERROR';
               return false;
             case 'recording':
@@ -107,7 +107,7 @@
               selectedDevice.state = 'MANAGE.DEVICE.STARTING';
               return false;
             default:
-              if (device.status == 'ok') {
+              if (device.status == 'stopped') {
                 groupReady = true;
               }
           }
@@ -120,10 +120,10 @@
       }
 
       switch (selectedDevice.status) {
-        case 'ok':
+        case 'stopped':
           selectedDevice.state = 'MANAGE.DEVICE.READY';
           break;
-        case 'ko':
+        case 'error':
           selectedDevice.state = 'MANAGE.DEVICE.ERROR';
           break;
         case 'recording':
