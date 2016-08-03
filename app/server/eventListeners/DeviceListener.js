@@ -1,5 +1,6 @@
 'use strict';
 
+var async = require('async');
 var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
 
 /**
@@ -41,16 +42,16 @@ DeviceListener.prototype.hello = function(data, socket, callback) {
         if (error) {
           callback(error);
         } else {
-          createdDevice.status = 'ok';
 
           // Asks for device settings
-          socket.emit('get', 'settings.name');
+          socket.emit('get', {event: 'settings.name'});
+          socket.emit('get', {event: 'session.status'});
           callback(error, createdDevice);
         }
       });
     } else {
       if (device.state === DeviceModel.STATE_ACCEPTED) {
-        device.status = 'ok';
+        socket.emit('get', {event: 'session.status'});
 
         // Asks for device settings
         self.settings(socket);
@@ -66,7 +67,7 @@ DeviceListener.prototype.hello = function(data, socket, callback) {
  *
  * @method setName
  * @async
- * @param {Object} name The name of the device
+ * @param {String} name The name of the device
  * @param {int} deviceId The id of the device we work on
  * @param {Function} callback Function to call when it's done with :
  *  - **Error** An error if something went wrong, null otherwise
@@ -74,7 +75,7 @@ DeviceListener.prototype.hello = function(data, socket, callback) {
 DeviceListener.prototype.setName = function(name, deviceId, callback) {
 
   // update device name
-  this.deviceModel.update(deviceId, name, function(error) {
+  this.deviceModel.update(deviceId, {name: name}, function(error) {
     if (error) {
       callback(error);
     } else {
@@ -90,18 +91,67 @@ DeviceListener.prototype.setName = function(name, deviceId, callback) {
  * @param {Object} socket The socket.io object
  */
 DeviceListener.prototype.settings = function(socket) {
-  socket.emit('get', 'storage');
-  socket.emit('get', 'inputs');
-  socket.emit('get', 'settings.presets');
+  socket.emit('get', {event: 'storage'});
+  socket.emit('get', {event: 'inputs'});
+  socket.emit('get', {event: 'settings.presets'});
 };
 
 /**
  * Send request for updating the device name
  *
  * @method updateName
- * @param socket
- * @param name
+ * @param {Object} socket The socket.io object
+ * @param {String} name The new name of the device
  */
 DeviceListener.prototype.updateName = function(socket, name) {
-  socket.emit('settings.name', name);
+  socket.emit('settings.name', {name: name});
+};
+
+/**
+ * Send request to start a recording session
+ *
+ * @method startRecord
+ * @param {Array} sockets An array of sockets
+ * @param {Object} param The parameters containing the session id, the recording preset to use
+ * and the optionally the devices ids
+ * @param {Function} callback Function to call when it's done with :
+ *  - **Error** An error if something went wrong, null otherwise
+ */
+DeviceListener.prototype.startRecord = function(sockets, param, callback) {
+  var actions = [];
+
+  sockets.map(function(socket) {
+
+    // Verify if socket is defined
+    if (socket) {
+      actions.push(
+        function(callback) {
+          socket.emit('session.start', {
+            id: (param.sessionId) ? param.sessionId : null,
+            preset: (param.preset) ? param.preset : null
+          });
+          callback();
+        }
+      );
+    }
+  });
+
+  async.parallel(actions, function(error) {
+    if (error) {
+      process.logger.error(error, {error: error, method: 'startRecord'});
+      callback(error);
+    } else {
+      callback();
+    }
+  });
+};
+
+/**
+ * Send request to stop a recording session
+ *
+ * @method stopRecord
+ * @param {Object} socket The socket.io object
+ */
+DeviceListener.prototype.stopRecord = function(socket) {
+  socket.emit('session.stop');
 };

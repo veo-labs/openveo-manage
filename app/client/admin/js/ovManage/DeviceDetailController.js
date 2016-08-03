@@ -209,8 +209,12 @@
       if (self.deviceSchedule.$valid) {
         entityService.addEntity('schedules', manageName, scheduleToSave).then(function(result) {
           schedules.push(result.data.entity.id);
-          entityService.updateEntity('devices', manageName, id, {schedules: schedules}).then(function() {});
-          manageService.addSchedule(id, result.data.entity, isGroup).then(function(device) {
+          if (isGroup) {
+            entityService.updateEntity('groups', manageName, id, {schedules: schedules}).then(function() {});
+          } else {
+            entityService.updateEntity('devices', manageName, id, {schedules: schedules}).then(function() {});
+          }
+          manageService.addSchedule(id, result.data.entity).then(function(device) {
             self.selectedDevice = device;
           });
 
@@ -221,23 +225,44 @@
       }
     };
 
-    /* self.startRecord = function() {
+    /**
+     * Start a new recording session for a device or a group of devices
+     */
+    self.startRecord = function() {
       var ids = [];
 
       // Verify if the device is a group
       if (self.selectedDevice.devices) {
-        //self.selectedDevice.devices.
+        self.selectedDevice.devices.map(function(device) {
+          ids.push(device.id);
+        });
+
         $scope.socket.emit('session.start', {
-          id: self.selectedDevice.id,
+          deviceIds: ids,
+          sessionId: self.selectedDevice.group,
           preset: (self.deviceSchedule.preset) ? self.deviceSchedule.preset : null
         });
       } else {
         $scope.socket.emit('session.start', {
-          id: self.selectedDevice.id,
+          deviceId: self.selectedDevice.id,
           preset: (self.deviceSchedule.preset) ? self.deviceSchedule.preset : null
         });
       }
-    };*/
+    };
+
+    /**
+     * Stop the current recording session
+     */
+    self.stopRecord = function() {
+
+    };
+
+    /**
+     * Create a new tag for the current recording session
+     */
+    self.tagRecord = function() {
+
+    };
 
     // Listen event to load the selected device details on window opening
     $scope.$on('device.details', function(event) {

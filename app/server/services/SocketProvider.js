@@ -196,7 +196,7 @@ function findSocket(deviceId) {
  * @param {Object} device The new device
  */
 function addDevice(socketId, device) {
-  var index = findDeviceIndex.call(this, socketId);
+  var index = findDeviceIndexById.call(this, device.id);
 
   if (index === -1) {
     this.devices.push({
@@ -238,9 +238,9 @@ function setDeviceStorage(socketId, storage) {
 
   if (index >= 0) {
     this.devices[index].device.storage = {
-      free: parseInt(storage.free),
-      used: parseInt(storage.used),
-      total: parseInt(storage.free) + parseInt(storage.used),
+      free: parseInt(storage.free) / 1000000000,
+      used: parseInt(storage.used) / 1000000000,
+      total: (parseInt(storage.free) + parseInt(storage.used)) / 1000000000,
       percent: (parseInt(storage.used) /
       (parseInt(storage.free) + parseInt(storage.used))) * 100
     };
@@ -274,6 +274,21 @@ function setDevicePresets(socketId, presets) {
 
   if (index >= 0) {
     this.devices[index].device.presets = presets;
+  }
+}
+
+/**
+ * Update the status of a device
+ *
+ * @method updateDeviceState
+ * @param {String} socketId The socket id
+ * @param {Object} status The status of the device
+ */
+function updateDeviceState(socketId, status) {
+  var index = findDeviceIndex.call(this, socketId);
+
+  if (index >= 0) {
+    this.devices[index].device.status = status;
   }
 }
 
@@ -318,6 +333,32 @@ function clientConnect() {
       if (deviceSocket)
         self.deviceListener.updateName(deviceSocket, data.name);
     });
+
+    // Listening for start a new recording session
+    socket.on('session.start', function(data) {
+      var sockets = [];
+
+      if (data.deviceIds) {
+        data.deviceIds.map(function(id) {
+          sockets.push(findSocket.call(self, id));
+        });
+      } else {
+        sockets.push(findSocket.call(self, data.deviceId));
+      }
+      self.deviceListener.startRecord(sockets, data, function(error) {
+        if (error) {
+          self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
+        } else {
+
+          // TODO: Update state manually ?
+        }
+      });
+    });
+
+    // Listening for stop the currently running recording session
+    socket.on('session.stop', function(data) {
+
+    });
   });
 }
 
@@ -344,14 +385,19 @@ function deviceConnect() {
     });
 
     // Listening for device name
-    socket.on('settings.name', function(data) {
+    socket.on('settings.name', function(name) {
       var device = findDevice.call(self, socket.id);
 
-      self.deviceListener.setName(data, device.id, function(error) {
+      // Verify if the name is defined
+      if (!name) {
+        name = 'Device';
+      }
+
+      self.deviceListener.setName(name, device.id, function(error) {
         if (error) {
           self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
         } else if (device.name.length === 0 && device.state === DeviceModel.STATE_PENDING) {
-          setDeviceName.call(self, socket.id, data.name);
+          setDeviceName.call(self, socket.id, name);
           self.clientListener.hello(device);
         }
       });
@@ -378,6 +424,14 @@ function deviceConnect() {
       var device = findDevice.call(self, socket.id);
 
       setDevicePresets.call(self, socket.id, data);
+      self.clientListener.update(device);
+    });
+
+    // Listening for device status change
+    socket.on('session.status', function(data) {
+      var device = findDevice.call(self, socket.id);
+
+      updateDeviceState.call(self, socket.id, data.status);
       self.clientListener.update(device);
     });
 
