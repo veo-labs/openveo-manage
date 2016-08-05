@@ -39,8 +39,11 @@
       title: 'MANAGE.PAGE_TITLE',
       access: 'manage-access-page',
       resolve: {
-        results: ['manageService', function(manageService) {
-          return manageService.getDevicesPromised();
+        devices: ['manageService', function(manageService) {
+          return manageService.getDevices();
+        }],
+        groups: ['manageService', function(manageService) {
+          return manageService.getGroups();
         }],
         group: ['manageService', '$route', function(manageService, $route) {
           var id = $route.current.params.id;
@@ -58,8 +61,11 @@
       title: 'MANAGE.GROUP_DETAIL.PAGE_TITLE',
       access: 'manage-group-detail-access-page',
       resolve: {
-        results: ['manageService', function(manageService) {
-          return manageService.getDevicesPromised();
+        devices: ['manageService', function(manageService) {
+          return manageService.getDevices();
+        }],
+        groups: ['manageService', function(manageService) {
+          return manageService.getGroups();
         }],
         group: ['manageService', '$route', function(manageService, $route) {
           var id = $route.current.params.id;

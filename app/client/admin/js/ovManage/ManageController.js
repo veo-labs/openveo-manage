@@ -10,7 +10,8 @@
     $window,
     $location,
     $filter,
-    results,
+    devices,
+    groups,
     group,
     socketService,
     manageService,
@@ -22,11 +23,13 @@
     // Initialize data
     if (group) {
       $scope.group = group; // Information of the group on detail page
+      $scope.acceptedDevices = group.devices;
+    } else {
+      $scope.acceptedDevices = devices.acceptedDevices;
     }
-    $scope.acceptedDevices = results.acceptedDevices;
-    $scope.groups = results.groups;
-    $scope.refusedDevices = results.refusedDevices;
-    $scope.pendingDevices = results.pendingDevices;
+    $scope.groups = groups;
+    $scope.refusedDevices = devices.refusedDevices;
+    $scope.pendingDevices = devices.pendingDevices;
     $scope.manage = {
       resize: 'normal', // Permits to resize the devices tiles (normal/medium/small)
       openedDevice: null, // Contain the id of the selected device
@@ -55,31 +58,6 @@
     }
 
     /**
-     * Remove an ui-state from all devices
-     * @param uiState
-     */
-    $scope.clearUiState = function(uiState) {
-      var index;
-
-      $scope.groups.map(function(group) {
-        if (group['ui-state']) {
-          index = group['ui-state'].indexOf(uiState);
-          if (index > -1) {
-            group['ui-state'].splice(index, 1);
-          }
-        }
-      });
-      $scope.acceptedDevices.map(function(device) {
-        if (device['ui-state']) {
-          index = device['ui-state'].indexOf(uiState);
-          if (index > -1) {
-            device['ui-state'].splice(index, 1);
-          }
-        }
-      });
-    };
-
-    /**
      * Permits to organize the view when the details is opened/closed
      *
      * @param opening
@@ -105,9 +83,11 @@
      * Go to the previous page
      */
     $scope.back = function() {
+      $scope.acceptedDevices.map(function(device) {
+        manageService.manageSelectedDevice(device.id);
+      });
       $scope.manage.showDetail = false;
       $scope.manage.openedDevice = null;
-      $scope.clearUiState('selected');
       $scope.organizeLayout(false);
       $window.history.back();
       $scope.manage.absUrl = $location.absUrl();
@@ -131,11 +111,11 @@
       // If there is only 2 devices the group is removed
       if (group.devices.length == 2) {
         entityService.removeEntity('groups', manageName, groupId).then(function() {
+          manageService.removeGroup(groupId);
           entityService.updateEntity('devices', manageName, group.devices[0].id,
             {group: null}).then(function() {});
           entityService.updateEntity('devices', manageName, group.devices[1].id,
             {group: null}).then(function() {});
-          manageService.removeGroup(groupId);
 
           if (!$scope.group) {
             $scope.$broadcast('close.window');
@@ -175,7 +155,8 @@
     '$window',
     '$location',
     '$filter',
-    'results',
+    'devices',
+    'groups',
     'group',
     'socketService',
     'manageService',

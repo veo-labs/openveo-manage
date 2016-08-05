@@ -10,7 +10,7 @@
     <div ng-controller="DeviceController as deviceCtrl" class="devices row">
         <div class="device accepted col-sm-4 col-md-3" ng-repeat="device in acceptedDevices track by device.id" ng-class="manage.resize" ng-if="device.group && group.id == device.group">
             <div class="cross" ng-click="removeFromGroup(device.id, group.id)"></div>
-            <div class="well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']">
+            <div class="well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']" ng-attr-data-selected="{{ device.isSelected }}">
                 <span class="title" ng-bind="device.name"></span>
                 <div class="equipments">
                     <span class="camera" ng-class="device.cameraStatus || 'disconnected'"></span>

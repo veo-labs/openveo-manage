@@ -55,7 +55,8 @@
      * Close the device detail window
      */
     self.closeDetail = function() {
-      $scope.clearUiState('selected');
+      if (self.selectedDevice)
+        manageService.manageSelectedDevice(self.selectedDevice.id);
       $scope.manage.showDetail = false;
       $scope.manage.openedDevice = null;
       self.selectedDevice = null;
@@ -196,33 +197,51 @@
           dateEnd: dateTimeEnd,
           preset: self.deviceSchedule.preset
         },
+        schedules = (self.selectedDevice.schedules) ? self.selectedDevice.schedules : [],
         isGroup = self.selectedDevice.devices,
-        schedules = [];
-
-      // Prepare to save
-      if (self.selectedDevice.schedules) {
-        self.selectedDevice.schedules.map(function(schedule) {
-          schedules.push(schedule.id);
-        });
-      }
+        entity = (isGroup) ? 'groups' : 'devices',
+        ids = [],
+        params = {
+          dateBegin: dateTimeBegin,
+          dateEnd: dateTimeEnd,
+          preset: self.deviceSchedule.preset,
+          deviceIds: []
+        };
 
       if (self.deviceSchedule.$valid) {
-        entityService.addEntity('schedules', manageName, scheduleToSave).then(function(result) {
-          schedules.push(result.data.entity.id);
-          if (isGroup) {
-            entityService.updateEntity('groups', manageName, id, {schedules: schedules}).then(function() {});
-          } else {
-            entityService.updateEntity('devices', manageName, id, {schedules: schedules}).then(function() {});
-          }
-          manageService.addSchedule(id, result.data.entity).then(function(device) {
-            self.selectedDevice = device;
+        if (isGroup) {
+          self.selectedDevice.devices.map(function(device) {
+            ids.push(device.id);
           });
+          params.deviceIds = ids;
+          params.sessionId = self.selectedDevice.group;
+        } else {
+          params.deviceIds.push(self.selectedDevice.id);
+        }
+
+        // Prepare schedules for saving in database
+        schedules.push(scheduleToSave);
+
+        entityService.updateEntity(entity, manageName, id, {schedules: schedules}).then(function() {
+
+          // Add to cron
+          deviceService.addCronSchedule(params);
+          self.selectedDevice.schedules = schedules;
 
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         }, function() {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
         });
       }
+    };
+
+    /**
+     * Remove a saved schedule
+     *
+     * @param position
+     */
+    self.removeSchedule = function(position) {
+
     };
 
     /**

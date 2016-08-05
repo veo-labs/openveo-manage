@@ -8,43 +8,23 @@
    * @module ov.manage
    * @class ManageService
    */
-  function ManageService($q, $rootScope, entityService, manageName) {
+  function ManageService($q, $rootScope, $route, $timeout, entityService, manageName) {
 
     var groups = null;
     var devices = null;
 
     /**
-     * Add a new device
+     * Gets all groups devices from server
      *
-     * @param {Object} device The new device
-     * @method addDevice
-     */
-    function addDevice(device) {
-      switch (device.state) {
-        case 'accepted':
-          devices.acceptedDevices.push(device);
-          break;
-        case 'pending':
-          devices.pendingDevices.push(device);
-          break;
-        case 'refused':
-          devices.refusedDevices.push(device);
-          break;
-        default:
-      }
-    }
-
-    /**
-     * Load all groups devices from server
-     *
-     * @private
      * @return {Promise} The promise used to retrieve groups from server
-     * @method loadGroups
+     * @method getGroups
      */
-    function loadGroups() {
+    function getGroups() {
       if (!groups) {
-        return entityService.getAllEntities('groups', manageName).then(function(groups) {
-          return groups.data.entities;
+        return entityService.getAllEntities('groups', manageName).then(function(results) {
+          groups = results.data.entities;
+
+          return groups;
         });
       }
 
@@ -52,84 +32,20 @@
     }
 
     /**
-     * Ordering devices from its state
+     * Gets devices from server for cache them
      *
-     * @param {Array} workingDevices The devices to order
-     * @private
-     * @method orderDevices
+     * @method getDevices
      */
-    function orderDevices(workingDevices) {
+    function getDevices() {
+      if (!devices) {
+        return entityService.getAllEntities('devices', manageName).then(function(results) {
+          devices = results.data.entities;
 
-      // Prepare cache
-      devices = {};
-      devices.acceptedDevices = [];
-      devices.pendingDevices = [];
-      devices.refusedDevices = [];
-
-      workingDevices.map(function(device) {
-        addDevice(device);
-        groups.map(function(group) {
-          if (!group.devices) group.devices = [];
-          if (group.id == device.group) {
-            group.devices.push(device.id);
-          }
-        });
-      });
-    }
-
-    /**
-     * Loads devices from server for cache them
-     *
-     * @private
-     * @method loadDevices
-     */
-    function loadDevices() {
-      if (!devices || !groups) {
-        var promises = {
-          workingDevices: entityService.getAllEntities('devices', manageName),
-          workingGroups: loadGroups()
-        };
-        return $q.all(promises).then(function(values) {
-          groups = values.workingGroups;
-          orderDevices(values.workingDevices.data.entities);
-
-          return {
-            groups: groups,
-            acceptedDevices: devices.acceptedDevices,
-            refusedDevices: devices.refusedDevices,
-            pendingDevices: devices.pendingDevices
-          };
+          return devices;
         });
       }
-    }
 
-    /**
-     * Return the loaded devices
-     *
-     * @return {Promise} The promise used to retrieve devices from server
-     * @method getDevicesPromised
-     */
-    function getDevicesPromised() {
-      if (!devices || !groups) {
-        return loadDevices();
-      }
-
-      return $q.when({
-        groups: groups,
-        acceptedDevices: devices.acceptedDevices,
-        refusedDevices: devices.refusedDevices,
-        pendingDevices: devices.pendingDevices
-      });
-    }
-
-    /**
-     * Retrieve groups
-     *
-     * @returns {*}
-     * @method getGroups
-     */
-    function getGroups() {
-      return groups;
+      return $q.when(devices);
     }
 
     /**
@@ -141,7 +57,7 @@
      */
     function getGroup(id) {
       if (!groups) {
-        return loadDevices().then(function() {
+        return getGroups().then(function() {
           return groups.find(function(group) {
             return group.id == id;
           });
@@ -149,39 +65,8 @@
       }
 
       return groups.find(function(group) {
-        return group.id == id;
+        return group.id === id;
       });
-    }
-
-    /**
-     * Retrieve the group devices with group id
-     *
-     * @param {String} groupId the group id
-     * @returns {Array}
-     * @method getDevicesByGroup
-     */
-    function getDevicesByGroup(groupId) {
-      var groupDevices = [];
-
-      if (!devices) {
-        return loadDevices().then(function() {
-          devices.acceptedDevices.map(function(device) {
-            if (device.group == groupId) {
-              groupDevices.push(device);
-            }
-          });
-
-          return groupDevices;
-        });
-      }
-
-      devices.acceptedDevices.map(function(device) {
-        if (device.group == groupId) {
-          groupDevices.push(device);
-        }
-      });
-
-      return groupDevices;
     }
 
     /**
@@ -191,72 +76,19 @@
      * @method removeGroup
      */
     function removeGroup(id) {
-      var devices = getDevicesByGroup(id),
+      var group = getGroup(id),
         groupIndex = groups.findIndex(function(groupId) {
           return id == groupId;
         });
 
       // Update devices belonging to the group
-      devices.map(function(device) {
+      group.devices.map(function(device) {
         entityService.updateEntity('devices', manageName, device.id, {group: null}).then(function() {
           delete device.group;
         });
       });
 
       groups.splice(groupIndex, 1);
-    }
-
-    /**
-     * Retrieve a group with complete devices with its id
-     *
-     * @param {String} id The group id
-     * @return group
-     * @method getGroup
-     */
-    function getGroupWithFullDevices(id) {
-      var devices = [];
-
-      if (!groups) {
-        return loadDevices().then(function() {
-          return groups.find(function(group) {
-            if (group.id == id) {
-              devices = getDevicesByGroup(group.id);
-              group.devices = devices;
-
-              return group;
-            }
-          });
-        });
-      }
-
-      return groups.find(function(group) {
-        if (group.id == id) {
-          devices = getDevicesByGroup(group.id);
-          group.devices = devices;
-
-          return group;
-        }
-      });
-    }
-
-    /**
-     * Define groups
-     *
-     * @param {Array} data An array of groups
-     * @method setGroups
-     */
-    function setGroups(data) {
-      groups = data;
-    }
-
-    /**
-     * Add a group to the groups
-     *
-     * @param {Object} group The new group
-     * @method addGroup
-     */
-    function addGroup(group) {
-      groups.push(group);
     }
 
     /**
@@ -276,16 +108,6 @@
     }
 
     /**
-     * Retrieve all devices
-     *
-     * @returns {*}
-     * @method getDevices
-     */
-    function getDevices() {
-      return devices;
-    }
-
-    /**
      * Retrieve a device with its id
      *
      * @param {String} id the device id
@@ -293,17 +115,41 @@
      * @method getDevice
      */
     function getDevice(id) {
-      if (!devices) {
-        return loadDevices().then(function() {
-          return devices.acceptedDevices.find(function(device) {
-            return device.id == id;
+
+      // Find device in group if user is in group detail page
+      if ($route.current.params.id) {
+        if (!groups) {
+          return getGroups().then(function() {
+            for (var i = 0; i < groups.length; i++) {
+              if (groups[i].id === $route.current.params.id) {
+                return groups[i].devices.find(function(device) {
+                  return device.id === id;
+                });
+              }
+            }
           });
+        }
+
+        for (var i = 0; i < groups.length; i++) {
+          if (groups[i].id === $route.current.params.id) {
+            return groups[i].devices.find(function(device) {
+              return device.id === id;
+            });
+          }
+        }
+      } else {
+        if (!devices) {
+          return getDevices().then(function() {
+            return devices.acceptedDevices.find(function(device) {
+              return device.id == id;
+            });
+          });
+        }
+
+        return devices.acceptedDevices.find(function(device) {
+          return device.id == id;
         });
       }
-
-      return devices.acceptedDevices.find(function(device) {
-        return device.id == id;
-      });
     }
 
     /**
@@ -318,16 +164,6 @@
       });
 
       devices.acceptedDevices.splice(deviceIndex, 1);
-    }
-
-    /**
-     * Define devices
-     *
-     * @param {Array} data An array of devices
-     * @method setDevices
-     */
-    function setDevices(data) {
-      devices = data;
     }
 
     /**
@@ -377,10 +213,12 @@
       }
 
       // Verify if the device is selected or not
-      if (selectedDevice && id === selectedDevice.id) {
-        device.isSelected = true;
-      } else {
-        device.isSelected = false;
+      if (device) {
+        if (selectedDevice && id === selectedDevice.id) {
+          device.isSelected = true;
+        } else {
+          device.isSelected = false;
+        }
       }
     }
 
@@ -394,29 +232,33 @@
      * @method addDevicesToGroup
      */
     function addDevicesToGroup(draggableId, dropzoneId, group) {
-      var index = devices.acceptedDevices.findIndex(function(workingDevice) {
+      var firstIndex = devices.acceptedDevices.findIndex(function(workingDevice) {
         return workingDevice.id == draggableId;
+      });
+      var secondIndex = devices.acceptedDevices.findIndex(function(workingDevice) {
+        return workingDevice.id == dropzoneId;
       });
 
       if (group) {
         group.devices = [];
-        group.devices.push(draggableId, dropzoneId);
+        devices.acceptedDevices[firstIndex].group = group.id;
+        devices.acceptedDevices[secondIndex].group = group.id;
+
+        group.devices.push(devices.acceptedDevices[firstIndex], devices.acceptedDevices[secondIndex]);
         groups.push(group);
-
-        devices.acceptedDevices[index].group = group.id;
-        index = devices.acceptedDevices.findIndex(function(workingDevice) {
-          return workingDevice.id == dropzoneId;
-        });
-
-        devices.acceptedDevices[index].group = group.id;
       } else {
         groups.map(function(group) {
           if (group.id == dropzoneId) {
-            group.devices.push(draggableId);
-            devices.acceptedDevices[index].group = group.id;
+            devices.acceptedDevices[firstIndex].group = group.id;
+            group.devices.push(devices.acceptedDevices[firstIndex]);
           }
         });
       }
+
+      // Send an event to close the device detail window
+      $timeout(function() {
+        $rootScope.$broadcast('close.window');
+      }, 250);
 
       return $q.when({
         groups: groups,
@@ -451,49 +293,18 @@
       return defer.promise;
     }
 
-    /**
-     * Add the schedule to the device or group and create the cron
-     *
-     * @param {String} deviceId The device id
-     * @param {Object} schedule The new schedule to add to the device
-     * @returns {*|r.promise|promise}
-     * @method addSchedule
-     */
-    function addSchedule(deviceId, schedule) {
-      var defer = $q.defer(),
-        device = (getDevice(deviceId)) ? getDevice(deviceId) : getGroup(deviceId);
-
-      if (!device.schedules) {
-        device.schedules = [];
-      }
-
-      device.schedules.push(schedule);
-
-      defer.resolve(device);
-
-      return defer.promise;
-    }
-
     return {
       getGroups: getGroups,
-      getGroup: getGroup,
-      getGroupWithFullDevices: getGroupWithFullDevices,
-      setGroups: setGroups,
-      addGroup: addGroup,
-      removeGroup: removeGroup,
       getDevices: getDevices,
+      getGroup: getGroup,
+      removeGroup: removeGroup,
       getDevice: getDevice,
       removeDevice: removeDevice,
-      getDevicesByGroup: getDevicesByGroup,
-      setDevices: setDevices,
-      addDevice: addDevice,
       updateDevice: updateDevice,
-      getDevicesPromised: getDevicesPromised,
       updateDeviceState: updateDeviceState,
       manageSelectedDevice: manageSelectedDevice,
       addDevicesToGroup: addDevicesToGroup,
-      removeDeviceFromGroup: removeDeviceFromGroup,
-      addSchedule: addSchedule
+      removeDeviceFromGroup: removeDeviceFromGroup
     };
 
   }
@@ -502,6 +313,8 @@
   ManageService.$inject = [
     '$q',
     '$rootScope',
+    '$route',
+    '$timeout',
     'entityService',
     'manageName'
   ];

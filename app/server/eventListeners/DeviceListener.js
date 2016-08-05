@@ -118,21 +118,22 @@ DeviceListener.prototype.updateName = function(socket, name) {
  *  - **Error** An error if something went wrong, null otherwise
  */
 DeviceListener.prototype.startRecord = function(sockets, param, callback) {
-  var actions = [];
+  var actions = [],
+    startRecordAsyncFunction = function(socket, param) {
+      return function(callback) {
+        socket.emit('session.start', {
+          id: (param.sessionId) ? param.sessionId : null,
+          preset: (param.preset) ? param.preset : null
+        });
+        callback();
+      };
+    };
 
   sockets.map(function(socket) {
 
     // Verify if socket is defined
     if (socket) {
-      actions.push(
-        function(callback) {
-          socket.emit('session.start', {
-            id: (param.sessionId) ? param.sessionId : null,
-            preset: (param.preset) ? param.preset : null
-          });
-          callback();
-        }
-      );
+      actions.push(startRecordAsyncFunction(socket, param));
     }
   });
 
@@ -150,8 +151,33 @@ DeviceListener.prototype.startRecord = function(sockets, param, callback) {
  * Send request to stop a recording session
  *
  * @method stopRecord
- * @param {Object} socket The socket.io object
+ * @param {Array} sockets An array of sockets
+ * @param {Function} callback Function to call when it's done with :
+ *  - **Error** An error if something went wrong, null otherwise
  */
-DeviceListener.prototype.stopRecord = function(socket) {
-  socket.emit('session.stop');
+DeviceListener.prototype.stopRecord = function(sockets, callback) {
+  var actions = [],
+    stopRecordAsyncFunction = function(socket) {
+      return function(callback) {
+        socket.emit('session.stop');
+        callback();
+      };
+    };
+
+  sockets.map(function(socket) {
+
+    // Verify if socket is defined
+    if (socket) {
+      actions.push(stopRecordAsyncFunction(socket));
+    }
+  });
+
+  async.parallel(actions, function(error) {
+    if (error) {
+      process.logger.error(error, {error: error, method: 'stopRecord'});
+      callback(error);
+    } else {
+      callback();
+    }
+  });
 };

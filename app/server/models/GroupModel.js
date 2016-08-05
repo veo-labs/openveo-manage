@@ -3,15 +3,29 @@
 // Module dependencies
 var util = require('util');
 var shortid = require('shortid');
+var async = require('async');
+var path = require('path');
 var openVeoAPI = require('@openveo/api');
-
+var SocketProviderManager = process.requireManage('app/server/services/SocketProviderManager.js');
+var configDir = openVeoAPI.fileSystem.getConfDir();
+var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
+var namespace = manageConf.namespace;
 var GroupProvider = process.requireManage('app/server/providers/GroupProvider.js');
+var DeviceProvider = process.requireManage('app/server/providers/DeviceProvider.js');
 
 /**
  * Creates a GroupModel.
  */
 function GroupModel() {
   openVeoAPI.EntityModel.call(this, new GroupProvider(openVeoAPI.applicationStorage.getDatabase()));
+
+  /**
+   * Device provider.
+   *
+   * @property deviceProvider
+   * @type DeviceProvider
+   */
+  this.deviceProvider = new DeviceProvider(openVeoAPI.applicationStorage.getDatabase());
 }
 
 module.exports = GroupModel;
@@ -45,5 +59,76 @@ GroupModel.prototype.add = function(data, callback) {
   this.provider.add(group, function(error, addedCount, groups) {
     if (callback)
       callback(error, addedCount, groups && groups[0]);
+  });
+};
+
+/**
+ * Gets the list of groups with devices details.
+ *
+ * @method get
+ * @async
+ * @param {Object} filter A MongoDB filter
+ * @param {Function} callback The function to call when it's done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Array** The list of groups
+ */
+GroupModel.prototype.get = function(filter, callback) {
+  var self = this,
+    groups = [],
+    devices = [],
+    socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace),
+    cachedDevices = socketProvider.getDevices(),
+    deviceIds = [];
+
+  // Avoid to retrieve in database all devices already in cache
+  cachedDevices.map(function(device) {
+    deviceIds.push(device.id);
+  });
+
+  async.parallel([
+
+    // Get the list of groups
+    function(callback) {
+      self.provider.get(filter, function(error, groupList) {
+        groups = groupList;
+        callback(error);
+      });
+    },
+
+    // Get the list of devices
+    function(callback) {
+      self.deviceProvider.get({id: {$nin: deviceIds}}, function(error, deviceList) {
+        devices = openVeoAPI.util.joinArray(cachedDevices, deviceList);
+        callback(error);
+      });
+    }
+
+  ], function(error) {
+    if (error) {
+      callback(error);
+    } else {
+      if (groups && devices) {
+
+        // Devices
+        for (var i in devices) {
+          var groupId = devices[i].group;
+
+          // Groups
+          for (var j in groups) {
+            if (groups[j].id === groupId) {
+
+              if (!groups[j].devices) {
+                groups[j].devices = [];
+              }
+
+              groups[j].devices.push(devices[i]);
+              break;
+            }
+          }
+        }
+      }
+
+      callback(null, groups);
+    }
   });
 };

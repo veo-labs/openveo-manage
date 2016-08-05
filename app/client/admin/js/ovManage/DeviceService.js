@@ -8,29 +8,10 @@
    * @module ov.manage
    * @class DeviceService
    */
-  function DeviceService($q, $rootScope, manageService, entityService, manageName) {
+  function DeviceService($q, $http, $rootScope, manageService, entityService, manageName) {
 
-    var selectedDevice = null;
-
-    /**
-     * Get a specific schedule with its id provide by a device
-     *
-     * @param {Array} scheduleIds An array of schedule ids link to a device
-     * @returns {*}
-     */
-    function getSchedules(scheduleIds) {
-      var param = {
-        filter: {
-          id: {
-            $in: scheduleIds
-          }
-        }
-      };
-
-      return entityService.getEntities('schedules', manageName, param, null).then(function(schedules) {
-        return schedules.data.rows;
-      });
-    }
+    var selectedDevice = null,
+      basePath = '/be/manage/';
 
     /**
      * Define the selected device to display in the detail window
@@ -46,26 +27,12 @@
       if (!isGroup) {
         selectedDevice = manageService.getDevice(deviceId);
       } else {
-        selectedDevice = manageService.getGroupWithFullDevices(deviceId);
+        selectedDevice = manageService.getGroup(deviceId);
       }
 
-      // Retrieve device schedules
-      if (selectedDevice.schedules) {
-        return getSchedules(selectedDevice.schedules).then(function(schedules) {
-          selectedDevice.schedules = schedules;
-          deferred.resolve();
+      deferred.resolve();
 
-          return deferred.promise;
-        }, function() {
-          deferred.reject();
-
-          return deferred.promise;
-        });
-      } else {
-        deferred.resolve();
-
-        return deferred.promise;
-      }
+      return deferred.promise;
     }
 
     /**
@@ -165,11 +132,22 @@
       return selectedDevice;
     }
 
+    /**
+     *  Create a record's schedule
+     *
+     * @param {Object} params Contains all data needed to create the record's schedule
+     * @returns {*}
+     */
+    function addCronSchedule(params) {
+      return $http.post(basePath + 'addCronSchedule/' + params);
+    }
+
     return {
       manageDeviceDetails: manageDeviceDetails,
       getSelectedDevice: getSelectedDevice,
       clearSelectedDevice: clearSelectedDevice,
-      updateState: updateState
+      updateState: updateState,
+      addCronSchedule: addCronSchedule
     };
 
   }
@@ -177,6 +155,7 @@
   app.factory('deviceService', DeviceService);
   DeviceService.$inject = [
     '$q',
+    '$http',
     '$rootScope',
     'manageService',
     'entityService',

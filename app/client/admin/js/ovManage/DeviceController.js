@@ -303,8 +303,8 @@
       interact('.device-group > .group').on('doubletap', function(event) {
         var groupId = event.currentTarget.getAttribute('data-id');
 
+        manageService.manageSelectedDevice(groupId);
         $scope.manage.showDetail = false;
-        $scope.clearUiState('selected');
         $location.path('manage/group-detail/' + groupId);
         $scope.manage.absUrl = $location.absUrl();
         $scope.$apply();
