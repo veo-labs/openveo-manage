@@ -92,22 +92,6 @@
     }
 
     /**
-     * Update a device
-     *
-     * @param {Object} device The updated device
-     * @method updateDevice
-     */
-    function updateDevice(device) {
-      if (device) {
-        var index = devices.acceptedDevices.findIndex(function(workingDevice) {
-          return workingDevice.id == device.id;
-        });
-
-        devices.acceptedDevices[index] = device;
-      }
-    }
-
-    /**
      * Retrieve a device with its id
      *
      * @param {String} id the device id
@@ -149,6 +133,37 @@
         return devices.acceptedDevices.find(function(device) {
           return device.id == id;
         });
+      }
+    }
+
+    /**
+     * Update a device
+     *
+     * @param {Object} device The updated device
+     * @method updateDevice
+     */
+    function updateDevice(result) {
+      var device = getDevice(result.id);
+
+      device[result.key] = result.data;
+
+      if (result.key === 'status') {
+        switch (device.status) {
+          case 'stopped':
+            device.state = 'MANAGE.DEVICE.READY';
+            break;
+          case 'error':
+            device.state = 'MANAGE.DEVICE.ERROR';
+            break;
+          case 'started':
+            device.state = 'MANAGE.DEVICE.RECORDING';
+            break;
+          case 'starting':
+            device.state = 'MANAGE.DEVICE.STARTING';
+            break;
+          default:
+            device.state = 'MANAGE.DEVICE.DISCONNECTED';
+        }
       }
     }
 

@@ -273,7 +273,22 @@
      * Stop the current recording session
      */
     self.stopRecord = function() {
+      var ids = [];
 
+      // Verify if the device is a group
+      if (self.selectedDevice.devices) {
+        self.selectedDevice.devices.map(function(device) {
+          ids.push(device.id);
+        });
+
+        $scope.socket.emit('session.stop', {
+          deviceIds: ids
+        });
+      } else {
+        $scope.socket.emit('session.stop', {
+          deviceIds: [self.selectedDevice.id]
+        });
+      }
     };
 
     /**

@@ -348,16 +348,23 @@ function clientConnect() {
       self.deviceListener.startRecord(sockets, data, function(error) {
         if (error) {
           self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
-        } else {
-
-          // TODO: Update state manually ?
         }
       });
     });
 
     // Listening for stop the currently running recording session
     socket.on('session.stop', function(data) {
+      var sockets = [];
 
+      data.deviceIds.map(function(id) {
+        sockets.push(findSocket.call(self, id));
+      });
+
+      self.deviceListener.stopRecord(sockets, function(error) {
+        if (error) {
+          self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
+        }
+      });
     });
   });
 }
@@ -408,7 +415,7 @@ function deviceConnect() {
       var device = findDevice.call(self, socket.id);
 
       setDeviceStorage.call(self, socket.id, data);
-      self.clientListener.update(device);
+      self.clientListener.update('storage', device.storage, device.id);
     });
 
     // Listening for device inputs
@@ -416,7 +423,7 @@ function deviceConnect() {
       var device = findDevice.call(self, socket.id);
 
       setDeviceInputs.call(self, socket.id, data);
-      self.clientListener.update(device);
+      self.clientListener.update('inputs', data, device.id);
     });
 
     // Listening for device equipments
@@ -424,7 +431,7 @@ function deviceConnect() {
       var device = findDevice.call(self, socket.id);
 
       setDevicePresets.call(self, socket.id, data);
-      self.clientListener.update(device);
+      self.clientListener.update('presets', data, device.id);
     });
 
     // Listening for device status change
@@ -432,7 +439,7 @@ function deviceConnect() {
       var device = findDevice.call(self, socket.id);
 
       updateDeviceState.call(self, socket.id, data.status);
-      self.clientListener.update(device);
+      self.clientListener.update('status', data.status, device.id);
     });
 
     // Disconnect event
@@ -440,7 +447,7 @@ function deviceConnect() {
       var device = findDevice.call(self, socket.id);
 
       disconnectDevice.call(self, socket.id);
-      self.clientListener.update(device);
+      self.clientListener.update('status', 'disconnected', device.id);
     });
 
   });

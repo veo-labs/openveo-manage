@@ -31,8 +31,10 @@ ClientListener.prototype.hello = function(device) {
  * Send an event to the client with the updated device
  *
  * @method update
- * @param {Object} device The updated device with storage data
+ * @param {String} key The device key to update
+ * @param {Object | String} The updated data
+ * @param {String} id the device id
  */
-ClientListener.prototype.update = function(device) {
-  this.ioClient.emit('update', device);
+ClientListener.prototype.update = function(key, data, id) {
+  this.ioClient.emit('update', {key: key, data: data, id: id});
 };

@@ -39,6 +39,8 @@
     "RECORDING": "Recording",
     "STARTING": "Recording starting",
     "SPACE": "Disk space",
-    "ERROR": "Error"
+    "ERROR": "Error",
+    "STOP_RECORDING": "Stop",
+    "TAG": "Tag"
   }
 }

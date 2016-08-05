@@ -67,7 +67,7 @@
             case 'error':
               selectedDevice.state = 'MANAGE.DEVICE.ERROR';
               return false;
-            case 'recording':
+            case 'started':
               selectedDevice.state = 'MANAGE.DEVICE.RECORDING';
               return false;
             case 'starting':
@@ -93,7 +93,7 @@
         case 'error':
           selectedDevice.state = 'MANAGE.DEVICE.ERROR';
           break;
-        case 'recording':
+        case 'started':
           selectedDevice.state = 'MANAGE.DEVICE.RECORDING';
           break;
         case 'starting':

@@ -83,6 +83,12 @@
         &.starting {
           @include sprite($device-starting);
         }
+        &.started {
+          @include sprite($device-starting);
+        }
+        &.stopping {
+          @include sprite($device-starting);
+        }
       }
       .screen {
         display: inline-block;

@@ -39,6 +39,8 @@
     "RECORDING": "En cours d'enregistrement",
     "STARTING": "Démarrage de l'enregistrement",
     "SPACE": "Espace disque",
-    "ERROR": "Erreur"
+    "ERROR": "Erreur",
+    "STOP_RECORDING": "Arrêter",
+    "TAG": "Tagger"
   }
 }

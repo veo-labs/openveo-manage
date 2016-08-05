@@ -52,8 +52,9 @@
       });
 
       // Device update listener
-      $scope.socket.on('update', function(device) {
-        manageService.updateDevice(device);
+      $scope.socket.on('update', function(data) {
+        manageService.updateDevice(data);
+        $scope.$apply();
       });
     }
 

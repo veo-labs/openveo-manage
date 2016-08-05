@@ -184,9 +184,12 @@
         .action {
           border-bottom: 1px solid $border-grey;
           margin-bottom: 20px;
-          .start {
+          .start, .recording {
             display: block;
             margin: 10px auto 20px auto;
+          }
+          .recording {
+            text-align: center;
           }
         }
         .planning {
@@ -282,10 +285,10 @@
           .error {
             color: $red;
           }
-          .stating {
+          .starting, .stopping {
             color: $orange;
           }
-          .recording {
+          .started {
             color: $dark-blue;
           }
         }
