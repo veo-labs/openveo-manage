@@ -67,12 +67,15 @@
           switch (device.status) {
             case 'error':
               selectedDevice.state = 'MANAGE.DEVICE.ERROR';
+              selectedDevice.status = 'error';
               return false;
             case 'started':
               selectedDevice.state = 'MANAGE.DEVICE.RECORDING';
+              selectedDevice.status = 'started';
               return false;
             case 'starting':
               selectedDevice.state = 'MANAGE.DEVICE.STARTING';
+              selectedDevice.status = 'starting';
               return false;
             default:
               if (device.status == 'stopped') {
@@ -82,9 +85,13 @@
         });
         if (groupReady) {
           selectedDevice.state = 'MANAGE.DEVICE.READY';
+          selectedDevice.status = 'stopped';
         } else {
           selectedDevice.state = 'MANAGE.DEVICE.DISCONNECTED';
+          selectedDevice.status = 'disconnected';
         }
+
+        return false;
       }
 
       switch (selectedDevice.status) {
