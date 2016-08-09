@@ -2,6 +2,7 @@
 
 var path = require('path');
 var util = require('util');
+var shortid = require('shortid');
 var openVeoAPI = require('@openveo/api');
 var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
 var EntityController = openVeoAPI.controllers.EntityController;
@@ -9,6 +10,7 @@ var SocketProviderManager = process.requireManage('app/server/services/SocketPro
 var configDir = openVeoAPI.fileSystem.getConfDir();
 var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
 var namespace = manageConf.namespace;
+var ScheduleManager = process.requireManage('app/server/services/ScheduleManager.js');
 var errors = process.requireManage('app/server/httpErrors.js');
 var AccessError = openVeoAPI.errors.AccessError;
 
@@ -91,10 +93,24 @@ DeviceController.prototype.updateEntityAction = function(request, response, next
   if (request.params.id && request.body) {
     var model = new this.Entity(request.user),
       entityId = request.params.id,
-      params = request.body,
-      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
+      data = request.body,
+      params = request.body.params,
+      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace),
+      scheduleManager = new ScheduleManager();
 
-    model.update(entityId, params, function(error, updateCount) {
+    // If it's a schedule update, generate an id for it
+    if (data.schedules) {
+      for (var i = 0; i < data.schedules.length; i++) {
+        if (!data.schedules[i].hasOwnProperty('id')) {
+          data.schedules[i].id = shortid.generate();
+          params.scheduleId = data.schedules[i].id;
+          break;
+        }
+      }
+      data = {schedules: data.schedules};
+    }
+
+    model.update(entityId, data, function(error, updateCount) {
       if (error && (error instanceof AccessError))
         next(errors.UPDATE_DEVICE_FORBIDDEN);
       else if (error) {
@@ -104,13 +120,26 @@ DeviceController.prototype.updateEntityAction = function(request, response, next
       } else {
 
         // Update cached device
-        socketProvider.updateDevice(entityId, params);
-        response.send({error: null, status: 'ok'});
+        socketProvider.updateDevice(entityId, data);
+
+        if (data.schedules) {
+
+          // Create the scheduled job
+          scheduleManager.createJob(data.schedules, params, entityId, socketProvider, function(error) {
+            if (error) {
+              next(error);
+            } else {
+              response.send({error: null, status: 'ok'});
+            }
+          });
+        } else {
+          response.send({error: null, status: 'ok'});
+        }
       }
     });
   } else {
 
-    // Missing id of the device or the datas
+    // Missing id of the device or the data
     next(errors.UPDATE_DEVICE_MISSING_PARAMETERS);
   }
 };
@@ -146,75 +175,3 @@ DeviceController.prototype.removeEntityAction = function(request, response, next
     next(errors.REMOVE_DEVICE_MISSING_PARAMETERS);
   }
 };
-
-
-/**
- * Create a new cron schedule with a start and a end time
- *
- * Expects one GET parameter :
- *  - **beginDate** The begin date to start the schedule
- *  - **endDate** The end date to stop the schedule
- *  - **deviceIds** The ids of the devices to start recording simultaneously
- *  - **sessionId** The id for to send for all the records if its a group
- *
- * @method addCronScheduleAction
- */
-/* ScheduleController.prototype.addCronScheduleAction = function(request, response, next) {
-  console.log(request.params);
-  if (request.params.beginDate && request.params.endDate && request.params.deviceIds) {
-    var socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace),
-      startTime = request.params.beginDate,
-      endTime = request.params.endDate,
-      sockets = [],
-      actions = [];
-
-    // Retrieve sockets from device ids
-    request.params.deviceIds.map(function(id) {
-      sockets.push(socketProvider.findSocket(id));
-    });
-    console.log('addCron');
-    console.log(request.params);
-    // Create the start job to launch a record
-    var startJob = schedule.scheduleJob(startTime, function() {
-      console.log('startJob');
-      socketProvider.deviceListener.startRecord(sockets, request.params);
-      /*sockets.map(function(socket) {
-       actions.push(socketProvider.deviceListener.startRecord(socket, request.params.sessionId));
-       });
-       async.series(actions, function(error) {
-       if (error) {
-       process.logger.error(error, {error: error, method: 'addCronScheduleAction:startJob'});
-       next(errors.START_SCHEDULE_JOB);
-       } else {
-       response.status(200).send();
-       }
-       });*/
-
-      // TODO: update state recording
-    // });
-
-    // Create the end job to stop a record
-   // var endJob = schedule.scheduleJob(endTime, function() {
-   //   socketProvider.deviceListener.stopRecord(sockets);
-      /* sockets.map(function(socket) {
-       actions.push(socketProvider.deviceListener.stopRecord(socket));
-       });
-       async.series(actions, function(error) {
-       if (error) {
-       process.logger.error(error, {error: error, method: 'addCronScheduleAction:endJob'});
-       next(errors.END_SCHEDULE_JOB);
-       } else {
-       response.status(200).send();
-       }
-       });*/
-
-      // TODO: update state end recording
-    /* });
-
-    response.send();
-  } else {
-
-    // Missing params for the schedule
-    next(errors.ADD_SCHEDULE_MISSING_PARAMETERS);
-  }
-};*/

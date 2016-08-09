@@ -181,3 +181,40 @@ DeviceListener.prototype.stopRecord = function(sockets, callback) {
     }
   });
 };
+
+/**
+ * Send request to tag a recording session
+ *
+ * @method tagRecord
+ * @param {Array} sockets An array of sockets
+ * @param {Function} callback Function to call when it's done with :
+ *  - **Error** An error if something went wrong, null otherwise
+ */
+DeviceListener.prototype.tagRecord = function(sockets, callback) {
+  var actions = [],
+    tagRecordAsyncFunction = function(socket) {
+      return function(callback) {
+        socket.emit('session.index', {
+          type: 'tag'
+        });
+        callback();
+      };
+    };
+
+  sockets.map(function(socket) {
+
+    // Verify if socket is defined
+    if (socket) {
+      actions.push(tagRecordAsyncFunction(socket));
+    }
+  });
+
+  async.parallel(actions, function(error) {
+    if (error) {
+      process.logger.error(error, {error: error, method: 'stopRecord'});
+      callback(error);
+    } else {
+      callback();
+    }
+  });
+};

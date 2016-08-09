@@ -57,10 +57,10 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="schedule in vm.selectedDevice.schedules | orderBy:order:reverse track by $index">
-                                <th ng-bind="schedule.dateBegin | date:'dd/MM/yyyy HH:mm'"></th>
-                                <th ng-bind="schedule.dateEnd | date:'dd/MM/yyyy HH:mm'"></th>
-                                <th class="cross" ng-click="vm.removeSchedule($index)"></th>
+                            <tr ng-repeat="schedule in vm.selectedDevice.schedules | orderBy:order:reverse track by schedule.id">
+                                <th ng-bind="schedule.beginDate | date:'dd/MM/yyyy HH:mm'"></th>
+                                <th ng-bind="schedule.endDate | date:'dd/MM/yyyy HH:mm'"></th>
+                                <th class="cross" ng-click="vm.removeSchedule(schedule.id)"></th>
                             </tr>
                             </tbody>
                         </table>

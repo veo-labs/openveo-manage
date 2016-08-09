@@ -193,8 +193,8 @@
       var dateTimeBegin = mergeDateTime(self.deviceSchedule.beginDate, self.deviceSchedule.beginTime),
         dateTimeEnd = mergeDateTime(self.deviceSchedule.endDate, self.deviceSchedule.endTime),
         scheduleToSave = {
-          dateBegin: dateTimeBegin,
-          dateEnd: dateTimeEnd,
+          beginDate: dateTimeBegin,
+          endDate: dateTimeEnd,
           preset: self.deviceSchedule.preset
         },
         schedules = (self.selectedDevice.schedules) ? self.selectedDevice.schedules : [],
@@ -202,8 +202,8 @@
         entity = (isGroup) ? 'groups' : 'devices',
         ids = [],
         params = {
-          dateBegin: dateTimeBegin,
-          dateEnd: dateTimeEnd,
+          beginDate: dateTimeBegin,
+          endDate: dateTimeEnd,
           preset: self.deviceSchedule.preset,
           deviceIds: []
         };
@@ -222,10 +222,7 @@
         // Prepare schedules for saving in database
         schedules.push(scheduleToSave);
 
-        entityService.updateEntity(entity, manageName, id, {schedules: schedules}).then(function() {
-
-          // Add to cron
-          deviceService.addCronSchedule(params);
+        entityService.updateEntity(entity, manageName, id, {schedules: schedules, params: params}).then(function() {
           self.selectedDevice.schedules = schedules;
 
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
@@ -238,10 +235,11 @@
     /**
      * Remove a saved schedule
      *
-     * @param position
+     * @param id
      */
-    self.removeSchedule = function(position) {
+    self.removeSchedule = function(id) {
 
+      // console.log(id);
     };
 
     /**
@@ -295,7 +293,22 @@
      * Create a new tag for the current recording session
      */
     self.tagRecord = function() {
+      var ids = [];
 
+      // Verify if the device is a group
+      if (self.selectedDevice.devices) {
+        self.selectedDevice.devices.map(function(device) {
+          ids.push(device.id);
+        });
+
+        $scope.socket.emit('session.index', {
+          deviceIds: ids
+        });
+      } else {
+        $scope.socket.emit('session.index', {
+          deviceIds: [self.selectedDevice.id]
+        });
+      }
     };
 
     // Listen event to load the selected device details on window opening
