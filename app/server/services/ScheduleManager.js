@@ -4,6 +4,7 @@ var schedule = require('node-schedule');
 var path = require('path');
 var openVeoAPI = require('@openveo/api');
 var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
+var GroupModel = process.requireManage('app/server/models/GroupModel.js');
 var SocketProviderManager = process.requireManage('app/server/services/SocketProviderManager.js');
 var configDir = openVeoAPI.fileSystem.getConfDir();
 var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
@@ -30,12 +31,13 @@ module.exports = ScheduleManager;
  * @param {String} name The name of the searched jobs
  * @param {Array} schedules The schedules to keep the device up to date
  * @param {String} entityId The id of the device or group of devices to update
+ * @param {String} entityType The type [groups/devices] of the model to update
  * @param {Object} socketProvider
  * @param {Function} [callback] The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
  */
-function removeJob(name, schedules, entityId, socketProvider, callback) {
-  var deviceModel = new DeviceModel(),
+function removeJob(name, schedules, entityId, entityType, socketProvider, callback) {
+  var model = (entityType === 'devices') ? new DeviceModel() : new GroupModel(),
     startJob = schedule.scheduledJobs['start_' + name],
     endJob = schedule.scheduledJobs['end_' + name],
     scheduleIndex;
@@ -46,7 +48,7 @@ function removeJob(name, schedules, entityId, socketProvider, callback) {
   });
   schedules.splice(scheduleIndex, 1);
 
-  deviceModel.update(entityId, {schedules: schedules}, function(error, updateCount) {
+  model.update(entityId, {schedules: schedules}, function(error, updateCount) {
     if (error && (error instanceof AccessError))
       callback(errors.UPDATE_DEVICE_FORBIDDEN);
     else if (error) {
@@ -56,7 +58,9 @@ function removeJob(name, schedules, entityId, socketProvider, callback) {
     } else {
       startJob.cancel();
       endJob.cancel();
-      socketProvider.updateDevice(entityId, {schedules: schedules});
+      if (entityType === 'devices') {
+        socketProvider.updateDevice(entityId, {schedules: schedules});
+      }
       callback();
     }
   });
@@ -100,7 +104,7 @@ ScheduleManager.prototype.createJob = function(schedules, params, callback) {
       } else {
 
         // Remove the scheduled job when it's done
-        removeJob(params.scheduleId, schedules, params.entityId, socketProvider, function(error) {
+        removeJob(params.scheduleId, schedules, params.entityId, params.entityType, socketProvider, function(error) {
           if (error) {
             process.logger.error(error, {error: error, method: 'removeJob'});
           }

@@ -204,6 +204,7 @@
         ids = [],
         params = {
           entityId: id,
+          entityType: entity,
           beginDate: dateTimeBegin,
           endDate: dateTimeEnd,
           preset: self.deviceSchedule.preset,
