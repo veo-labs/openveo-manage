@@ -289,11 +289,11 @@ function clientConnect() {
 
     // Listening for device update name
     socket.on('update.name', function(data) {
-      var device = findDeviceById.call(self, data.id);
+      var socket = findSocket.call(self, data.id);
 
       // Send the new device name
-      if (device)
-        self.deviceListener.updateName(device, data.name);
+      if (socket)
+        self.deviceListener.updateName(socket, data.name);
     });
 
     // Listening for start a new recording session

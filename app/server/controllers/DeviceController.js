@@ -2,7 +2,6 @@
 
 var path = require('path');
 var util = require('util');
-var shortid = require('shortid');
 var openVeoAPI = require('@openveo/api');
 var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
 var EntityController = openVeoAPI.controllers.EntityController;
@@ -10,7 +9,6 @@ var SocketProviderManager = process.requireManage('app/server/services/SocketPro
 var configDir = openVeoAPI.fileSystem.getConfDir();
 var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
 var namespace = manageConf.namespace;
-var ScheduleManager = process.requireManage('app/server/services/ScheduleManager.js');
 var errors = process.requireManage('app/server/httpErrors.js');
 var AccessError = openVeoAPI.errors.AccessError;
 
@@ -94,21 +92,7 @@ DeviceController.prototype.updateEntityAction = function(request, response, next
     var model = new this.Entity(request.user),
       entityId = request.params.id,
       data = request.body,
-      params = request.body.params,
-      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace),
-      scheduleManager = new ScheduleManager();
-
-    // If it's a schedule update, generate an id for it
-    if (data.schedules) {
-      for (var i = 0; i < data.schedules.length; i++) {
-        if (!data.schedules[i].hasOwnProperty('id')) {
-          data.schedules[i].id = shortid.generate();
-          params.scheduleId = data.schedules[i].id;
-          break;
-        }
-      }
-      data = {schedules: data.schedules};
-    }
+      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
 
     model.update(entityId, data, function(error, updateCount) {
       if (error && (error instanceof AccessError))
@@ -121,20 +105,7 @@ DeviceController.prototype.updateEntityAction = function(request, response, next
 
         // Update cached device
         socketProvider.updateDevice(entityId, data);
-
-        if (data.schedules) {
-
-          // Create the scheduled job
-          scheduleManager.createJob(data.schedules, params, entityId, socketProvider, function(error) {
-            if (error) {
-              next(error);
-            } else {
-              response.send({error: null, status: 'ok'});
-            }
-          });
-        } else {
-          response.send({error: null, status: 'ok'});
-        }
+        response.send({error: null, status: 'ok'});
       }
     });
   } else {

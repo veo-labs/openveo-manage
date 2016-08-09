@@ -193,6 +193,7 @@
       var dateTimeBegin = mergeDateTime(self.deviceSchedule.beginDate, self.deviceSchedule.beginTime),
         dateTimeEnd = mergeDateTime(self.deviceSchedule.endDate, self.deviceSchedule.endTime),
         scheduleToSave = {
+          scheduleId: deviceService.generateId(),
           beginDate: dateTimeBegin,
           endDate: dateTimeEnd,
           preset: self.deviceSchedule.preset
@@ -202,6 +203,7 @@
         entity = (isGroup) ? 'groups' : 'devices',
         ids = [],
         params = {
+          entityId: id,
           beginDate: dateTimeBegin,
           endDate: dateTimeEnd,
           preset: self.deviceSchedule.preset,
@@ -222,8 +224,12 @@
         // Prepare schedules for saving in database
         schedules.push(scheduleToSave);
 
-        entityService.updateEntity(entity, manageName, id, {schedules: schedules, params: params}).then(function() {
-          self.selectedDevice.schedules = schedules;
+        entityService.updateEntity(entity, manageName, id, {schedules: schedules}).then(function() {
+
+          // Create the scheduled job
+          deviceService.addScheduledJob({schedules: schedules, params: params}).then(function() {
+            self.selectedDevice.schedules = schedules;
+          });
 
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         }, function() {

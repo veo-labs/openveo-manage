@@ -3,7 +3,9 @@
 module.exports = {
   routes: {
     public: {},
-    private: {},
+    private: {
+      'post /addScheduledJob': 'app/server/controllers/ScheduleController.addScheduledJobAction'
+    },
     ws: {}
   },
   entities: {

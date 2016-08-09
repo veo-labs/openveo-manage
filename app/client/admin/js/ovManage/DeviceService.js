@@ -11,7 +11,8 @@
   function DeviceService($q, $http, $rootScope, manageService, entityService, manageName) {
 
     var selectedDevice = null,
-      basePath = '/be/manage/';
+      basePath = '/be/manage/',
+      ORIGINAL = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-';
 
     /**
      * Define the selected device to display in the detail window
@@ -137,9 +138,25 @@
      *
      * @param {Object} params Contains all data needed to create the record's schedule
      * @returns {*}
+     * @method addScheduledJob
      */
-    function addCronSchedule(params) {
-      return $http.post(basePath + 'addCronSchedule/' + params);
+    function addScheduledJob(params) {
+      return $http.post(basePath + 'addScheduledJob', params);
+    }
+
+    /**
+     * Generate an unique id
+     *
+     * @returns {string}
+     * @method generateId
+     */
+    function generateId() {
+      var id = '';
+
+      for (var i = 0; i < 8; i++)
+        id += ORIGINAL.charAt(Math.floor(Math.random() * ORIGINAL.length));
+
+      return id;
     }
 
     return {
@@ -147,7 +164,8 @@
       getSelectedDevice: getSelectedDevice,
       clearSelectedDevice: clearSelectedDevice,
       updateState: updateState,
-      addCronSchedule: addCronSchedule
+      addScheduledJob: addScheduledJob,
+      generateId: generateId
     };
 
   }
