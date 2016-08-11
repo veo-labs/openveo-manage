@@ -57,6 +57,7 @@
     self.closeDetail = function() {
       if (self.selectedDevice)
         manageService.manageSelectedDevice(self.selectedDevice.id);
+
       $scope.manage.showDetail = false;
       $scope.manage.openedDevice = null;
       self.selectedDevice = null;
@@ -136,8 +137,6 @@
       var model = (self.selectedDevice.devices) ? 'groups' : 'devices';
 
       entityService.updateEntity(model, manageName, self.selectedDevice.id, {name: name}).then(function() {
-        self.selectedDevice.name = name;
-        manageService.updateDevice(self.selectedDevice);
         self.selectedDevice.displayInputName = !self.selectedDevice.displayInputName;
 
         // Send event to save the new name (not for groups)
@@ -190,13 +189,15 @@
      * @param id
      */
     self.saveSchedule = function(id) {
-      var dateTimeBegin = mergeDateTime(self.deviceSchedule.beginDate, self.deviceSchedule.beginTime),
-        dateTimeEnd = mergeDateTime(self.deviceSchedule.endDate, self.deviceSchedule.endTime),
+      var dateTimeBegin = mergeDateTime(self.deviceSchedule.schedule.beginDate,
+        self.deviceSchedule.schedule.beginTime),
+        dateTimeEnd = mergeDateTime(self.deviceSchedule.schedule.endDate, self.deviceSchedule.schedule.endTime),
+        generatedId = deviceService.generateId(),
         scheduleToSave = {
-          scheduleId: deviceService.generateId(),
+          scheduleId: generatedId,
           beginDate: dateTimeBegin,
           endDate: dateTimeEnd,
-          preset: self.deviceSchedule.preset
+          preset: self.deviceSchedule.schedule.preset
         },
         schedules = (self.selectedDevice.schedules) ? self.selectedDevice.schedules : [],
         isGroup = self.selectedDevice.devices,
@@ -205,9 +206,10 @@
         params = {
           entityId: id,
           entityType: entity,
+          scheduleId: generatedId,
           beginDate: dateTimeBegin,
           endDate: dateTimeEnd,
-          preset: self.deviceSchedule.preset,
+          preset: self.deviceSchedule.schedule.preset,
           deviceIds: []
         };
 
@@ -217,7 +219,6 @@
             ids.push(device.id);
           });
           params.deviceIds = ids;
-          params.sessionId = self.selectedDevice.group;
         } else {
           params.deviceIds.push(self.selectedDevice.id);
         }
@@ -228,10 +229,8 @@
         entityService.updateEntity(entity, manageName, id, {schedules: schedules}).then(function() {
 
           // Create the scheduled job
-          deviceService.addScheduledJob({schedules: schedules, params: params}).then(function() {
-            self.selectedDevice.schedules = schedules;
-          });
-
+          deviceService.addScheduledJob({schedules: schedules, params: params}).then(function() {});
+          self.deviceSchedule.schedule = {};
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         }, function() {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);

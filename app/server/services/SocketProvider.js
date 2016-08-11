@@ -10,6 +10,7 @@ var socket = require('socket.io');
 var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
 var DeviceListener = process.requireManage('app/server/eventListeners/DeviceListener');
 var ClientListener = process.requireManage('app/server/eventListeners/ClientListener');
+var ScheduleManager = process.requireManage('app/server/services/ScheduleManager.js');
 
 /**
  * Defines a custom error with an error code.
@@ -92,6 +93,14 @@ function SocketProvider(namespace) {
    * @type ClientListener
    */
   this.clientListener = new ClientListener(this.ioDevice, this.ioClient, this.deviceModel);
+
+  /**
+   * The schedule manager
+   *
+   * @property scheduleManager
+   * @type ScheduleManager
+   */
+  this.scheduleManager = new ScheduleManager();
 }
 
 util.inherits(SocketProvider, events.EventEmitter);
@@ -364,6 +373,14 @@ function deviceConnect() {
           self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
         } else {
           addDevice.call(self, socket.id, device);
+
+          // Update the scheduled jobs
+          self.scheduleManager.updateDeviceJobs.call(self, device, function(error, schedules) {
+            if (error)
+              self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
+            if (!device.group)
+              device.schedules = schedules;
+          });
         }
       });
     });

@@ -1,14 +1,9 @@
 'use strict';
 
 var schedule = require('node-schedule');
-var path = require('path');
 var openVeoAPI = require('@openveo/api');
 var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
 var GroupModel = process.requireManage('app/server/models/GroupModel.js');
-var SocketProviderManager = process.requireManage('app/server/services/SocketProviderManager.js');
-var configDir = openVeoAPI.fileSystem.getConfDir();
-var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
-var namespace = manageConf.namespace;
 var errors = process.requireManage('app/server/httpErrors.js');
 var AccessError = openVeoAPI.errors.AccessError;
 
@@ -70,16 +65,15 @@ function removeJob(name, schedules, entityId, entityType, socketProvider, callba
  * Create a new start and end job for a specified schedule
  *
  * @method createJob
+ * @param {Object} socketProvider
  * @param {Array} schedules The schedules to keep the device up to date
  * @param {Object} params All parameters needed to create the new job
  * @param {Function} [callback] The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
  */
-ScheduleManager.prototype.createJob = function(schedules, params, callback) {
-
+ScheduleManager.prototype.createJob = function(socketProvider, schedules, params, callback) {
   var startTime = params.beginDate,
     endTime = params.endDate,
-    socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace),
     sockets = [];
 
   // Retrieve sockets from device ids
@@ -116,16 +110,112 @@ ScheduleManager.prototype.createJob = function(schedules, params, callback) {
   callback();
 };
 
+/**
+ * Clear the scheduled jobs for a device witch have a start date < now
+ *
+ * @method clearOldJobs
+ * @param {Object} device The device to update
+ * @param {String} entityType The type of entity [devices/groups]
+ * @param {Function} [callback] The function to call when it's done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Schedules** The updated schedules job of the device
+ */
+function clearOldJobs(device, entityType, callback) {
+  var model = (entityType === 'devices') ? new DeviceModel() : new GroupModel(),
+    entityId = (entityType === 'devices') ? device.id : device.group,
+    schedules = device.schedules,
+    now = new Date();
+
+  // Create the new schedules object to save
+  if (device.schedules) {
+    device.schedules.map(function(schedule, index) {
+      if (new Date(schedule.beginDate).getTime() < now.getTime()) {
+        schedules.splice(index, 1);
+      }
+    });
+  } else {
+    schedules = [];
+  }
+
+  model.update(entityId, {schedules: schedules}, function(error, updateCount) {
+    if (error && (error instanceof AccessError))
+      callback(errors.UPDATE_DEVICE_FORBIDDEN);
+    else if (error) {
+      process.logger.error((error && error.message) || 'Fail updating',
+        {method: 'updateEntityAction', entity: entityId});
+      callback(errors.UPDATE_DEVICE_ERROR);
+    } else {
+      callback(error, schedules);
+    }
+  });
+}
+
+/**
+ * Permits to update or create the scheduled jobs for a device on new socket connection
+ *
+ * @param {Object} device The device to update
+ * @param {Function} [callback] The function to call when it's done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Schedules** The updated schedules job of the device
+ */
+ScheduleManager.prototype.updateDeviceJobs = function(device, callback) {
+
+  var self = this,
+    groupModel,
+    deviceIds = [],
+    entityType = (device.group) ? 'groups' : 'devices';
+
+  // Verify if job already exist
+  clearOldJobs(device, entityType, function(error, schedules) {
+    if (!error) {
+      // Do not recreate jobs for a device belonging to a group
+      if (!device.group) {
+        schedules.map(function(schedule) {
+          self.scheduleManager.createJob(self, schedules, {
+            scheduleId: schedule.scheduleId,
+            entityId: device.id,
+            entityType: entityType,
+            beginDate: schedule.beginDate,
+            endDate: schedule.endDate,
+            deviceIds: [device.id]
+          }, function() {
+            // Log
+          });
+        });
+      } else {
+        groupModel = new GroupModel();
+
+        groupModel.getOne(device.group, null, function(error, group) {
+          if (!error && group.schedules) {
+            group.devices.map(function(device) {
+              deviceIds.push(device.id);
+            });
+            group.schedules.map(function(schedule) {
+              self.scheduleManager.createJob(self, schedules, {
+                scheduleId: schedule.scheduleId,
+                entityId: group.id,
+                entityType: entityType,
+                beginDate: schedule.beginDate,
+                endDate: schedule.endDate,
+                deviceIds: deviceIds
+              }, function() {
+                // Log
+              });
+            });
+          } else {
+            callback(error);
+          }
+        });
+      }
+    } else {
+      callback(error);
+    }
+
+    callback(error, schedules);
+  });
+};
+
 /*
 ScheduleManager.prototype.createRecurrentJob = function() {
 
-};*/
-
-/**
- * Call on plugin start to remove the old jobs and recreate the next jobs
- *
- * @method manageJobs
- */
-/* ScheduleManager.prototype.manageJobs = function() {
-  var deviceModel = new DeviceModel();
 };*/

@@ -1,10 +1,15 @@
 'use strict';
 
 var util = require('util');
+var path = require('path');
 var openVeoAPI = require('@openveo/api');
 var errors = process.requireManage('app/server/httpErrors.js');
 var ScheduleManager = process.requireManage('app/server/services/ScheduleManager.js');
 var Controller = openVeoAPI.controllers.Controller;
+var SocketProviderManager = process.requireManage('app/server/services/SocketProviderManager.js');
+var configDir = openVeoAPI.fileSystem.getConfDir();
+var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
+var namespace = manageConf.namespace;
 
 /**
  * Creates a ScheduleController
@@ -30,10 +35,11 @@ util.inherits(ScheduleController, Controller);
 ScheduleController.prototype.addScheduledJobAction = function(request, response, next) {
   var schedules = request.body.schedules,
     params = request.body.params,
-    scheduleManager = new ScheduleManager();
+    scheduleManager = new ScheduleManager(),
+    socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
 
   if (params.beginDate && params.endDate && params.deviceIds) {
-    scheduleManager.createJob(schedules, params, function(error) {
+    scheduleManager.createJob(socketProvider, schedules, params, function(error) {
       if (error) {
         next(error);
       } else {

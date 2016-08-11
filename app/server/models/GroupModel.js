@@ -4,12 +4,7 @@
 var util = require('util');
 var shortid = require('shortid');
 var async = require('async');
-var path = require('path');
 var openVeoAPI = require('@openveo/api');
-var SocketProviderManager = process.requireManage('app/server/services/SocketProviderManager.js');
-var configDir = openVeoAPI.fileSystem.getConfDir();
-var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
-var namespace = manageConf.namespace;
 var GroupProvider = process.requireManage('app/server/providers/GroupProvider.js');
 var DeviceProvider = process.requireManage('app/server/providers/DeviceProvider.js');
 
@@ -75,15 +70,7 @@ GroupModel.prototype.add = function(data, callback) {
 GroupModel.prototype.get = function(filter, callback) {
   var self = this,
     groups = [],
-    devices = [],
-    socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace),
-    cachedDevices = socketProvider.getDevices(),
-    deviceIds = [];
-
-  // Avoid to retrieve in database all devices already in cache
-  cachedDevices.map(function(device) {
-    deviceIds.push(device.id);
-  });
+    devices = [];
 
   async.parallel([
 
@@ -97,8 +84,8 @@ GroupModel.prototype.get = function(filter, callback) {
 
     // Get the list of devices
     function(callback) {
-      self.deviceProvider.get({id: {$nin: deviceIds}}, function(error, deviceList) {
-        devices = openVeoAPI.util.joinArray(cachedDevices, deviceList);
+      self.deviceProvider.get(null, function(error, deviceList) {
+        devices = deviceList;
         callback(error);
       });
     }
@@ -129,6 +116,51 @@ GroupModel.prototype.get = function(filter, callback) {
       }
 
       callback(null, groups);
+    }
+  });
+};
+
+/**
+ * Gets a specific group with devices details.
+ *
+ * @method getOne
+ * @async
+ * @parma {String} The searched group id
+ * @param {Object} filter A MongoDB filter
+ * @param {Function} callback The function to call when it's done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Object** The group with its devices
+ */
+GroupModel.prototype.getOne = function(id, filter, callback) {
+  var self = this,
+    group,
+    devices = [];
+
+  async.parallel([
+
+    // Get the list of groups
+    function(callback) {
+      self.provider.getOne(id, filter, function(error, searchedGroup) {
+        group = searchedGroup;
+        callback(error);
+      });
+    },
+
+    // Get the list of devices
+    function(callback) {
+      self.deviceProvider.get({group: {$eq: id}}, function(error, deviceList) {
+        devices = deviceList;
+        callback(error);
+      });
+    }
+
+  ], function(error) {
+    if (error) {
+      callback(error);
+    } else {
+      group.devices = devices;
+
+      callback(null, group);
     }
   });
 };
