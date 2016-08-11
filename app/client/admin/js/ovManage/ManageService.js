@@ -143,7 +143,7 @@
      * @method updateDevice
      */
     function updateDevice(result) {
-      var device = getDevice(result.id);
+      var device = (getDevice(result.id)) ? getDevice(result.id) : getGroup(result.id);
 
       device[result.key] = result.data;
 
@@ -163,6 +163,20 @@
             break;
           default:
             device.state = 'MANAGE.DEVICE.DISCONNECTED';
+        }
+      }
+
+      // Keep the devices of a group up to date
+      if (device.group) {
+        for (var i = 0; i < groups.length; i++) {
+          if (groups[i].id === device.group) {
+            for (var j = 0; j < groups[i].devices.length; j++) {
+              if (groups[i].devices[j].id === device.id) {
+                groups[i].devices[j] = device;
+                break;
+              }
+            }
+          }
         }
       }
     }
