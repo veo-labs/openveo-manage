@@ -45,7 +45,6 @@ DeviceListener.prototype.hello = function(data, socket, callback) {
 
           // Asks for device settings
           socket.emit('get', {event: 'settings.name'});
-          socket.emit('get', {event: 'session.status'});
           callback(error, createdDevice);
         }
       });
@@ -91,6 +90,7 @@ DeviceListener.prototype.setName = function(name, deviceId, callback) {
  * @param {Object} socket The socket.io object
  */
 DeviceListener.prototype.settings = function(socket) {
+  socket.emit('get', {event: 'session.status'});
   socket.emit('get', {event: 'storage'});
   socket.emit('get', {event: 'inputs'});
   socket.emit('get', {event: 'settings.presets'});
