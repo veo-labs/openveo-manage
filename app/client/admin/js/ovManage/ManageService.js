@@ -81,14 +81,16 @@
           return id == groupId;
         });
 
-      // Update devices belonging to the group
-      group.devices.map(function(device) {
-        entityService.updateEntity('devices', manageName, device.id, {group: null}).then(function() {
-          delete device.group;
-        });
-      });
-
       groups.splice(groupIndex, 1);
+
+      // Update devices belonging to the group
+      $timeout(function() {
+        group.devices.map(function(device) {
+          entityService.updateEntity('devices', manageName, device.id, {group: null}).then(function() {
+            delete device.group;
+          });
+        });
+      }, 300);
     }
 
     /**
@@ -99,6 +101,8 @@
      * @method getDevice
      */
     function getDevice(id) {
+
+      var result = {};
 
       // Find device in group if user is in group detail page
       if ($route.current.params.id) {
@@ -124,15 +128,41 @@
       } else {
         if (!devices) {
           return getDevices().then(function() {
-            return devices.acceptedDevices.find(function(device) {
-              return device.id == id;
+            devices.acceptedDevices.map(function(device) {
+              if (device.id === id) {
+                result = device;
+              }
+            });
+            devices.pendingDevices.map(function(device) {
+              if (device.id === id) {
+                result = device;
+              }
+            });
+            devices.refusedDevices.map(function(device) {
+              if (device.id === id) {
+                result = device;
+              }
             });
           });
         }
 
-        return devices.acceptedDevices.find(function(device) {
-          return device.id == id;
+        devices.acceptedDevices.map(function(device) {
+          if (device.id === id) {
+            result = device;
+          }
         });
+        devices.pendingDevices.map(function(device) {
+          if (device.id === id) {
+            result = device;
+          }
+        });
+        devices.refusedDevices.map(function(device) {
+          if (device.id === id) {
+            result = device;
+          }
+        });
+
+        return result;
       }
     }
 
