@@ -129,20 +129,22 @@ DeviceController.prototype.removeEntityAction = function(request, response, next
       entityId = request.params.id,
       socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
 
-    model.remove(entityId, function(error, deleteCount) {
-      if (error) {
-        process.logger.error(error.message, {error: error, method: 'removeEntityAction'});
-        next(errors.REMOVE_ENTITY_ERROR);
-      } else {
+    socketProvider.scheduleManager.toggleDeviceJobs(entityId, null, 'removeDevice', socketProvider, function() {
+      model.remove(entityId, function(error, deleteCount) {
+        if (error) {
+          process.logger.error(error.message, {error: error, method: 'removeEntityAction'});
+          next(errors.REMOVE_ENTITY_ERROR);
+        } else {
 
-        // Update cached device
-        socketProvider.removeDeviceById(entityId);
-        response.send({error: null, status: 'ok'});
-      }
+          // Update cached device
+          socketProvider.removeDeviceById(entityId);
+          response.send({error: null, status: 'ok'});
+        }
+      });
     });
   } else {
 
-    // Missing id of the device or the datas
+    // Missing id of the device or the data
     next(errors.REMOVE_DEVICE_MISSING_PARAMETERS);
   }
 };

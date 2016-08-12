@@ -51,11 +51,15 @@ function removeJob(name, schedules, entityId, entityType, socketProvider, callba
         {method: 'updateEntityAction', entity: entityId});
       callback(errors.UPDATE_DEVICE_ERROR);
     } else {
-      startJob.cancel();
-      endJob.cancel();
-      if (entityType === 'devices') {
+      if (startJob)
+        startJob.cancel();
+
+      if (endJob)
+        endJob.cancel();
+
+      if (entityType === 'devices')
         socketProvider.updateDevice(entityId, {schedules: schedules});
-      }
+
       callback();
     }
   });
@@ -124,12 +128,20 @@ function clearOldJobs(device, entityType, callback) {
   var model = (entityType === 'devices') ? new DeviceModel() : new GroupModel(),
     entityId = (entityType === 'devices') ? device.id : device.group,
     schedules = device.schedules,
+    startSchedule,
+    endSchedule,
     now = new Date();
 
   // Create the new schedules object to save
   if (device.schedules) {
-    device.schedules.map(function(schedule, index) {
-      if (new Date(schedule.beginDate).getTime() < now.getTime()) {
+    device.schedules.map(function(data, index) {
+      if (new Date(data.beginDate).getTime() < now.getTime()) {
+        startSchedule = schedule.scheduledJobs['start_' + data.scheduleId];
+        endSchedule = schedule.scheduledJobs['end_' + data.scheduleId];
+        if (startSchedule)
+          startSchedule.cancel();
+        if (endSchedule)
+          endSchedule.cancel();
         schedules.splice(index, 1);
       }
     });
@@ -213,6 +225,161 @@ ScheduleManager.prototype.updateDeviceJobs = function(device, callback) {
 
     callback(error, schedules);
   });
+};
+
+/**
+ * Permits to manage (create or remove) the scheduled jobs depending of the user interactions with the devices
+ *
+ * @param {String | null} deviceId The id of the device to update, null otherwise
+ * @param {String | null} groupId The id of the group to update, null otherwise
+ * @param {String} action The type of action realised by the user
+ * @param {Object} socketProvider
+ * @param {Function} [callback] The function to call when it's done
+ */
+ScheduleManager.prototype.toggleDeviceJobs = function(deviceId, groupId, action, socketProvider, callback) {
+  var groupModel = new GroupModel(),
+    deviceModel = new DeviceModel(),
+    self = this,
+    deviceIds = [];
+
+  switch (action) {
+    case 'addDeviceToGroup':
+      groupModel.getOne(groupId, null, function(error, group) {
+        group.devices.map(function(device) {
+          deviceIds.push(device.id);
+
+          // Disable device scheduled jobs
+          if (device.id === deviceId && device.schedules) {
+            device.schedules.map(function(data) {
+              schedule.scheduledJobs['start_' + data.scheduleId].cancel();
+              schedule.scheduledJobs['end_' + data.scheduleId].cancel();
+            });
+          }
+        });
+
+        // Recreate group scheduled jobs with the new device
+        if (group.schedules) {
+          clearOldJobs(group, 'groups', function(error, schedules) {
+            if (!error)
+              schedules.map(function(data) {
+                self.createJob(socketProvider, schedules, {
+                  scheduleId: data.scheduleId,
+                  entityId: group.id,
+                  entityType: 'groups',
+                  beginDate: data.beginDate,
+                  endDate: data.endDate,
+                  deviceIds: deviceIds
+                }, function() {
+                  // Log
+                });
+              });
+          });
+        }
+      });
+      break;
+
+    case 'removeDevice':
+    case 'createGroup':
+      deviceModel.getOne(deviceId, null, function(error, device) {
+
+        // Disable device scheduled jobs
+        if (device.schedules) {
+          device.schedules.map(function(data) {
+            schedule.scheduledJobs['start_' + data.scheduleId].cancel();
+            schedule.scheduledJobs['end_' + data.scheduleId].cancel();
+          });
+        }
+      });
+      break;
+
+    case 'removeDeviceFromGroup':
+
+      // Manage group scheduled jobs
+      groupModel.getOne(groupId, null, function(error, group) {
+        group.devices.map(function(device) {
+          deviceIds.push(device.id);
+        });
+
+        // Recreate group scheduled jobs without the old device
+        if (group.schedules) {
+          clearOldJobs(group, 'groups', function(error, schedules) {
+            if (!error)
+              schedules.map(function(data) {
+                self.createJob(socketProvider, schedules, {
+                  scheduleId: data.scheduleId,
+                  entityId: group.id,
+                  entityType: 'groups',
+                  beginDate: data.beginDate,
+                  endDate: data.endDate,
+                  deviceIds: deviceIds
+                }, function() {
+                  // Log
+                });
+              });
+          });
+        }
+      });
+
+      // Manage device scheduled jobs
+      deviceModel.getOne(deviceId, null, function(error, device) {
+        if (device.schedules) {
+          clearOldJobs(device, 'devices', function(error, schedules) {
+            if (!error)
+              schedules.map(function(data) {
+                self.createJob(socketProvider, schedules, {
+                  scheduleId: data.scheduleId,
+                  entityId: device.id,
+                  entityType: 'groups',
+                  beginDate: data.beginDate,
+                  endDate: data.endDate,
+                  deviceIds: [device.id]
+                }, function() {
+                  // Log
+                });
+              });
+          });
+        }
+      });
+      break;
+
+    case 'removeGroup':
+      groupModel.getOne(groupId, null, function(error, group) {
+
+        // Remove the group scheduled jobs
+        if (group.schedules) {
+          group.schedules.map(function(data) {
+            schedule.scheduledJobs['start_' + data.scheduleId].cancel();
+            schedule.scheduledJobs['end_' + data.scheduleId].cancel();
+          });
+        }
+
+        // Recreate the jobs for the devices
+        group.devices.map(function(device) {
+          if (device.schedules) {
+            clearOldJobs(device, 'devices', function(error, schedules) {
+              if (!error)
+                schedules.map(function(data) {
+                  self.createJob(socketProvider, schedules, {
+                    scheduleId: data.scheduleId,
+                    entityId: group.id,
+                    entityType: 'groups',
+                    beginDate: data.beginDate,
+                    endDate: data.endDate,
+                    deviceIds: [device.id]
+                  }, function() {
+                    // Log
+                  });
+                });
+            });
+          }
+        });
+      });
+      break;
+    default:
+      break;
+  }
+
+  callback();
 };
 
 /*

@@ -181,10 +181,17 @@
 
         entityService.addEntity('groups', manageName, {}).then(function(result) {
           group = result.data.entity;
-          entityService.updateEntity('devices', manageName, draggableId, {group: group.id}).then(function() {});
-          entityService.updateEntity('devices', manageName, dropzoneId, {group: group.id}).then(function() {});
-          manageService.addDevicesToGroup(draggableId, dropzoneId, group).then(function() {});
+          entityService.updateEntity('devices', manageName, draggableId, {group: group.id}).then(function() {
 
+            // Update device scheduled jobs
+            deviceService.toggleScheduledJobs(draggableId, null, 'createGroup').then(function() {});
+          });
+          entityService.updateEntity('devices', manageName, dropzoneId, {group: group.id}).then(function() {
+
+            // Update device scheduled jobs
+            deviceService.toggleScheduledJobs(dropzoneId, null, 'createGroup').then(function() {});
+          });
+          manageService.addDevicesToGroup(draggableId, dropzoneId, group).then(function() {});
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         }, function() {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
@@ -192,6 +199,9 @@
       } else {
         entityService.updateEntity('devices', manageName, draggableId, {group: dropzoneId}).then(function() {
           manageService.addDevicesToGroup(draggableId, dropzoneId).then(function() {});
+
+          // Update device scheduled jobs
+          deviceService.toggleScheduledJobs(draggableId, dropzoneId, 'addDeviceToGroup').then(function() {});
 
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
         }, function() {

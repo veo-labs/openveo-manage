@@ -152,6 +152,18 @@
     }
 
     /**
+     *
+     * @param {String | null} deviceId The id of the device, null otherwise
+     * @param {String | null} groupId The id of the group, null otherwise
+     * @param {String} action the type of action for the jobs [create/remove]
+     * @returns {*}
+     * @method toggleScheduledJobs
+     */
+    function toggleScheduledJobs(deviceId, groupId, action) {
+      return $http.post(basePath + 'toggleScheduledJobs', {deviceId: deviceId, groupId: groupId, action: action});
+    }
+
+    /**
      * Generate an unique id
      *
      * @returns {string}
@@ -172,6 +184,7 @@
       clearSelectedDevice: clearSelectedDevice,
       updateState: updateState,
       addScheduledJob: addScheduledJob,
+      toggleScheduledJobs: toggleScheduledJobs,
       generateId: generateId
     };
 

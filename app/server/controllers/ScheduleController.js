@@ -20,6 +20,14 @@ var namespace = manageConf.namespace;
  */
 function ScheduleController() {
   Controller.call(this);
+
+  /**
+   * ScheduleManager.
+   *
+   * @property scheduleManager
+   * @type ScheduleManager
+   */
+  this.scheduleManager = new ScheduleManager();
 }
 
 module.exports = ScheduleController;
@@ -35,11 +43,10 @@ util.inherits(ScheduleController, Controller);
 ScheduleController.prototype.addScheduledJobAction = function(request, response, next) {
   var schedules = request.body.schedules,
     params = request.body.params,
-    scheduleManager = new ScheduleManager(),
     socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
 
   if (params.beginDate && params.endDate && params.deviceIds) {
-    scheduleManager.createJob(socketProvider, schedules, params, function(error) {
+    this.scheduleManager.createJob(socketProvider, schedules, params, function(error) {
       if (error) {
         next(error);
       } else {
@@ -50,5 +57,29 @@ ScheduleController.prototype.addScheduledJobAction = function(request, response,
 
     // Missing schedule parameters
     next(errors.ADD_SCHEDULE_MISSING_PARAMETERS);
+  }
+};
+
+/**
+ * Enable/disable devices' jobs when it added/removed to a group
+ *
+ * @method toggleScheduledJobsAction
+ *
+ * Also expects data in body.
+ */
+ScheduleController.prototype.toggleScheduledJobsAction = function(request, response, next) {
+  if (request.body.action) {
+    var deviceId = request.body.deviceId,
+      groupId = request.body.groupId,
+      action = request.body.action,
+      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
+
+    this.scheduleManager.toggleDeviceJobs(deviceId, groupId, action, socketProvider, function() {
+      response.send({error: null, status: 'ok'});
+    });
+  } else {
+
+    // Missing device id parameters
+    next(errors.UPDATE_SCHEDULE_MISSING_PARAMETERS);
   }
 };

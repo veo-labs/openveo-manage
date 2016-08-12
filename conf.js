@@ -4,7 +4,8 @@ module.exports = {
   routes: {
     public: {},
     private: {
-      'post /addScheduledJob': 'app/server/controllers/ScheduleController.addScheduledJobAction'
+      'post /addScheduledJob': 'app/server/controllers/ScheduleController.addScheduledJobAction',
+      'post /toggleScheduledJobs': 'app/server/controllers/ScheduleController.toggleScheduledJobsAction'
     },
     ws: {}
   },
