@@ -155,7 +155,7 @@ DeviceListener.prototype.stopRecord = function(sockets, callback) {
   var actions = [],
     stopRecordAsyncFunction = function(socket) {
       return function(callback) {
-        socket.emit('session.stop');
+        socket.emit('session.stop', {});
         callback();
       };
     };
