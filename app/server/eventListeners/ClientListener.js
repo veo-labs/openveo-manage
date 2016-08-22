@@ -3,16 +3,12 @@
 /**
  * Define function for events from clients
  *
- * @param ioDevice
  * @param ioClient
- * @param deviceModel
  * @constructor
  */
-function ClientListener(ioDevice, ioClient, deviceModel) {
+function ClientListener(ioClient) {
 
-  this.ioDevice = ioDevice;
   this.ioClient = ioClient;
-  this.deviceModel = deviceModel;
 }
 
 module.exports = ClientListener;

@@ -6,15 +6,11 @@ var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
 /**
  * Define functions for events from devices
  *
- * @param ioDevice
- * @param ioClient
  * @param deviceModel
  * @constructor
  */
-function DeviceListener(ioDevice, ioClient, deviceModel) {
+function DeviceListener(deviceModel) {
 
-  this.ioDevice = ioDevice;
-  this.ioClient = ioClient;
   this.deviceModel = deviceModel;
 }
 

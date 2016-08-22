@@ -84,7 +84,7 @@ function SocketProvider(namespace) {
    * @property deviceListener
    * @type DeviceListener
    */
-  this.deviceListener = new DeviceListener(this.ioDevice, this.ioClient, this.deviceModel);
+  this.deviceListener = new DeviceListener(this.deviceModel);
 
   /**
    * The client listener
@@ -92,7 +92,7 @@ function SocketProvider(namespace) {
    * @property clientListener
    * @type ClientListener
    */
-  this.clientListener = new ClientListener(this.ioDevice, this.ioClient, this.deviceModel);
+  this.clientListener = new ClientListener(this.ioClient);
 
   /**
    * The schedule manager
