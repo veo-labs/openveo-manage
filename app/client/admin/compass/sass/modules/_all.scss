@@ -6,8 +6,13 @@
   width: 100%;
   padding-right: 0;
   transition: all .5s ease;
-  &.small {
-    padding-right: 300px;
+  &.small, .small {
+    font-size: 100%;
+  }
+  @include desktop-and-tablet() {
+    &.small {
+      padding-right: 300px;
+    }
   }
   &.medium {
     padding-right: 300px;
@@ -251,29 +256,35 @@
   }
 
   // Common
-  &.medium-remove-active {
-    .device, .device-group {
-      @keyframes mediumWidth {
-        0% {width: 33.33333%}
-        100% {width: 25%}
+  @include desktop-and-tablet() {
+    &.medium-remove-active {
+      .device, .device-group {
+        @keyframes mediumWidth {
+          0% {width: 33.33333%}
+          100% {width: 25%}
+        }
+        animation: mediumWidth .3s ease;
       }
-      animation: mediumWidth .3s ease;
+    }
+    &.small-remove-active {
+      .device, .device-group {
+        @keyframes smallWidth {
+          0% {width: 50%}
+          100% {width: 33.33333%}
+        }
+        animation: smallWidth .3s ease;
+      }
     }
   }
-  &.small-remove-active {
-    .device, .device-group {
-      @keyframes smallWidth {
-        0% {width: 50%}
-        100% {width: 33.33333%}
-      }
-      animation: smallWidth .3s ease;
-    }
-  }
+
   .device, .device-group {
-    &.small {
-      width: 50%;
-      font-size: 14px;
+    @include desktop-and-tablet() {
+      &.small {
+        width: 50%;
+        font-size: 14px;
+      }
     }
+
     &.medium {
       width: 33.33333%;
     }

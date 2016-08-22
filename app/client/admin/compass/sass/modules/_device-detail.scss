@@ -8,6 +8,12 @@
   transition: all .5s ease;
   background-color: $selected-grey;
   overflow: hidden;
+  z-index: 2;
+
+  @include mobile() {
+    width: 100%;
+    margin-right: -100%;
+  }
 
   &.opened {
     margin-right: 0;
@@ -80,14 +86,27 @@
     height: 100%;
     width: 900px;
     transition: all .6s ease;
+
+    @include mobile() {
+      width: 300%;
+    }
+
     &.first {
       left: 0;
     }
     &.second {
       left: -300px;
+
+      @include mobile() {
+        left: -100%;
+      }
     }
     &.third {
       left: -600px;
+
+      @include mobile() {
+        left: -200%;
+      }
     }
     .page {
       position: absolute;
@@ -95,6 +114,10 @@
       width: 300px;
       display: inline-block;
       padding: 25px 20px;
+
+      @include mobile() {
+        width: 33.33333%;
+      }
 
       table, thead, tbody, th {
         border: none;
@@ -248,6 +271,11 @@
 
       &.detail-page {
         left: 300px;
+
+        @include mobile() {
+          left: 33.33333%;
+        }
+
         .status {
           .name {
             color: $dark-blue;
@@ -312,6 +340,10 @@
       }
       &.history-page {
         left: 600px;
+
+        @include mobile() {
+          left: 66.66666%;
+        }
       }
     }
   }
