@@ -86,9 +86,11 @@
                     </div>
                 </div>
                 <div class="infos" ng-if="!vm.selectedDevice.devices.length && vm.selectedDevice.status && vm.selectedDevice.status !== 'disconnected'">
-                    <div class="ip" ng-bind="'IP : '"></div>
+                    <div class="ip" ng-bind="'IP : ' + vm.selectedDevice.ip"></div>
                     <div class="mac" ng-bind="'@MAC : ' + vm.selectedDevice.id"></div>
-                    <div class="url" ng-bind="'URL : '"></div>
+                    <div class="url">URL :
+                        <a ng-href="http://{{ vm.selectedDevice.ip }}" target="_blank" ng-bind="'http://' + vm.selectedDevice.ip"></a>
+                    </div>
                 </div>
                 <div class="storage" ng-if="!vm.selectedDevice.devices.length && vm.selectedDevice.status && vm.selectedDevice.status !== 'disconnected'">
                     <span class="text" ng-bind="('MANAGE.DEVICE.SPACE' | translate) + ' : '"></span>

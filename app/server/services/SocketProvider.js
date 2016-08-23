@@ -189,9 +189,12 @@ function findSocket(deviceId) {
  * @private
  * @param {String} socketId the socket id
  * @param {Object} device The new device
+ * @param {String} ip The address IP of the device
  */
-function addDevice(socketId, device) {
+function addDevice(socketId, device, ip) {
   var index = findDeviceIndexById.call(this, device.id);
+
+  device.ip = ip.substring(7);
 
   if (index === -1) {
     this.devices.push({
@@ -390,7 +393,7 @@ function deviceConnect() {
         if (error) {
           self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
         } else {
-          addDevice.call(self, socket.id, device);
+          addDevice.call(self, socket.id, device, socket.handshake.address);
 
           // Update the scheduled jobs
           self.scheduleManager.updateDeviceJobs.call(self, device, function(error, schedules) {
