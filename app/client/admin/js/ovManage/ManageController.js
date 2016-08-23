@@ -28,7 +28,7 @@
     } else {
       $scope.acceptedDevices = devices.acceptedDevices;
     }
-    console.log($scope.acceptedDevices);
+
     $scope.groups = groups;
     $scope.refusedDevices = devices.refusedDevices;
     $scope.pendingDevices = devices.pendingDevices;

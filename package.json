@@ -68,7 +68,6 @@
   },
   "precommit": [
     "eslint",
-    "mocha",
-    "karma"
+    "mocha"
   ]
 }
