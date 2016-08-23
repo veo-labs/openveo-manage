@@ -277,6 +277,13 @@ function setDeviceInputs(device, inputs) {
  * @param {Object} presets The presets of the device
  */
 function setDevicePresets(device, presets) {
+  var data = presets;
+
+  if (!Array.isArray(presets)) {
+    presets = [];
+    presets.push(data);
+  }
+
   device.presets = presets;
 }
 
@@ -446,7 +453,7 @@ function deviceConnect() {
       var device = findDevice.call(self, socket.id);
 
       setDevicePresets.call(self, device, data);
-      self.clientListener.update('presets', data, device.id);
+      self.clientListener.update('presets', device.presets, device.id);
     });
 
     // Listening for device status change
