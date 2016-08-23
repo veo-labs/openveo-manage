@@ -49,6 +49,7 @@
     "DEVICE_ERROR": "Error",
     "START_RECORD": "Start recording",
     "STOP_RECORD": "Stop recording",
+    "TAG_RECORD": "Record tagged",
     "UPDATE_NAME": "Update name",
     "ADD_DEVICE_TO_GROUP": "Add to group: ",
     "REMOVE_DEVICE_FROM_GROUP": "Remove from group: "

@@ -320,7 +320,8 @@
      * Create a new tag for the current recording session
      */
     self.tagRecord = function() {
-      var ids = [];
+      var ids = [],
+        model = (self.selectedDevice.devices) ? 'groups' : 'devices';
 
       // Verify if the device is a group
       if (self.selectedDevice.devices) {
@@ -336,6 +337,12 @@
           deviceIds: [self.selectedDevice.id]
         });
       }
+
+      // Save to history
+      manageService.addToHistory(self.selectedDevice.id, model, 'TAG_RECORD', self.selectedDevice.history, null)
+      .then(function(result) {
+        self.selectedDevice.history = result.data.history;
+      });
     };
 
     // Listen event to load the selected device details on window opening

@@ -86,6 +86,13 @@ HistoryController.prototype.addHistoryToEntityAction = function(request, respons
         };
         history.push(newHistory);
         break;
+      case 'TAG_RECORD':
+        newHistory.message = {
+          data: 'MANAGE.HISTORY.TAG_RECORD',
+          groupName: null
+        };
+        history.push(newHistory);
+        break;
       default:
         break;
     }
