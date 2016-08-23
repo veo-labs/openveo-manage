@@ -239,10 +239,31 @@ function setDeviceStorage(device, storage) {
  *
  * @method setDeviceInputs
  * @param {Object} The device object
- * @param {Object} inputs The inputs (camera, desktop) connected to the device
+ * @param {Object} inputs The inputs (camera, slides) connected to the device
  */
 function setDeviceInputs(device, inputs) {
-  device.inputs = inputs;
+  var data = {};
+
+  if (inputs.camera.timings) {
+    if (!inputs.camera.timings.supported) {
+      data.camera = 'ko';
+    } else {
+      data.camera = 'ok';
+    }
+  } else {
+    data.camera = 'disconnected';
+  }
+  if (inputs.slides.timings) {
+    if (!inputs.slides.timings.supported) {
+      data.desktop = 'ko';
+    } else {
+      data.desktop = 'ok';
+    }
+  } else {
+    data.desktop = 'disconnected';
+  }
+
+  device.inputs = data;
 }
 
 /**
@@ -414,7 +435,7 @@ function deviceConnect() {
       var device = findDevice.call(self, socket.id);
 
       setDeviceInputs.call(self, device, data);
-      self.clientListener.update('inputs', data, device.id);
+      self.clientListener.update('inputs', device.inputs, device.id);
     });
 
     // Listening for device equipments

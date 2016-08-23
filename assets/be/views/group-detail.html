@@ -13,9 +13,9 @@
             <div class="well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']" ng-attr-data-selected="{{ device.isSelected }}">
                 <span class="title" ng-bind="device.name"></span>
                 <div class="equipments">
-                    <span class="camera" ng-class="device.cameraStatus || 'disconnected'"></span>
+                    <span class="camera" ng-class="device.inputs.camera || 'disconnected'"></span>
                     <span class="box" ng-class="device.status || 'disconnected'"></span>
-                    <span class="screen" ng-class="device.desktopStatus || 'disconnected'"></span>
+                    <span class="screen" ng-class="device.inputs.desktop || 'disconnected'"></span>
                     <ul class="progress-storage">
                         <li data-storage="{{ device.storage.percent || 0 }}">
                             <svg viewBox="-10 -10 220 220">
