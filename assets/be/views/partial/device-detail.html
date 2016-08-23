@@ -66,12 +66,13 @@
                         </table>
                     </div>
                 </form>
-                <button ng-if="!vm.selectedDevice.devices.length && !vm.selectedDevice.group" class="btn btn-primary remove" ng-click="vm.openRemoveModal(vm.selectedDevice.id)" ng-bind="'MANAGE.DETAIL.REMOVE_DEVICE' | translate"></button>
+                <button ng-if="!vm.selectedDevice.devices && !vm.selectedDevice.group" class="btn btn-primary remove" ng-click="vm.openRemoveModal(vm.selectedDevice.id)" ng-bind="'MANAGE.DETAIL.REMOVE_DEVICE' | translate"></button>
+                <div class="title" ng-if="!vm.selectedDevice.devices && (!vm.selectedDevice.status || vm.selectedDevice.status === 'disconnected')" ng-bind="'MANAGE.DETAIL.NO_ACTION' | translate"></div>
             </div>
             <div class="detail-page page" ng-class="{'active': vm.isActivePage(1)}">
                 <div class="status">
                     <span class="name" ng-bind="vm.selectedDevice.name"></span>
-                    <i class="pencil glyphicon glyphicon-pencil" ng-show="!vm.selectedDevice.displayInputName" ng-click="vm.displayDeviceNameForm()"></i>
+                    <i class="pencil glyphicon glyphicon-pencil" ng-show="!vm.selectedDevice.displayInputName && vm.selectedDevice.status && vm.selectedDevice.status !== 'disconnected'" ng-click="vm.displayDeviceNameForm()"></i>
                     <form name="vm.deviceNameForm" novalidate ng-show="vm.selectedDevice.displayInputName">
                         <input type="text" class="form-control input-name" ng-model="vm.selectedDeviceName" required>
                         <span>
@@ -84,12 +85,12 @@
                         <span ng-class="vm.selectedDevice.status" ng-bind="vm.selectedDevice.state | translate"></span>
                     </div>
                 </div>
-                <div class="infos" ng-if="!vm.selectedDevice.devices.length && vm.selectedDevice.status !== 'disconnected'">
+                <div class="infos" ng-if="!vm.selectedDevice.devices.length && vm.selectedDevice.status && vm.selectedDevice.status !== 'disconnected'">
                     <div class="ip" ng-bind="'IP : '"></div>
                     <div class="mac" ng-bind="'@MAC : ' + vm.selectedDevice.id"></div>
                     <div class="url" ng-bind="'URL : '"></div>
                 </div>
-                <div class="storage" ng-if="!vm.selectedDevice.devices.length && vm.selectedDevice.status !== 'disconnected'">
+                <div class="storage" ng-if="!vm.selectedDevice.devices.length && vm.selectedDevice.status && vm.selectedDevice.status !== 'disconnected'">
                     <span class="text" ng-bind="('MANAGE.DEVICE.SPACE' | translate) + ' : '"></span>
                     <span ng-bind="(vm.selectedDevice.storage.used | number : '1') + ' Go / ' + (vm.selectedDevice.storage.total | number : '1') + ' Go'"></span>
                 </div>
@@ -106,7 +107,7 @@
                         <tbody>
                             <tr ng-repeat="device in vm.selectedDevice.devices | orderBy:order:reverse track by device.id">
                                 <th ng-bind="device.name"></th>
-                                <th ng-bind="device.status"></th>
+                                <th ng-init="state = (device.state === 'accepted') ? 'MANAGE.DEVICE.DISCONNECTED' : device.state" ng-bind="state | translate"></th>
                                 <th class="cross" ng-click="removeFromGroup(device.id, vm.selectedDevice.id)"></th>
                             </tr>
                         </tbody>
@@ -123,8 +124,8 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="history in vm.selectedDevice.history | orderBy:order:reverse track by history.id">
-                        <th ng-bind="device.date"></th>
-                        <th ng-bind="device.message"></th>
+                        <th ng-bind="history.date | date:'dd/MM/yyyy HH:mm'"></th>
+                        <th ng-bind="history.message | translate:'':vm.selectedDevice"></th>
                     </tr>
                     </tbody>
                 </table>
