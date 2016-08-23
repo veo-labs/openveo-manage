@@ -115,7 +115,7 @@ HistoryController.prototype.addHistoryToEntityAction = function(request, respons
 
         // Update cached device
         if (data.entityType === 'devices') {
-          socketProvider.updateDevice(entityId, history);
+          socketProvider.updateDevice(entityId, {history: history});
         }
         response.send({error: null, status: 'ok', history: history});
       }
