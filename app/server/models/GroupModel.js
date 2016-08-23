@@ -54,7 +54,10 @@ GroupModel.prototype.add = function(data, callback) {
       {
         id: shortid.generate(),
         date: new Date(),
-        message: 'MANAGE.HISTORY.CREATE_GROUP'
+        message: {
+          data: 'MANAGE.HISTORY.CREATE_GROUP',
+          groupName: null
+        }
       }
     ]
   };

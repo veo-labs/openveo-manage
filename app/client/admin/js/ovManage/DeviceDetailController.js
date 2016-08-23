@@ -281,7 +281,7 @@
       }
 
       // Save to history
-      manageService.addToHistory(self.selectedDevice.id, model, 'START_RECORD', self.selectedDevice.history)
+      manageService.addToHistory(self.selectedDevice.id, model, 'START_RECORD', self.selectedDevice.history, null)
       .then(function(result) {
         self.selectedDevice.history = result.data.history;
       });
@@ -310,7 +310,7 @@
       }
 
       // Save to history
-      manageService.addToHistory(self.selectedDevice.id, model, 'STOP_RECORD', self.selectedDevice.history)
+      manageService.addToHistory(self.selectedDevice.id, model, 'STOP_RECORD', self.selectedDevice.history, null)
       .then(function(result) {
         self.selectedDevice.history = result.data.history;
       });

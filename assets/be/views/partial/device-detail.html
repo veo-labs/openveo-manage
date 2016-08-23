@@ -125,7 +125,7 @@
                     <tbody>
                     <tr ng-repeat="history in vm.selectedDevice.history | orderBy:order:reverse track by history.id">
                         <th ng-bind="history.date | date:'dd/MM/yyyy HH:mm'"></th>
-                        <th ng-bind="history.message | translate:'':vm.selectedDevice"></th>
+                        <th ng-init="groupName = (history.message.groupName) ? history.message.groupName : ''" ng-bind="(history.message.data | translate) + groupName"></th>
                     </tr>
                     </tbody>
                 </table>

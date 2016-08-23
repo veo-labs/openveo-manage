@@ -71,6 +71,22 @@
     }
 
     /**
+     * Save the event to the history
+     *
+     * @param {String} id The id of the device or the group
+     * @param {String} model The type of entity [devices/groups]
+     * @param {String} action The type of history action
+     * @param {Object} history The history object to save
+     * @param {String | null} groupName The group name to save even if the group is deleted
+     * @returns {*}
+     * @method addToHistory
+     */
+    function addToHistory(id, model, action, history, groupName) {
+      return $http.post(basePath + 'addHistoryToEntity/' + id, {entityType: model, action: action, history: history,
+        groupName: groupName});
+    }
+
+    /**
      * Remove a group with its id and clear the devices
      *
      * @param id
@@ -89,6 +105,12 @@
         group.devices.map(function(device) {
           entityService.updateEntity('devices', manageName, device.id, {group: null}).then(function() {
             delete device.group;
+
+            // Save to history
+            addToHistory(device.id, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name)
+            .then(function(result) {
+              device.history = result.data.history;
+            });
           });
         });
       }, 300);
@@ -304,12 +326,29 @@
         devices.acceptedDevices[firstIndex].group = group.id;
         devices.acceptedDevices[secondIndex].group = group.id;
 
+        // Save to history
+        addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', devices.acceptedDevices[firstIndex].history,
+        group.name).then(function(result) {
+          devices.acceptedDevices[firstIndex].history = result.data.history;
+        });
+        addToHistory(dropzoneId, 'devices', 'ADD_DEVICE_TO_GROUP', devices.acceptedDevices[secondIndex].history,
+        group.name).then(function(result) {
+          devices.acceptedDevices[secondIndex].history = result.data.history;
+        });
+
         group.devices.push(devices.acceptedDevices[firstIndex], devices.acceptedDevices[secondIndex]);
         groups.push(group);
       } else {
         groups.map(function(group) {
           if (group.id == dropzoneId) {
             devices.acceptedDevices[firstIndex].group = group.id;
+
+            // Save to history
+            addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', devices.acceptedDevices[firstIndex].history,
+            group.name).then(function(result) {
+              devices.acceptedDevices[firstIndex].history = result.data.history;
+            });
+
             group.devices.push(devices.acceptedDevices[firstIndex]);
           }
         });
@@ -345,26 +384,17 @@
       group.devices.splice(deviceIndex, 1);
       delete device.group;
 
+      // Save to history
+      addToHistory(deviceId, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name).then(function(result) {
+        device.history = result.data.history;
+      });
+
       defer.resolve();
 
       // Send an event to close the device detail window
       $rootScope.$broadcast('close.window');
 
       return defer.promise;
-    }
-
-    /**
-     * Save the event to the history
-     *
-     * @param {String} id The id of the device or the group
-     * @param {String} model The type of entity [devices/groups]
-     * @param {String} action The type of history action
-     * @param {Object} history The history object to save
-     * @returns {*}
-     * @method addToHistory
-     */
-    function addToHistory(id, model, action, history) {
-      return $http.post(basePath + 'addHistoryToEntity/' + id, {entityType: model, action: action, history: history});
     }
 
     return {

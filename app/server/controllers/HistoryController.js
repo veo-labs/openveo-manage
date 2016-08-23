@@ -52,20 +52,39 @@ HistoryController.prototype.addHistoryToEntityAction = function(request, respons
     // Manage the type of action
     switch (data.action) {
       case 'UPDATE_NAME':
-        newHistory.message = 'MANAGE.HISTORY.UPDATE_NAME';
+        newHistory.message = {
+          data: 'MANAGE.HISTORY.UPDATE_NAME',
+          groupName: null
+        };
         history.push(newHistory);
         break;
       case 'START_RECORD':
-        newHistory.message = 'MANAGE.HISTORY.START_RECORD';
+        newHistory.message = {
+          data: 'MANAGE.HISTORY.START_RECORD',
+          groupName: null
+        };
         history.push(newHistory);
         break;
       case 'STOP_RECORD':
-        newHistory.message = 'MANAGE.HISTORY.STOP_RECORD';
+        newHistory.message = {
+          data: 'MANAGE.HISTORY.STOP_RECORD',
+          groupName: null
+        };
         history.push(newHistory);
         break;
-      case 'ADD_DEVICE':
+      case 'ADD_DEVICE_TO_GROUP':
+        newHistory.message = {
+          data: 'MANAGE.HISTORY.ADD_DEVICE_TO_GROUP',
+          groupName: data.groupName
+        };
+        history.push(newHistory);
         break;
-      case 'REMOVE_DEVICE':
+      case 'REMOVE_DEVICE_FROM_GROUP':
+        newHistory.message = {
+          data: 'MANAGE.HISTORY.REMOVE_DEVICE_FROM_GROUP',
+          groupName: data.groupName
+        };
+        history.push(newHistory);
         break;
       default:
         break;
