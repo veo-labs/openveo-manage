@@ -47,8 +47,8 @@
   "HISTORY": {
     "CREATE_GROUP": "Création du groupe",
     "DEVICE_ERROR": "Erreur",
-    "DEVICE_STARTING": "Démarrage de l'enregistrement",
-    "DEVICE_STOPPING": "Arrêt de l'enregistrement",
+    "START_RECORD": "Démarrage de l'enregistrement",
+    "STOP_RECORD": "Arrêt de l'enregistrement",
     "UPDATE_NAME": "Mise à jour du nom"
   }
 }
