@@ -67,7 +67,7 @@
                     </div>
                 </form>
                 <button ng-if="!vm.selectedDevice.devices && !vm.selectedDevice.group" class="btn btn-primary remove" ng-click="vm.openRemoveModal(vm.selectedDevice.id)" ng-bind="'MANAGE.DETAIL.REMOVE_DEVICE' | translate"></button>
-                <div class="title" ng-if="!vm.selectedDevice.devices && (!vm.selectedDevice.status || vm.selectedDevice.status === 'disconnected')" ng-bind="'MANAGE.DETAIL.NO_ACTION' | translate"></div>
+                <div class="title" ng-if="!vm.selectedDevice.devices && vm.selectedDevice.group && (!vm.selectedDevice.status || vm.selectedDevice.status === 'disconnected')" ng-bind="'MANAGE.DETAIL.NO_ACTION' | translate"></div>
             </div>
             <div class="detail-page page" ng-class="{'active': vm.isActivePage(1)}">
                 <div class="status">
