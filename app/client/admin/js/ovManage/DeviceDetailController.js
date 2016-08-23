@@ -138,6 +138,13 @@
 
       entityService.updateEntity(model, manageName, self.selectedDevice.id, {name: name}).then(function() {
         self.selectedDevice.displayInputName = !self.selectedDevice.displayInputName;
+        self.selectedDevice.name = name;
+
+        // Save to history
+        manageService.addToHistory(self.selectedDevice.id, model, 'UPDATE_NAME', self.selectedDevice.history)
+        .then(function(result) {
+          self.selectedDevice.history = result.data.history;
+        });
 
         // Send event to save the new name (not for groups)
         if (!self.selectedDevice.devices) {
@@ -267,7 +274,7 @@
         });
       } else {
         $scope.socket.emit('session.start', {
-          deviceId: self.selectedDevice.id,
+          deviceIds: [self.selectedDevice.id],
           preset: (self.deviceSchedule.preset) ? self.deviceSchedule.preset : null
         });
       }

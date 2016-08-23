@@ -5,7 +5,8 @@ module.exports = {
     public: {},
     private: {
       'post /addScheduledJob': 'app/server/controllers/ScheduleController.addScheduledJobAction',
-      'post /toggleScheduledJobs': 'app/server/controllers/ScheduleController.toggleScheduledJobsAction'
+      'post /toggleScheduledJobs': 'app/server/controllers/ScheduleController.toggleScheduledJobsAction',
+      'post /addHistoryToEntity/:id': 'app/server/controllers/HistoryController.addHistoryToEntityAction'
     },
     ws: {}
   },

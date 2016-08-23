@@ -8,10 +8,11 @@
    * @module ov.manage
    * @class ManageService
    */
-  function ManageService($q, $rootScope, $route, $timeout, entityService, manageName) {
+  function ManageService($http, $q, $rootScope, $route, $timeout, entityService, manageName) {
 
-    var groups = null;
-    var devices = null;
+    var groups = null,
+      devices = null,
+      basePath = '/be/manage/';
 
     /**
      * Gets all groups devices from server
@@ -352,6 +353,20 @@
       return defer.promise;
     }
 
+    /**
+     * Save the event to the history
+     *
+     * @param {String} id The id of the device or the group
+     * @param {String} model The type of entity [devices/groups]
+     * @param {String} action The type of history action
+     * @param {Object} history The history object to save
+     * @returns {*}
+     * @method addToHistory
+     */
+    function addToHistory(id, model, action, history) {
+      return $http.post(basePath + 'addHistoryToEntity/' + id, {entityType: model, action: action, history: history});
+    }
+
     return {
       getGroups: getGroups,
       getDevices: getDevices,
@@ -363,13 +378,15 @@
       updateDeviceState: updateDeviceState,
       manageSelectedDevice: manageSelectedDevice,
       addDevicesToGroup: addDevicesToGroup,
-      removeDeviceFromGroup: removeDeviceFromGroup
+      removeDeviceFromGroup: removeDeviceFromGroup,
+      addToHistory: addToHistory
     };
 
   }
 
   app.factory('manageService', ManageService);
   ManageService.$inject = [
+    '$http',
     '$q',
     '$rootScope',
     '$route',

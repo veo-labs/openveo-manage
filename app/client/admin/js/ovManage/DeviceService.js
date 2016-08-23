@@ -152,6 +152,7 @@
     }
 
     /**
+     * Enable or disable the scheduled jobs
      *
      * @param {String | null} deviceId The id of the device, null otherwise
      * @param {String | null} groupId The id of the group, null otherwise
