@@ -56,8 +56,12 @@ HistoryController.prototype.addHistoryToEntityAction = function(request, respons
         history.push(newHistory);
         break;
       case 'START_RECORD':
+        newHistory.message = 'MANAGE.HISTORY.START_RECORD';
+        history.push(newHistory);
         break;
       case 'STOP_RECORD':
+        newHistory.message = 'MANAGE.HISTORY.STOP_RECORD';
+        history.push(newHistory);
         break;
       case 'ADD_DEVICE':
         break;

@@ -259,7 +259,8 @@
      * Start a new recording session for a device or a group of devices
      */
     self.startRecord = function() {
-      var ids = [];
+      var ids = [],
+        model = (self.selectedDevice.devices) ? 'groups' : 'devices';
 
       // Verify if the device is a group
       if (self.selectedDevice.devices) {
@@ -278,13 +279,20 @@
           preset: (self.deviceSchedule.preset) ? self.deviceSchedule.preset : null
         });
       }
+
+      // Save to history
+      manageService.addToHistory(self.selectedDevice.id, model, 'START_RECORD', self.selectedDevice.history)
+      .then(function(result) {
+        self.selectedDevice.history = result.data.history;
+      });
     };
 
     /**
      * Stop the current recording session
      */
     self.stopRecord = function() {
-      var ids = [];
+      var ids = [],
+        model = (self.selectedDevice.devices) ? 'groups' : 'devices';
 
       // Verify if the device is a group
       if (self.selectedDevice.devices) {
@@ -300,6 +308,12 @@
           deviceIds: [self.selectedDevice.id]
         });
       }
+
+      // Save to history
+      manageService.addToHistory(self.selectedDevice.id, model, 'STOP_RECORD', self.selectedDevice.history)
+      .then(function(result) {
+        self.selectedDevice.history = result.data.history;
+      });
     };
 
     /**

@@ -27,10 +27,10 @@
                     </div>
                     <div class="action" ng-if="!vm.selectedDevice.group && vm.displayAction">
                         <div class="title" ng-bind="'MANAGE.DETAIL.ACTION' | translate"></div>
-                        <button class="start btn btn-primary"  ng-click="vm.startRecord()" ng-if="vm.selectedDevice.status === 'stopped' || vm.selectedDevice.status === 'starting' || vm.selectedDevice.status === 'error'" ng-disabled="vm.selectedDevice.status === 'starting'" ng-bind="'MANAGE.DETAIL.START' | translate"></button>
+                        <button class="start btn btn-primary" type="button" ng-click="vm.startRecord()" ng-if="vm.selectedDevice.status === 'stopped' || vm.selectedDevice.status === 'starting' || vm.selectedDevice.status === 'error'" ng-disabled="vm.selectedDevice.status === 'starting'" ng-bind="'MANAGE.DETAIL.START' | translate"></button>
                         <div class="recording">
-                            <button class="stop btn" ng-click="vm.stopRecord()" ng-if="vm.selectedDevice.status === 'started' || vm.selectedDevice.status === 'stopping'" ng-disabled="vm.selectedDevice.status === 'stopping'" ng-bind="'MANAGE.DEVICE.STOP_RECORDING' | translate"></button>
-                            <button class="tag btn btn-primary" ng-click="vm.tagRecord()" ng-if="vm.selectedDevice.status === 'started' || vm.selectedDevice.status === 'stopping'" ng-disabled="vm.selectedDevice.status === 'stopping'" ng-bind="'MANAGE.DEVICE.TAG' | translate"></button>
+                            <button class="stop btn" type="button" ng-click="vm.stopRecord()" ng-if="vm.selectedDevice.status === 'started' || vm.selectedDevice.status === 'stopping'" ng-disabled="vm.selectedDevice.status === 'stopping'" ng-bind="'MANAGE.DEVICE.STOP_RECORDING' | translate"></button>
+                            <button class="tag btn btn-primary" type="button" ng-click="vm.tagRecord()" ng-if="vm.selectedDevice.status === 'started' || vm.selectedDevice.status === 'stopping'" ng-disabled="vm.selectedDevice.status === 'stopping'" ng-bind="'MANAGE.DEVICE.TAG' | translate"></button>
                         </div>
                     </div>
                     <div class="planning" ng-if="!vm.selectedDevice.group && vm.displayAction">
