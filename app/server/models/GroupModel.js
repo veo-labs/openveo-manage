@@ -49,8 +49,16 @@ GroupModel.prototype.add = function(data, callback) {
 
   var group = {
     id: data.id || shortid.generate(),
-    name: data.name || 'Groupe'
+    name: data.name || 'Groupe',
+    history: [
+      {
+        id: shortid.generate(),
+        date: new Date(),
+        message: 'MANAGE.HISTORY.CREATE_GROUP'
+      }
+    ]
   };
+
   this.provider.add(group, function(error, addedCount, groups) {
     if (callback)
       callback(error, addedCount, groups && groups[0]);
