@@ -92,7 +92,7 @@ function SocketProvider(namespace) {
    * @property clientListener
    * @type ClientListener
    */
-  this.clientListener = new ClientListener(this.ioClient);
+  this.clientListener = new ClientListener(this.ioClient, this.deviceModel);
 
   /**
    * The schedule manager
@@ -309,13 +309,10 @@ function clientConnect() {
     socket.on('session.start', function(data) {
       var sockets = [];
 
-      if (data.deviceIds) {
-        data.deviceIds.map(function(id) {
-          sockets.push(findSocket.call(self, id));
-        });
-      } else {
-        sockets.push(findSocket.call(self, data.deviceId));
-      }
+      data.deviceIds.map(function(id) {
+        sockets.push(findSocket.call(self, id));
+      });
+
       self.deviceListener.startRecord(sockets, data, function(error) {
         if (error) {
           self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));

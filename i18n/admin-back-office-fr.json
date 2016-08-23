@@ -16,6 +16,7 @@
   "INFO": "Le manage supervise l'ensemble des encodeurs connectés. Il permet de gérer des groupes d'encodeurs, de lancer et d'arrêter les enregistrements, de marquer des points d'intérêt dans la vidéo, ainsi que de planifier des enregistrements différés.",
   "DETAIL": {
     "ACTION": "Action",
+    "NO_ACTION": "Aucune action disponible",
     "DETAIL": "Détail",
     "HISTORY": "Historique",
     "STATE": "Etat",
@@ -42,5 +43,12 @@
     "ERROR": "Erreur",
     "STOP_RECORDING": "Arrêter",
     "TAG": "Tagger"
+  },
+  "HISTORY": {
+    "CREATE_GROUP": "Création du groupe",
+    "DEVICE_ERROR": "Erreur",
+    "DEVICE_STARTING": "Démarrage de l'enregistrement",
+    "DEVICE_STOPPING": "Arrêt de l'enregistrement",
+    "UPDATE_NAME": "Mise à jour du nom"
   }
 }
