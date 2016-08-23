@@ -93,6 +93,13 @@ HistoryController.prototype.addHistoryToEntityAction = function(request, respons
         };
         history.push(newHistory);
         break;
+      case 'STATE_ERROR':
+        newHistory.message = {
+          data: 'MANAGE.HISTORY.STATE_ERROR',
+          groupName: null
+        };
+        history.push(newHistory);
+        break;
       default:
         break;
     }

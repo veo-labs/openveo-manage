@@ -46,7 +46,7 @@
   },
   "HISTORY": {
     "CREATE_GROUP": "Création du groupe",
-    "DEVICE_ERROR": "Erreur",
+    "STATE_ERROR": "Erreur",
     "START_RECORD": "Démarrage de l'enregistrement",
     "STOP_RECORD": "Arrêt de l'enregistrement",
     "TAG_RECORD": "Taggage de l'enregistrement",

@@ -196,7 +196,8 @@
      * @method updateDevice
      */
     function updateDevice(result) {
-      var device = (getDevice(result.id)) ? getDevice(result.id) : getGroup(result.id);
+      var device = (getDevice(result.id)) ? getDevice(result.id) : getGroup(result.id),
+        model = (device.hasOwnProperty('state') ? 'devices' : 'groups');
 
       device[result.key] = result.data;
 
@@ -207,6 +208,11 @@
             break;
           case 'error':
             device.state = 'MANAGE.DEVICE.ERROR';
+
+            // Save to history
+            addToHistory(result.id, model, 'STATE_ERROR', device.history, null).then(function(result) {
+              device.history = result.data.history;
+            });
             break;
           case 'started':
             device.state = 'MANAGE.DEVICE.RECORDING';

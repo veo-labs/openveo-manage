@@ -118,7 +118,7 @@ DeviceListener.prototype.startRecord = function(sockets, param, callback) {
     startRecordAsyncFunction = function(socket, param) {
       return function(callback) {
         socket.emit('session.start', {
-          id: param.scheduleId,
+          id: (param.sessionId) ? param.sessionId : null,
           preset: (param.preset) ? param.preset : null
         });
         callback();

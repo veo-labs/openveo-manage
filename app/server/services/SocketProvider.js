@@ -92,7 +92,7 @@ function SocketProvider(namespace) {
    * @property clientListener
    * @type ClientListener
    */
-  this.clientListener = new ClientListener(this.ioClient, this.deviceModel);
+  this.clientListener = new ClientListener(this.ioClient);
 
   /**
    * The schedule manager
