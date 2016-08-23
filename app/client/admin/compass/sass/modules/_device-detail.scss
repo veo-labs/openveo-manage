@@ -199,6 +199,11 @@
             opacity: .6;
           }
 
+          .selected-preset {
+            float: right;
+            font-weight: bold;
+          }
+
           select {
             position: absolute;
             right: 0;

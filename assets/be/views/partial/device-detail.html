@@ -21,9 +21,10 @@
                 <form name="vm.deviceSchedule" ng-submit="vm.saveSchedule(vm.selectedDevice.id)" novalidate>
                     <div class="preset" ng-if="!vm.selectedDevice.devices.length && vm.displayAction" ng-class="{'disabled': !vm.selectedDevice.presets}">
                         <span class="title" ng-bind="'MANAGE.DETAIL.PRESET' | translate"></span>
-                        <select ng-model="vm.deviceSchedule.schedule.preset" ng-options="preset.profile as ('P' + preset.profile) for preset in vm.selectedDevice.presets |orderBy:'profile'" ng-disabled="!vm.selectedDevice.presets">
+                        <select ng-model="vm.deviceSchedule.schedule.preset" ng-options="preset.profile as ('P' + preset.profile) for preset in vm.selectedDevice.presets |orderBy:'profile'" ng-disabled="!vm.selectedDevice.presets" ng-if="vm.selectedDevice.presets.length > 1">
                             <option value="" selected hidden />
                         </select>
+                        <span class="selected-preset" ng-init="vm.deviceSchedule.schedule.preset = vm.selectedDevice.presets[0].profile" ng-model="vm.deviceSchedule.schedule.preset" ng-if="vm.selectedDevice.presets.length === 1" ng-bind="'P' + vm.selectedDevice.presets[0].profile"></span>
                     </div>
                     <div class="action" ng-if="!vm.selectedDevice.group && vm.displayAction">
                         <div class="title" ng-bind="'MANAGE.DETAIL.ACTION' | translate"></div>
@@ -122,12 +123,14 @@
                     <tr>
                         <th ov-sort-table order="'date'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.TABLE.DATE' | translate }}</th>
                         <th ov-sort-table order="'message'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.TABLE.MESSAGE' | translate }}</th>
+                        <th class="trash"><i class="glyphicon glyphicon-trash"></i></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="history in vm.selectedDevice.history | orderBy:order:reverse track by history.id">
+                    <tr ng-repeat="history in vm.selectedDevice.history | orderBy:order:!reverse track by history.id">
                         <th ng-bind="history.date | date:'dd/MM/yyyy HH:mm'"></th>
                         <th ng-init="groupName = (history.message.groupName) ? history.message.groupName : ''" ng-bind="(history.message.data | translate) + groupName"></th>
+                        <th class="cross" ng-click="vm.removeHistory(vm.selectedDevice.id, history.id)"></th>
                     </tr>
                     </tbody>
                 </table>
