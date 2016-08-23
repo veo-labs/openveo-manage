@@ -8,7 +8,7 @@
   transition: all .5s ease;
   background-color: $selected-grey;
   overflow: hidden;
-  z-index: 2;
+  z-index: 3;
 
   @include mobile() {
     width: 100%;
