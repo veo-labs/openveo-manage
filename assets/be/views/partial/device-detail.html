@@ -34,7 +34,7 @@
                             <button class="tag btn btn-primary" type="button" ng-click="vm.tagRecord()" ng-if="vm.selectedDevice.status === 'started' || vm.selectedDevice.status === 'stopping'" ng-disabled="vm.selectedDevice.status === 'stopping'" ng-bind="'MANAGE.DEVICE.TAG' | translate"></button>
                         </div>
                     </div>
-                    <div class="planning" ng-if="!vm.selectedDevice.group && vm.displayAction">
+                    <div class="planning" ng-if="!vm.selectedDevice.group">
                         <div class="title" ng-bind="'MANAGE.DETAIL.PLANNING' | translate"></div>
                         <div class="begin-block">
                             <div class="begin" ng-bind="('MANAGE.DETAIL.BEGIN' | translate) + ' :'"></div>
