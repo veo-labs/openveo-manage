@@ -38,15 +38,15 @@
                         <div class="title" ng-bind="'MANAGE.DETAIL.PLANNING' | translate"></div>
                         <div class="begin-block">
                             <div class="begin" ng-bind="('MANAGE.DETAIL.BEGIN' | translate) + ' :'"></div>
-                            <input class="date" type="text" uib-datepicker-popup="dd/MM/yyyy" ng-model="vm.deviceSchedule.schedule.beginDate" is-open="vm.popupBegin.opened" min-date="vm.popupBegin.minDate" show-button-bar="false" show-weeks="false" ng-required="true" close-text="Close" required/>
+                            <input class="date" type="text" uib-datepicker-popup="dd/MM/yyyy" ng-click="vm.popupBegin.opened = !vm.popupBegin.opened" ng-model="vm.deviceSchedule.schedule.beginDate" is-open="vm.popupBegin.opened" min-date="vm.popupBegin.minDate" show-button-bar="false" show-weeks="false" ng-required="true" close-text="Close" ng-change="vm.updateFormValidity()" required/>
                             <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.popupBegin.opened = !vm.popupBegin.opened"><i class="glyphicon glyphicon-calendar"></i></button>
-                            <uib-timepicker class="time" ng-model="vm.deviceSchedule.schedule.beginTime" show-spinners="false" show-meridian="false" required></uib-timepicker>
+                            <uib-timepicker class="time" ng-model="vm.deviceSchedule.schedule.beginTime" show-spinners="false" show-meridian="false" ng-change="vm.updateFormValidity()" required></uib-timepicker>
                         </div>
                         <div class="end-block">
                             <div class="end" ng-bind="('MANAGE.DETAIL.END' | translate) + ' :'"></div>
-                            <input class="date" type="text" uib-datepicker-popup="dd/MM/yyyy" ng-model="vm.deviceSchedule.schedule.endDate" is-open="vm.popupEnd.opened" min-date="vm.beginDate" show-button-bar="false" show-weeks="false" ng-required="true" close-text="Close" required/>
+                            <input class="date" type="text" uib-datepicker-popup="dd/MM/yyyy" ng-click="vm.popupEnd.opened = !vm.popupEnd.opened" ng-model="vm.deviceSchedule.schedule.endDate" is-open="vm.popupEnd.opened" min-date="vm.deviceSchedule.schedule.beginDate" show-button-bar="false" show-weeks="false" ng-required="true" close-text="Close" ng-change="vm.updateFormValidity()" required/>
                             <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"><i class="glyphicon glyphicon-calendar"></i></button>
-                            <uib-timepicker class="time" ng-model="vm.deviceSchedule.schedule.endTime" show-spinners="false" show-meridian="false" required></uib-timepicker>
+                            <uib-timepicker class="time" min="vm.deviceSchedule.schedule.beginTime" ng-model="vm.deviceSchedule.schedule.endTime" show-spinners="false" show-meridian="false" ng-change="vm.updateFormValidity()" required></uib-timepicker>
                         </div>
                         <button type="submit" class="record btn btn-primary" ng-disabled="vm.deviceSchedule.$invalid" ng-bind="'MANAGE.DETAIL.RECORD' | translate"></button>
                         <table class="table" border="0">

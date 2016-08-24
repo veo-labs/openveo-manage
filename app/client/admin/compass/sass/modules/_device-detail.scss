@@ -115,6 +115,12 @@
       display: inline-block;
       padding: 25px 20px;
 
+      form.ng-invalid-schedule.ng-submitted{
+        input {
+          border: 1px solid $red;
+        }
+      }
+
       @include mobile() {
         width: 33.33333%;
       }

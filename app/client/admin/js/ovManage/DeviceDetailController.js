@@ -165,7 +165,7 @@
     }
 
     /**
-     * Save a schedule for a device or a group of devices TODO: node-schedule for CRON
+     * Save a schedule for a device or a group of devices
      *
      * @param id
      */
@@ -194,6 +194,22 @@
           deviceIds: []
         };
 
+      // Verify dates
+      if (dateTimeBegin >= dateTimeEnd) {
+        self.deviceSchedule.$setValidity('schedule', false);
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.DATE_ERROR'), 4000);
+      }
+
+      // Verify if the new scheduled job is not in conflict with the existing jobs
+      for (var i = 0; i < schedules.length; i++) {
+        if ((dateTimeBegin >= new Date(schedules[i].beginDate) && dateTimeBegin <= new Date(schedules[i].endDate)) ||
+          (dateTimeEnd >= new Date(schedules[i].beginDate) && dateTimeEnd <= new Date(schedules[i].endDate))) {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.CONFLICT_ERROR'), 4000);
+          self.deviceSchedule.$setValidity('schedule', false);
+          break;
+        }
+      }
+
       if (self.deviceSchedule.$valid) {
         if (isGroup) {
           self.selectedDevice.devices.map(function(device) {
@@ -212,10 +228,19 @@
           // Create the scheduled job
           deviceService.addScheduledJob({schedules: schedules, params: params}).then(function() {});
           self.deviceSchedule.schedule = {};
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.SCHEDULE.SAVE_SUCCESS'), 4000);
         }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.SAVE_ERROR'), 4000);
         });
+      }
+    };
+
+    /**
+     * Update the form validity on change if its on error to retry validation
+     */
+    self.updateFormValidity = function() {
+      if (!self.deviceSchedule.$valid) {
+        self.deviceSchedule.$setValidity('schedule', true);
       }
     };
 
@@ -336,9 +361,9 @@
 
       entityService.updateEntity(model, manageName, self.selectedDevice.id, {history: history}).then(function() {
         self.selectedDevice.history = history;
-        $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.HISTORY.SAVE_SUCCESS'), 4000);
+        $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.HISTORY.REMOVE_SUCCESS'), 4000);
       }, function() {
-        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.HISTORY.SAVE_ERROR'), 4000);
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.HISTORY.REMOVE_ERROR'), 4000);
       });
     };
 
