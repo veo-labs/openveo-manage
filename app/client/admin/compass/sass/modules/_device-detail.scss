@@ -349,6 +349,18 @@
         @include mobile() {
           left: 66.66666%;
         }
+
+        th.cross {
+          position: relative;
+
+          &:before, &:after {
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+          }
+        }
       }
     }
   }
