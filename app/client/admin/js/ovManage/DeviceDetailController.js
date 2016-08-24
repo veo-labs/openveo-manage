@@ -95,32 +95,6 @@
     };
 
     /**
-     * Open a modal, apply callback on OK promise and remove device
-     *
-     * @param id
-     */
-    self.openRemoveModal = function(id) {
-      var modalInstance = $uibModal.open({
-        templateUrl: 'removeModal.html',
-        controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
-          $scope.ok = function() {
-            $uibModalInstance.close(true);
-          };
-
-          $scope.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
-          };
-        }]
-      });
-
-      modalInstance.result.then(function() {
-        self.removeDevice(id);
-      }, function() {
-        // Do nothing
-      });
-    };
-
-    /**
      * Display the input to update the device name
      */
     self.displayDeviceNameForm = function() {
@@ -342,6 +316,68 @@
       manageService.addToHistory(self.selectedDevice.id, model, 'TAG_RECORD', self.selectedDevice.history, null)
       .then(function(result) {
         self.selectedDevice.history = result.data.history;
+      });
+    };
+
+    /**
+     * Remove a specific history
+     *
+     * @param {String} historyId The history id
+     */
+    self.removeHistory = function(historyId) {
+      var model = (self.selectedDevice.devices) ? 'groups' : 'devices',
+        history = self.selectedDevice.history,
+        historyIndex = self.selectedDevice.history.findIndex(function(history) {
+          return history.id === historyId;
+        });
+
+      // Update the history
+      history.splice(historyIndex, 1);
+
+      entityService.updateEntity(model, manageName, self.selectedDevice.id, {history: history}).then(function() {
+        self.selectedDevice.history = history;
+        $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.HISTORY.SAVE_SUCCESS'), 4000);
+      }, function() {
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.HISTORY.SAVE_ERROR'), 4000);
+      });
+    };
+
+    /**
+     * Open a modal, apply callback on OK promise and remove device
+     *
+     * @param {String} id The id of the object to remove
+     * @param {String} action The type of action to realise
+     */
+    self.openRemoveModal = function(id, action) {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'removeModal.html',
+        controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
+          $scope.ok = function() {
+            $uibModalInstance.close(true);
+          };
+
+          $scope.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+          };
+        }]
+      });
+
+      modalInstance.result.then(function() {
+        switch (action) {
+          case 'REMOVE_DEVICE':
+            self.removeDevice(id);
+            break;
+          case 'REMOVE_SCHEDULE':
+            self.removeSchedule(id);
+            break;
+          case 'REMOVE_HISTORY':
+            self.removeHistory(id);
+            break;
+          default:
+            break;
+        }
+      }, function() {
+        // Do nothing
       });
     };
 

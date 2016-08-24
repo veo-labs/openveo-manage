@@ -61,13 +61,13 @@
                             <tr ng-repeat="schedule in vm.selectedDevice.schedules | orderBy:order:reverse track by schedule.scheduleId">
                                 <th ng-bind="schedule.beginDate | date:'dd/MM/yyyy HH:mm'"></th>
                                 <th ng-bind="schedule.endDate | date:'dd/MM/yyyy HH:mm'"></th>
-                                <th class="cross" ng-click="vm.removeSchedule(schedule.scheduleId)"></th>
+                                <th class="cross" ng-click="vm.openRemoveModal(schedule.scheduleId, 'REMOVE_SCHEDULE')"></th>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </form>
-                <button ng-if="!vm.selectedDevice.devices && !vm.selectedDevice.group" class="btn btn-primary remove" ng-click="vm.openRemoveModal(vm.selectedDevice.id)" ng-bind="'MANAGE.DETAIL.REMOVE_DEVICE' | translate"></button>
+                <button ng-if="!vm.selectedDevice.devices && !vm.selectedDevice.group" class="btn btn-primary remove" ng-click="vm.openRemoveModal(vm.selectedDevice.id, 'REMOVE_DEVICE')" ng-bind="'MANAGE.DETAIL.REMOVE_DEVICE' | translate"></button>
                 <div class="title" ng-if="!vm.selectedDevice.devices && vm.selectedDevice.group && (!vm.selectedDevice.status || vm.selectedDevice.status === 'disconnected')" ng-bind="'MANAGE.DETAIL.NO_ACTION' | translate"></div>
             </div>
             <div class="detail-page page" ng-class="{'active': vm.isActivePage(1)}">
@@ -130,7 +130,7 @@
                     <tr ng-repeat="history in vm.selectedDevice.history | orderBy:order:!reverse track by history.id">
                         <th ng-bind="history.date | date:'dd/MM/yyyy HH:mm'"></th>
                         <th ng-init="groupName = (history.message.groupName) ? history.message.groupName : ''" ng-bind="(history.message.data | translate) + groupName"></th>
-                        <th class="cross" ng-click="vm.removeHistory(vm.selectedDevice.id, history.id)"></th>
+                        <th class="cross" ng-click="vm.openRemoveModal(history.id, 'REMOVE_HISTORY')"></th>
                     </tr>
                     </tbody>
                 </table>
