@@ -194,7 +194,7 @@
           (dateTimeEnd >= scheduleDateTimeBegin && dateTimeEnd <= scheduleDateTimeEnd) ||
           (dateTimeBegin <= scheduleDateTimeBegin && dateTimeEnd >= scheduleDateTimeEnd)) {
 
-          if (currentSchedule.recurrent || self.deviceSchedule.schedule.recurrent) {
+          if (currentSchedule.recurrent || self.deviceSchedule.schedule.recurrent) {
             scheduleTimeBegin = scheduleDateTimeBegin.getHours() + ':' + scheduleDateTimeBegin.getMinutes();
             scheduleTimeEnd = scheduleDateTimeEnd.getHours() + ':' + scheduleDateTimeEnd.getMinutes();
 
