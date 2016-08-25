@@ -165,6 +165,56 @@
     }
 
     /**
+     * Verify if the dates of the new scheduled job are not in conflicts with the other scheduled jobs
+     *
+     * @param {DateTime} dateTimeBegin The begin date of the schedule
+     * @param {DateTime} dateTimeEnd the end date of the schedule
+     */
+    function verifyDates(dateTimeBegin, dateTimeEnd) {
+      var timeBegin = dateTimeBegin.getHours() + ':' + dateTimeBegin.getMinutes(),
+        timeEnd = dateTimeEnd.getHours() + ':' + dateTimeEnd.getMinutes(),
+        currentSchedule,
+        scheduleDateTimeBegin,
+        scheduleDateTimeEnd,
+        scheduleTimeBegin,
+        scheduleTimeEnd;
+
+      if (dateTimeBegin >= dateTimeEnd && dateTimeBegin > new Date()) {
+        self.deviceSchedule.$setValidity('schedule', false);
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.DATE_ERROR'), 4000);
+      }
+
+      // Verify if the new scheduled job is not in conflict with the existing jobs
+      for (var i = 0; i < self.selectedDevice.schedules.length; i++) {
+        currentSchedule = self.selectedDevice.schedules[i];
+        scheduleDateTimeBegin = new Date(currentSchedule.beginDate);
+        scheduleDateTimeEnd = new Date(currentSchedule.endDate);
+
+        if ((dateTimeBegin >= scheduleDateTimeBegin && dateTimeBegin <= scheduleDateTimeEnd) ||
+          (dateTimeEnd >= scheduleDateTimeBegin && dateTimeEnd <= scheduleDateTimeEnd) ||
+          (dateTimeBegin <= scheduleDateTimeBegin && dateTimeEnd >= scheduleDateTimeEnd)) {
+
+          if (currentSchedule.recurrent || self.deviceSchedule.schedule.recurrent) {
+            scheduleTimeBegin = scheduleDateTimeBegin.getHours() + ':' + scheduleDateTimeBegin.getMinutes();
+            scheduleTimeEnd = scheduleDateTimeEnd.getHours() + ':' + scheduleDateTimeEnd.getMinutes();
+
+            if ((timeBegin >= scheduleTimeBegin && timeBegin <= scheduleTimeEnd) ||
+              (timeEnd >= scheduleTimeBegin && timeEnd <= scheduleTimeEnd) ||
+              (timeBegin <= scheduleTimeBegin && timeEnd >= scheduleTimeEnd)) {
+              $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.CONFLICT_ERROR'), 4000);
+              self.deviceSchedule.$setValidity('schedule', false);
+              break;
+            }
+          } else {
+            $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.CONFLICT_ERROR'), 4000);
+            self.deviceSchedule.$setValidity('schedule', false);
+            break;
+          }
+        }
+      }
+    }
+
+    /**
      * Save a schedule for a device or a group of devices
      *
      * @param id
@@ -196,21 +246,7 @@
           deviceIds: []
         };
 
-      // Verify dates
-      if (dateTimeBegin >= dateTimeEnd) {
-        self.deviceSchedule.$setValidity('schedule', false);
-        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.DATE_ERROR'), 4000);
-      }
-
-      // Verify if the new scheduled job is not in conflict with the existing jobs
-      for (var i = 0; i < schedules.length; i++) {
-        if ((dateTimeBegin >= new Date(schedules[i].beginDate) && dateTimeBegin <= new Date(schedules[i].endDate)) ||
-          (dateTimeEnd >= new Date(schedules[i].beginDate) && dateTimeEnd <= new Date(schedules[i].endDate))) {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.CONFLICT_ERROR'), 4000);
-          self.deviceSchedule.$setValidity('schedule', false);
-          break;
-        }
-      }
+      verifyDates(dateTimeBegin, dateTimeEnd);
 
       if (self.deviceSchedule.$valid) {
         if (isGroup) {
