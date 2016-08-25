@@ -1,7 +1,7 @@
 # OpenVeo Manage
 OpenVeo Manage is an [OpenVeo](https://github.com/veo-labs/openveo-core) plugin.
 
-OpenVeo Manage adds the dollowing features:
+OpenVeo Manage adds the following features:
     - Development in progress
 
 # Documentation
