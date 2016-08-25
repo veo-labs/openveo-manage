@@ -48,6 +48,10 @@
                             <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"><i class="glyphicon glyphicon-calendar"></i></button>
                             <uib-timepicker class="time" min="vm.deviceSchedule.schedule.beginTime" ng-model="vm.deviceSchedule.schedule.endTime" show-spinners="false" show-meridian="false" ng-change="vm.updateFormValidity()" required></uib-timepicker>
                         </div>
+                        <div class="recurrent">
+                            <input id="recurrent-schedule" type="checkbox" ng-model="vm.deviceSchedule.schedule.recurrent">
+                            <label for="recurrent-schedule" ng-bind="'MANAGE.DETAIL.RECURRENT' | translate"></label>
+                        </div>
                         <button type="submit" class="record btn btn-primary" ng-disabled="vm.deviceSchedule.$invalid" ng-bind="'MANAGE.DETAIL.RECORD' | translate"></button>
                         <table class="table" border="0">
                             <thead>
@@ -59,8 +63,22 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="schedule in vm.selectedDevice.schedules | orderBy:order:reverse track by schedule.scheduleId">
-                                <th ng-bind="schedule.beginDate | date:'dd/MM/yyyy HH:mm'"></th>
-                                <th ng-bind="schedule.endDate | date:'dd/MM/yyyy HH:mm'"></th>
+                                <th>
+                                    <div class="periodic start" ng-if="schedule.recurrent">
+                                        <i class="glyphicon glyphicon-repeat"></i>
+                                        <div class="hour" ng-bind="schedule.beginDate | date:'HH:mm'"></div>
+                                        <div class="date" ng-bind="schedule.beginDate | date:'dd/MM/yyyy'"></div>
+                                    </div>
+                                    <div ng-if="!schedule.recurrent" ng-bind="schedule.beginDate | date:'dd/MM/yyyy HH:mm'"></div>
+                                </th>
+                                <th>
+                                    <div class="periodic end" ng-if="schedule.recurrent">
+                                        <i class="glyphicon glyphicon-repeat"></i>
+                                        <div class="hour" ng-bind="schedule.endDate | date:'HH:mm'"></div>
+                                        <div class="date" ng-bind="schedule.endDate | date:'dd/MM/yyyy'"></div>
+                                    </div>
+                                    <div ng-if="!schedule.recurrent" ng-bind="schedule.endDate | date:'dd/MM/yyyy HH:mm'"></div>
+                                </th>
                                 <th class="cross" ng-click="vm.openRemoveModal(schedule.scheduleId, 'REMOVE_SCHEDULE')"></th>
                             </tr>
                             </tbody>

@@ -184,6 +184,15 @@
                 text-align: center;
                 cursor: pointer;
                 @include cross(15px, 1px, $black-detail);
+                position: relative;
+
+                &:before, &:after {
+                  margin: auto;
+                  top: 0;
+                  left: 0;
+                  bottom: 0;
+                  right: 0;
+                }
               }
             }
           }
@@ -269,9 +278,41 @@
               }
             }
           }
+          .recurrent  {
+            margin-top: 5px;
+            label {
+              font-weight: normal;
+              vertical-align: middle;
+            }
+          }
           .record {
             margin: 15px auto 20px auto;
             display: block;
+          }
+          .periodic {
+            position: relative;
+            .hour {
+              text-align: center;
+            }
+            .date {
+              text-align: right;
+              padding-right: 3px;
+            }
+            i {
+              margin: auto;
+              position: absolute;
+              top: 0;
+              left: 0;
+              bottom: 0;
+              height: 12px;
+              font-weight: bold;
+            }
+            &.start {
+              color: $green;
+            }
+            &.end {
+              color: $red;
+            }
           }
         }
         .remove {
@@ -354,18 +395,6 @@
 
         @include mobile() {
           left: 66.66666%;
-        }
-
-        th.cross {
-          position: relative;
-
-          &:before, &:after {
-            margin: auto;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-          }
         }
       }
     }

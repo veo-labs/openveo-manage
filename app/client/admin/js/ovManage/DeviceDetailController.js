@@ -178,6 +178,7 @@
           scheduleId: generatedId,
           beginDate: dateTimeBegin,
           endDate: dateTimeEnd,
+          recurrent: self.deviceSchedule.schedule.recurrent,
           preset: self.deviceSchedule.schedule.preset
         },
         schedules = (self.selectedDevice.schedules) ? self.selectedDevice.schedules : [],
@@ -190,6 +191,7 @@
           scheduleId: generatedId,
           beginDate: dateTimeBegin,
           endDate: dateTimeEnd,
+          recurrent: self.deviceSchedule.schedule.recurrent,
           preset: self.deviceSchedule.schedule.preset,
           deviceIds: []
         };
