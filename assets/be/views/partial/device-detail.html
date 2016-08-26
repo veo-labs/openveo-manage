@@ -56,28 +56,25 @@
                         <table class="table" border="0">
                             <thead>
                             <tr>
-                                <th ov-sort-table order="'begin'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.BEGIN' | translate }}</th>
-                                <th ov-sort-table order="'end'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.END' | translate }}</th>
+                                <th ov-sort-table order="'beginDate'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.BEGIN' | translate }}</th>
+                                <th ov-sort-table order="'endDate'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.END' | translate }}</th>
                                 <th class="trash"><i class="glyphicon glyphicon-trash"></i></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="schedule in vm.selectedDevice.schedules | orderBy:order:reverse track by schedule.scheduleId">
                                 <th>
-                                    <div class="periodic start" ng-if="schedule.recurrent">
-                                        <i class="glyphicon glyphicon-repeat"></i>
+                                    <div class="periodic">
+                                        <i class="glyphicon glyphicon-repeat" ng-if="schedule.recurrent"></i>
                                         <div class="hour" ng-bind="schedule.beginDate | date:'HH:mm'"></div>
-                                        <div class="date" ng-bind="schedule.beginDate | date:'dd/MM/yyyy'"></div>
+                                        <div ng-class="{'right': schedule.recurrent}" class="date" ng-bind="schedule.beginDate | date:'dd/MM/yyyy'"></div>
                                     </div>
-                                    <div ng-if="!schedule.recurrent" ng-bind="schedule.beginDate | date:'dd/MM/yyyy HH:mm'"></div>
                                 </th>
                                 <th>
-                                    <div class="periodic end" ng-if="schedule.recurrent">
-                                        <i class="glyphicon glyphicon-repeat"></i>
+                                    <div class="periodic">
                                         <div class="hour" ng-bind="schedule.endDate | date:'HH:mm'"></div>
                                         <div class="date" ng-bind="schedule.endDate | date:'dd/MM/yyyy'"></div>
                                     </div>
-                                    <div ng-if="!schedule.recurrent" ng-bind="schedule.endDate | date:'dd/MM/yyyy HH:mm'"></div>
                                 </th>
                                 <th class="cross" ng-click="vm.openRemoveModal(schedule.scheduleId, 'REMOVE_SCHEDULE')"></th>
                             </tr>
@@ -140,7 +137,7 @@
                     <thead>
                     <tr>
                         <th ov-sort-table order="'date'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.TABLE.DATE' | translate }}</th>
-                        <th ov-sort-table order="'message'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.TABLE.MESSAGE' | translate }}</th>
+                        <th ov-sort-table order="'message.data'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.TABLE.MESSAGE' | translate }}</th>
                         <th class="trash"><i class="glyphicon glyphicon-trash"></i></th>
                     </tr>
                     </thead>
