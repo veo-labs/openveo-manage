@@ -17,7 +17,10 @@
 
     var self = this,
       activePage = 0,
-      today = new Date();
+      today = new Date(),
+      actionEl = document.querySelector('.device-detail .action-page'),
+      detailEl = document.querySelector('.device-detail .detail-page'),
+      historyEl = document.querySelector('.device-detail .history-page');
 
     // The stored selected device
     self.selectedDevice = null;
@@ -31,6 +34,16 @@
     self.popupEnd = {
       opened: false
     };
+
+    // Initialize scrollBars
+    actionEl.setAttribute('style', 'height:' + parseInt(actionEl.offsetHeight - 100) + 'px');
+    detailEl.setAttribute('style', 'height:' + parseInt(detailEl.offsetHeight - 100) + 'px');
+    historyEl.setAttribute('style', 'height:' + parseInt(historyEl.offsetHeight - 100) + 'px');
+
+    /* global Ps */
+    Ps.initialize(actionEl);
+    Ps.initialize(detailEl);
+    Ps.initialize(historyEl);
 
     /**
      * Define the active page index

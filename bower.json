@@ -3,7 +3,8 @@
   "private": true,
   "dependencies": {
     "interact.js": "1.2.6",
-    "socket.io-client": "1.4.8"
+    "socket.io-client": "1.4.8",
+    "perfect-scrollbar": "0.6.12"
   },
   "devDependencies": {}
 }

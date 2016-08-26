@@ -42,7 +42,8 @@ module.exports = {
     scriptLibFiles: {
       base: [
         '/manage/lib/interact.js/dist/interact.min.js',
-        '/manage/lib/socket.io-client/socket.io.js'
+        '/manage/lib/socket.io-client/socket.io.js',
+        '/manage/lib/perfect-scrollbar/js/perfect-scrollbar.min.js'
       ],
       dev: [],
       prod: [
@@ -66,7 +67,8 @@ module.exports = {
       ]
     },
     cssFiles: [
-      '/manage/be/css/manage.css'
+      '/manage/be/css/manage.css',
+      '/manage/lib/perfect-scrollbar/css/perfect-scrollbar.min.css'
     ]
   }
 };

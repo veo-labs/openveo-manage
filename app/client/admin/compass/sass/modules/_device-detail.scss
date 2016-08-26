@@ -109,11 +109,13 @@
       }
     }
     .page {
-      position: absolute;
-      top: 0;
+      position: relative;
+      float: left;
+      left: 0;
       width: 300px;
       display: inline-block;
       padding: 25px 20px;
+      height: 100%;
 
       form.ng-invalid-schedule.ng-submitted{
         input {
@@ -315,7 +317,7 @@
       }
 
       &.detail-page {
-        left: 300px;
+        /*left: 300px;*/
 
         @include mobile() {
           left: 33.33333%;
@@ -384,7 +386,7 @@
         }
       }
       &.history-page {
-        left: 600px;
+        /*left: 600px;*/
 
         @include mobile() {
           left: 66.66666%;
