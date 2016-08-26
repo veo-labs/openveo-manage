@@ -403,7 +403,7 @@ function deviceConnect() {
           addDevice.call(self, socket.id, device, socket.handshake.address);
 
           // Update the scheduled jobs
-          self.scheduleManager.updateDeviceJobs.call(self, device, function(error, schedules) {
+          self.scheduleManager.updateJobs.call(self, device, function(error, schedules) {
             if (error)
               self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
             if (!device.group)

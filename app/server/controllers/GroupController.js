@@ -39,7 +39,7 @@ GroupController.prototype.removeEntityAction = function(request, response, next)
       entityId = request.params.id,
       socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
 
-    socketProvider.scheduleManager.toggleDeviceJobs(null, entityId, 'removeGroup', socketProvider, function() {
+    socketProvider.scheduleManager.toggleJobs(null, entityId, 'removeGroup', socketProvider, function() {
       model.remove(entityId, function(error, deleteCount) {
         if (error) {
           process.logger.error(error.message, {error: error, method: 'removeEntityAction'});
