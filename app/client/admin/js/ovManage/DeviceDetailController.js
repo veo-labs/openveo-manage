@@ -283,13 +283,49 @@
     };
 
     /**
-     * Remove a saved schedule
+     * Remove a specific schedule
      *
-     * @param id
+     * @param {String} scheduleId The schedule id
      */
-    self.removeSchedule = function(id) {
+    self.removeSchedule = function(scheduleId) {
+      var model = (self.selectedDevice.devices) ? 'groups' : 'devices',
+        schedules = self.selectedDevice.schedules,
+        scheduleIndex = schedules.findIndex(function(schedule) {
+          return schedule.scheduleId === scheduleId;
+        }),
+        beginDate = new Date(schedules[scheduleIndex].beginDate),
+        endDate = new Date(schedules[scheduleIndex].endDate),
+        beginTime = beginDate.getHours() + ':' + beginDate.getMinutes(),
+        endTime = endDate.getHours() + ':' + endDate.getMinutes(),
+        now = new Date(),
+        nomTime = now.getHours() + ':' + now.getMinutes(),
+        params = {
+          entityId: self.selectedDevice.id,
+          entityType: model,
+          scheduleId: scheduleId,
+          beginDate: beginDate,
+          endDate: endDate,
+          recurrent: schedules[scheduleIndex].recurrent
+        };
 
-      // console.log(id);
+      // Verify if the record is not in progress
+      if (beginDate <= now && endDate >= now) {
+        if (schedules[scheduleIndex].recurrent && (beginTime >= nomTime && endTime <= nomTime)) {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.ERROR.RECORD_IN_PROGRESS'), 4000);
+        } else {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.ERROR.RECORD_IN_PROGRESS'), 4000);
+        }
+      } else {
+        deviceService.removeScheduledJob({schedules: schedules, params: params}).then(function() {
+
+          // Update the schedules
+          schedules.splice(scheduleIndex, 1);
+          self.selectedDevice.schedules = schedules;
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.SCHEDULE.REMOVE_SUCCESS'), 4000);
+        }, function() {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.REMOVE_ERROR'), 4000);
+        });
+      }
     };
 
     /**

@@ -19,55 +19,9 @@ function ScheduleManager() {
 module.exports = ScheduleManager;
 
 /**
- * Remove the stored start and end jobs with their name and update the device
- *
- * @private
- * @method removeJob
- * @param {Object} params The params of the job to remove
- * @param {Array} schedules The schedules to keep the device up to date
- * @param {Object} socketProvider
- * @param {Function} [callback] The function to call when it's done
- *   - **Error** The error if an error occurred, null otherwise
- */
-function removeJob(params, schedules, socketProvider, callback) {
-  var model = (params.entityType === 'devices') ? new DeviceModel() : new GroupModel(),
-    startJob = schedule.scheduledJobs['start_' + params.name],
-    endJob = schedule.scheduledJobs['end_' + params.name],
-    scheduleIndex;
-
-  // Create the new schedules object to save
-  scheduleIndex = schedules.findIndex(function(value) {
-    return value.id == params.name;
-  });
-  schedules.splice(scheduleIndex, 1);
-
-  if (!params.recurrent) {
-    model.update(params.entityId, {schedules: schedules}, function(error, updateCount) {
-      if (error && (error instanceof AccessError))
-        callback(errors.UPDATE_DEVICE_FORBIDDEN);
-      else if (error) {
-        process.logger.error((error && error.message) || 'Fail updating',
-          {method: 'updateEntityAction', entity: params.entityId});
-        callback(errors.UPDATE_DEVICE_ERROR);
-      } else {
-        if (startJob)
-          startJob.cancel();
-
-        if (endJob)
-          endJob.cancel();
-
-        if (params.entityType === 'devices')
-          socketProvider.updateDevice(params.entityId, {schedules: schedules});
-
-        callback();
-      }
-    });
-  }
-}
-
-/**
  * Create a new start and end recurrent job for a specified schedule
  *
+ * @private
  * @method createRecurrentJob
  * @param {Object} socketProvider
  * @param {Array} schedules The schedules to keep the device up to date
@@ -79,7 +33,9 @@ function createRecurrentJob(socketProvider, schedules, params) {
     recurrentEndTime = new Date(params.beginDate),
     sockets = [],
     startJob,
-    endJob;
+    endJob,
+    i = 0,
+    self = this;
 
   // Define the first end of the job
   recurrentEndTime.setHours(endTime.getHours(), endTime.getMinutes());
@@ -92,7 +48,7 @@ function createRecurrentJob(socketProvider, schedules, params) {
   while (startTime <= endTime) {
 
     // Create the start job to launch a record
-    startJob = schedule.scheduleJob(new Date(startTime), function() {
+    startJob = schedule.scheduleJob('start_' + i + '_' + params.scheduleId, new Date(startTime), function() {
       socketProvider.deviceListener.startRecord(sockets, params, function(error) {
         if (error) {
           process.logger.error(error, {error: error, method: 'createJob:startJob'});
@@ -101,14 +57,14 @@ function createRecurrentJob(socketProvider, schedules, params) {
     });
 
     // Create the end job to stop a record
-    endJob = schedule.scheduleJob(new Date(recurrentEndTime), function() {
+    endJob = schedule.scheduleJob('end_' + i + '_' + params.scheduleId, new Date(recurrentEndTime), function() {
       socketProvider.deviceListener.stopRecord(sockets, function(error) {
         if (error) {
           process.logger.error(error, {error: error, method: 'createJob:endJob'});
         } else if (recurrentEndTime === endTime) {
 
           // Remove the scheduled job when it's done
-          removeJob(params, schedules, socketProvider, function(error) {
+          self.removeJob(params, schedules, socketProvider, function(error) {
             if (error) {
               process.logger.error(error, {error: error, method: 'removeJob'});
             }
@@ -123,8 +79,110 @@ function createRecurrentJob(socketProvider, schedules, params) {
     // Add a day to the startTime/recurrentEndTime to create the next job
     startTime.setDate(startTime.getDate() + 1);
     recurrentEndTime.setDate(startTime.getDate());
+    i++;
   }
 }
+
+/**
+ * Remove a recurrent scheduled job
+ *
+ * @private
+ * @method removeRecurrentJob
+ * @param {Object} socketProvider
+ * @param {Array} schedules The schedules to keep the device up to date
+ * @param {Object} params All parameters needed to remove the new job
+ * @param {Function} [callback] The function to call when it's done
+ *    - **Error** The error if an error occurred, null otherwise
+ */
+function removeRecurrentJob(socketProvider, schedules, params, callback) {
+  var model = (params.entityType === 'devices') ? new DeviceModel() : new GroupModel(),
+    startTime = new Date(params.beginDate),
+    endTime = new Date(params.endDate),
+    startJob,
+    endJob,
+    i = 0;
+
+  model.update(params.entityId, {schedules: schedules}, function(error, updateCount) {
+    if (error && (error instanceof AccessError))
+      callback(errors.UPDATE_DEVICE_FORBIDDEN);
+    else if (error) {
+      process.logger.error((error && error.message) || 'Fail updating',
+        {method: 'updateEntityAction', entity: params.entityId});
+      callback(errors.REMOVE_SCHEDULE_ERROR);
+    } else {
+
+      while (startTime <= endTime) {
+        startJob = schedule.scheduledJobs['start_' + i + '_' + params.scheduleId];
+        endJob = schedule.scheduledJobs['end_' + i + '_' + params.scheduleId];
+
+        if (startJob)
+          startJob.cancel();
+
+        if (endJob)
+          endJob.cancel();
+
+        // Add a day to the startTime to remove the next job
+        startTime.setDate(startTime.getDate() + 1);
+        i++;
+      }
+
+      if (params.entityType === 'devices')
+        socketProvider.updateDevice(params.entityId, {schedules: schedules});
+
+      callback();
+    }
+  });
+}
+
+/**
+ * Remove the stored start and end jobs with their name and update the device
+ *
+ * @method removeJob
+ * @param {Object} params The params of the job to remove
+ * @param {Array} schedules The schedules to keep the device up to date
+ * @param {Object} socketProvider
+ * @param {Function} [callback] The function to call when it's done
+ *   - **Error** The error if an error occurred, null otherwise
+ */
+ScheduleManager.prototype.removeJob = function(params, schedules, socketProvider, callback) {
+  var model = (params.entityType === 'devices') ? new DeviceModel() : new GroupModel(),
+    startJob = schedule.scheduledJobs['start_' + params.scheduleId],
+    endJob = schedule.scheduledJobs['end_' + params.scheduleId],
+    scheduleIndex;
+
+  // Create the new schedules object to save
+  scheduleIndex = schedules.findIndex(function(value) {
+    return value.id == params.scheduleId;
+  });
+  schedules.splice(scheduleIndex, 1);
+
+  if (params.recurrent) {
+    removeRecurrentJob(socketProvider, schedules, params, function(error) {
+      callback(error);
+    });
+  } else {
+    model.update(params.entityId, {schedules: schedules}, function(error, updateCount) {
+      if (error && (error instanceof AccessError))
+        callback(errors.UPDATE_DEVICE_FORBIDDEN);
+      else if (error) {
+        process.logger.error((error && error.message) || 'Fail updating',
+          {method: 'updateEntityAction', entity: params.entityId});
+        callback(errors.REMOVE_SCHEDULE_ERROR);
+      } else {
+        if (startJob)
+          startJob.cancel();
+
+        if (endJob)
+          endJob.cancel();
+
+        if (params.entityType === 'devices')
+          socketProvider.updateDevice(params.entityId, {schedules: schedules});
+
+        callback();
+      }
+    });
+  }
+};
 
 /**
  * Create a new start and end job for a specified schedule
@@ -139,16 +197,18 @@ function createRecurrentJob(socketProvider, schedules, params) {
 ScheduleManager.prototype.createJob = function(socketProvider, schedules, params, callback) {
   var startTime = params.beginDate,
     endTime = params.endDate,
-    sockets = [];
-
-  // Retrieve sockets from device ids
-  params.deviceIds.map(function(id) {
-    sockets.push(socketProvider.getSocket(id));
-  });
+    sockets = [],
+    self = this;
 
   if (params.recurrent) {
     createRecurrentJob(socketProvider, schedules, params);
   } else {
+
+    // Retrieve sockets from device ids
+    params.deviceIds.map(function(id) {
+      sockets.push(socketProvider.getSocket(id));
+    });
+
     // Create the start job to launch a record
     schedule.scheduleJob('start_' + params.scheduleId, startTime, function() {
       socketProvider.deviceListener.startRecord(sockets, params, function(error) {
@@ -166,7 +226,7 @@ ScheduleManager.prototype.createJob = function(socketProvider, schedules, params
         } else {
 
           // Remove the scheduled job when it's done
-          removeJob(params.scheduleId, schedules, params.entityId, params.entityType, socketProvider, function(error) {
+          self.removeJob(params, schedules, socketProvider, function(error) {
             if (error) {
               process.logger.error(error, {error: error, method: 'removeJob'});
             }
@@ -230,12 +290,13 @@ function clearOldJobs(device, entityType, callback) {
 /**
  * Permits to update or create the scheduled jobs for a device on new socket connection
  *
+ * @method updateJobs
  * @param {Object} device The device to update
  * @param {Function} [callback] The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
  *   - **Schedules** The updated schedules job of the device
  */
-ScheduleManager.prototype.updateDeviceJobs = function(device, callback) {
+ScheduleManager.prototype.updateJobs = function(device, callback) {
 
   var self = this,
     groupModel,
@@ -297,13 +358,14 @@ ScheduleManager.prototype.updateDeviceJobs = function(device, callback) {
 /**
  * Permits to manage (create or remove) the scheduled jobs depending of the user interactions with the devices
  *
+ * @method toggleJobs
  * @param {String | null} deviceId The id of the device to update, null otherwise
  * @param {String | null} groupId The id of the group to update, null otherwise
  * @param {String} action The type of action realised by the user
  * @param {Object} socketProvider
  * @param {Function} [callback] The function to call when it's done
  */
-ScheduleManager.prototype.toggleDeviceJobs = function(deviceId, groupId, action, socketProvider, callback) {
+ScheduleManager.prototype.toggleJobs = function(deviceId, groupId, action, socketProvider, callback) {
   var groupModel = new GroupModel(),
     deviceModel = new DeviceModel(),
     self = this,

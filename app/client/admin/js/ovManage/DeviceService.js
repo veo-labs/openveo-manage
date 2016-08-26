@@ -143,7 +143,7 @@
     /**
      *  Create a record's schedule
      *
-     * @param {Object} params Contains all data needed to create the record's schedule
+     * @param {Object} params Contains all data needed to create the schedule
      * @returns {*}
      * @method addScheduledJob
      */
@@ -162,6 +162,16 @@
      */
     function toggleScheduledJobs(deviceId, groupId, action) {
       return $http.post(basePath + 'toggleScheduledJobs', {deviceId: deviceId, groupId: groupId, action: action});
+    }
+
+    /**
+     * Remove a scheduled job
+     *
+     * @param {Object} params Contains all data needed to remove the schedule
+     * @returns {*}
+     */
+    function removeScheduledJob(params) {
+      return $http.post(basePath + 'removeScheduledJob', params);
     }
 
     /**
@@ -186,6 +196,7 @@
       updateState: updateState,
       addScheduledJob: addScheduledJob,
       toggleScheduledJobs: toggleScheduledJobs,
+      removeScheduledJob: removeScheduledJob,
       generateId: generateId
     };
 
