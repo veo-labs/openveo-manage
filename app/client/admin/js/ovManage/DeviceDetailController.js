@@ -36,9 +36,9 @@
     };
 
     // Initialize scrollBars
-    actionEl.setAttribute('style', 'height:' + parseInt(actionEl.offsetHeight - 100) + 'px');
-    detailEl.setAttribute('style', 'height:' + parseInt(detailEl.offsetHeight - 100) + 'px');
-    historyEl.setAttribute('style', 'height:' + parseInt(historyEl.offsetHeight - 100) + 'px');
+    actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
+    detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
+    historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
 
     /* global Ps */
     Ps.initialize(actionEl);
@@ -508,6 +508,13 @@
     // Listen event to close device details window
     $scope.$on('close.window', function(event) {
       self.closeDetail();
+    });
+
+    // Listen window resize event to update height of elements
+    window.addEventListener('resize', function() {
+      actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
+      detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
+      historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
     });
 
   }
