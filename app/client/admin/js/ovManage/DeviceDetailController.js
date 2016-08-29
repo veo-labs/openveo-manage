@@ -516,7 +516,6 @@
       detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
       historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
     });
-
   }
 
   app.controller('DeviceDetailController', DeviceDetailController);

@@ -220,6 +220,11 @@
           case 'starting':
             device.state = 'MANAGE.DEVICE.STARTING';
             break;
+          case 'disconnected':
+            delete device.presets;
+            delete device.inputs;
+            delete device.storage;
+            break;
           default:
             device.state = 'MANAGE.DEVICE.DISCONNECTED';
         }

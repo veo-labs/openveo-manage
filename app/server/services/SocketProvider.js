@@ -305,11 +305,12 @@ function updateDeviceState(device, status) {
  * @private
  * @param {Object} The device object
  */
-/* function disconnectDevice(device) {
+ function disconnectDevice(device) {
   device.status = 'disconnected';
   delete device.presets;
+  delete device.inputs;
   delete device.storage;
-}*/
+}
 
 /**
  * Initialize a socket.io client connexion
@@ -466,13 +467,11 @@ function deviceConnect() {
 
     // Disconnect event
     socket.on('disconnect', function() {
-
-      /* var device = findDevice.call(self, socket.id);
+      var device = findDevice.call(self, socket.id);
 
       disconnectDevice.call(self, device);
-      self.clientListener.update('status', 'disconnected', device.id);*/
+      self.clientListener.update('status', 'disconnected', device.id);
     });
-
   });
 }
 
