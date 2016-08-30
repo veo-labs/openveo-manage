@@ -63,8 +63,8 @@
         groupReady = false;
 
       if (isGroup) {
-        selectedDevice.devices.map(function(device) {
-          switch (device.status) {
+        for (var i = 0; i < selectedDevice.devices.length; i++) {
+          switch (selectedDevice.devices[i].status) {
             case 'error':
               selectedDevice.state = 'MANAGE.DEVICE.ERROR';
               selectedDevice.status = 'error';
@@ -78,11 +78,12 @@
               selectedDevice.status = 'starting';
               return false;
             default:
-              if (device.status == 'stopped') {
+              if (selectedDevice.devices[i].status == 'stopped') {
                 groupReady = true;
               }
           }
-        });
+        }
+
         if (groupReady) {
           selectedDevice.state = 'MANAGE.DEVICE.READY';
           selectedDevice.status = 'stopped';

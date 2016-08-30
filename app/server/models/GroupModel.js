@@ -152,7 +152,7 @@ GroupModel.prototype.getOne = function(id, filter, callback) {
     // Get the list of groups
     function(callback) {
       self.provider.getOne(id, filter, function(error, searchedGroup) {
-        group = searchedGroup || {};
+        group = searchedGroup || {};
         callback(error);
       });
     },
