@@ -305,7 +305,7 @@ function updateDeviceState(device, status) {
  * @private
  * @param {Object} The device object
  */
- function disconnectDevice(device) {
+function disconnectDevice(device) {
   device.status = 'disconnected';
   delete device.presets;
   delete device.inputs;
@@ -415,8 +415,9 @@ function deviceConnect() {
     });
 
     // Listening for device name
-    socket.on('settings.name', function(name) {
-      var device = findDevice.call(self, socket.id);
+    socket.on('settings.name', function(data) {
+      var device = findDevice.call(self, socket.id),
+        name = data.name;
 
       // Verify if the name is defined
       if (!name) {
@@ -469,8 +470,10 @@ function deviceConnect() {
     socket.on('disconnect', function() {
       var device = findDevice.call(self, socket.id);
 
-      disconnectDevice.call(self, device);
-      self.clientListener.update('status', 'disconnected', device.id);
+      if (device) {
+        disconnectDevice.call(self, device);
+        self.clientListener.update('status', 'disconnected', device.id);
+      }
     });
   });
 }
