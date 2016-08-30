@@ -35,16 +35,6 @@
       opened: false
     };
 
-    // Initialize scrollBars
-    actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
-    detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
-    historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
-
-    /* global Ps */
-    Ps.initialize(actionEl);
-    Ps.initialize(detailEl);
-    Ps.initialize(historyEl);
-
     /**
      * Define the active page index
      *

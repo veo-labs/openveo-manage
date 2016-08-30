@@ -244,6 +244,24 @@
     }
 
     /**
+     * Initialize the scrollBars for device detail window
+     */
+    function initScrollbar() {
+      var actionEl = document.querySelector('.device-detail .action-page'),
+        detailEl = document.querySelector('.device-detail .detail-page'),
+        historyEl = document.querySelector('.device-detail .history-page');
+
+      actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
+      detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
+      historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
+
+      /* global Ps */
+      Ps.initialize(actionEl);
+      Ps.initialize(detailEl);
+      Ps.initialize(historyEl);
+    }
+
+    /**
      * Display the device/group detail on tile click
      */
     function clickDevice() {
@@ -295,6 +313,7 @@
           }, 500);
         }
 
+        initScrollbar();
         $scope.$apply();
       });
     }

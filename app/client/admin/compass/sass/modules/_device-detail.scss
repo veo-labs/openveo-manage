@@ -317,7 +317,6 @@
       }
 
       &.detail-page {
-        /*left: 300px;*/
 
         @include mobile() {
           left: 33.33333%;
@@ -386,7 +385,6 @@
         }
       }
       &.history-page {
-        /*left: 600px;*/
 
         @include mobile() {
           left: 66.66666%;
