@@ -117,7 +117,6 @@ function removeRecurrentJob(socketProvider, schedules, params, callback) {
 
         if (startJob)
           startJob.cancel();
-
         if (endJob)
           endJob.cancel();
 
@@ -171,7 +170,6 @@ ScheduleManager.prototype.removeJob = function(params, schedules, socketProvider
       } else {
         if (startJob)
           startJob.cancel();
-
         if (endJob)
           endJob.cancel();
 
@@ -300,19 +298,17 @@ ScheduleManager.prototype.updateJobs = function(device, callback) {
 
   var self = this,
     groupModel,
-    deviceIds = [],
-    entityType = (device.group) ? 'groups' : 'devices';
+    deviceIds = [];
 
-  // Verify if job already exist
-  clearOldJobs(device, entityType, function(error, schedules) {
-    if (!error) {
-      // Do not recreate jobs for a device belonging to a group
-      if (!device.group) {
+  // Do not recreate jobs for a device belonging to a group
+  if (!device.group) {
+    clearOldJobs(device, 'devices', function(error, schedules) {
+      if (!error) {
         schedules.map(function(schedule) {
           self.scheduleManager.createJob(self, schedules, {
             scheduleId: schedule.scheduleId,
             entityId: device.id,
-            entityType: entityType,
+            entityType: 'devices',
             beginDate: schedule.beginDate,
             endDate: schedule.endDate,
             recurrent: schedule.recurrent,
@@ -322,37 +318,39 @@ ScheduleManager.prototype.updateJobs = function(device, callback) {
           });
         });
       } else {
-        groupModel = new GroupModel();
-
-        groupModel.getOne(device.group, null, function(error, group) {
-          if (!error && group.schedules) {
-            group.devices.map(function(device) {
-              deviceIds.push(device.id);
-            });
-            group.schedules.map(function(schedule) {
-              self.scheduleManager.createJob(self, schedules, {
-                scheduleId: schedule.scheduleId,
-                entityId: group.id,
-                entityType: entityType,
-                beginDate: schedule.beginDate,
-                endDate: schedule.endDate,
-                recurrent: schedule.recurrent,
-                deviceIds: deviceIds
-              }, function() {
-                // Log
-              });
-            });
-          } else {
-            callback(error);
-          }
-        });
+        callback(error);
       }
-    } else {
-      callback(error);
-    }
+      callback(error, schedules)
+    });
+  } else {
+    groupModel = new GroupModel();
 
-    callback(error, schedules);
-  });
+    groupModel.getOne(device.group, null, function(error, group) {
+      if (!error && group.schedules) {
+        clearOldJobs(group, 'groups', function(error, schedules) {
+          group.devices.map(function(device) {
+            deviceIds.push(device.id);
+          });
+          group.schedules.map(function(schedule) {
+            self.scheduleManager.createJob(self, schedules, {
+              scheduleId: schedule.scheduleId,
+              entityId: group.id,
+              entityType: 'groups',
+              beginDate: schedule.beginDate,
+              endDate: schedule.endDate,
+              recurrent: schedule.recurrent,
+              deviceIds: deviceIds
+            }, function() {
+              // Log
+            });
+          });
+          callback(error, schedules);
+        });
+      } else {
+        callback(error);
+      }
+    });
+  }
 };
 
 /**
@@ -379,9 +377,18 @@ ScheduleManager.prototype.toggleJobs = function(deviceId, groupId, action, socke
 
           // Disable device scheduled jobs
           if (device.id === deviceId && device.schedules) {
-            device.schedules.map(function(data) {
-              schedule.scheduledJobs['start_' + data.scheduleId].cancel();
-              schedule.scheduledJobs['end_' + data.scheduleId].cancel();
+            device.schedules.map(function(data, i) {
+              if (data.recurrent) {
+                if (schedule.scheduledJobs['start_' + i + '_' + data.scheduleId])
+                  schedule.scheduledJobs['start_' + i + '_' + data.scheduleId].cancel();
+                if (schedule.scheduledJobs['end_' + i + '_' + data.scheduleId])
+                  schedule.scheduledJobs['end_' + i + '_' + data.scheduleId].cancel();
+              } else {
+                if (schedule.scheduledJobs['start_' + data.scheduleId])
+                  schedule.scheduledJobs['start_' + data.scheduleId].cancel();
+                if (schedule.scheduledJobs['end_' + data.scheduleId])
+                  schedule.scheduledJobs['end_' + data.scheduleId].cancel();
+              }
             });
           }
         });
@@ -414,9 +421,18 @@ ScheduleManager.prototype.toggleJobs = function(deviceId, groupId, action, socke
 
         // Disable device scheduled jobs
         if (device.schedules) {
-          device.schedules.map(function(data) {
-            schedule.scheduledJobs['start_' + data.scheduleId].cancel();
-            schedule.scheduledJobs['end_' + data.scheduleId].cancel();
+          device.schedules.map(function(data, i) {
+            if (data.recurrent) {
+              if (schedule.scheduledJobs['start_' + i + '_' + data.scheduleId])
+                schedule.scheduledJobs['start_' + i + '_' + data.scheduleId].cancel();
+              if (schedule.scheduledJobs['end_' + i + '_' + data.scheduleId])
+                schedule.scheduledJobs['end_' + i + '_' + data.scheduleId].cancel();
+            } else {
+              if (schedule.scheduledJobs['start_' + data.scheduleId])
+                schedule.scheduledJobs['start_' + data.scheduleId].cancel();
+              if (schedule.scheduledJobs['end_' + data.scheduleId])
+                schedule.scheduledJobs['end_' + data.scheduleId].cancel();
+            }
           });
         }
       });
@@ -479,9 +495,18 @@ ScheduleManager.prototype.toggleJobs = function(deviceId, groupId, action, socke
 
         // Remove the group scheduled jobs
         if (group.schedules) {
-          group.schedules.map(function(data) {
-            schedule.scheduledJobs['start_' + data.scheduleId].cancel();
-            schedule.scheduledJobs['end_' + data.scheduleId].cancel();
+          group.schedules.map(function(data, i) {
+            if (data.recurrent) {
+              if (schedule.scheduledJobs['start_' + i + '_' + data.scheduleId])
+                schedule.scheduledJobs['start_' + i + '_' + data.scheduleId].cancel();
+              if (schedule.scheduledJobs['end_' + i + '_' + data.scheduleId])
+                schedule.scheduledJobs['end_' + i + '_' + data.scheduleId].cancel();
+            } else {
+              if (schedule.scheduledJobs['start_' + data.scheduleId])
+                schedule.scheduledJobs['start_' + data.scheduleId].cancel();
+              if (schedule.scheduledJobs['end_' + data.scheduleId])
+                schedule.scheduledJobs['end_' + data.scheduleId].cancel();
+            }
           });
         }
 
