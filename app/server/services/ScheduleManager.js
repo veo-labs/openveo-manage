@@ -320,7 +320,7 @@ ScheduleManager.prototype.updateJobs = function(device, callback) {
       } else {
         callback(error);
       }
-      callback(error, schedules)
+      callback(error, schedules);
     });
   } else {
     groupModel = new GroupModel();
