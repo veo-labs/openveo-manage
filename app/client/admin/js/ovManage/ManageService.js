@@ -77,13 +77,13 @@
      * @param {String} model The type of entity [devices/groups]
      * @param {String} action The type of history action
      * @param {Object} history The history object to save
-     * @param {String | null} groupName The group name to save even if the group is deleted
+     * @param {String | null} name The name to save as message parameter
      * @returns {*}
      * @method addToHistory
      */
-    function addToHistory(id, model, action, history, groupName) {
+    function addToHistory(id, model, action, history, name) {
       return $http.post(basePath + 'addHistoryToEntity/' + id, {entityType: model, action: action, history: history,
-        groupName: groupName});
+        name: name});
     }
 
     /**
@@ -108,9 +108,7 @@
 
             // Save to history
             addToHistory(device.id, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name)
-            .then(function(result) {
-              device.history = result.data.history;
-            });
+            .then(function() {});
           });
         });
       }, 300);
@@ -196,8 +194,17 @@
      * @method updateDevice
      */
     function updateDevice(result) {
-      var device = (getDevice(result.id)) ? getDevice(result.id) : getGroup(result.id),
-        model = (device.hasOwnProperty('state') ? 'devices' : 'groups');
+      var device,
+        group,
+        model;
+
+      if (getGroup(result.id)) {
+        device = getGroup(result.id);
+        model = 'groups';
+      } else {
+        device = getDevice(result.id);
+        model = 'devices';
+      }
 
       device[result.key] = result.data;
 
@@ -210,9 +217,11 @@
             device.state = 'MANAGE.DEVICE.ERROR';
 
             // Save to history
-            addToHistory(result.id, model, 'STATE_ERROR', device.history, null).then(function(result) {
-              device.history = result.data.history;
-            });
+            if (device.group) {
+              group = getGroup(device.group);
+              addToHistory(device.group, 'groups', 'STATE_ERROR', group.history, device.name).then(function() {});
+            }
+            addToHistory(result.id, model, 'STATE_ERROR', device.history, null).then(function() {});
             break;
           case 'started':
             device.state = 'MANAGE.DEVICE.RECORDING';
@@ -296,12 +305,12 @@
      * @method manageSelectedDevice
      */
     function manageSelectedDevice(id, selectedDevice, lastSelectedId) {
-      var device = (getDevice(id)) ? getDevice(id) : getGroup(id),
+      var device = (getGroup(id)) ? getGroup(id) : getDevice(id),
         lastDevice = null;
 
       // Remove the last selected device state if defined
       if (lastSelectedId) {
-        lastDevice = (getDevice(lastSelectedId)) ? getDevice(lastSelectedId) : getGroup(lastSelectedId);
+        lastDevice = (getGroup(lastSelectedId)) ? getGroup(lastSelectedId) : getDevice(lastSelectedId);
         lastDevice.isSelected = false;
       }
 
@@ -339,13 +348,9 @@
 
         // Save to history
         addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', devices.acceptedDevices[firstIndex].history,
-        group.name).then(function(result) {
-          devices.acceptedDevices[firstIndex].history = result.data.history;
-        });
+        group.name).then(function() {});
         addToHistory(dropzoneId, 'devices', 'ADD_DEVICE_TO_GROUP', devices.acceptedDevices[secondIndex].history,
-        group.name).then(function(result) {
-          devices.acceptedDevices[secondIndex].history = result.data.history;
-        });
+        group.name).then(function() {});
 
         group.devices.push(devices.acceptedDevices[firstIndex], devices.acceptedDevices[secondIndex]);
         groups.push(group);
@@ -356,9 +361,7 @@
 
             // Save to history
             addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', devices.acceptedDevices[firstIndex].history,
-            group.name).then(function(result) {
-              devices.acceptedDevices[firstIndex].history = result.data.history;
-            });
+            group.name).then(function() {});
 
             group.devices.push(devices.acceptedDevices[firstIndex]);
           }
@@ -396,9 +399,8 @@
       delete device.group;
 
       // Save to history
-      addToHistory(deviceId, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name).then(function(result) {
-        device.history = result.data.history;
-      });
+      addToHistory(deviceId, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name)
+        .then(function(result) {});
 
       defer.resolve();
 

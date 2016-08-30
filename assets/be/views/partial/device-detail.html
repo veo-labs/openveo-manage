@@ -144,7 +144,7 @@
                     <tbody>
                     <tr ng-repeat="history in vm.selectedDevice.history | orderBy:order:!reverse track by history.id">
                         <th ng-bind="history.date | date:'dd/MM/yyyy HH:mm'"></th>
-                        <th ng-init="groupName = (history.message.groupName) ? history.message.groupName : ''" ng-bind="(history.message.data | translate) + groupName"></th>
+                        <th ng-init="name = (history.message.name) ? ': ' + history.message.name : ''" ng-bind="(history.message.data | translate) + name"></th>
                         <th class="cross" ng-click="vm.openRemoveModal(history.id, 'REMOVE_HISTORY')"></th>
                     </tr>
                     </tbody>

@@ -560,16 +560,23 @@ SocketProvider.prototype.devicesSettings = function(deviceIds) {
  * Update a device with the given data
  *
  * @method updateDevice
- * @param {String} deviceId the device id
+ * @param {String} id the device or group id
  * @param {Object} data The new data of the device
  */
-SocketProvider.prototype.updateDevice = function(deviceId, data) {
-  var device = findDeviceById.call(this, deviceId),
-    self = this;
+SocketProvider.prototype.updateDevice = function(id, data) {
+  var device = findDeviceById.call(this, id),
+    self = this,
+    key;
 
-  for (var key in data) {
-    device[key] = data[key];
-    self.clientListener.update(key, data[key], device.id);
+  if (!device) {
+    for (key in data) {
+      self.clientListener.update(key, data[key], id);
+    }
+  } else {
+    for (key in data) {
+      device[key] = data[key];
+      self.clientListener.update(key, data[key], device.id);
+    }
   }
 };
 

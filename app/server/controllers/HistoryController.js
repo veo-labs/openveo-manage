@@ -54,49 +54,49 @@ HistoryController.prototype.addHistoryToEntityAction = function(request, respons
       case 'UPDATE_NAME':
         newHistory.message = {
           data: 'MANAGE.HISTORY.UPDATE_NAME',
-          groupName: null
+          name: null
         };
         history.push(newHistory);
         break;
       case 'START_RECORD':
         newHistory.message = {
           data: 'MANAGE.HISTORY.START_RECORD',
-          groupName: null
+          name: null
         };
         history.push(newHistory);
         break;
       case 'STOP_RECORD':
         newHistory.message = {
           data: 'MANAGE.HISTORY.STOP_RECORD',
-          groupName: null
+          name: null
         };
         history.push(newHistory);
         break;
       case 'ADD_DEVICE_TO_GROUP':
         newHistory.message = {
           data: 'MANAGE.HISTORY.ADD_DEVICE_TO_GROUP',
-          groupName: data.groupName
+          name: data.name
         };
         history.push(newHistory);
         break;
       case 'REMOVE_DEVICE_FROM_GROUP':
         newHistory.message = {
           data: 'MANAGE.HISTORY.REMOVE_DEVICE_FROM_GROUP',
-          groupName: data.groupName
+          name: data.name
         };
         history.push(newHistory);
         break;
       case 'TAG_RECORD':
         newHistory.message = {
           data: 'MANAGE.HISTORY.TAG_RECORD',
-          groupName: null
+          name: null
         };
         history.push(newHistory);
         break;
       case 'STATE_ERROR':
         newHistory.message = {
           data: 'MANAGE.HISTORY.STATE_ERROR',
-          groupName: null
+          name: data.name
         };
         history.push(newHistory);
         break;
@@ -113,11 +113,8 @@ HistoryController.prototype.addHistoryToEntityAction = function(request, respons
         next(errors.ADD_HISTORY_ERROR);
       } else {
 
-        // Update cached device
-        if (data.entityType === 'devices') {
-          socketProvider.updateDevice(entityId, {history: history});
-        }
-        response.send({error: null, status: 'ok', history: history});
+        socketProvider.updateDevice(entityId, {history: history});
+        response.send({error: null, status: 'ok'});
       }
     });
   } else {

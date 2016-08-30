@@ -125,8 +125,7 @@ function removeRecurrentJob(socketProvider, schedules, params, callback) {
         i++;
       }
 
-      if (params.entityType === 'devices')
-        socketProvider.updateDevice(params.entityId, {schedules: schedules});
+      socketProvider.updateDevice(params.entityId, {schedules: schedules});
 
       callback();
     }
@@ -173,8 +172,7 @@ ScheduleManager.prototype.removeJob = function(params, schedules, socketProvider
         if (endJob)
           endJob.cancel();
 
-        if (params.entityType === 'devices')
-          socketProvider.updateDevice(params.entityId, {schedules: schedules});
+        socketProvider.updateDevice(params.entityId, {schedules: schedules});
 
         callback();
       }

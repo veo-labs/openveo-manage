@@ -119,9 +119,7 @@
 
         // Save to history
         manageService.addToHistory(self.selectedDevice.id, model, 'UPDATE_NAME', self.selectedDevice.history)
-        .then(function(result) {
-          self.selectedDevice.history = result.data.history;
-        });
+        .then(function() {});
 
         // Send event to save the new name (not for groups)
         if (!self.selectedDevice.devices) {
@@ -188,30 +186,32 @@
       }
 
       // Verify if the new scheduled job is not in conflict with the existing jobs
-      for (var i = 0; i < self.selectedDevice.schedules.length; i++) {
-        currentSchedule = self.selectedDevice.schedules[i];
-        scheduleDateTimeBegin = new Date(currentSchedule.beginDate);
-        scheduleDateTimeEnd = new Date(currentSchedule.endDate);
+      if (self.selectedDevice.schedules) {
+        for (var i = 0; i < self.selectedDevice.schedules.length; i++) {
+          currentSchedule = self.selectedDevice.schedules[i];
+          scheduleDateTimeBegin = new Date(currentSchedule.beginDate);
+          scheduleDateTimeEnd = new Date(currentSchedule.endDate);
 
-        if ((dateTimeBegin >= scheduleDateTimeBegin && dateTimeBegin <= scheduleDateTimeEnd) ||
-          (dateTimeEnd >= scheduleDateTimeBegin && dateTimeEnd <= scheduleDateTimeEnd) ||
-          (dateTimeBegin <= scheduleDateTimeBegin && dateTimeEnd >= scheduleDateTimeEnd)) {
+          if ((dateTimeBegin >= scheduleDateTimeBegin && dateTimeBegin <= scheduleDateTimeEnd) ||
+            (dateTimeEnd >= scheduleDateTimeBegin && dateTimeEnd <= scheduleDateTimeEnd) ||
+            (dateTimeBegin <= scheduleDateTimeBegin && dateTimeEnd >= scheduleDateTimeEnd)) {
 
-          if (currentSchedule.recurrent || self.deviceSchedule.schedule.recurrent) {
-            scheduleTimeBegin = scheduleDateTimeBegin.getHours() + ':' + scheduleDateTimeBegin.getMinutes();
-            scheduleTimeEnd = scheduleDateTimeEnd.getHours() + ':' + scheduleDateTimeEnd.getMinutes();
+            if (currentSchedule.recurrent || self.deviceSchedule.schedule.recurrent) {
+              scheduleTimeBegin = scheduleDateTimeBegin.getHours() + ':' + scheduleDateTimeBegin.getMinutes();
+              scheduleTimeEnd = scheduleDateTimeEnd.getHours() + ':' + scheduleDateTimeEnd.getMinutes();
 
-            if ((timeBegin >= scheduleTimeBegin && timeBegin <= scheduleTimeEnd) ||
-              (timeEnd >= scheduleTimeBegin && timeEnd <= scheduleTimeEnd) ||
-              (timeBegin <= scheduleTimeBegin && timeEnd >= scheduleTimeEnd)) {
+              if ((timeBegin >= scheduleTimeBegin && timeBegin <= scheduleTimeEnd) ||
+                (timeEnd >= scheduleTimeBegin && timeEnd <= scheduleTimeEnd) ||
+                (timeBegin <= scheduleTimeBegin && timeEnd >= scheduleTimeEnd)) {
+                $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.CONFLICT_ERROR'), 4000);
+                self.deviceSchedule.$setValidity('schedule', false);
+                break;
+              }
+            } else {
               $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.CONFLICT_ERROR'), 4000);
               self.deviceSchedule.$setValidity('schedule', false);
               break;
             }
-          } else {
-            $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.CONFLICT_ERROR'), 4000);
-            self.deviceSchedule.$setValidity('schedule', false);
-            break;
           }
         }
       }
@@ -358,9 +358,7 @@
 
       // Save to history
       manageService.addToHistory(self.selectedDevice.id, model, 'START_RECORD', self.selectedDevice.history, null)
-      .then(function(result) {
-        self.selectedDevice.history = result.data.history;
-      });
+      .then(function() {});
     };
 
     /**
@@ -387,9 +385,7 @@
 
       // Save to history
       manageService.addToHistory(self.selectedDevice.id, model, 'STOP_RECORD', self.selectedDevice.history, null)
-      .then(function(result) {
-        self.selectedDevice.history = result.data.history;
-      });
+      .then(function() {});
     };
 
     /**
@@ -416,9 +412,7 @@
 
       // Save to history
       manageService.addToHistory(self.selectedDevice.id, model, 'TAG_RECORD', self.selectedDevice.history, null)
-      .then(function(result) {
-        self.selectedDevice.history = result.data.history;
-      });
+      .then(function() {});
     };
 
     /**
