@@ -51,7 +51,7 @@
     "STOP_RECORD": "Arrêt de l'enregistrement",
     "TAG_RECORD": "Taggage de l'enregistrement",
     "UPDATE_NAME": "Mise à jour du nom",
-    "ADD_DEVICE_TO_GROUP": "Ajout au groupe: ",
-    "REMOVE_DEVICE_FROM_GROUP": "Suppression du groupe: "
+    "ADD_DEVICE_TO_GROUP": "Ajout au groupe",
+    "REMOVE_DEVICE_FROM_GROUP": "Suppression du groupe"
   }
 }
