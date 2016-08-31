@@ -22,7 +22,10 @@ module.exports = {
     },
     {
       id: 'manage-group-detail-access-page',
-      name: 'MANAGE.PERMISSIONS.GROUP_DETAIL.ACCESS_PAGE_NAME'
+      name: 'MANAGE.PERMISSIONS.ACCESS_GROUP_DETAIL_PAGE_NAME',
+      paths: [
+        'get /manage/group-detail*'
+      ]
     }
   ],
   backOffice: {

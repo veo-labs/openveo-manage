@@ -78,5 +78,27 @@
     "REMOVE_DEVICE_FROM_GROUP": "Suppression du groupe",
     "REMOVE_SUCCESS": "Elément supprimé de l'historique",
     "REMOVE_ERROR": "Erreur lors de la suppression de l'élément depuis l'historique"
+  },
+  "PERMISSIONS" : {
+    "ADD_DEVICES_NAME": "Ajouter des encodeurs",
+    "UPDATE_DEVICES_NAME": "Editer les encodeurs",
+    "DELETE_DEVICES_NAME": "Supprimer les encodeurs",
+    "ADD_GROUPS_NAME": "Ajouter des groupes",
+    "UPDATE_GROUPS_NAME": "Editer les groupes",
+    "DELETE_GROUPS_NAME": "Supprimer les groupes",
+    "GROUP_DEVICES": "Encodeurs",
+    "GROUP_GROUPS": "Groupes",
+    "ACCESS_PAGE_NAME": "Accès à la page du manage",
+    "ACCESS_GROUP_DETAIL_PAGE_NAME": "Accès à la page du détail d'un groupe du manage"
+  },
+  "WS_SCOPES": {
+    "GET_DEVICES_NAME": "Récupérer les encodeurs",
+    "ADD_DEVICES_NAME": "Ajouter des encodeurs",
+    "UPDATE_DEVICES_NAME": "Mettre à jour les encodeurs",
+    "DELETE_DEVICES_NAME": "Supprimer les encodeurs",
+    "GET_GROUPS_NAME": "Récupérer les groupes",
+    "ADD_GROUPS_NAME": "Ajouter des groupes",
+    "UPDATE_GROUPS_NAME": "Mettre à jour les groupes",
+    "DELETE_GROUPS_NAME": "Supprimer les groupes"
   }
 }

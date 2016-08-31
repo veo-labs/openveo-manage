@@ -78,5 +78,27 @@
     "REMOVE_DEVICE_FROM_GROUP": "Remove from group",
     "REMOVE_SUCCESS": "Element removed from history",
     "REMOVE_ERROR": "An error occurred while removing the element from the history"
+  },
+  "PERMISSIONS" : {
+    "ADD_DEVICES_NAME": "Add encoders",
+    "UPDATE_DEVICES_NAME": "Edit encoders",
+    "DELETE_DEVICES_NAME": "Remove encoders",
+    "ADD_GROUPS_NAME": "Add groups",
+    "UPDATE_GROUPS_NAME": "Edit groups",
+    "DELETE_GROUPS_NAME": "Remove groups",
+    "GROUP_DEVICES": "Encoders",
+    "GROUP_GROUPS": "Groups",
+    "ACCESS_PAGE_NAME": "Access Manage page",
+    "ACCESS_GROUP_DETAIL_PAGE_NAME": "Access Manage group detail page"
+  },
+  "WS_SCOPES": {
+    "GET_DEVICES_NAME": "Get encoders",
+    "ADD_DEVICES_NAME": "Add encoders",
+    "UPDATE_DEVICES_NAME": "Update encoders",
+    "DELETE_DEVICES_NAME": "Delete encoders",
+    "GET_GROUPS_NAME": "Get groups",
+    "ADD_GROUPS_NAME": "Add groups",
+    "UPDATE_GROUPS_NAME": "Update groups",
+    "DELETE_GROUPS_NAME": "Delete groups"
   }
 }
