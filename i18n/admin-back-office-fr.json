@@ -20,6 +20,8 @@
     "DETAIL": "Détail",
     "HISTORY": "Historique",
     "STATE": "Etat",
+    "RECURRENT": "Enregistrement journalier",
+    "RECURRENT_EXPLANATION": "En cochant cette case vous programmez un enregistrement journalier",
     "TABLE": {
       "NAME": "Nom",
       "STATUS": "Statut",

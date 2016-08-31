@@ -20,6 +20,8 @@
     "DETAIL": "Detail",
     "HISTORY": "History",
     "STATE": "State",
+    "RECURRENT": "Daily record",
+    "RECURRENT_EXPLANATION": "By checking this box you set a daily record",
     "TABLE": {
       "NAME": "Name",
       "STATUS": "Status",
