@@ -421,7 +421,7 @@ function deviceConnect() {
 
       // Verify if the name is defined
       if (!name) {
-        name = 'Device';
+        name = 'MANAGE.DEVICE.NAME';
       }
 
       self.deviceListener.setName(name, device.id, function(error) {
@@ -592,4 +592,5 @@ SocketProvider.prototype.removeDeviceById = function(deviceId) {
   if (index >= 0) {
     this.devices.splice(index, 1);
   }
+  this.clientListener.remove(deviceId);
 };

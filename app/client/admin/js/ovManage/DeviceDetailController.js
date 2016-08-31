@@ -69,39 +69,10 @@
     };
 
     /**
-     * Remove a device
-     *
-     * @param id
-     */
-    self.removeDevice = function(id) {
-      if ($scope.group && $scope.group.devices.length == 2) {
-        entityService.removeEntity('devices', manageName, id).then(function() {
-          entityService.removeEntity('groups', manageName, $scope.group.id).then(function() {
-            manageService.removeDevice(id);
-            manageService.removeGroup($scope.group.id);
-            self.closeDetail();
-            $scope.back();
-            $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_SUCCESS'), 4000);
-          });
-        }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_ERROR'), 4000);
-        });
-      } else {
-        entityService.removeEntity('devices', manageName, id).then(function() {
-          manageService.removeDevice(id);
-          self.closeDetail();
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_SUCCESS'), 4000);
-        }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_ERROR'), 4000);
-        });
-      }
-    };
-
-    /**
      * Display the input to update the device name
      */
     self.displayDeviceNameForm = function() {
-      self.selectedDeviceName = self.selectedDevice.name;
+      self.selectedDeviceName = $filter('translate')(self.selectedDevice.name);
       self.selectedDevice.displayInputName = !self.selectedDevice.displayInputName;
     };
 
@@ -153,6 +124,7 @@
     /**
      * Permits to merge date and time for a schedule
      *
+     * @private
      * @param {DateTime} date The date (begin or end) defined for a schedule
      * @param {DateTime} time The time (begin or end) defined for a schedule
      */
@@ -168,6 +140,7 @@
     /**
      * Verify if the dates of the new scheduled job are not in conflicts with the other scheduled jobs
      *
+     * @private
      * @param {DateTime} dateTimeBegin The begin date of the schedule
      * @param {DateTime} dateTimeEnd the end date of the schedule
      */
@@ -286,52 +259,6 @@
     };
 
     /**
-     * Remove a specific schedule
-     *
-     * @param {String} scheduleId The schedule id
-     */
-    self.removeSchedule = function(scheduleId) {
-      var model = (self.selectedDevice.devices) ? 'groups' : 'devices',
-        schedules = self.selectedDevice.schedules,
-        scheduleIndex = schedules.findIndex(function(schedule) {
-          return schedule.scheduleId === scheduleId;
-        }),
-        beginDate = new Date(schedules[scheduleIndex].beginDate),
-        endDate = new Date(schedules[scheduleIndex].endDate),
-        beginTime = beginDate.getHours() + ':' + beginDate.getMinutes(),
-        endTime = endDate.getHours() + ':' + endDate.getMinutes(),
-        now = new Date(),
-        nomTime = now.getHours() + ':' + now.getMinutes(),
-        params = {
-          entityId: self.selectedDevice.id,
-          entityType: model,
-          scheduleId: scheduleId,
-          beginDate: beginDate,
-          endDate: endDate,
-          recurrent: schedules[scheduleIndex].recurrent
-        };
-
-      // Verify if the record is not in progress
-      if (beginDate <= now && endDate >= now) {
-        if (schedules[scheduleIndex].recurrent && (beginTime >= nomTime && endTime <= nomTime)) {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.RECORD_IN_PROGRESS'), 4000);
-        } else {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.RECORD_IN_PROGRESS'), 4000);
-        }
-      } else {
-        deviceService.removeScheduledJob({schedules: schedules, params: params}).then(function() {
-
-          // Update the schedules
-          schedules.splice(scheduleIndex, 1);
-          self.selectedDevice.schedules = schedules;
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.SCHEDULE.REMOVE_SUCCESS'), 4000);
-        }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.REMOVE_ERROR'), 4000);
-        });
-      }
-    };
-
-    /**
      * Start a new recording session for a device or a group of devices
      */
     self.startRecord = function() {
@@ -416,11 +343,59 @@
     };
 
     /**
+     * Remove a specific schedule
+     *
+     * @private
+     * @param {String} scheduleId The schedule id
+     */
+    function removeSchedule(scheduleId) {
+      var model = (self.selectedDevice.devices) ? 'groups' : 'devices',
+        schedules = self.selectedDevice.schedules,
+        scheduleIndex = schedules.findIndex(function(schedule) {
+          return schedule.scheduleId === scheduleId;
+        }),
+        beginDate = new Date(schedules[scheduleIndex].beginDate),
+        endDate = new Date(schedules[scheduleIndex].endDate),
+        beginTime = beginDate.getHours() + ':' + beginDate.getMinutes(),
+        endTime = endDate.getHours() + ':' + endDate.getMinutes(),
+        now = new Date(),
+        nomTime = now.getHours() + ':' + now.getMinutes(),
+        params = {
+          entityId: self.selectedDevice.id,
+          entityType: model,
+          scheduleId: scheduleId,
+          beginDate: beginDate,
+          endDate: endDate,
+          recurrent: schedules[scheduleIndex].recurrent
+        };
+
+      // Verify if the record is not in progress
+      if (beginDate <= now && endDate >= now) {
+        if (schedules[scheduleIndex].recurrent && (beginTime >= nomTime && endTime <= nomTime)) {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.RECORD_IN_PROGRESS'), 4000);
+        } else {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.RECORD_IN_PROGRESS'), 4000);
+        }
+      } else {
+        deviceService.removeScheduledJob({schedules: schedules, params: params}).then(function() {
+
+          // Update the schedules
+          schedules.splice(scheduleIndex, 1);
+          self.selectedDevice.schedules = schedules;
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.SCHEDULE.REMOVE_SUCCESS'), 4000);
+        }, function() {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.REMOVE_ERROR'), 4000);
+        });
+      }
+    }
+
+    /**
      * Remove a specific history
      *
+     * @private
      * @param {String} historyId The history id
      */
-    self.removeHistory = function(historyId) {
+    function removeHistory(historyId) {
       var model = (self.selectedDevice.devices) ? 'groups' : 'devices',
         history = self.selectedDevice.history,
         historyIndex = self.selectedDevice.history.findIndex(function(history) {
@@ -436,7 +411,22 @@
       }, function() {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.HISTORY.REMOVE_ERROR'), 4000);
       });
-    };
+    }
+
+    /**
+     * Remove a device
+     *
+     * @private
+     * @param id
+     */
+    function removeDevice(id) {
+      entityService.removeEntity('devices', manageName, id).then(function() {
+        manageService.removeDevice(id);
+        $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_SUCCESS'), 4000);
+      }, function() {
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_ERROR'), 4000);
+      });
+    }
 
     /**
      * Open a modal, apply callback on OK promise and remove device
@@ -461,13 +451,13 @@
       modalInstance.result.then(function() {
         switch (action) {
           case 'REMOVE_DEVICE':
-            self.removeDevice(id);
+            removeDevice(id);
             break;
           case 'REMOVE_SCHEDULE':
-            self.removeSchedule(id);
+            removeSchedule(id);
             break;
           case 'REMOVE_HISTORY':
-            self.removeHistory(id);
+            removeHistory(id);
             break;
           default:
             break;

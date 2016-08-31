@@ -58,6 +58,12 @@
         manageService.updateDevice(data);
         $scope.$apply();
       });
+
+      // Device remove listener
+      $scope.socket.on('remove', function(data) {
+        manageService.removeEntity(data.id);
+        $scope.$apply();
+      });
     }
 
     /**

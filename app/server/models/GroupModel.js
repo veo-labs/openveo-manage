@@ -49,7 +49,7 @@ GroupModel.prototype.add = function(data, callback) {
 
   var group = {
     id: data.id || shortid.generate(),
-    name: data.name || 'Groupe',
+    name: data.name || 'MANAGE.GROUP.NAME',
     schedules: [],
     history: [
       {

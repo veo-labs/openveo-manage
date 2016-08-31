@@ -265,7 +265,8 @@
         return id == workingDevice.id;
       });
 
-      devices.acceptedDevices.splice(deviceIndex, 1);
+      if (deviceIndex !== -1)
+        devices.acceptedDevices.splice(deviceIndex, 1);
     }
 
     /**
@@ -410,6 +411,28 @@
       return defer.promise;
     }
 
+    /**
+     * Remove a specific device or group
+     *
+     * @param {String} id the id of a device or a group
+     */
+    function removeEntity(id) {
+      var entity = (getGroup(id)) ? 'groups' : 'devices',
+        groupIndex;
+
+      if (entity === 'devices') {
+        removeDevice(id);
+        $rootScope.$broadcast('close.window');
+      } else {
+        groupIndex = groups.findIndex(function(groupId) {
+          return id == groupId;
+        });
+
+        if (groupIndex !== -1)
+          groups.splice(groupIndex, 1);
+      }
+    }
+
     return {
       getGroups: getGroups,
       getDevices: getDevices,
@@ -422,7 +445,8 @@
       manageSelectedDevice: manageSelectedDevice,
       addDevicesToGroup: addDevicesToGroup,
       removeDeviceFromGroup: removeDeviceFromGroup,
-      addToHistory: addToHistory
+      addToHistory: addToHistory,
+      removeEntity: removeEntity
     };
 
   }

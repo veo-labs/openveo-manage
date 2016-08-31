@@ -34,3 +34,12 @@ ClientListener.prototype.hello = function(device) {
 ClientListener.prototype.update = function(key, data, id) {
   this.ioClient.emit('update', {key: key, data: data, id: id});
 };
+
+/**
+ * Send an event to the client for removing the device or group
+ *
+ * @param {String} id the device or group id to remove
+ */
+ClientListener.prototype.remove = function(id) {
+  this.ioClient.emit('remove', {id: id});
+};

@@ -59,6 +59,11 @@ module.exports = {
     httpCode: 500,
     module: 'manage'
   },
+  UPDATE_GROUP_ERROR: {
+    code: 0x009,
+    httpCode: 500,
+    module: 'manage'
+  },
 
   // Authentication errors
   UPDATE_DEVICE_FORBIDDEN: {
@@ -68,6 +73,11 @@ module.exports = {
   },
   UPDATE_HISTORY_FORBIDDEN: {
     code: 0x201,
+    httpCode: 403,
+    module: 'manage'
+  },
+  UPDATE_GROUP_FORBIDDEN: {
+    code: 0x202,
     httpCode: 403,
     module: 'manage'
   },

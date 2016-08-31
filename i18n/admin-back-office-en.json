@@ -36,7 +36,11 @@
     "RECORD": "Record",
     "REMOVE_DEVICE": "Remove encoder"
   },
+  "GROUP": {
+    "NAME": "Group"
+  },
   "DEVICE": {
+    "NAME": "Encoder",
     "READY": "Ready",
     "DISCONNECTED": "Disconnected",
     "RECORDING": "Recording",

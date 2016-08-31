@@ -36,7 +36,11 @@
     "RECORD": "Enregistrer",
     "REMOVE_DEVICE": "Supprimer l'encodeur"
   },
+  "GROUP": {
+    "NAME": "Groupe"
+  },
   "DEVICE": {
+    "NAME": "Encodeur",
     "READY": "Prêt",
     "DISCONNECTED": "Déconnecté",
     "RECORDING": "En cours d'enregistrement",

@@ -10,6 +10,7 @@ var configDir = openVeoAPI.fileSystem.getConfDir();
 var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
 var namespace = manageConf.namespace;
 var errors = process.requireManage('app/server/httpErrors.js');
+var AccessError = openVeoAPI.errors.AccessError;
 
 /**
  * Creates a GroupController
@@ -53,5 +54,44 @@ GroupController.prototype.removeEntityAction = function(request, response, next)
 
     // Missing id of the group
     next(errors.REMOVE_GROUP_MISSING_PARAMETERS);
+  }
+};
+
+/**
+ * Updates a group.
+ *
+ * Expects the following url parameters :
+ *  - **id** The id of the entity to update
+ *
+ * Also expects data in body.
+ *
+ * @method updateEntityAction
+ */
+EntityController.prototype.updateEntityAction = function(request, response, next) {
+  if (request.params.id && request.body) {
+    var model = new this.Entity(request.user),
+      entityId = request.params.id,
+      data = request.body,
+      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
+
+    model.update(entityId, request.body, function(error, updateCount) {
+      if (error && (error instanceof AccessError))
+        next(errors.UPDATE_GROUP_FORBIDDEN);
+      else if (error) {
+        process.logger.error((error && error.message) || 'Fail updating',
+          {method: 'updateEntityAction', entity: entityId});
+        next(errors.UPDATE_GROUP_ERROR);
+      } else {
+
+        // Permits to keep all users up to data
+        socketProvider.updateDevice(entityId, data);
+        response.send({error: null, status: 'ok'});
+      }
+    });
+  } else {
+
+    // Missing id of the entity or the datas
+    next(errors.UPDATE_ENTITY_MISSING_PARAMETERS);
+
   }
 };

@@ -2,7 +2,7 @@
     <!-- Devices groups -->
     <div class="device-group col-sm-4 col-md-3" ng-repeat="group in groups track by group.id" ng-class="manage.resize">
         <div class="dropzone well group" ng-attr-data-id="{{ group.id }}" ng-class="group['ui-state']" ng-attr-data-selected="{{ group.isSelected }}">
-            <span class="title" ng-bind="group.name"></span>
+            <span class="title" ng-bind="group.name | translate"></span>
             <span class="count">
               {{ group.devices.length }}
               <span class="mini-box"></span>
@@ -19,7 +19,7 @@
     <!-- Devices -->
     <div class="device accepted col-sm-4 col-md-3" ng-repeat="device in acceptedDevices | orderBy:'name' track by device.id" ng-class="manage.resize" ng-if="!device.group">
         <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']" ng-attr-data-selected="{{ device.isSelected }}">
-            <span class="title" ng-bind="device.name"></span>
+            <span class="title" ng-bind="device.name | translate"></span>
             <div class="equipments">
                 <span class="camera" ng-class="device.inputs.camera || 'disconnected'"></span>
                 <span class="box" ng-class="device.status || 'disconnected'"></span>
@@ -93,7 +93,7 @@
     <h3 ng-bind="'MANAGE.REFUSED.TITLE' | translate"></h3>
     <div class="device col-sm-4 col-md-3" ng-repeat="device in refusedDevices track by device.id" ng-class="manage.resize">
         <div class="well" ng-attr-data-id="{{ device.id }}">
-            <span class="title" ng-bind="device.name"></span>
+            <span class="title" ng-bind="device.name | translate"></span>
             <div class="equipments">
                 <span class="box disconnected"></span>
             </div>
@@ -107,7 +107,7 @@
     <h3 ng-bind="'MANAGE.PENDING.TITLE' | translate"></h3>
     <div class="device demands col-sm-4 col-md-3" ng-repeat="device in pendingDevices track by device.id" ng-class="manage.resize">
         <div class="device-connexion well" ng-attr-data-id="{{ device.id }}">
-            <div class="title" ng-bind="('MANAGE.CONNEXION.TITLE' | translate) + device.name"></div>
+            <div class="title" ng-bind="('MANAGE.CONNEXION.TITLE' | translate) + (device.name | translate)"></div>
             <div class="mac" ng-bind="'@Mac: ' + device.id"></div>
             <div class="device"></div>
             <div class="choice">
