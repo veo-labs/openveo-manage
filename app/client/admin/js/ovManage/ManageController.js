@@ -43,6 +43,20 @@
     $scope.devicesConnexion = []; // Store all the new pending connexions
 
     /**
+     * Remove a device from the device connexion object on user response
+     *
+     * @param {int} id The device id to remove
+     */
+    function removeDeviceConnected(id) {
+      for (var i = 0; i < $scope.devicesConnexion.length; i++) {
+        if ($scope.devicesConnexion[i].id == id) {
+          $scope.devicesConnexion.splice(i, 1);
+          break;
+        }
+      }
+    }
+
+    /**
      * Initialize all socket.io listeners
      */
     function initializeListeners() {
@@ -62,6 +76,13 @@
       // Device remove listener
       $scope.socket.on('remove', function(data) {
         manageService.removeEntity(data.id);
+        $scope.$apply();
+      });
+
+      // Device accept or refused listener after hello
+      $scope.socket.on('updateState', function(data) {
+        removeDeviceConnected(data.device.id);
+        manageService.updateDeviceState(data.device, data.state, data.newState);
         $scope.$apply();
       });
     }

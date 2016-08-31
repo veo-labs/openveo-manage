@@ -38,8 +38,19 @@ ClientListener.prototype.update = function(key, data, id) {
 /**
  * Send an event to the client for removing the device or group
  *
+ * @method remove
  * @param {String} id the device or group id to remove
  */
 ClientListener.prototype.remove = function(id) {
   this.ioClient.emit('remove', {id: id});
+};
+
+/**
+ * Sned an event to the client when updating the state of a device
+ *
+ * @method updateState
+ * @param {Object} data Contain the id of the new device
+ */
+ClientListener.prototype.updateState = function(data) {
+  this.ioClient.emit('updateState', data);
 };

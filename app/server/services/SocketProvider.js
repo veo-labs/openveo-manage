@@ -381,6 +381,11 @@ function clientConnect() {
         }
       });
     });
+
+    // Listening for update state on device first connexion
+    socket.on('updateState', function(data) {
+      self.clientListener.updateState(data);
+    });
   });
 }
 

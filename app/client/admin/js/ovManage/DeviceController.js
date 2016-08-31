@@ -347,20 +347,6 @@
     }
 
     /**
-     * Remove a device from the device connexion object on user response
-     *
-     * @param {int} id The device id to remove
-     */
-    function removeDeviceConnected(id) {
-      for (var i = 0; i < $scope.devicesConnexion.length; i++) {
-        if ($scope.devicesConnexion[i].id == id) {
-          $scope.devicesConnexion.splice(i, 1);
-          break;
-        }
-      }
-    }
-
-    /**
      * Add pending/refused device to the accepted list of devices
      *
      * @param {Object} device The device object
@@ -376,10 +362,8 @@
 
         // Ask for device detail
         $scope.socket.emit('settings', [device.id]);
-        removeDeviceConnected(device.id);
-        manageService.updateDeviceState(device, state, self.STATE_ACCEPTED).then(function() {
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_SUCCESS'), 4000);
-        });
+        $scope.socket.emit('updateState', {device: device, state: state, newState: self.STATE_ACCEPTED});
+        $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_SUCCESS'), 4000);
       }, function() {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_ERROR'), 4000);
       });
@@ -398,10 +382,8 @@
       };
 
       entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
-        removeDeviceConnected(device.id);
-        manageService.updateDeviceState(device, state, self.STATE_REFUSED).then(function() {
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_SUCCESS'), 4000);
-        });
+        $scope.socket.emit('updateState', {device: device, state: state, newState: self.STATE_REFUSED});
+        $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_SUCCESS'), 4000);
       }, function() {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_ERROR'), 4000);
       });
