@@ -42,7 +42,28 @@
     "SPACE": "Disk space",
     "ERROR": "Error",
     "STOP_RECORDING": "Stop",
-    "TAG": "Tag"
+    "TAG": "Tag",
+    "ADD_TO_GROUP_SUCCESS": "The encoder has been added to the group: {{name}}",
+    "ADD_TO_GROUP_ERROR": "An error occurred while adding the encoder to the group: {{name}}",
+    "ADD_ACCEPTED_SUCCESS": "Encoder accepted",
+    "ADD_ACCEPTED_ERROR":"An error occurred while updating the encoder to the state accepted",
+    "ADD_REFUSED_SUCCESS": "Encoder refused",
+    "ADD_REFUSED_ERROR":"An error occurred while updating the encoder to the state refused",
+    "REMOVE_SUCCESS": "Encoder successfully removed",
+    "REMOVE_ERROR": "An error occurred. Removal of the encoder could not be performed",
+    "UPDATE_NAME_SUCCESS": "Update name successfully",
+    "UPDATE_NAME_ERROR": "An error occurred while updating the name",
+    "REMOVE_GROUP_SUCCESS": "Group successfully removed",
+    "REMOVE_GROUP_ERROR": "An error occurred. Removal of the group could not be performed"
+  },
+  "SCHEDULE": {
+    "DATE_ERROR": "The dates are not valid",
+    "CONFLICT_ERROR": "A scheduled job is already planned on this time slot",
+    "SAVE_SUCCESS": "Scheduled job saved",
+    "SAVE_ERROR": "An error occurred while adding the scheduled job",
+    "REMOVE_SUCCESS": "Scheduled job successfully removed",
+    "REMOVE_ERROR": "An error occurred. Removal of the scheduled job could not be performed",
+    "RECORD_IN_PROGRESS": "Unable to remove the scheduled job because the recording is in progress"
   },
   "HISTORY": {
     "CREATE_GROUP": "group creation",
@@ -52,6 +73,8 @@
     "TAG_RECORD": "Record tagged",
     "UPDATE_NAME": "Update name",
     "ADD_DEVICE_TO_GROUP": "Add to group",
-    "REMOVE_DEVICE_FROM_GROUP": "Remove from group"
+    "REMOVE_DEVICE_FROM_GROUP": "Remove from group",
+    "REMOVE_SUCCESS": "Element removed from history",
+    "REMOVE_ERROR": "An error occurred while removing the element from the history"
   }
 }

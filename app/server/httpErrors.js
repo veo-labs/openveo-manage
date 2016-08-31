@@ -106,5 +106,5 @@ module.exports = {
     code: 0x306,
     httpCode: 400,
     module: 'manage'
-  },
+  }
 };

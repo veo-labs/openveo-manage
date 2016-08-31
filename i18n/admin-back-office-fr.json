@@ -42,7 +42,28 @@
     "SPACE": "Espace disque",
     "ERROR": "Erreur",
     "STOP_RECORDING": "Arrêter",
-    "TAG": "Tagger"
+    "TAG": "Tagger",
+    "ADD_TO_GROUP_SUCCESS": "L'encodeur a été ajouté au groupe: {{name}}",
+    "ADD_TO_GROUP_ERROR": "Erreur lors de l'ajout de l'encodeur au groupe: {{name}}",
+    "ADD_ACCEPTED_SUCCESS": "Encodeur accepté",
+    "ADD_ACCEPTED_ERROR":"Erreur lors du passage au statut accepté de l'encodeur",
+    "ADD_REFUSED_SUCCESS": "Encodeur refusé",
+    "ADD_REFUSED_ERROR":"Erreur lors du passage au statut refusé de l'encodeur",
+    "REMOVE_SUCCESS": "L'encodeur a été supprimer",
+    "REMOVE_ERROR": "Une erreur est survenue. La suppression de l'encodeur n'a pas pu être effectuée",
+    "UPDATE_NAME_SUCCESS": "Mise à jour du nom appliquée",
+    "UPDATE_NAME_ERROR": "Erreur lors de la mise à jour du nom",
+    "REMOVE_GROUP_SUCCESS": "Le groupe a été supprimé",
+    "REMOVE_GROUP_ERROR": "Une erreur est survenue. La suppression du groupe n'a pas pu être effectuée"
+  },
+  "SCHEDULE": {
+    "DATE_ERROR": "Les dates saisies ne sont pas valides",
+    "CONFLICT_ERROR": "Une programmation a déjà lieu sur cette plage horaire",
+    "SAVE_SUCCESS": "Programmation ajoutée avec succès",
+    "SAVE_ERROR": "Erreur lors de l'ajout de la programmation",
+    "REMOVE_SUCCESS": "La programmation a été supprimée",
+    "REMOVE_ERROR": "Une erreur est survenue. La suppression de la programmation n'a pas pu être effectuée",
+    "RECORD_IN_PROGRESS": "Impossible de supprimer la programmation, car l'enregistrement est en cours"
   },
   "HISTORY": {
     "CREATE_GROUP": "Création du groupe",
@@ -52,6 +73,8 @@
     "TAG_RECORD": "Taggage de l'enregistrement",
     "UPDATE_NAME": "Mise à jour du nom",
     "ADD_DEVICE_TO_GROUP": "Ajout au groupe",
-    "REMOVE_DEVICE_FROM_GROUP": "Suppression du groupe"
+    "REMOVE_DEVICE_FROM_GROUP": "Suppression du groupe",
+    "REMOVE_SUCCESS": "Elément supprimé de l'historique",
+    "REMOVE_ERROR": "Erreur lors de la suppression de l'élément depuis l'historique"
   }
 }

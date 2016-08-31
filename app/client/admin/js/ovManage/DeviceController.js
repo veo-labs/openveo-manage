@@ -174,10 +174,10 @@
      * @param {Boolean} isGroup True if the dropzone is a group
      */
     function addDeviceToGroup(draggableId, dropzoneId, isGroup) {
+      var group;
 
       // Create the group if it's two devices
       if (!isGroup) {
-        var group;
 
         entityService.addEntity('groups', manageName, {}).then(function(result) {
           group = result.data.entity;
@@ -192,20 +192,26 @@
             deviceService.toggleScheduledJobs(dropzoneId, null, 'createGroup').then(function() {});
           });
           manageService.addDevicesToGroup(draggableId, dropzoneId, group).then(function() {});
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_SUCCESS', '',
+            {name: group.name}), 4000);
         }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_ERROR', '',
+            {name: group.name}), 4000);
         });
       } else {
+        group = manageService.getGroup(dropzoneId);
+
         entityService.updateEntity('devices', manageName, draggableId, {group: dropzoneId}).then(function() {
           manageService.addDevicesToGroup(draggableId, dropzoneId).then(function() {});
 
           // Update device scheduled jobs
           deviceService.toggleScheduledJobs(draggableId, dropzoneId, 'addDeviceToGroup').then(function() {});
 
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_SUCCESS', '',
+            {name: group.name}), 4000);
         }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_ERROR', '',
+            {name: group.name}), 4000);
         });
       }
     }
@@ -372,10 +378,10 @@
         $scope.socket.emit('settings', [device.id]);
         removeDeviceConnected(device.id);
         manageService.updateDeviceState(device, state, self.STATE_ACCEPTED).then(function() {
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_SUCCESS'), 4000);
         });
       }, function() {
-        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_ERROR'), 4000);
       });
     };
 
@@ -394,10 +400,10 @@
       entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
         removeDeviceConnected(device.id);
         manageService.updateDeviceState(device, state, self.STATE_REFUSED).then(function() {
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.SAVE_SUCCESS'), 4000);
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_SUCCESS'), 4000);
         });
       }, function() {
-        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.SAVE_ERROR'), 4000);
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_ERROR'), 4000);
       });
     };
 

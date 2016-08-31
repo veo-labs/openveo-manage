@@ -314,9 +314,9 @@
       // Verify if the record is not in progress
       if (beginDate <= now && endDate >= now) {
         if (schedules[scheduleIndex].recurrent && (beginTime >= nomTime && endTime <= nomTime)) {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.ERROR.RECORD_IN_PROGRESS'), 4000);
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.RECORD_IN_PROGRESS'), 4000);
         } else {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.ERROR.RECORD_IN_PROGRESS'), 4000);
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.SCHEDULE.RECORD_IN_PROGRESS'), 4000);
         }
       } else {
         deviceService.removeScheduledJob({schedules: schedules, params: params}).then(function() {
