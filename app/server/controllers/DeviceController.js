@@ -133,7 +133,7 @@ DeviceController.prototype.removeEntityAction = function(request, response, next
       model.remove(entityId, function(error, deleteCount) {
         if (error) {
           process.logger.error(error.message, {error: error, method: 'removeEntityAction'});
-          next(errors.REMOVE_ENTITY_ERROR);
+          next(errors.REMOVE_DEVICE_ERROR);
         } else {
 
           // Update cached device

@@ -43,7 +43,7 @@ GroupController.prototype.removeEntityAction = function(request, response, next)
       model.remove(entityId, function(error, deleteCount) {
         if (error) {
           process.logger.error(error.message, {error: error, method: 'removeEntityAction'});
-          next(errors.REMOVE_ENTITY_ERROR);
+          next(errors.REMOVE_GROUP_ERROR);
         } else {
           response.send({error: null, status: 'ok'});
         }
