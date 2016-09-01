@@ -194,10 +194,10 @@
 
           $scope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: group});
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_SUCCESS', '',
-            {name: group.name}), 4000);
+            {name: $filter('translate')(group.name)}), 4000);
         }, function() {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_ERROR', '',
-            {name: group.name}), 4000);
+            {name: $filter('translate')(group.name)}), 4000);
         });
       } else {
         group = manageService.getGroup(dropzoneId);
@@ -209,10 +209,10 @@
           deviceService.toggleScheduledJobs(draggableId, dropzoneId, 'addDeviceToGroup').then(function() {});
 
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_SUCCESS', '',
-            {name: group.name}), 4000);
+            {name: $filter('translate')(group.name)}), 4000);
         }, function() {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_ERROR', '',
-            {name: group.name}), 4000);
+            {name: $filter('translate')(group.name)}), 4000);
         });
       }
     }
