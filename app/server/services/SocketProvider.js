@@ -7,6 +7,9 @@
 var util = require('util');
 var events = require('events');
 var socket = require('socket.io');
+var cookie = require('cookie');
+var cookieParser = require('cookie-parser');
+var openVeoAPI = require('@openveo/api');
 var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
 var DeviceListener = process.requireManage('app/server/eventListeners/DeviceListener');
 var ClientListener = process.requireManage('app/server/eventListeners/ClientListener');
@@ -319,7 +322,28 @@ function disconnectDevice(device) {
  * @private
  */
 function clientConnect() {
-  var self = this;
+  var self = this,
+    database = openVeoAPI.applicationStorage.getDatabase(),
+    sessionSecret = openVeoAPI.applicationStorage.getSessionSecret(),
+    sessionStore = database.getStore('core_sessions'),
+    parsedCookie,
+    sessionId;
+
+  // Verify if the user is connected
+  this.ioClient.use(function(socket, next) {
+    parsedCookie = cookie.parse(socket.handshake.headers.cookie);
+    sessionId = cookieParser.signedCookie(parsedCookie['connect.sid'], sessionSecret);
+
+    if (!sessionId)
+      return next(new Error('Not authorized'));
+
+    sessionStore.get(sessionId, function(error, session) {
+      if (error || !session.passport.user)
+        return next(new Error('Not authorized'));
+
+      next();
+    });
+  });
 
   this.ioClient.on('connection', function(socket) {
 
