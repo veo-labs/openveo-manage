@@ -191,9 +191,8 @@
             // Update device scheduled jobs
             deviceService.toggleScheduledJobs(dropzoneId, null, 'createGroup').then(function() {});
           });
-          manageService.addDevicesToGroup(draggableId, dropzoneId, group).then(function(result) {
-            $scope.socket.emit('create.group', result.group);
-          });
+
+          $scope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: group});
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_SUCCESS', '',
             {name: group.name}), 4000);
         }, function() {
@@ -204,7 +203,7 @@
         group = manageService.getGroup(dropzoneId);
 
         entityService.updateEntity('devices', manageName, draggableId, {group: dropzoneId}).then(function() {
-          manageService.addDevicesToGroup(draggableId, dropzoneId).then(function() {});
+          $scope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: null});
 
           // Update device scheduled jobs
           deviceService.toggleScheduledJobs(draggableId, dropzoneId, 'addDeviceToGroup').then(function() {});

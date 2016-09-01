@@ -71,17 +71,6 @@
     }
 
     /**
-     * Add the new group to the groups array
-     *
-     * @param {Object} group The created group
-     * @method addGroup
-     */
-    function addGroup(group) {
-      $rootScope.$broadcast('close.window');
-      groups.push(group);
-    }
-
-    /**
      * Save the event to the history
      *
      * @param {String} id The id of the device or the group
@@ -371,6 +360,7 @@
         group.name).then(function() {});
 
         group.devices.push(devices.acceptedDevices[firstIndex], devices.acceptedDevices[secondIndex]);
+        groups.push(group);
       } else {
         groups.map(function(group) {
           if (group.id == dropzoneId) {
@@ -391,7 +381,8 @@
       }, 250);
 
       return $q.when({
-        group: group
+        groups: groups,
+        devices: devices
       });
     }
 
@@ -426,33 +417,10 @@
       return defer.promise;
     }
 
-    /**
-     * Remove a specific device or group
-     *
-     * @param {String} id the id of a device or a group
-     */
-    function removeEntity(id) {
-      var entity = (getGroup(id)) ? 'groups' : 'devices',
-        groupIndex;
-
-      if (entity === 'devices') {
-        removeDevice(id);
-        $rootScope.$broadcast('close.window');
-      } else {
-        groupIndex = groups.findIndex(function(groupId) {
-          return id == groupId;
-        });
-
-        if (groupIndex !== -1)
-          groups.splice(groupIndex, 1);
-      }
-    }
-
     return {
       getGroups: getGroups,
       getDevices: getDevices,
       getGroup: getGroup,
-      addGroup: addGroup,
       removeGroup: removeGroup,
       getDevice: getDevice,
       removeDevice: removeDevice,
@@ -461,8 +429,7 @@
       manageSelectedDevice: manageSelectedDevice,
       addDevicesToGroup: addDevicesToGroup,
       removeDeviceFromGroup: removeDeviceFromGroup,
-      addToHistory: addToHistory,
-      removeEntity: removeEntity
+      addToHistory: addToHistory
     };
 
   }

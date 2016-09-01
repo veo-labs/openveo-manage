@@ -74,8 +74,8 @@
       });
 
       // Device remove listener
-      $scope.socket.on('remove', function(data) {
-        manageService.removeEntity(data.id);
+      $scope.socket.on('remove.device', function(data) {
+        manageService.removeDevice(data.id);
         $scope.$apply();
       });
 
@@ -86,16 +86,14 @@
         $scope.$apply();
       });
 
-      // Group creation listener
-      $scope.socket.on('create.group', function(group) {
-        manageService.addGroup(group);
-        $scope.$apply();
+      // Add device to group listener
+      $scope.socket.on('group.addDevice', function(data) {
+        manageService.addDevicesToGroup(data.firstId, data.secondId, data.group).then(function() {});
       });
 
       // Group delete listener
       $scope.socket.on('remove.group', function(data) {
         manageService.removeGroup(data.id);
-        $scope.$apply();
       });
     }
 

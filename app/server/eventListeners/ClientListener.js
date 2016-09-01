@@ -36,13 +36,13 @@ ClientListener.prototype.update = function(key, data, id) {
 };
 
 /**
- * Send an event to the client for removing the device or group
+ * Send an event to the client for removing the device
  *
- * @method remove
- * @param {String} id the device or group id to remove
+ * @method removeDevice
+ * @param {String} id the device id to remove
  */
-ClientListener.prototype.remove = function(id) {
-  this.ioClient.emit('remove', {id: id});
+ClientListener.prototype.removeDevice = function(id) {
+  this.ioClient.emit('remove.device', {id: id});
 };
 
 /**
@@ -56,13 +56,13 @@ ClientListener.prototype.updateState = function(data) {
 };
 
 /**
- * Send an event to the client when creating a new group
+ * Send an event to the client when adding a device to a group
  *
- * @method createGroup
- * @param {Object} group The created group with its devices
+ * @method addDeviceToGroup
+ * @param {Object} data Contain the device ids an optionally the group
  */
-ClientListener.prototype.createGroup = function(group) {
-  this.ioClient.emit('create.group', group);
+ClientListener.prototype.addDeviceToGroup = function(data) {
+  this.ioClient.emit('group.addDevice', data);
 };
 
 /**

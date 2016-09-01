@@ -388,8 +388,8 @@ function clientConnect() {
     });
 
     // Listening for group creation event
-    socket.on('create.group', function(data) {
-      self.clientListener.createGroup(data);
+    socket.on('group.addDevice', function(data) {
+      self.clientListener.addDeviceToGroup(data);
     });
 
     // Listening for group remove event
@@ -606,6 +606,6 @@ SocketProvider.prototype.removeDeviceById = function(deviceId) {
 
   if (index >= 0) {
     this.devices.splice(index, 1);
+    this.clientListener.removeDevice(deviceId);
   }
-  this.clientListener.remove(deviceId);
 };
