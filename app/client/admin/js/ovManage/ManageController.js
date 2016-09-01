@@ -80,9 +80,21 @@
       });
 
       // Device accept or refused listener after hello
-      $scope.socket.on('updateState', function(data) {
+      $scope.socket.on('update.state', function(data) {
         removeDeviceConnected(data.device.id);
         manageService.updateDeviceState(data.device, data.state, data.newState);
+        $scope.$apply();
+      });
+
+      // Group creation listener
+      $scope.socket.on('create.group', function(group) {
+        manageService.addGroup(group);
+        $scope.$apply();
+      });
+
+      // Group delete listener
+      $scope.socket.on('remove.group', function(data) {
+        manageService.removeGroup(data.id);
         $scope.$apply();
       });
     }
@@ -141,13 +153,8 @@
       // If there is only 2 devices the group is removed
       if (group.devices.length == 2) {
         entityService.removeEntity('groups', manageName, groupId).then(function() {
-          manageService.removeGroup(groupId);
+          $scope.socket.emit('remove.group', {id: groupId});
 
-          if (!$scope.group) {
-            $scope.$broadcast('close.window');
-          } else {
-            $scope.back();
-          }
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_SUCCESS'), 4000);
         }, function() {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_ERROR'), 4000);

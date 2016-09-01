@@ -71,6 +71,17 @@
     }
 
     /**
+     * Add the new group to the groups array
+     *
+     * @param {Object} group The created group
+     * @method addGroup
+     */
+    function addGroup(group) {
+      $rootScope.$broadcast('close.window');
+      groups.push(group);
+    }
+
+    /**
      * Save the event to the history
      *
      * @param {String} id The id of the device or the group
@@ -99,6 +110,12 @@
         });
 
       groups.splice(groupIndex, 1);
+
+      if ($route.current.params.id) {
+        $rootScope.$broadcast('back');
+      } else {
+        $rootScope.$broadcast('close.window');
+      }
 
       // Update devices belonging to the group
       $timeout(function() {
@@ -354,7 +371,6 @@
         group.name).then(function() {});
 
         group.devices.push(devices.acceptedDevices[firstIndex], devices.acceptedDevices[secondIndex]);
-        groups.push(group);
       } else {
         groups.map(function(group) {
           if (group.id == dropzoneId) {
@@ -375,8 +391,7 @@
       }, 250);
 
       return $q.when({
-        groups: groups,
-        devices: devices
+        group: group
       });
     }
 
@@ -437,6 +452,7 @@
       getGroups: getGroups,
       getDevices: getDevices,
       getGroup: getGroup,
+      addGroup: addGroup,
       removeGroup: removeGroup,
       getDevice: getDevice,
       removeDevice: removeDevice,

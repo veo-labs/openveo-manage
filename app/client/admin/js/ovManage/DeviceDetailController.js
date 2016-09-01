@@ -484,6 +484,11 @@
       self.closeDetail();
     });
 
+    // Lister event for go to previous page
+    $scope.$on('back', function(event) {
+      $scope.back();
+    });
+
     // Listen window resize event to update height of elements
     window.addEventListener('resize', function() {
       actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');

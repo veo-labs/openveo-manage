@@ -46,11 +46,31 @@ ClientListener.prototype.remove = function(id) {
 };
 
 /**
- * Sned an event to the client when updating the state of a device
+ * Send an event to the client when updating the state of a device
  *
  * @method updateState
  * @param {Object} data Contain the id of the new device
  */
 ClientListener.prototype.updateState = function(data) {
-  this.ioClient.emit('updateState', data);
+  this.ioClient.emit('update.state', data);
+};
+
+/**
+ * Send an event to the client when creating a new group
+ *
+ * @method createGroup
+ * @param {Object} group The created group with its devices
+ */
+ClientListener.prototype.createGroup = function(group) {
+  this.ioClient.emit('create.group', group);
+};
+
+/**
+ * Send an event to the client when removing a group
+ *
+ * @method removeGroup
+ * @param {Object} data Contain the id of the group to remove
+ */
+ClientListener.prototype.removeGroup = function(data) {
+  this.ioClient.emit('remove.group', data);
 };

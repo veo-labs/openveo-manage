@@ -191,7 +191,9 @@
             // Update device scheduled jobs
             deviceService.toggleScheduledJobs(dropzoneId, null, 'createGroup').then(function() {});
           });
-          manageService.addDevicesToGroup(draggableId, dropzoneId, group).then(function() {});
+          manageService.addDevicesToGroup(draggableId, dropzoneId, group).then(function(result) {
+            $scope.socket.emit('create.group', result.group);
+          });
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_SUCCESS', '',
             {name: group.name}), 4000);
         }, function() {
@@ -362,7 +364,7 @@
 
         // Ask for device detail
         $scope.socket.emit('settings', [device.id]);
-        $scope.socket.emit('updateState', {device: device, state: state, newState: self.STATE_ACCEPTED});
+        $scope.socket.emit('update.state', {device: device, state: state, newState: self.STATE_ACCEPTED});
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_SUCCESS'), 4000);
       }, function() {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_ERROR'), 4000);
@@ -382,7 +384,7 @@
       };
 
       entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
-        $scope.socket.emit('updateState', {device: device, state: state, newState: self.STATE_REFUSED});
+        $scope.socket.emit('update.state', {device: device, state: state, newState: self.STATE_REFUSED});
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_SUCCESS'), 4000);
       }, function() {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_ERROR'), 4000);

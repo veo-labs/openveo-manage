@@ -383,8 +383,18 @@ function clientConnect() {
     });
 
     // Listening for update state on device first connexion
-    socket.on('updateState', function(data) {
+    socket.on('update.state', function(data) {
       self.clientListener.updateState(data);
+    });
+
+    // Listening for group creation event
+    socket.on('create.group', function(data) {
+      self.clientListener.createGroup(data);
+    });
+
+    // Listening for group remove event
+    socket.on('remove.group', function(data) {
+      self.clientListener.removeGroup(data);
     });
   });
 }
