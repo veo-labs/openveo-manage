@@ -387,9 +387,14 @@ function clientConnect() {
       self.clientListener.updateState(data);
     });
 
-    // Listening for group creation event
+    // Listening for add device to group event
     socket.on('group.addDevice', function(data) {
       self.clientListener.addDeviceToGroup(data);
+    });
+
+    // Listening for remove device from group event
+    socket.on('group.removeDevice', function(data) {
+      self.clientListener.removeDeviceFromGroup(data);
     });
 
     // Listening for group remove event

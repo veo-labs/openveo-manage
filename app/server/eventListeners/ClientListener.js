@@ -66,6 +66,16 @@ ClientListener.prototype.addDeviceToGroup = function(data) {
 };
 
 /**
+ * Send an event to the client when removing a device from a group
+ *
+ * @method removeDeviceFromGroup
+ * @param {Object} data Contain the device ids an optionally the group
+ */
+ClientListener.prototype.removeDeviceFromGroup = function(data) {
+  this.ioClient.emit('group.removeDevice', data);
+};
+
+/**
  * Send an event to the client when removing a group
  *
  * @method removeGroup

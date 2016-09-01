@@ -91,6 +91,14 @@
         manageService.addDevicesToGroup(data.firstId, data.secondId, data.group).then(function() {});
       });
 
+      // Remove device from a group listener
+      $scope.socket.on('group.removeDevice', function(data) {
+        manageService.removeDeviceFromGroup(data.deviceId, data.groupId).then(function() {
+          deviceService.toggleScheduledJobs(data.deviceId, data.groupId, 'removeDeviceFromGroup').then(function() {});
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_SUCCESS'), 4000);
+        });
+      });
+
       // Group delete listener
       $scope.socket.on('remove.group', function(data) {
         manageService.removeGroup(data.id);
@@ -159,10 +167,7 @@
         });
       } else {
         entityService.updateEntity('devices', manageName, deviceId, {group: null}).then(function() {
-          manageService.removeDeviceFromGroup(deviceId, groupId).then(function() {
-            deviceService.toggleScheduledJobs(deviceId, groupId, 'removeDeviceFromGroup').then(function() {});
-            $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_SUCCESS'), 4000);
-          });
+          $scope.socket.emit('group.removeDevice', {deviceId: deviceId, groupId: groupId});
         }, function() {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_ERROR'), 4000);
         });
