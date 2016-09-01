@@ -398,11 +398,13 @@
       var defer = $q.defer(),
         group = getGroup(groupId),
         device = getDevice(deviceId, true),
-        deviceIndex = group.devices.findIndex(function(id) {
-          return id == deviceId;
+        deviceIndex = group.devices.findIndex(function(data) {
+          return data.id == deviceId;
         });
 
-      group.devices.splice(deviceIndex, 1);
+      if (deviceIndex !== -1) {
+        group.devices.splice(deviceIndex, 1);
+      }
       delete device.group;
 
       // Save to history
