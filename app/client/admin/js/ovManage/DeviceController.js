@@ -113,6 +113,11 @@
         y = parseInt(target.getBoundingClientRect().top - relatedTarget.parentNode.getBoundingClientRect().top),
         element = angular.element(relatedTarget);
 
+      if (target.classList.contains('group')) {
+        x = parseInt(x + 41);
+        y = parseInt(y - 66);
+      }
+
       element.css({
         '-webkit-transition-duration': '.75s',
         'transition-duration': '.75s',
