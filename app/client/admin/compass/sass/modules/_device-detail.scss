@@ -317,11 +317,6 @@
       }
 
       &.detail-page {
-
-        @include mobile() {
-          left: 33.33333%;
-        }
-
         .status {
           .name {
             color: $dark-blue;
@@ -382,12 +377,6 @@
         }
         .storage > .text {
           font-weight: bold;
-        }
-      }
-      &.history-page {
-
-        @include mobile() {
-          left: 66.66666%;
         }
       }
     }
