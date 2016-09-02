@@ -94,8 +94,8 @@
      */
     function removeGroup(id) {
       var group = getGroup(id),
-        groupIndex = groups.findIndex(function(groupId) {
-          return id == groupId;
+        groupIndex = groups.findIndex(function(data) {
+          return id == data.id;
         });
 
       groups.splice(groupIndex, 1);
@@ -121,6 +121,55 @@
     }
 
     /**
+     * Find a specific device in devices object
+     *
+     * @param {String} id The device id
+     * @returns {*}
+     * @method findDevice
+     */
+    function findDevice(id) {
+      var result = {};
+
+      if (!devices) {
+        return getDevices().then(function() {
+          devices.acceptedDevices.map(function(device) {
+            if (device.id === id) {
+              result = device;
+            }
+          });
+          devices.pendingDevices.map(function(device) {
+            if (device.id === id) {
+              result = device;
+            }
+          });
+          devices.refusedDevices.map(function(device) {
+            if (device.id === id) {
+              result = device;
+            }
+          });
+        });
+      }
+
+      devices.acceptedDevices.map(function(device) {
+        if (device.id === id) {
+          result = device;
+        }
+      });
+      devices.pendingDevices.map(function(device) {
+        if (device.id === id) {
+          result = device;
+        }
+      });
+      devices.refusedDevices.map(function(device) {
+        if (device.id === id) {
+          result = device;
+        }
+      });
+
+      return result;
+    }
+
+    /**
      * Retrieve a device with its id
      *
      * @param {String} id the device id
@@ -137,7 +186,7 @@
           return getGroups().then(function() {
             for (var i = 0; i < groups.length; i++) {
               if (groups[i].id === $route.current.params.id) {
-                return groups[i].devices.find(function(device) {
+                result = groups[i].devices.find(function(device) {
                   return device.id === id;
                 });
               }
@@ -147,49 +196,19 @@
 
         for (var i = 0; i < groups.length; i++) {
           if (groups[i].id === $route.current.params.id) {
-            return groups[i].devices.find(function(device) {
+            result = groups[i].devices.find(function(device) {
               return device.id === id;
             });
           }
         }
-      } else {
-        if (!devices) {
-          return getDevices().then(function() {
-            devices.acceptedDevices.map(function(device) {
-              if (device.id === id) {
-                result = device;
-              }
-            });
-            devices.pendingDevices.map(function(device) {
-              if (device.id === id) {
-                result = device;
-              }
-            });
-            devices.refusedDevices.map(function(device) {
-              if (device.id === id) {
-                result = device;
-              }
-            });
-          });
+
+        if (!result) {
+          return findDevice(id);
+        } else {
+          return result;
         }
-
-        devices.acceptedDevices.map(function(device) {
-          if (device.id === id) {
-            result = device;
-          }
-        });
-        devices.pendingDevices.map(function(device) {
-          if (device.id === id) {
-            result = device;
-          }
-        });
-        devices.refusedDevices.map(function(device) {
-          if (device.id === id) {
-            result = device;
-          }
-        });
-
-        return result;
+      } else {
+        return findDevice(id);
       }
     }
 
@@ -200,17 +219,7 @@
      * @method updateDevice
      */
     function updateDevice(result) {
-      var device,
-        group,
-        model;
-
-      if (getGroup(result.id)) {
-        device = getGroup(result.id);
-        model = 'groups';
-      } else {
-        device = getDevice(result.id);
-        model = 'devices';
-      }
+      var device = getGroup(result.id) ? getGroup(result.id) : getDevice(result.id);
 
       device[result.key] = result.data;
 
@@ -221,13 +230,6 @@
             break;
           case 'error':
             device.state = 'MANAGE.DEVICE.ERROR';
-
-            // Save to history
-            if (device.group) {
-              group = getGroup(device.group);
-              addToHistory(device.group, 'groups', 'STATE_ERROR', group.history, device.name).then(function() {});
-            }
-            addToHistory(result.id, model, 'STATE_ERROR', device.history, null).then(function() {});
             break;
           case 'started':
             device.state = 'MANAGE.DEVICE.RECORDING';
@@ -397,7 +399,7 @@
     function removeDeviceFromGroup(deviceId, groupId) {
       var defer = $q.defer(),
         group = getGroup(groupId),
-        device = getDevice(deviceId, true),
+        device = getDevice(deviceId),
         deviceIndex = group.devices.findIndex(function(data) {
           return data.id == deviceId;
         });
@@ -408,8 +410,7 @@
       delete device.group;
 
       // Save to history
-      addToHistory(deviceId, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name)
-        .then(function(result) {});
+      addToHistory(deviceId, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name).then(function() {});
 
       defer.resolve();
 

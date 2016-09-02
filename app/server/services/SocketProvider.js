@@ -9,11 +9,15 @@ var events = require('events');
 var socket = require('socket.io');
 var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
+var shortid = require('shortid');
 var openVeoAPI = require('@openveo/api');
 var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
+var GroupModel = process.requireManage('app/server/models/GroupModel.js');
 var DeviceListener = process.requireManage('app/server/eventListeners/DeviceListener');
 var ClientListener = process.requireManage('app/server/eventListeners/ClientListener');
 var ScheduleManager = process.requireManage('app/server/services/ScheduleManager.js');
+var errors = process.requireManage('app/server/httpErrors.js');
+var AccessError = openVeoAPI.errors.AccessError;
 
 /**
  * Defines a custom error with an error code.
@@ -72,6 +76,14 @@ function SocketProvider(namespace) {
    * @type DeviceModel
    */
   this.deviceModel = new DeviceModel();
+
+  /**
+   * Group model
+   *
+   * @property groupModel
+   * @type GroupModel
+   */
+  this.groupModel = new GroupModel();
 
   /**
    * devices connected
@@ -316,6 +328,58 @@ function disconnectDevice(device) {
 }
 
 /**
+ * Save to history the error when it append
+ *
+ * @method saveErrorToHistory
+ * @private
+ * @param {Object} device the device object
+ */
+function saveErrorToHistory(device) {
+
+  var self = this,
+    history = {
+      id: shortid.generate(),
+      date: new Date(),
+      message: {
+        data: 'MANAGE.HISTORY.STATE_ERROR',
+        name: null
+      }
+    };
+
+  device.history.push(history);
+
+  if (device.group) {
+    this.groupModel.getOne(device.group, null, function(error, group) {
+      history.message.name = device.name;
+      group.history.push(history);
+      self.groupModel.update(group.id, {history: group.history}, function(error, updateCount) {
+        if (error && (error instanceof AccessError))
+          self.emit('error', new Error(error.message, errors.ADD_HISTORY_FORBIDDEN));
+        else if (error) {
+          process.logger.error((error && error.message) || 'Fail updating',
+            {method: 'addHistoryToEntityAction', entity: group.id});
+          self.emit('error', new Error(error.message, errors.ADD_HISTORY_ERROR));
+        } else {
+          self.clientListener.update('history', group.history, group.id);
+        }
+      });
+    });
+  }
+
+  this.deviceModel.update(device.id, {history: device.history}, function(error, updateCount) {
+    if (error && (error instanceof AccessError))
+      self.emit('error', new Error(error.message, errors.ADD_HISTORY_FORBIDDEN));
+    else if (error) {
+      process.logger.error((error && error.message) || 'Fail updating',
+        {method: 'addHistoryToEntityAction', entity: device.id});
+      self.emit('error', new Error(error.message, errors.ADD_HISTORY_ERROR));
+    } else {
+      self.clientListener.update('history', device.history, device.id);
+    }
+  });
+}
+
+/**
  * Initialize a socket.io client connexion
  *
  * @method clientConnect
@@ -508,6 +572,10 @@ function deviceConnect() {
 
       updateDeviceState.call(self, device, data.status);
       self.clientListener.update('status', data.status, device.id);
+
+      // Save error to history
+      if (data.status === 'error')
+        saveErrorToHistory.call(self, device);
     });
 
     // Disconnect event
