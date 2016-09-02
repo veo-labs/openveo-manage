@@ -10,6 +10,7 @@ var socket = require('socket.io');
 var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
 var shortid = require('shortid');
+var async = require('async');
 var openVeoAPI = require('@openveo/api');
 var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
 var GroupModel = process.requireManage('app/server/models/GroupModel.js');
@@ -346,37 +347,44 @@ function saveErrorToHistory(device) {
       }
     };
 
-  device.history.push(history);
-
-  if (device.group) {
-    this.groupModel.getOne(device.group, null, function(error, group) {
-      history.message.name = device.name;
-      group.history.push(history);
-      self.groupModel.update(group.id, {history: group.history}, function(error, updateCount) {
+  async.parallel([
+    function(callback) {
+      if (device.group) {
+        self.groupModel.getOne(device.group, null, function(error, group) {
+          history.message.name = device.name;
+          group.history.push(history);
+          self.groupModel.update(group.id, {history: group.history}, function(error, updateCount) {
+            if (error && (error instanceof AccessError))
+              self.emit('error', new Error(error.message, errors.ADD_HISTORY_FORBIDDEN));
+            else if (error) {
+              process.logger.error((error && error.message) || 'Fail updating',
+                {method: 'addHistoryToEntityAction', entity: group.id});
+              self.emit('error', new Error(error.message, errors.ADD_HISTORY_ERROR));
+            } else {
+              self.clientListener.update('history', group.history, group.id);
+              callback();
+            }
+          });
+        });
+      }
+    },
+    function(callback) {
+      history.message.name = null;
+      device.history.push(history);
+      self.deviceModel.update(device.id, {history: device.history}, function(error, updateCount) {
         if (error && (error instanceof AccessError))
           self.emit('error', new Error(error.message, errors.ADD_HISTORY_FORBIDDEN));
         else if (error) {
           process.logger.error((error && error.message) || 'Fail updating',
-            {method: 'addHistoryToEntityAction', entity: group.id});
+            {method: 'addHistoryToEntityAction', entity: device.id});
           self.emit('error', new Error(error.message, errors.ADD_HISTORY_ERROR));
         } else {
-          self.clientListener.update('history', group.history, group.id);
+          self.clientListener.update('history', device.history, device.id);
+          callback();
         }
       });
-    });
-  }
-
-  this.deviceModel.update(device.id, {history: device.history}, function(error, updateCount) {
-    if (error && (error instanceof AccessError))
-      self.emit('error', new Error(error.message, errors.ADD_HISTORY_FORBIDDEN));
-    else if (error) {
-      process.logger.error((error && error.message) || 'Fail updating',
-        {method: 'addHistoryToEntityAction', entity: device.id});
-      self.emit('error', new Error(error.message, errors.ADD_HISTORY_ERROR));
-    } else {
-      self.clientListener.update('history', device.history, device.id);
     }
-  });
+  ]);
 }
 
 /**
