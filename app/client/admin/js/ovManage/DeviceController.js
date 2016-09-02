@@ -179,7 +179,9 @@
      * @param {Boolean} isGroup True if the dropzone is a group
      */
     function addDeviceToGroup(draggableId, dropzoneId, isGroup) {
-      var group;
+      var group,
+        firstDevice = manageService.getDevice(draggableId),
+        secondDevice = (!isGroup) ? manageService.getDevice(dropzoneId) : null;
 
       // Create the group if it's two devices
       if (!isGroup) {
@@ -198,6 +200,13 @@
           });
 
           $scope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: group});
+
+          // Save to history
+          manageService.addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', firstDevice.history, group.name)
+            .then(function() {});
+          manageService.addToHistory(dropzoneId, 'devices', 'ADD_DEVICE_TO_GROUP', secondDevice.history, group.name)
+            .then(function() {});
+
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_SUCCESS', '',
             {name: $filter('translate')(group.name)}), 4000);
         }, function() {
@@ -208,10 +217,15 @@
         group = manageService.getGroup(dropzoneId);
 
         entityService.updateEntity('devices', manageName, draggableId, {group: dropzoneId}).then(function() {
-          $scope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: null});
 
           // Update device scheduled jobs
           deviceService.toggleScheduledJobs(draggableId, dropzoneId, 'addDeviceToGroup').then(function() {});
+
+          $scope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: null});
+
+          // Save to history
+          manageService.addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', firstDevice.history, group.name)
+            .then(function() {});
 
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_SUCCESS', '',
             {name: $filter('translate')(group.name)}), 4000);

@@ -355,23 +355,12 @@
         devices.acceptedDevices[firstIndex].group = group.id;
         devices.acceptedDevices[secondIndex].group = group.id;
 
-        // Save to history
-        addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', devices.acceptedDevices[firstIndex].history,
-        group.name).then(function() {});
-        addToHistory(dropzoneId, 'devices', 'ADD_DEVICE_TO_GROUP', devices.acceptedDevices[secondIndex].history,
-        group.name).then(function() {});
-
         group.devices.push(devices.acceptedDevices[firstIndex], devices.acceptedDevices[secondIndex]);
         groups.push(group);
       } else {
         groups.map(function(group) {
           if (group.id == dropzoneId) {
             devices.acceptedDevices[firstIndex].group = group.id;
-
-            // Save to history
-            addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', devices.acceptedDevices[firstIndex].history,
-            group.name).then(function() {});
-
             group.devices.push(devices.acceptedDevices[firstIndex]);
           }
         });
