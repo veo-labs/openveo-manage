@@ -19,6 +19,7 @@ var ClientListener = process.requireManage('app/server/eventListeners/ClientList
 var ScheduleManager = process.requireManage('app/server/services/ScheduleManager.js');
 var errors = process.requireManage('app/server/httpErrors.js');
 var AccessError = openVeoAPI.errors.AccessError;
+var socketErrors = process.requireManage('app/server/services/socketErrors.js');
 
 /**
  * Defines a custom error with an error code.
@@ -407,11 +408,11 @@ function clientConnect() {
     sessionId = cookieParser.signedCookie(parsedCookie['connect.sid'], sessionSecret);
 
     if (!sessionId)
-      return next(new Error('Not authorized'));
+      return next(new SocketError('Not authorized', socketErrors.NOT_AUTHORIZED));
 
     sessionStore.get(sessionId, function(error, session) {
       if (error || !session.passport.user)
-        return next(new Error('Not authorized'));
+        return next(new SocketError('Not authorized', socketErrors.NOT_AUTHORIZED));
 
       next();
     });
@@ -443,7 +444,7 @@ function clientConnect() {
 
       self.deviceListener.startRecord(sockets, data, function(error) {
         if (error) {
-          self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
+          self.emit('error', new SocketError(error.message, socketErrors.START_RECORD_ERROR));
         }
       });
     });
@@ -458,7 +459,7 @@ function clientConnect() {
 
       self.deviceListener.stopRecord(sockets, function(error) {
         if (error) {
-          self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
+          self.emit('error', new SocketError(error.message, socketErrors.STOP_RECORD_ERROR));
         }
       });
     });
@@ -473,7 +474,7 @@ function clientConnect() {
 
       self.deviceListener.tagRecord(sockets, function(error) {
         if (error) {
-          self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
+          self.emit('error', new SocketError(error.message, socketErrors.TAG_RECORD_ERROR));
         }
       });
     });
@@ -515,14 +516,14 @@ function deviceConnect() {
     socket.on('hello', function(data) {
       self.deviceListener.hello(data, socket, function(error, device) {
         if (error) {
-          self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
+          self.emit('error', new SocketError(error.message, socketErrors.HELLO_RECORD_ERROR));
         } else {
           addDevice.call(self, socket.id, device, socket.handshake.address);
 
           // Update the scheduled jobs
           self.scheduleManager.updateJobs.call(self, device, function(error, schedules) {
             if (error)
-              self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
+              self.emit('error', new SocketError(error.message, socketErrors.UPDATE_JOB_ERROR));
             if (!device.group)
               device.schedules = schedules;
           });
@@ -542,7 +543,7 @@ function deviceConnect() {
 
       self.deviceListener.setName(name, device.id, function(error) {
         if (error) {
-          self.emit('error', new SocketError(error.message, 'TODO ERROR MESSAGE'));
+          self.emit('error', new SocketError(error.message, socketErrors.SET_NAME_ERROR));
         } else if (device.name.length === 0 && device.state === DeviceModel.STATE_PENDING) {
           setDeviceName.call(self, device, name);
           self.clientListener.hello(device);
