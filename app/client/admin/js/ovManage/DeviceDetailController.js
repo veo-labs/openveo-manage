@@ -9,7 +9,6 @@
     $scope,
     $filter,
     $uibModal,
-    $rootScope,
     deviceService,
     manageService,
     entityService,
@@ -94,7 +93,7 @@
 
         // Send event to save the new name (not for groups)
         if (!self.selectedDevice.devices) {
-          $rootScope.socket.emit('update.name', {id: self.selectedDevice.id, name: name});
+          $scope.socket.emit('update.name', {id: self.selectedDevice.id, name: name});
         }
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.UPDATE_NAME_SUCCESS'), 4000);
       }, function() {
@@ -271,13 +270,13 @@
           ids.push(device.id);
         });
 
-        $rootScope.socket.emit('session.start', {
+        $scope.socket.emit('session.start', {
           deviceIds: ids,
           sessionId: self.selectedDevice.group,
           preset: (self.deviceSchedule.preset) ? self.deviceSchedule.preset : null
         });
       } else {
-        $rootScope.socket.emit('session.start', {
+        $scope.socket.emit('session.start', {
           deviceIds: [self.selectedDevice.id],
           preset: (self.deviceSchedule.preset) ? self.deviceSchedule.preset : null
         });
@@ -300,7 +299,7 @@
           ids.push(device.id);
         });
 
-        $rootScope.socket.emit('session.stop', {
+        $scope.socket.emit('session.stop', {
           deviceIds: ids
         });
       } else {
@@ -326,11 +325,11 @@
           ids.push(device.id);
         });
 
-        $rootScope.socket.emit('session.index', {
+        $scope.socket.emit('session.index', {
           deviceIds: ids
         });
       } else {
-        $rootScope.socket.emit('session.index', {
+        $scope.socket.emit('session.index', {
           deviceIds: [self.selectedDevice.id]
         });
       }
@@ -499,7 +498,6 @@
     '$scope',
     '$filter',
     '$uibModal',
-    '$rootScope',
     'deviceService',
     'manageService',
     'entityService',

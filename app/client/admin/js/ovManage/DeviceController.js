@@ -10,7 +10,6 @@
     $filter,
     $timeout,
     $location,
-    $rootScope,
     manageService,
     entityService,
     manageName,
@@ -200,7 +199,7 @@
             deviceService.toggleScheduledJobs(dropzoneId, null, 'createGroup');
           });
 
-          $rootScope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: group});
+          $scope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: group});
 
           // Save to history
           manageService.addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', firstDevice.history, group.name);
@@ -220,7 +219,7 @@
           // Update device scheduled jobs
           deviceService.toggleScheduledJobs(draggableId, dropzoneId, 'addDeviceToGroup');
 
-          $rootScope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: null});
+          $scope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: null});
 
           // Save to history
           manageService.addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', firstDevice.history, group.name);
@@ -379,8 +378,8 @@
       entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
 
         // Ask for device detail
-        $rootScope.socket.emit('settings', [device.id]);
-        $rootScope.socket.emit('update.state', {device: device, state: state, newState: self.STATE_ACCEPTED});
+        $scope.socket.emit('settings', [device.id]);
+        $scope.socket.emit('update.state', {device: device, state: state, newState: self.STATE_ACCEPTED});
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_SUCCESS'), 4000);
       }, function() {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_ERROR'), 4000);
@@ -400,7 +399,7 @@
       };
 
       entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
-        $rootScope.socket.emit('update.state', {device: device, state: state, newState: self.STATE_REFUSED});
+        $scope.socket.emit('update.state', {device: device, state: state, newState: self.STATE_REFUSED});
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_SUCCESS'), 4000);
       }, function() {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_ERROR'), 4000);
@@ -423,7 +422,6 @@
     '$filter',
     '$timeout',
     '$location',
-    '$rootScope',
     'manageService',
     'entityService',
     'manageName',

@@ -10,11 +10,9 @@
     $window,
     $location,
     $filter,
-    $rootScope,
     devices,
     groups,
     group,
-    socketService,
     manageService,
     entityService,
     manageName) {
@@ -99,7 +97,7 @@
         devices = angular.copy(group.devices);
 
         entityService.removeEntity('groups', manageName, groupId).then(function() {
-          $rootScope.socket.emit('remove.group', {id: groupId});
+          $scope.socket.emit('remove.group', {id: groupId});
 
           devices.map(function(device) {
             entityService.updateEntity('devices', manageName, device.id, {group: null}).then(function() {
@@ -117,7 +115,7 @@
         device = manageService.getDevice(deviceId);
 
         entityService.updateEntity('devices', manageName, deviceId, {group: null}).then(function() {
-          $rootScope.socket.emit('group.removeDevice', {deviceId: deviceId, groupId: groupId});
+          $scope.socket.emit('group.removeDevice', {deviceId: deviceId, groupId: groupId});
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_DEVICE_GROUP_SUCCESS', '',
             {name: $filter('translate')(group.name)}), 4000);
 
@@ -131,11 +129,11 @@
     };
 
     // Asks for devices settings only once
-    if (!devicesIds) {
+    if (devicesIds.length === 0) {
       $scope.acceptedDevices.map(function(device) {
         devicesIds.push(device.id);
       });
-      $rootScope.socket.emit('settings', devicesIds);
+      $scope.socket.emit('settings', devicesIds);
     }
   }
 
@@ -145,11 +143,9 @@
     '$window',
     '$location',
     '$filter',
-    '$rootScope',
     'devices',
     'groups',
     'group',
-    'socketService',
     'manageService',
     'entityService',
     'manageName'
