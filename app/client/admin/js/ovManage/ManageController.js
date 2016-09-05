@@ -10,12 +10,12 @@
     $window,
     $location,
     $filter,
+    $rootScope,
     devices,
     groups,
     group,
     socketService,
     manageService,
-    deviceService,
     entityService,
     manageName) {
 
@@ -38,72 +38,6 @@
       showDetail: false, // Used to add a class to the selected device
       absUrl: $location.absUrl() // The URL of the current page
     };
-
-    $scope.socket = socketService.getConnexion();
-    $scope.devicesConnexion = []; // Store all the new pending connexions
-
-    /**
-     * Remove a device from the device connexion object on user response
-     *
-     * @param {int} id The device id to remove
-     */
-    function removeDeviceConnected(id) {
-      for (var i = 0; i < $scope.devicesConnexion.length; i++) {
-        if ($scope.devicesConnexion[i].id == id) {
-          $scope.devicesConnexion.splice(i, 1);
-          break;
-        }
-      }
-    }
-
-    /**
-     * Initialize all socket.io listeners
-     */
-    function initializeListeners() {
-
-      // Hello listener
-      $scope.socket.on('hello', function(device) {
-        $scope.devicesConnexion.push(device);
-        $scope.$apply();
-      });
-
-      // Device update listener
-      $scope.socket.on('update', function(data) {
-        manageService.updateDevice(data);
-        $scope.$apply();
-      });
-
-      // Device remove listener
-      $scope.socket.on('remove.device', function(data) {
-        manageService.removeDevice(data.id);
-        $scope.$apply();
-      });
-
-      // Device accept or refused listener after hello
-      $scope.socket.on('update.state', function(data) {
-        removeDeviceConnected(data.device.id);
-        manageService.updateDeviceState(data.device, data.state, data.newState);
-        $scope.$apply();
-      });
-
-      // Add device to group listener
-      $scope.socket.on('group.addDevice', function(data) {
-        manageService.addDevicesToGroup(data.firstId, data.secondId, data.group).then(function() {});
-      });
-
-      // Remove device from a group listener
-      $scope.socket.on('group.removeDevice', function(data) {
-        manageService.removeDeviceFromGroup(data.deviceId, data.groupId).then(function() {
-          deviceService.toggleScheduledJobs(data.deviceId, data.groupId, 'removeDeviceFromGroup').then(function() {});
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_SUCCESS'), 4000);
-        });
-      });
-
-      // Group delete listener
-      $scope.socket.on('remove.group', function(data) {
-        manageService.removeGroup(data.id);
-      });
-    }
 
     /**
      * Permits to organize the view when the details is opened/closed
@@ -137,7 +71,7 @@
       $scope.manage.showDetail = false;
       $scope.manage.openedDevice = null;
       $scope.organizeLayout(false);
-      $window.history.back();
+      $location.path('manage');
       $scope.manage.absUrl = $location.absUrl();
     };
 
@@ -148,7 +82,9 @@
      * @param {String} groupId The id of the group from the device will be removed
      */
     $scope.removeFromGroup = function(deviceId, groupId) {
-      var group = null;
+      var group = null,
+        device,
+        devices;
 
       if (!$scope.group) {
         group = manageService.getGroup(groupId);
@@ -158,31 +94,42 @@
 
       // If there is only 2 devices the group is removed
       if (group.devices.length == 2) {
+        devices = angular.copy(group.devices);
+
         entityService.removeEntity('groups', manageName, groupId).then(function() {
-          $scope.socket.emit('remove.group', {id: groupId});
+          $rootScope.socket.emit('remove.group', {id: groupId});
+
+          devices.map(function(device) {
+            entityService.updateEntity('devices', manageName, device.id, {group: null}).then(function() {
+
+              // Save to history
+              manageService.addToHistory(device.id, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name);
+            });
+          });
 
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_SUCCESS'), 4000);
         }, function() {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_ERROR'), 4000);
         });
       } else {
+        device = manageService.getDevice(deviceId);
+
         entityService.updateEntity('devices', manageName, deviceId, {group: null}).then(function() {
-          $scope.socket.emit('group.removeDevice', {deviceId: deviceId, groupId: groupId});
+          $rootScope.socket.emit('group.removeDevice', {deviceId: deviceId, groupId: groupId});
+
+          // Save to history
+          manageService.addToHistory(deviceId, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name);
         }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_GROUP_ERROR'), 4000);
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_DEVICE_GROUP_ERROR'), 4000);
         });
       }
     };
-
-
-    // Initialize socket.io listeners
-    initializeListeners();
 
     // Asks for devices settings
     $scope.acceptedDevices.map(function(device) {
       devicesIds.push(device.id);
     });
-    $scope.socket.emit('settings', devicesIds);
+    $rootScope.socket.emit('settings', devicesIds);
 
   }
 
@@ -192,12 +139,12 @@
     '$window',
     '$location',
     '$filter',
+    '$rootScope',
     'devices',
     'groups',
     'group',
     'socketService',
     'manageService',
-    'deviceService',
     'entityService',
     'manageName'
   ];

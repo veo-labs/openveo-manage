@@ -7,7 +7,7 @@
     'ov.socketIO'
   ]);
 
-  app.run(['$rootScope', function($rootScope) {
+  app.run(['$rootScope', 'socketService', function($rootScope, socketService) {
     $rootScope.$on('$locationChangeStart', function(event, next, current) {
 
       // Specific for manage plugin
@@ -24,6 +24,9 @@
         }
       }
     });
+
+    // Initialize socket.io connexion
+    $rootScope.socket = socketService.initConnexion();
   }]);
 
   /*

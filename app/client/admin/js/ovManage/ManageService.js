@@ -12,6 +12,7 @@
 
     var groups = null,
       devices = null,
+      devicesConnexion = [], // Store all the new pending connexions
       basePath = '/be/manage/';
 
     /**
@@ -78,12 +79,11 @@
      * @param {String} action The type of history action
      * @param {Object} history The history object to save
      * @param {String | null} name The name to save as message parameter
-     * @returns {*}
      * @method addToHistory
      */
     function addToHistory(id, model, action, history, name) {
-      return $http.post(basePath + 'addHistoryToEntity/' + id, {entityType: model, action: action, history: history,
-        name: name});
+      $http.post(basePath + 'addHistoryToEntity/' + id, {entityType: model, action: action, history: history,
+        name: name}).then(function(){});
     }
 
     /**
@@ -93,41 +93,29 @@
      * @method removeGroup
      */
     function removeGroup(id) {
-      var group = getGroup(id),
-        groupIndex = groups.findIndex(function(data) {
+      var groupIndex = groups.findIndex(function(data) {
           return id == data.id;
         });
 
-      groups.splice(groupIndex, 1);
+      if (groupIndex !== -1)
+        groups.splice(groupIndex, 1);
 
       if ($route.current.params.id) {
         $rootScope.$broadcast('back');
       } else {
         $rootScope.$broadcast('close.window');
       }
-
-      // Update devices belonging to the group
-      $timeout(function() {
-        group.devices.map(function(device) {
-          entityService.updateEntity('devices', manageName, device.id, {group: null}).then(function() {
-            delete device.group;
-
-            // Save to history
-            addToHistory(device.id, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name)
-            .then(function() {});
-          });
-        });
-      }, 300);
     }
 
     /**
-     * Find a specific device in devices object
+     * Retrieve a device with its id
      *
-     * @param {String} id The device id
-     * @returns {*}
-     * @method findDevice
+     * @param {String} id the device id
+     * @returns {*|{}}
+     * @method getDevice
      */
-    function findDevice(id) {
+    function getDevice(id) {
+
       var result = {};
 
       if (!devices) {
@@ -167,49 +155,6 @@
       });
 
       return result;
-    }
-
-    /**
-     * Retrieve a device with its id
-     *
-     * @param {String} id the device id
-     * @returns {*|{}}
-     * @method getDevice
-     */
-    function getDevice(id) {
-
-      var result = {};
-
-      // Find device in group if user is in group detail page
-      if ($route.current.params.id) {
-        if (!groups) {
-          return getGroups().then(function() {
-            for (var i = 0; i < groups.length; i++) {
-              if (groups[i].id === $route.current.params.id) {
-                result = groups[i].devices.find(function(device) {
-                  return device.id === id;
-                });
-              }
-            }
-          });
-        }
-
-        for (var i = 0; i < groups.length; i++) {
-          if (groups[i].id === $route.current.params.id) {
-            result = groups[i].devices.find(function(device) {
-              return device.id === id;
-            });
-          }
-        }
-
-        if (!result) {
-          return findDevice(id);
-        } else {
-          return result;
-        }
-      } else {
-        return findDevice(id);
-      }
     }
 
     /**
@@ -339,7 +284,6 @@
      * @param {String} draggableId A device id
      * @param {String} dropzoneId A device or group id
      * @param {Object} group The new group to add devices
-     * @returns {*}
      * @method addDevicesToGroup
      */
     function addDevicesToGroup(draggableId, dropzoneId, group) {
@@ -370,11 +314,6 @@
       $timeout(function() {
         $rootScope.$broadcast('close.window');
       }, 250);
-
-      return $q.when({
-        groups: groups,
-        devices: devices
-      });
     }
 
     /**
@@ -382,12 +321,10 @@
      *
      * @param {String} deviceId The device id
      * @param {String} groupId The group id
-     * @returns {r.promise|*|promise}
      * @method removeDeviceFromGroup
      */
     function removeDeviceFromGroup(deviceId, groupId) {
-      var defer = $q.defer(),
-        group = getGroup(groupId),
+      var group = getGroup(groupId),
         device = getDevice(deviceId),
         deviceIndex = group.devices.findIndex(function(data) {
           return data.id == deviceId;
@@ -398,15 +335,33 @@
       }
       delete device.group;
 
-      // Save to history
-      addToHistory(deviceId, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name).then(function() {});
-
-      defer.resolve();
-
       // Send an event to close the device detail window
       $rootScope.$broadcast('close.window');
+    }
 
-      return defer.promise;
+    /**
+     * Remove a device from the device connexion object on user response
+     *
+     * @param {int} id The device id to remove
+     * @method removeDeviceConnected
+     */
+    function removeDeviceConnected(id) {
+      for (var i = 0; i < devicesConnexion.length; i++) {
+        if (devicesConnexion[i].id == id) {
+          devicesConnexion.splice(i, 1);
+          break;
+        }
+      }
+    }
+
+    /**
+     * Add a new device to the manage interface
+     *
+     * @param {Object} device the new device object
+     * @method addDeviceConnected
+     */
+    function addDeviceConnected(device) {
+      devicesConnexion.push(device);
     }
 
     return {
@@ -421,7 +376,9 @@
       manageSelectedDevice: manageSelectedDevice,
       addDevicesToGroup: addDevicesToGroup,
       removeDeviceFromGroup: removeDeviceFromGroup,
-      addToHistory: addToHistory
+      addToHistory: addToHistory,
+      removeDeviceConnected: removeDeviceConnected,
+      addDeviceConnected: addDeviceConnected
     };
 
   }

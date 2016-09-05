@@ -145,11 +145,10 @@
      *  Create a record's schedule
      *
      * @param {Object} params Contains all data needed to create the schedule
-     * @returns {*}
      * @method addScheduledJob
      */
     function addScheduledJob(params) {
-      return $http.post(basePath + 'addScheduledJob', params);
+      $http.post(basePath + 'addScheduledJob', params).then(function() {});
     }
 
     /**
@@ -158,11 +157,11 @@
      * @param {String | null} deviceId The id of the device, null otherwise
      * @param {String | null} groupId The id of the group, null otherwise
      * @param {String} action the type of action for the jobs [create/remove]
-     * @returns {*}
      * @method toggleScheduledJobs
      */
     function toggleScheduledJobs(deviceId, groupId, action) {
-      return $http.post(basePath + 'toggleScheduledJobs', {deviceId: deviceId, groupId: groupId, action: action});
+      $http.post(basePath + 'toggleScheduledJobs', {deviceId: deviceId, groupId: groupId, action: action})
+        .then(function() {});
     }
 
     /**

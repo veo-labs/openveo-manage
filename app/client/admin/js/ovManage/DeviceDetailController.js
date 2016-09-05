@@ -9,6 +9,7 @@
     $scope,
     $filter,
     $uibModal,
+    $rootScope,
     deviceService,
     manageService,
     entityService,
@@ -89,12 +90,11 @@
         self.selectedDevice.name = name;
 
         // Save to history
-        manageService.addToHistory(self.selectedDevice.id, model, 'UPDATE_NAME', self.selectedDevice.history)
-        .then(function() {});
+        manageService.addToHistory(self.selectedDevice.id, model, 'UPDATE_NAME', self.selectedDevice.history);
 
         // Send event to save the new name (not for groups)
         if (!self.selectedDevice.devices) {
-          $scope.socket.emit('update.name', {id: self.selectedDevice.id, name: name});
+          $rootScope.socket.emit('update.name', {id: self.selectedDevice.id, name: name});
         }
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.UPDATE_NAME_SUCCESS'), 4000);
       }, function() {
@@ -240,7 +240,7 @@
         entityService.updateEntity(entity, manageName, id, {schedules: schedules}).then(function() {
 
           // Create the scheduled job
-          deviceService.addScheduledJob({schedules: schedules, params: params}).then(function() {});
+          deviceService.addScheduledJob({schedules: schedules, params: params});
           self.deviceSchedule.schedule = {};
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.SCHEDULE.SAVE_SUCCESS'), 4000);
         }, function() {
@@ -271,21 +271,20 @@
           ids.push(device.id);
         });
 
-        $scope.socket.emit('session.start', {
+        $rootScope.socket.emit('session.start', {
           deviceIds: ids,
           sessionId: self.selectedDevice.group,
           preset: (self.deviceSchedule.preset) ? self.deviceSchedule.preset : null
         });
       } else {
-        $scope.socket.emit('session.start', {
+        $rootScope.socket.emit('session.start', {
           deviceIds: [self.selectedDevice.id],
           preset: (self.deviceSchedule.preset) ? self.deviceSchedule.preset : null
         });
       }
 
       // Save to history
-      manageService.addToHistory(self.selectedDevice.id, model, 'START_RECORD', self.selectedDevice.history, null)
-      .then(function() {});
+      manageService.addToHistory(self.selectedDevice.id, model, 'START_RECORD', self.selectedDevice.history, null);
     };
 
     /**
@@ -301,7 +300,7 @@
           ids.push(device.id);
         });
 
-        $scope.socket.emit('session.stop', {
+        $rootScope.socket.emit('session.stop', {
           deviceIds: ids
         });
       } else {
@@ -311,8 +310,7 @@
       }
 
       // Save to history
-      manageService.addToHistory(self.selectedDevice.id, model, 'STOP_RECORD', self.selectedDevice.history, null)
-      .then(function() {});
+      manageService.addToHistory(self.selectedDevice.id, model, 'STOP_RECORD', self.selectedDevice.history, null);
     };
 
     /**
@@ -328,18 +326,17 @@
           ids.push(device.id);
         });
 
-        $scope.socket.emit('session.index', {
+        $rootScope.socket.emit('session.index', {
           deviceIds: ids
         });
       } else {
-        $scope.socket.emit('session.index', {
+        $rootScope.socket.emit('session.index', {
           deviceIds: [self.selectedDevice.id]
         });
       }
 
       // Save to history
-      manageService.addToHistory(self.selectedDevice.id, model, 'TAG_RECORD', self.selectedDevice.history, null)
-      .then(function() {});
+      manageService.addToHistory(self.selectedDevice.id, model, 'TAG_RECORD', self.selectedDevice.history, null);
     };
 
     /**
@@ -502,6 +499,7 @@
     '$scope',
     '$filter',
     '$uibModal',
+    '$rootScope',
     'deviceService',
     'manageService',
     'entityService',
