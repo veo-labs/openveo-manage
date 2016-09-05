@@ -29,7 +29,7 @@
 
         // Hello listener
         socket.on('hello', function(device) {
-          manageService.addDeviceConnected.push(device);
+          manageService.addDeviceConnected(device);
           $rootScope.$apply();
         });
 

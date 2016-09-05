@@ -12,7 +12,7 @@
 
     var groups = null,
       devices = null,
-      devicesConnexion = [], // Store all the new pending connexions
+      devicesConnexion = [],
       basePath = '/be/manage/';
 
     /**
@@ -220,6 +220,9 @@
 
       if (deviceIndex !== -1)
         devices.acceptedDevices.splice(deviceIndex, 1);
+
+      // Send an event to close the device detail window
+      $rootScope.$broadcast('close.window');
     }
 
     /**
@@ -364,6 +367,14 @@
       devicesConnexion.push(device);
     }
 
+    /**
+     * Retrieve the new pending connexion devices
+     * @returns {Array}
+     */
+    function getDevicesConnected() {
+      return devicesConnexion;
+    }
+
     return {
       getGroups: getGroups,
       getDevices: getDevices,
@@ -378,7 +389,8 @@
       removeDeviceFromGroup: removeDeviceFromGroup,
       addToHistory: addToHistory,
       removeDeviceConnected: removeDeviceConnected,
-      addDeviceConnected: addDeviceConnected
+      addDeviceConnected: addDeviceConnected,
+      getDevicesConnected: getDevicesConnected
     };
 
   }

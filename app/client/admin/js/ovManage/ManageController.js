@@ -39,6 +39,8 @@
       absUrl: $location.absUrl() // The URL of the current page
     };
 
+    $scope.devicesConnexion = manageService.getDevicesConnected(); // The new pending connexions
+
     /**
      * Permits to organize the view when the details is opened/closed
      *
