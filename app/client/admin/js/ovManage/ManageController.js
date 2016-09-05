@@ -130,12 +130,13 @@
       }
     };
 
-    // Asks for devices settings
-    $scope.acceptedDevices.map(function(device) {
-      devicesIds.push(device.id);
-    });
-    $rootScope.socket.emit('settings', devicesIds);
-
+    // Asks for devices settings only once
+    if (!devicesIds) {
+      $scope.acceptedDevices.map(function(device) {
+        devicesIds.push(device.id);
+      });
+      $rootScope.socket.emit('settings', devicesIds);
+    }
   }
 
   app.controller('ManageController', ManageController);
