@@ -83,7 +83,7 @@
      */
     function addToHistory(id, model, action, history, name) {
       $http.post(basePath + 'addHistoryToEntity/' + id, {entityType: model, action: action, history: history,
-        name: name}).then(function(){});
+        name: name}).then(function() {});
     }
 
     /**
@@ -94,8 +94,8 @@
      */
     function removeGroup(id) {
       var groupIndex = groups.findIndex(function(data) {
-          return id == data.id;
-        });
+        return id == data.id;
+      });
 
       if (groupIndex !== -1)
         groups.splice(groupIndex, 1);
