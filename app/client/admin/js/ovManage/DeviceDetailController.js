@@ -66,6 +66,12 @@
       self.selectedDevice = null;
       deviceService.clearSelectedDevice();
       $scope.organizeLayout(false);
+
+      // Destroy scrollbar
+      /* global Ps */
+      Ps.destroy(actionEl);
+      Ps.destroy(detailEl);
+      Ps.destroy(historyEl);
     };
 
     /**

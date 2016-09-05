@@ -15,7 +15,10 @@
     manageName,
     deviceService) {
 
-    var self = this;
+    var self = this,
+      actionEl = document.querySelector('.device-detail .action-page'),
+      detailEl = document.querySelector('.device-detail .detail-page'),
+      historyEl = document.querySelector('.device-detail .history-page');
 
     // Available state for device
     self.STATE_ACCEPTED = 'accepted';
@@ -270,9 +273,6 @@
      * Initialize the scrollBars for device detail window
      */
     function initScrollbar() {
-      var actionEl = document.querySelector('.device-detail .action-page'),
-        detailEl = document.querySelector('.device-detail .detail-page'),
-        historyEl = document.querySelector('.device-detail .history-page');
 
       actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
       detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
@@ -314,6 +314,8 @@
           $scope.manage.openedDevice = deviceId;
           $scope.manage.showDetail = true;
           $scope.organizeLayout($scope.manage.showDetail);
+
+          initScrollbar();
         } else if ($scope.manage.openedDevice == deviceId) {
           selectedDevice = deviceService.manageDeviceDetails();
           manageService.manageSelectedDevice(deviceId, selectedDevice);
@@ -322,6 +324,11 @@
           $scope.manage.openedDevice = null;
           $scope.manage.showDetail = false;
           $scope.organizeLayout($scope.manage.showDetail);
+
+          // Destroy scrollbar
+          Ps.destroy(actionEl);
+          Ps.destroy(detailEl);
+          Ps.destroy(historyEl);
         } else {
           $scope.manage.openedDevice = deviceId;
           $scope.manage.showDetail = false;
@@ -333,10 +340,14 @@
             self.lastDeviceSelected = deviceId;
 
             $scope.manage.showDetail = true;
+
+            // Update scrollbar
+            Ps.update(actionEl);
+            Ps.update(detailEl);
+            Ps.update(historyEl);
           }, 500);
         }
 
-        initScrollbar();
         $scope.$apply();
       });
     }
