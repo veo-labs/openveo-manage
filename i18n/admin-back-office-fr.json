@@ -60,7 +60,9 @@
     "UPDATE_NAME_SUCCESS": "Mise à jour du nom appliquée",
     "UPDATE_NAME_ERROR": "Erreur lors de la mise à jour du nom",
     "REMOVE_GROUP_SUCCESS": "Le groupe a été supprimé",
-    "REMOVE_GROUP_ERROR": "Une erreur est survenue. La suppression du groupe n'a pas pu être effectuée"
+    "REMOVE_GROUP_ERROR": "Une erreur est survenue. La suppression du groupe n'a pas pu être effectuée",
+    "REMOVE_DEVICE_GROUP_SUCCESS": "L'encodeur a été supprimé du groupe: {{name}}",
+    "REMOVE_DEVICE_GROUP_ERROR": "Erreur lors de la suppression de l'encodeur depuis le groupe: {{name}}"
   },
   "SCHEDULE": {
     "DATE_ERROR": "Les dates saisies ne sont pas valides",

@@ -60,7 +60,9 @@
     "UPDATE_NAME_SUCCESS": "Update name successfully",
     "UPDATE_NAME_ERROR": "An error occurred while updating the name",
     "REMOVE_GROUP_SUCCESS": "Group successfully removed",
-    "REMOVE_GROUP_ERROR": "An error occurred. Removal of the group could not be performed"
+    "REMOVE_GROUP_ERROR": "An error occurred. Removal of the group could not be performed",
+    "REMOVE_DEVICE_GROUP_SUCCESS": "The encoder has been removed from the group: {{name}}",
+    "REMOVE_DEVICE_GROUP_ERROR": "An error occurred while removing the encoder from the group: {{name}}"
   },
   "SCHEDULE": {
     "DATE_ERROR": "The dates are not valid",

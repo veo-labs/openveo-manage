@@ -118,11 +118,14 @@
 
         entityService.updateEntity('devices', manageName, deviceId, {group: null}).then(function() {
           $rootScope.socket.emit('group.removeDevice', {deviceId: deviceId, groupId: groupId});
+          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_DEVICE_GROUP_SUCCESS', '',
+            {name: $filter('translate')(group.name)}), 4000);
 
           // Save to history
           manageService.addToHistory(deviceId, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name);
         }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_DEVICE_GROUP_ERROR'), 4000);
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_DEVICE_GROUP_ERROR', '',
+            {name: $filter('translate')(group.name)}), 4000);
         });
       }
     };
