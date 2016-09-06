@@ -411,7 +411,7 @@ function clientConnect() {
       return next(new SocketError('Not authorized', socketErrors.NOT_AUTHORIZED));
 
     sessionStore.get(sessionId, function(error, session) {
-      if (error || !session.passport.user)
+      if (error || !session || !session.passport || !session.passport.user)
         return next(new SocketError('Not authorized', socketErrors.NOT_AUTHORIZED));
 
       next();
