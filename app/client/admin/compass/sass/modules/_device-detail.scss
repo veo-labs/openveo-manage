@@ -262,6 +262,10 @@
               height: 32px;
               font-size: 26px;
               margin-left: -3px;
+
+              @include tablet() {
+                padding-left: 7px;
+              }
             }
             .uib-datepicker {
               .btn {
@@ -271,7 +275,6 @@
               }
             }
             .uib-timepicker {
-              top: -2px;
               right: -9px;
               position: relative;
 

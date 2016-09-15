@@ -44,9 +44,11 @@
   }
   &:before {
     transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
   }
   &:after {
     transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
   }
 }
 

@@ -132,6 +132,7 @@
               left: 0;
               top: 0;
               transform: rotate(-90deg);
+              -webkit-transform: rotate(-90deg);
             }
             &:nth-child(2) path {
               fill: none;
@@ -156,6 +157,9 @@
       transform-style: preserve-3d;
       transform: rotateX(-55deg);
       transform-origin: 0 100%;
+      -webkit-transform-style: preserve-3d;
+      -webkit-transform: rotateX(-55deg);
+      -webkit-transform-origin: 0 100%;
 
       &.ng-animate {
         display: block !important;
@@ -190,10 +194,13 @@
       cursor: pointer;
       transform-style: preserve-3d;
       transition: all .6s ease;
+      -webkit-transform-style: preserve-3d;
 
       &.can-drop {
         transform: rotateX(-55deg);
         transform-origin: 0 100%;
+        -webkit-transform: rotateX(-55deg);
+        -webkit-transform-origin: 0 100%;
       }
     }
     .title {
@@ -332,9 +339,11 @@
         }
         &:before {
           transform: rotate(-45deg);
+          -webkit-transform: rotate(-45deg);
         }
         &:after {
           transform: rotate(45deg);
+          -webkit-transform: rotate(45deg);
           left: 11px;
         }
       }
