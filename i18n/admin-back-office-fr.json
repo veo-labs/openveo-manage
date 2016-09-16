@@ -55,7 +55,7 @@
     "ADD_ACCEPTED_ERROR":"Erreur lors du passage au statut accepté de l'encodeur",
     "ADD_REFUSED_SUCCESS": "Encodeur refusé",
     "ADD_REFUSED_ERROR":"Erreur lors du passage au statut refusé de l'encodeur",
-    "REMOVE_SUCCESS": "L'encodeur a été supprimer",
+    "REMOVE_SUCCESS": "L'encodeur a été supprimé",
     "REMOVE_ERROR": "Une erreur est survenue. La suppression de l'encodeur n'a pas pu être effectuée",
     "UPDATE_NAME_SUCCESS": "Mise à jour du nom appliquée",
     "UPDATE_NAME_ERROR": "Erreur lors de la mise à jour du nom",
