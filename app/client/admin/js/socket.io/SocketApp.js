@@ -22,57 +22,17 @@
     /**
      * Initialize socket.io connexion with server
      */
-    function initConnexion() {
+    function initSocket() {
       if (!socket) {
         /* global io */
         socket = io.connect('http://' + $location.host() + ':3002/client');
-
-        // Hello listener
-        socket.on('hello', function(device) {
-          manageService.addDeviceConnected(device);
-          $rootScope.$apply();
-        });
-
-        // Device update listener
-        socket.on('update', function(data) {
-          manageService.updateDevice(data);
-          $rootScope.$apply();
-        });
-
-        // Device remove listener
-        socket.on('remove.device', function(data) {
-          manageService.removeDevice(data.id);
-          $rootScope.$apply();
-        });
-
-        // Device accept or refused listener after hello
-        socket.on('update.state', function(data) {
-          manageService.removeDeviceConnected(data.device.id);
-          manageService.updateDeviceState(data.device, data.state, data.newState);
-          $rootScope.$apply();
-        });
-
-        // Add device to group listener
-        socket.on('group.addDevice', function(data) {
-          manageService.addDevicesToGroup(data.firstId, data.secondId, data.group);
-        });
-
-        // Remove device from a group listener
-        socket.on('group.removeDevice', function(data) {
-          manageService.removeDeviceFromGroup(data.deviceId, data.groupId);
-        });
-
-        // Group delete listener
-        socket.on('remove.group', function(data) {
-          manageService.removeGroup(data.id);
-        });
       }
 
       return socket;
     }
 
     return {
-      initConnexion: initConnexion
+      initSocket: initSocket
     };
 
   }

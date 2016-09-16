@@ -7,11 +7,12 @@
     'ov.socketIO'
   ]);
 
-  app.run(['$rootScope', 'socketService', function($rootScope, socketService) {
+  app.run(['$rootScope', function($rootScope) {
     $rootScope.$on('$locationChangeStart', function(event, next, current) {
 
       // Specific for manage plugin
       if (current.lastIndexOf('manage') >= 0) {
+
         // url slug : shortening the url to stuff that follows after "#"
         current = current.slice(current.lastIndexOf('/be/') + 4, current.length);
         next = next.slice(next.lastIndexOf('/be/') + 4, next.length);
@@ -24,9 +25,6 @@
         }
       }
     });
-
-    // Initialize socket.io connexion
-    $rootScope.socket = socketService.initConnexion();
   }]);
 
   /*

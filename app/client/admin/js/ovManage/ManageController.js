@@ -14,6 +14,8 @@
     groups,
     group,
     manageService,
+    deviceService,
+    socketService,
     entityService,
     manageName) {
 
@@ -38,6 +40,51 @@
     };
 
     $scope.devicesConnexion = manageService.getDevicesConnected(); // The new pending connexions
+
+    // Initialize socket.io connexion
+    if (!$scope.socket) {
+      $scope.socket = socketService.initSocket();
+
+      // Hello listener
+      $scope.socket.on('hello', function(device) {
+        manageService.addDeviceConnected(device);
+        $scope.$apply();
+      });
+
+      // Device update listener
+      $scope.socket.on('update', function(data) {
+        manageService.updateDevice(data);
+        $scope.$apply();
+      });
+
+      // Device remove listener
+      $scope.socket.on('remove.device', function(data) {
+        manageService.removeDevice(data.id);
+        $scope.$apply();
+      });
+
+      // Device accept or refused listener after hello
+      $scope.socket.on('update.state', function(data) {
+        manageService.removeDeviceConnected(data.device.id);
+        manageService.updateDeviceState(data.device, data.state, data.newState);
+        $scope.$apply();
+      });
+
+      // Add device to group listener
+      $scope.socket.on('group.addDevice', function(data) {
+        manageService.addDevicesToGroup(data.firstId, data.secondId, data.group);
+      });
+
+      // Remove device from a group listener
+      $scope.socket.on('group.removeDevice', function(data) {
+        manageService.removeDeviceFromGroup(data.deviceId, data.groupId);
+      });
+
+      // Group delete listener
+      $scope.socket.on('remove.group', function(data) {
+        manageService.removeGroup(data.id);
+      });
+    }
 
     /**
      * Permits to organize the view when the details is opened/closed
@@ -119,6 +166,9 @@
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_DEVICE_GROUP_SUCCESS', '',
             {name: $filter('translate')(group.name)}), 4000);
 
+          // Update device scheduled jobs
+          deviceService.toggleScheduledJobs(deviceId, groupId, 'removeDeviceFromGroup');
+
           // Save to history
           manageService.addToHistory(deviceId, 'devices', 'REMOVE_DEVICE_FROM_GROUP', device.history, group.name);
         }, function() {
@@ -147,6 +197,8 @@
     'groups',
     'group',
     'manageService',
+    'deviceService',
+    'socketService',
     'entityService',
     'manageName'
   ];
