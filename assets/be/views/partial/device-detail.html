@@ -88,7 +88,7 @@
             <div class="detail-page page" ng-class="{'active': vm.isActivePage(1)}">
                 <div class="status">
                     <span class="name" ng-bind="vm.selectedDevice.name | translate"></span>
-                    <i class="pencil glyphicon glyphicon-pencil" ng-show="!vm.selectedDevice.displayInputName && vm.selectedDevice.status && vm.selectedDevice.status !== 'disconnected'" ng-click="vm.displayDeviceNameForm()"></i>
+                    <i class="pencil glyphicon glyphicon-pencil" ng-show="!vm.selectedDevice.displayInputName && ((vm.selectedDevice.status && vm.selectedDevice.status !== 'disconnected') || vm.selectedDevice.devices)" ng-click="vm.displayDeviceNameForm()"></i>
                     <form name="vm.deviceNameForm" novalidate ng-show="vm.selectedDevice.displayInputName">
                         <input type="text" class="form-control input-name" ng-model="vm.selectedDeviceName" required>
                         <span>
