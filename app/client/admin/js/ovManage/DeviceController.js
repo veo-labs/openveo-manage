@@ -274,6 +274,14 @@
      */
     function initScrollbar() {
 
+      // Avoid error if the element is not created yet
+      if (!actionEl)
+        actionEl = document.querySelector('.device-detail .action-page');
+      if (!detailEl)
+        detailEl = document.querySelector('.device-detail .detail-page');
+      if (!historyEl)
+        historyEl = document.querySelector('.device-detail .history-page');
+
       actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
       detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
       historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
@@ -282,6 +290,28 @@
       Ps.initialize(actionEl);
       Ps.initialize(detailEl);
       Ps.initialize(historyEl);
+    }
+
+    /**
+     * Update the scrollbars on device detail change
+     */
+    function updateScrollbar() {
+      actionEl.scrollTop = 0;
+      detailEl.scrollTop = 0;
+      historyEl.scrollTop = 0;
+
+      Ps.update(actionEl);
+      Ps.update(detailEl);
+      Ps.update(historyEl);
+    }
+
+    /**
+     * Destroy scrollbars when device detail is closed
+     */
+    function destroyScrollbar() {
+      Ps.destroy(actionEl);
+      Ps.destroy(detailEl);
+      Ps.destroy(historyEl);
     }
 
     /**
@@ -325,10 +355,7 @@
           $scope.manage.showDetail = false;
           $scope.organizeLayout($scope.manage.showDetail);
 
-          // Destroy scrollbar
-          Ps.destroy(actionEl);
-          Ps.destroy(detailEl);
-          Ps.destroy(historyEl);
+          destroyScrollbar();
         } else {
           $scope.manage.openedDevice = deviceId;
           $scope.manage.showDetail = false;
@@ -341,10 +368,7 @@
 
             $scope.manage.showDetail = true;
 
-            // Update scrollbar
-            Ps.update(actionEl);
-            Ps.update(detailEl);
-            Ps.update(historyEl);
+            updateScrollbar();
           }, 500);
         }
 
@@ -371,6 +395,8 @@
         $location.path('manage/group-detail/' + groupId);
         $scope.manage.absUrl = $location.absUrl();
         $scope.$apply();
+
+        destroyScrollbar();
       });
     }
 
