@@ -5,7 +5,7 @@ OpenVeo back end is written using AngularJS and SASS / Compass. SASS files need 
 OpenVeo does not automatically compile SASS and JavaScript files for his plugins. Thus OpenVeo Plugin Boilerplate have to compile his own SASS and JavaScript files.
 
 In order to manage those compilations, we use [Grunt](http://gruntjs.com/) - A Javascript task runner. Many tasks are already write, but you can write your own.
-There are other tasks to launch [unit tests](/developers/unit-tests), [e2e tests](/developers/end-to-end-tests) or generate and publish documentation on Github pages.
+There are other tasks to launch [unit tests](/developers/unit-tests), [e2e tests](/developers/end-to-end-tests) or generate and manage documentation on Github pages.
 
 # Compiling SASS files
 

@@ -3,11 +3,11 @@
 From OpenVeo root directory :
 
     cd node_modules/@openveo
-    git clone git@github.com:veo-labs/openveo-publish.git plugin-name
+    git clone git@github.com:veo-labs/openveo-manage.git manage
 
 # Install project's dependencies
 
-    cd plugin-name
+    cd manage
     npm install
 
 # Remove installed peer dependencies
