@@ -114,7 +114,7 @@
      */
     self.isDisplayAction = function() {
       if (self.selectedDevice) {
-        if (self.selectedDevice.devices) {
+        if (self.selectedDevice.devices && self.selectedDevice.status !== 'disconnected') {
           self.displayAction = true;
         } else if (!self.selectedDevice.status || self.selectedDevice.status === 'disconnected') {
           self.displayAction = false;
