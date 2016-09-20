@@ -274,13 +274,10 @@
      */
     function initScrollbar() {
 
-      // Avoid error if the element is not created yet
-      if (!actionEl)
-        actionEl = document.querySelector('.device-detail .action-page');
-      if (!detailEl)
-        detailEl = document.querySelector('.device-detail .detail-page');
-      if (!historyEl)
-        historyEl = document.querySelector('.device-detail .history-page');
+      // Recreate elements to avoid errors
+      actionEl = document.querySelector('.device-detail .action-page');
+      detailEl = document.querySelector('.device-detail .detail-page');
+      historyEl = document.querySelector('.device-detail .history-page');
 
       actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
       detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
@@ -394,9 +391,9 @@
         $scope.manage.showDetail = false;
         $location.path('manage/group-detail/' + groupId);
         $scope.manage.absUrl = $location.absUrl();
-        $scope.$apply();
-
         destroyScrollbar();
+
+        $scope.$apply();
       });
     }
 
