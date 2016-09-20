@@ -112,8 +112,13 @@
      * Go to the previous page
      */
     $scope.back = function() {
+
+      // Remove an eventually selected device or group
       $scope.acceptedDevices.map(function(device) {
         manageService.manageSelectedDevice(device.id);
+      });
+      $scope.groups.map(function(group) {
+        manageService.manageSelectedDevice(group.id);
       });
       $scope.manage.showDetail = false;
       $scope.manage.openedDevice = null;
