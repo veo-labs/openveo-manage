@@ -19,7 +19,8 @@
     entityService,
     manageName) {
 
-    var devicesIds = [];
+    var devicesIds = [],
+      activePage = 0;
 
     // Initialize data
     if (group) {
@@ -85,6 +86,25 @@
         manageService.removeGroup(data.id);
       });
     }
+
+    /**
+     * Define the active page index
+     *
+     * @param index
+     */
+    $scope.setActivePage = function(index) {
+      activePage = index;
+    };
+
+    /**
+     * Determine if the passed index is the active page index
+     *
+     * @param index
+     * @returns {boolean}
+     */
+    $scope.isActivePage = function(index) {
+      return activePage === index;
+    };
 
     /**
      * Permits to organize the view when the details is opened/closed

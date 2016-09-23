@@ -7,6 +7,7 @@
    */
   function DeviceController(
     $scope,
+    $rootScope,
     $filter,
     $timeout,
     $location,
@@ -344,18 +345,11 @@
 
           initScrollbar();
         } else if ($scope.manage.openedDevice == deviceId) {
-          selectedDevice = deviceService.manageDeviceDetails();
-          manageService.manageSelectedDevice(deviceId, selectedDevice);
-          self.lastDeviceSelected = null;
-
-          $scope.manage.openedDevice = null;
-          $scope.manage.showDetail = false;
-          $scope.organizeLayout($scope.manage.showDetail);
-
-          destroyScrollbar();
+          $rootScope.$broadcast('close.window');
         } else {
           $scope.manage.openedDevice = deviceId;
           $scope.manage.showDetail = false;
+          $scope.setActivePage(0);
 
           // Add a latency to visualize the change of device detail
           $timeout(function() {
@@ -453,6 +447,7 @@
   app.controller('DeviceController', DeviceController);
   DeviceController.$inject = [
     '$scope',
+    '$rootScope',
     '$filter',
     '$timeout',
     '$location',

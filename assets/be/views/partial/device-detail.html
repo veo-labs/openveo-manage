@@ -2,13 +2,13 @@
     <div class="device-detail" ng-class="{'opened' : manage.showDetail}">
         <div class="header">
             <ul class="menu">
-                <li class="action item" ng-click="vm.setActivePage(0)" ng-class="{'active': vm.isActivePage(0)}">
+                <li class="action item" ng-click="setActivePage(0)" ng-class="{'active': isActivePage(0)}">
                     <span ng-bind="'MANAGE.DETAIL.ACTION' | translate"></span>
                 </li>
-                <li class="detail item" ng-click="vm.setActivePage(1)" ng-class="{'active': vm.isActivePage(1)}">
+                <li class="detail item" ng-click="setActivePage(1)" ng-class="{'active': isActivePage(1)}">
                     <span ng-bind="'MANAGE.DETAIL.DETAIL' | translate"></span>
                 </li>
-                <li class="history item" ng-click="vm.setActivePage(2)" ng-class="{'active': vm.isActivePage(2)}">
+                <li class="history item" ng-click="setActivePage(2)" ng-class="{'active': isActivePage(2)}">
                     <span ng-bind="'MANAGE.DETAIL.HISTORY' | translate"></span>
                 </li>
                 <hr />
@@ -16,8 +16,8 @@
             <span class="exit" ng-click="vm.closeDetail()"></span>
         </div>
 
-        <div class="content" ng-class="{'first': vm.isActivePage(0), 'second': vm.isActivePage(1), 'third': vm.isActivePage(2)}">
-            <div class="action-page page" ng-class="{'active': vm.isActivePage(0)}">
+        <div class="content" ng-class="{'first': isActivePage(0), 'second': isActivePage(1), 'third': isActivePage(2)}">
+            <div class="action-page page" ng-class="{'active': isActivePage(0)}">
                 <form name="vm.deviceSchedule" ng-submit="vm.saveSchedule(vm.selectedDevice.id)" novalidate>
                     <div class="preset" ng-if="!vm.selectedDevice.devices.length && vm.displayAction" ng-class="{'disabled': !vm.selectedDevice.presets}">
                         <span class="title" ng-bind="'MANAGE.DETAIL.PRESET' | translate"></span>
@@ -85,7 +85,7 @@
                 <button ng-if="!vm.selectedDevice.devices && !vm.selectedDevice.group" class="btn btn-primary remove" ng-click="vm.openRemoveModal(vm.selectedDevice.id, 'REMOVE_DEVICE')" ng-bind="'MANAGE.DETAIL.REMOVE_DEVICE' | translate"></button>
                 <div class="title" ng-if="!vm.selectedDevice.devices && vm.selectedDevice.group && (!vm.selectedDevice.status || vm.selectedDevice.status === 'disconnected')" ng-bind="'MANAGE.DETAIL.NO_ACTION' | translate"></div>
             </div>
-            <div class="detail-page page" ng-class="{'active': vm.isActivePage(1)}">
+            <div class="detail-page page" ng-class="{'active': isActivePage(1)}">
                 <div class="status">
                     <span class="name" ng-bind="vm.selectedDevice.name | translate"></span>
                     <i class="pencil glyphicon glyphicon-pencil" ng-show="!vm.selectedDevice.displayInputName && ((vm.selectedDevice.status && vm.selectedDevice.status !== 'disconnected') || vm.selectedDevice.devices)" ng-click="vm.displayDeviceNameForm()"></i>
@@ -132,7 +132,7 @@
                     </table>
                 </div>
             </div>
-            <div class="history-page page" ng-class="{'active': vm.isActivePage(2)}">
+            <div class="history-page page" ng-class="{'active': isActivePage(2)}">
                 <table class="table" border="0">
                     <thead>
                     <tr>

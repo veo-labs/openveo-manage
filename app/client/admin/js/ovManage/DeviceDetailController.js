@@ -9,6 +9,7 @@
     $scope,
     $filter,
     $uibModal,
+    $timeout,
     deviceService,
     manageService,
     entityService,
@@ -16,7 +17,6 @@
   ) {
 
     var self = this,
-      activePage = 0,
       today = new Date(),
       actionEl = document.querySelector('.device-detail .action-page'),
       detailEl = document.querySelector('.device-detail .detail-page'),
@@ -36,25 +36,6 @@
     };
 
     /**
-     * Define the active page index
-     *
-     * @param index
-     */
-    self.setActivePage = function(index) {
-      activePage = index;
-    };
-
-    /**
-     * Determine if the passed index is the active page index
-     *
-     * @param index
-     * @returns {boolean}
-     */
-    self.isActivePage = function(index) {
-      return activePage === index;
-    };
-
-    /**
      * Close the device detail window
      */
     self.closeDetail = function() {
@@ -63,9 +44,13 @@
 
       $scope.manage.showDetail = false;
       $scope.manage.openedDevice = null;
+      $scope.organizeLayout(false);
       self.selectedDevice = null;
       deviceService.clearSelectedDevice();
-      $scope.organizeLayout(false);
+
+      $timeout(function() {
+        $scope.setActivePage(0);
+      }, 400);
 
       // Destroy scrollbar
       /* global Ps */
@@ -504,6 +489,7 @@
     '$scope',
     '$filter',
     '$uibModal',
+    '$timeout',
     'deviceService',
     'manageService',
     'entityService',
