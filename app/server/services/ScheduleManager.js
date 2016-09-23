@@ -126,7 +126,6 @@ function removeRecurrentJob(socketProvider, schedules, params, callback) {
       }
 
       socketProvider.updateDevice(params.entityId, {schedules: schedules});
-
       callback();
     }
   });
@@ -173,7 +172,6 @@ ScheduleManager.prototype.removeJob = function(params, schedules, socketProvider
           endJob.cancel();
 
         socketProvider.updateDevice(params.entityId, {schedules: schedules});
-
         callback();
       }
     });
@@ -236,27 +234,41 @@ ScheduleManager.prototype.createJob = function(socketProvider, schedules, params
 };
 
 /**
- * Clear the scheduled jobs for a device witch have a end date < now
+ * Clear the scheduled jobs for a device witch have a start date < now
  *
  * @method clearOldJobs
  * @param {Object} device The device to update
  * @param {String} entityType The type of entity [devices/groups]
+ * @param {Object} socketProvider
  * @param {Function} [callback] The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
  *   - **Schedules** The updated schedules job of the device
  */
-function clearOldJobs(device, entityType, callback) {
+function clearOldJobs(device, entityType, socketProvider, callback) {
   var model = (entityType === 'devices') ? new DeviceModel() : new GroupModel(),
     entityId = (entityType === 'devices') ? device.id : device.group,
     schedules = device.schedules,
     startSchedule,
     endSchedule,
-    now = new Date();
+    now = new Date(),
+    recurrentEndTime;
 
   // Create the new schedules object to save
   if (device.schedules) {
     device.schedules.map(function(data, index) {
-      if (new Date(data.endDate).getTime() < now.getTime()) {
+      if (data.recurrent) {
+        recurrentEndTime = new Date(data.endDate);
+        recurrentEndTime.setHours(new Date(data.beginDate).getHours(), new Date(data.beginDate).getMinutes());
+        if (recurrentEndTime.getTime() < now.getTime()) {
+          startSchedule = schedule.scheduledJobs['start_' + data.scheduleId];
+          endSchedule = schedule.scheduledJobs['end_' + data.scheduleId];
+          if (startSchedule)
+            startSchedule.cancel();
+          if (endSchedule)
+            endSchedule.cancel();
+          schedules.splice(index, 1);
+        }
+      } else if (new Date(data.beginDate).getTime() < now.getTime()) {
         startSchedule = schedule.scheduledJobs['start_' + data.scheduleId];
         endSchedule = schedule.scheduledJobs['end_' + data.scheduleId];
         if (startSchedule)
@@ -278,6 +290,8 @@ function clearOldJobs(device, entityType, callback) {
         {method: 'updateEntityAction', entity: entityId});
       callback(errors.UPDATE_DEVICE_ERROR);
     } else {
+
+      socketProvider.updateDevice(entityId, {schedules: schedules});
       callback(error, schedules);
     }
   });
@@ -300,7 +314,7 @@ ScheduleManager.prototype.updateJobs = function(device, callback) {
 
   // Do not recreate jobs for a device belonging to a group
   if (!device.group) {
-    clearOldJobs(device, 'devices', function(error, schedules) {
+    clearOldJobs(device, 'devices', self, function(error, schedules) {
       if (!error) {
         schedules.map(function(schedule) {
           self.scheduleManager.createJob(self, schedules, {
@@ -325,7 +339,7 @@ ScheduleManager.prototype.updateJobs = function(device, callback) {
 
     groupModel.getOne(device.group, null, function(error, group) {
       if (!error && group.schedules) {
-        clearOldJobs(group, 'groups', function(error, schedules) {
+        clearOldJobs(group, 'groups', self.socketProvider, function(error, schedules) {
           group.devices.map(function(device) {
             deviceIds.push(device.id);
           });
@@ -393,7 +407,7 @@ ScheduleManager.prototype.toggleJobs = function(deviceId, groupId, action, socke
 
         // Recreate group scheduled jobs with the new device
         if (group.schedules) {
-          clearOldJobs(group, 'groups', function(error, schedules) {
+          clearOldJobs(group, 'groups', socketProvider, function(error, schedules) {
             if (!error)
               schedules.map(function(data) {
                 self.createJob(socketProvider, schedules, {
@@ -446,7 +460,7 @@ ScheduleManager.prototype.toggleJobs = function(deviceId, groupId, action, socke
 
         // Recreate group scheduled jobs without the old device
         if (group.schedules) {
-          clearOldJobs(group, 'groups', function(error, schedules) {
+          clearOldJobs(group, 'groups', socketProvider, function(error, schedules) {
             if (!error)
               schedules.map(function(data) {
                 self.createJob(socketProvider, schedules, {
@@ -468,7 +482,7 @@ ScheduleManager.prototype.toggleJobs = function(deviceId, groupId, action, socke
       // Manage device scheduled jobs
       deviceModel.getOne(deviceId, null, function(error, device) {
         if (device.schedules) {
-          clearOldJobs(device, 'devices', function(error, schedules) {
+          clearOldJobs(device, 'devices', socketProvider, function(error, schedules) {
             if (!error)
               schedules.map(function(data) {
                 self.createJob(socketProvider, schedules, {
@@ -511,7 +525,7 @@ ScheduleManager.prototype.toggleJobs = function(deviceId, groupId, action, socke
         // Recreate the jobs for the devices
         group.devices.map(function(device) {
           if (device.schedules) {
-            clearOldJobs(device, 'devices', function(error, schedules) {
+            clearOldJobs(device, 'devices', socketProvider, function(error, schedules) {
               if (!error)
                 schedules.map(function(data) {
                   self.createJob(socketProvider, schedules, {
