@@ -20,7 +20,7 @@
 
             <!-- Action tab -->
             <div class="action-page page" ng-class="{'active': isActivePage(0)}">
-                <form name="vm.itemSchedule" ng-submit="vm.addSchedule()" novalidate>
+                <form name="actionForm" ng-submit="vm.addSchedule()" novalidate>
 
                   <!-- Preset selector -->
                     <div class="preset"
@@ -69,7 +69,7 @@
                     <div class="planning" ng-if="vm.selectedItem.status !== DEVICE_STATUS.DISCONNECTED">
                         <div class="title" ng-bind="'MANAGE.DETAIL.ACTION.PLANNING_TITLE' | translate"></div>
 
-                        <div class="begin-block" ng-class="{'has-error': vm.itemSchedule.beginDate.$invalid && vm.itemSchedule.beginDate.$touched}">
+                        <div class="begin-block" ng-class="{'has-error': actionForm.beginDate.$invalid && actionForm.beginDate.$touched}">
                             <div class="begin" ng-bind="('MANAGE.DETAIL.ACTION.BEGIN' | translate) + ' :'"></div>
                             <input name="beginDate"
                                    class="form-control date"
@@ -117,7 +117,7 @@
                             <label for="recurrent-schedule" ng-bind="'MANAGE.DETAIL.ACTION.RECURRENT' | translate"></label>
                         </div>
 
-                        <div class="end-block" ng-show="vm.itemSchedule.schedule.recurrent"  ng-class="{'has-error': vm.itemSchedule.endDate.$invalid && vm.itemSchedule.endDate.$touched}">
+                        <div class="end-block" ng-show="vm.itemSchedule.schedule.recurrent"  ng-class="{'has-error': actionForm.endDate.$invalid && actionForm.endDate.$touched}">
                             <div class="end" ng-bind="('MANAGE.DETAIL.ACTION.END' | translate) + ' :'"></div>
                             <input name="endDate"
                                    class="form-control date"
@@ -135,7 +135,7 @@
                             <button class="datepicker" type="button" class="btn btn-default" ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"><i class="glyphicon glyphicon-calendar"></i></button>
                         </div>
 
-                        <button type="submit" class="record btn btn-primary" ng-disabled="vm.itemSchedule.$invalid || vm.selectedItem.inputs.error" ng-bind="'MANAGE.DETAIL.ACTION.RECORD' | translate"></button>
+                        <button type="submit" class="record btn btn-primary" ng-disabled="actionForm.$invalid || vm.selectedItem.inputs.error" ng-bind="'MANAGE.DETAIL.ACTION.RECORD' | translate"></button>
 
                         <table class="table" border="0">
                             <thead>

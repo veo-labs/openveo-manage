@@ -45,6 +45,7 @@
     self.minDuration.setMinutes(1);
 
     self.zeroTimeDate = new Date().setHours(0, 0, 0, 0);
+    self.itemSchedule = {schedule: {}};
 
     /**
      * Checks if two schedules are in conflict.
@@ -321,7 +322,7 @@
      * @method validateEndDate
      */
     self.validateEndDate = function() {
-      if (self.itemSchedule && self.itemSchedule.schedule.beginDate > self.itemSchedule.schedule.endDate)
+      if (self.itemSchedule.schedule.beginDate > self.itemSchedule.schedule.endDate)
         self.itemSchedule.schedule.endDate = new Date(self.itemSchedule.schedule.beginDate.getTime());
     };
 
@@ -569,6 +570,8 @@
 
     // Listen event to load the selected item details on window opening
     $scope.$on('item.load', function(event, itemId, isGroup) {
+      if (self.selectedItem && self.selectedItem.id === itemId)
+        return;
 
       // Get the new selected item
       self.selectedItem = isGroup ? GroupFactory.getGroup(itemId) : DeviceFactory.getDevice(itemId);
@@ -580,7 +583,9 @@
       // Select the new item
       self.selectedItem.isSelected = true;
 
-      self.validatePreset(self.selectedItem.presets && self.selectedItem.presets[0].id);
+      var preset = self.selectedItem.presets && self.selectedItem.presets[0].id;
+      self.itemSchedule.schedule.preset = preset;
+      self.validatePreset(preset);
     });
 
     // Listen event to close item details window
@@ -597,7 +602,6 @@
     $scope.$watch('vm.selectedItem.presets', function() {
       if (self.selectedItem) {
         var preset = self.selectedItem.presets && self.selectedItem.presets[0].id;
-        if (!self.itemSchedule.schedule) self.itemSchedule.schedule = {};
         self.itemSchedule.schedule.preset = preset;
         self.validatePreset(preset);
       }
