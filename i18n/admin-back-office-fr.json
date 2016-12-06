@@ -87,7 +87,7 @@
     "ADD_DEVICE_ERROR": "Erreur lors de l'ajout de l'encodeur au groupe \"{{name}}\" (code = {{code}})"
   },
   "DEVICE": {
-    "NAME": "Encodeur",
+    "DEFAULT_NAME": "Encodeur",
     "SPACE": "Espace disque",
     "INPUTS_STATUS": {
       "MISSING_CAMERA": "Ce preset nécessite une caméra fonctionnelle",
