@@ -434,7 +434,7 @@
       var type = (self.selectedItem.type === MANAGEABLE_TYPES.GROUP) ? MANAGEABLE_TYPES.GROUP : MANAGEABLE_TYPES.DEVICE;
 
       if ((beginDate <= now && endDate >= now) ||
-         (schedule.recurrent && beginTime <= nowTime && endTime >= nowTime)
+         (schedule.recurrent && beginTime <= nowTime && endTime >= nowTime && beginDate <= now)
       ) {
 
         // Schedule in progress

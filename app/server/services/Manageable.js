@@ -259,7 +259,7 @@ Manageable.prototype.isScheduleRunning = function(schedule) {
   var nowTime = now.getHours() + ':' + now.getMinutes();
 
   if ((beginDate <= now && endDate >= now) ||
-     (schedule.recurrent && beginTime <= nowTime && endTime >= nowTime)
+     (schedule.recurrent && beginTime <= nowTime && endTime >= nowTime && beginDate <= now)
   ) {
     return false;
   }
