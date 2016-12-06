@@ -241,6 +241,9 @@ DevicesSocketNamespace.prototype.askForSettings = function(socket, callback) {
 
   settings.forEach(function(setting) {
     actions.push(function(callback) {
+      if (!socket)
+        return callback(new DeviceError('Device not connected anymore'));
+
       var data = {
         event: setting
       };
@@ -269,6 +272,9 @@ DevicesSocketNamespace.prototype.askForSettings = function(socket, callback) {
  *  - **Error** An error if something went wrong, null otherwise
  */
 DevicesSocketNamespace.prototype.askForName = function(socket, callback) {
+  if (!socket)
+    return callback(new DeviceError('Device not connected anymore'));
+
   var data = {
     event: 'settings.name'
   };
@@ -292,6 +298,9 @@ DevicesSocketNamespace.prototype.askForName = function(socket, callback) {
  *  - **Error** An error if something went wrong, null otherwise
  */
 DevicesSocketNamespace.prototype.askForUpdateName = function(socket, name, callback) {
+  if (!socket)
+    return callback(new DeviceError('Device not connected anymore'));
+
   var data = {
     name: name
   };
