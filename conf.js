@@ -4,10 +4,7 @@ module.exports = {
   routes: {
     public: {},
     private: {
-      'post /addScheduledJob': 'app/server/controllers/ScheduleController.addScheduledJobAction',
-      'post /toggleScheduledJobs': 'app/server/controllers/ScheduleController.toggleScheduledJobsAction',
-      'post /addHistoryToEntity/:id': 'app/server/controllers/HistoryController.addHistoryToEntityAction',
-      'post /removeScheduledJob': 'app/server/controllers/ScheduleController.removeScheduledJobAction'
+      'get /configuration': 'app/server/controllers/ManageController.getConfigurationAction'
     },
     ws: {}
   },
@@ -56,12 +53,14 @@ module.exports = {
     scriptFiles: {
       base: [],
       dev: [
-        '/manage/ovManage/ManageApp.js',
-        '/manage/ovManage/ManageController.js',
-        '/manage/ovManage/ManageService.js',
+        '/manage/ovManage/App.js',
+        '/manage/ovManage/MainController.js',
+        '/manage/ovManage/ManageFactory.js',
+        '/manage/ovManage/ManageableFactory.js',
+        '/manage/ovManage/DeviceFactory.js',
+        '/manage/ovManage/GroupFactory.js',
         '/manage/ovManage/DeviceController.js',
-        '/manage/ovManage/DeviceService.js',
-        '/manage/ovManage/DeviceDetailController.js',
+        '/manage/ovManage/ItemDetailController.js',
         '/manage/ovManage/SortTableDirective.js',
         '/manage/socket.io/SocketApp.js'
       ],

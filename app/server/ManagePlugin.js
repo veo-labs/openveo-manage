@@ -1,13 +1,18 @@
 'use strict';
 
-// Module dependencies
+var path = require('path');
 var util = require('util');
 var express = require('express');
 var async = require('async');
 var openVeoAPI = require('@openveo/api');
 var DeviceProvider = process.requireManage('app/server/providers/DeviceProvider.js');
 var GroupProvider = process.requireManage('app/server/providers/GroupProvider.js');
-var SocketProviderManager = process.requireManage('app/server/services/SocketProviderManager.js');
+var SocketServerManager = process.requireManage('app/server/socket/SocketServerManager.js');
+var ManageServer = process.requireManage('app/server/services/ManageServer.js');
+var DevicesSocketNamespace = process.requireManage('app/server/services/namespaces/DevicesSocketNamespace.js');
+var BrowsersSocketNamespace = process.requireManage('app/server/services/namespaces/BrowsersSocketNamespace.js');
+var configDir = openVeoAPI.fileSystem.getConfDir();
+var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
 
 /**
  * Creates a ManagePlugin.
@@ -19,8 +24,8 @@ var SocketProviderManager = process.requireManage('app/server/services/SocketPro
 function ManagePlugin() {
 
   /**
-   * Creates a public router
-   * It will be automatically mounted on /manage/ by the core
+   * Creates a public router.
+   * It will be automatically mounted on /manage/ by the core.
    *
    * Manage public router.
    *
@@ -30,9 +35,9 @@ function ManagePlugin() {
   this.router = express.Router();
 
   /**
-   * Creates a private router
-   * All routes associated to the private router require a back end authentication
-   * It will be automatically mounted on /be/manage/ by the core
+   * Creates a private router.
+   * All routes associated to the private router require a back end authentication.
+   * It will be automatically mounted on /be/manage/ by the core.
    *
    * Manage private router.
    *
@@ -42,9 +47,9 @@ function ManagePlugin() {
   this.privateRouter = express.Router();
 
   /**
-   * Creates a Web Service router
-   * All routes associated to the Web Service router will be part of the Web Service
-   * It will be automatically mounter on /manage/ by the core (but on another server)
+   * Creates a Web Service router.
+   * All routes associated to the Web Service router will be part of the Web Service.
+   * It will be automatically mounted on /manage/ by the core (but on another server).
    *
    * Manage web service router.
    *
@@ -97,6 +102,11 @@ ManagePlugin.prototype.init = function(callback) {
 };
 
 /**
+ * Creates and starts a socket server to establish communication
+ * with devices and browsers.
+ *
+ * Browsers (back end interfaces) are live-synchronized with connected devices.
+ *
  * Optional "start" method automatically called by core application
  * after plugin is loaded and initialized.
  *
@@ -107,8 +117,24 @@ ManagePlugin.prototype.init = function(callback) {
  */
 ManagePlugin.prototype.start = function(callback) {
   if (!process.isWebService) {
-    SocketProviderManager.load();
-  }
 
-  callback();
+    // Start server
+    var server = SocketServerManager.getServer();
+    server.listen(manageConf.port);
+    process.socketLogger.info('Start socket server on port ' + manageConf.port);
+
+    // Add devices and browsers socket namespaces
+    var devicesNamespace = new DevicesSocketNamespace();
+    var browsersNamespace = new BrowsersSocketNamespace();
+    server.addNamespace(devicesNamespace, manageConf.devicesNamespace);
+    server.addNamespace(browsersNamespace, manageConf.browsersNamespace);
+    process.socketLogger.info('Connect devices on namespace "' + manageConf.devicesNamespace + '"');
+    process.socketLogger.info('Connect browsers on namespace "' + manageConf.browsersNamespace + '"');
+
+    // Create a manage server to live synchronize browsers with devices information
+    var manageServer = ManageServer.get(devicesNamespace, browsersNamespace);
+    manageServer.connect(callback);
+
+  } else
+    callback();
 };

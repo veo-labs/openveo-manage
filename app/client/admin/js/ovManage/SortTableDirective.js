@@ -3,15 +3,15 @@
 (function(app) {
 
   /**
-   * Creates a new Angular directive as an HTML attribute ov-sort-table to be able to create a sort table.
+   * Creates a new Angular directive as an HTML attribute ov-manage-sort-table to be able to create a sort table.
    *
    * @example
-   *  <th ov-sort-table order="'name'" by="order" reverse="reverse">Name</th>
+   *  <th ov-manage-sort-table order="'name'" by="order" reverse="reverse">Name</th>
    *
    * @module ov.manage
-   * @class ovSortTable
+   * @class ovManageSortTable
    */
-  function ovSortTable() {
+  function ovManageSortTable() {
 
     return {
       restrict: 'A',
@@ -46,6 +46,6 @@
     };
   }
 
-  app.directive('ovSortTable', ovSortTable);
+  app.directive('ovManageSortTable', ovManageSortTable);
 
 })(angular.module('ov.manage'));

@@ -1,32 +1,36 @@
 'use strict';
 
 /**
- * Manage the socket.io connexion between client/server
+ * Defines the ov.manage.socketIO module to build a socket.io client.
  *
- * @module ov.socketIO
- * @main ov.socketIO
+ * @module ov.manage.socketIO
+ * @main ov.manage.socketIO
  */
+/* global io */
 (function(angular) {
 
-  var app = angular.module('ov.socketIO', []);
+  var app = angular.module('ov.manage.socketIO', []);
 
   /**
-   * Defines a socket service.
+   * Defines a ManageSocketService holding a socket.io client singleton.
    *
-   * @module ov.socketIO
-   * @class SocketService
+   * @module ov.manage.socketIO
+   * @class ManageSocketService
    */
-  function SocketService($location, $rootScope, manageService) {
+  function SocketService($location) {
     var socket = null;
 
     /**
-     * Initialize socket.io connexion with server
+     * Initializes a socket.io connection with the server if not already initialized.
+     *
+     * @method initSocket
+     * @param {String} namespace socket.io namespace name to connect to
+     * @param {Number} port socket.io server port to connect to
+     * @return {Client} The socket.io client
      */
-    function initSocket() {
-      if (!socket) {
-        /* global io */
-        socket = io.connect('http://' + $location.host() + ':3002/client');
-      }
+    function initSocket(namespace, port) {
+      if (!socket)
+        socket = io.connect($location.protocol() + '://' + $location.host() + ':' + port + namespace);
 
       return socket;
     }
@@ -37,7 +41,7 @@
 
   }
 
-  app.factory('socketService', SocketService);
-  SocketService.$inject = ['$location', '$rootScope', 'manageService'];
+  app.factory('ManageSocketService', SocketService);
+  SocketService.$inject = ['$location'];
 
 })(angular);

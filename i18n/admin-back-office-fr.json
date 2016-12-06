@@ -8,92 +8,134 @@
   "PENDING": {
     "TITLE": "Encodeurs en attente"
   },
-  "CONNEXION": {
+  "CONNECTION": {
     "TITLE": "Demande de connexion de "
   },
   "PAGE_TITLE": "Manage",
   "TITLE": "Manage",
   "INFO": "Le manage supervise l'ensemble des encodeurs connectés. Il permet de gérer des groupes d'encodeurs, de lancer et d'arrêter les enregistrements, de marquer des points d'intérêt dans la vidéo, ainsi que de planifier des enregistrements différés.",
   "DETAIL": {
-    "ACTION": "Action",
-    "NO_ACTION": "Aucune action disponible",
-    "DETAIL": "Détail",
-    "HISTORY": "Historique",
-    "STATE": "Etat",
-    "RECURRENT": "Enregistrement journalier",
-    "RECURRENT_EXPLANATION": "En cochant cette case vous programmez un enregistrement journalier",
-    "TABLE": {
-      "NAME": "Nom",
-      "STATUS": "Statut",
-      "DATE": "Date",
-      "MESSAGE": "Message"
+    "ACTION" : {
+      "TAB_TITLE": "Action",
+      "ACTION_TITLE": "Action",
+      "RECURRENT": "Enregistrement journalier",
+      "PRESET": "Sélectionner un préréglage",
+      "START": "Démarrer",
+      "BEGIN": "Début",
+      "DURATION": "Durée",
+      "END": "Fin",
+      "PLANNING_TITLE": "Planification",
+      "PLANNING_TABLE": {
+        "BEGIN": "Début",
+        "DURATION": "Durée",
+        "END": "Fin"
+      },
+      "TIME": "Heure",
+      "RECORD": "Enregistrer",
+      "REMOVE_DEVICE": "Supprimer l'encodeur",
+      "STOP_RECORDING": "Arrêter",
+      "TAG": "Tagger",
+      "NO_ACTION": "No action available"
     },
-    "PRESET": "Sélectionner un préréglage",
-    "START": "Démarrer",
-    "PLANNING": "Planification",
-    "BEGIN": "Début",
-    "END": "Fin",
-    "RECORD": "Enregistrer",
-    "REMOVE_DEVICE": "Supprimer l'encodeur"
+    "DETAIL": {
+      "TAB_TITLE": "Détail",
+      "STATE": "Etat",
+      "DEVICES_TITLE": "Action",
+      "DEVICES_TABLE": {
+        "NAME": "Nom",
+        "STATUS": "Statut"
+      }
+    },
+    "HISTORY": {
+      "TAB_TITLE": "Historique",
+      "TABLE": {
+        "DATE": "Date",
+        "MESSAGE": "Message"
+      },
+      "PURGE_HISTORY": "Purger l'historique"
+    }
   },
-  "GROUP": {
-    "NAME": "Groupe"
-  },
-  "DEVICE": {
-    "NAME": "Encodeur",
+  "STATUS": {
     "READY": "Prêt",
     "DISCONNECTED": "Déconnecté",
     "RECORDING": "En cours d'enregistrement",
     "STARTING": "Démarrage de l'enregistrement",
-    "SPACE": "Espace disque",
-    "ERROR": "Erreur",
-    "STOP_RECORDING": "Arrêter",
-    "TAG": "Tagger",
-    "ADD_TO_GROUP_SUCCESS": "L'encodeur a été ajouté au groupe: {{name}}",
-    "ADD_TO_GROUP_ERROR": "Erreur lors de l'ajout de l'encodeur au groupe: {{name}}",
-    "ADD_ACCEPTED_SUCCESS": "Encodeur accepté",
-    "ADD_ACCEPTED_ERROR":"Erreur lors du passage au statut accepté de l'encodeur",
-    "ADD_REFUSED_SUCCESS": "Encodeur refusé",
-    "ADD_REFUSED_ERROR":"Erreur lors du passage au statut refusé de l'encodeur",
-    "REMOVE_SUCCESS": "L'encodeur a été supprimé",
-    "REMOVE_ERROR": "Une erreur est survenue. La suppression de l'encodeur n'a pas pu être effectuée",
-    "UPDATE_NAME_SUCCESS": "Mise à jour du nom appliquée",
-    "UPDATE_NAME_ERROR": "Erreur lors de la mise à jour du nom",
-    "REMOVE_GROUP_SUCCESS": "Le groupe a été supprimé",
-    "REMOVE_GROUP_ERROR": "Une erreur est survenue. La suppression du groupe n'a pas pu être effectuée",
-    "REMOVE_DEVICE_GROUP_SUCCESS": "L'encodeur a été supprimé du groupe: {{name}}",
-    "REMOVE_DEVICE_GROUP_ERROR": "Erreur lors de la suppression de l'encodeur depuis le groupe: {{name}}"
+    "ERROR": "Erreur"
   },
-  "SCHEDULE": {
-    "DATE_ERROR": "Les dates saisies ne sont pas valides",
+  "MANAGEABLE": {
+    "UPDATE_NAME_ERROR": "Erreur lors de la mise à jour du nom (code = {{code}})",
+    "REMOVE_HISTORIC_SUCCESS": "Elément supprimé de l'historique",
+    "REMOVE_HISTORIC_ERROR": "Erreur lors de la suppression de l'élément depuis l'historique (code = {{code}})",
+    "REMOVE_HISTORY_SUCCESS": "Historique purgé",
+    "REMOVE_HISTORY_ERROR": "Erreur lors de la purge de l'historique (code = {{code}})",
+    "BEGIN_DATE_ERROR": "La date de démarrage doit être postérieure à maintenant",
+    "BEGIN_END_DATES_ERROR": "La date de démarrage doit être antérieure à la date de fin",
     "CONFLICT_ERROR": "Une programmation a déjà lieu sur cette plage horaire",
-    "SAVE_SUCCESS": "Programmation ajoutée avec succès",
-    "SAVE_ERROR": "Erreur lors de l'ajout de la programmation",
-    "REMOVE_SUCCESS": "La programmation a été supprimée",
-    "REMOVE_ERROR": "Une erreur est survenue. La suppression de la programmation n'a pas pu être effectuée",
-    "RECORD_IN_PROGRESS": "Impossible de supprimer la programmation, car l'enregistrement est en cours"
+    "GROUP_CONFLICT_ERROR": "Une programmation a déjà lieu sur cette plage horaire pour les encodeurs : {{devices}}",
+    "ADD_SCHEDULE_SUCCESS": "Programmation ajoutée avec succès",
+    "ADD_SCHEDULE_ERROR": "Erreur lors de l'ajout de la programmation (code = {{code}})",
+    "REMOVE_SCHEDULE_SUCCESS": "La programmation a été supprimée",
+    "REMOVE_SCHEDULE_ERROR": "Une erreur est survenue. La suppression de la programmation n'a pas pu être effectuée (code = {{code}})",
+    "SCHEDULE_IN_PROGRESS_ERROR": "Impossible de supprimer la programmation car l'enregistrement est en cours"
+  },
+  "GROUP": {
+    "DEFAULT_NAME": "Groupe",
+    "CREATE_ERROR": "Erreur lors de la création du groupe (code = {{code}})",
+    "PRESET_INPUTS_ERROR": "Ce preset n'est pas disponible, merci de vérifier les entrées des encodeurs suivant : {{devices}}",
+    "REMOVE_ERROR": "Erreur lors de la suppression du groupe (code = {{code}})",
+    "REMOVE_DEVICE_ERROR": "Erreur lors de la suppression de l'encodeur \"{{name}}\" du groupe (code = {{code}})",
+    "ADD_DEVICE_ERROR": "Erreur lors de l'ajout de l'encodeur au groupe \"{{name}}\" (code = {{code}})"
+  },
+  "DEVICE": {
+    "NAME": "Encodeur",
+    "SPACE": "Espace disque",
+    "INPUTS_STATUS": {
+      "MISSING_CAMERA": "Ce preset nécessite une caméra fonctionnelle",
+      "MISSING_PC": "Ce preset nécessite un PC fonctionnel",
+      "MISSING_PC_AND_CAMERA": "Ce preset nécessite qu'une caméra et un PC soient connectés"
+    },
+    "ADD_ACCEPTED_ERROR":"Erreur lors du passage au statut accepté de l'encodeur (code = {{code}})",
+    "ADD_REFUSED_ERROR":"Erreur lors du passage au statut refusé de l'encodeur (code = {{code}})",
+    "REMOVE_SUCCESS": "L'encodeur a été supprimé",
+    "REMOVE_ERROR": "Une erreur est survenue. La suppression de l'encodeur n'a pas pu être effectuée (code = {{code}})",
+    "START_RECORD_ERROR": "Erreur lors du démarrage de l'enregistrement sur l'encodeur \"{{name}}\" (code = {{code}})",
+    "STOP_RECORD_ERROR": "Erreur lors de l'arrêt de l'enregistrement sur l'encodeur \"{{name}}\" (code = {{code}})",
+    "INDEX_RECORD_ERROR": "Erreur lors de l'ajout du point d'intérêt sur l'encodeur \"{{name}}\" (code = {{code}})"
   },
   "HISTORY": {
+    "CONNECTED": "Encodeur connecté",
+    "DISCONNECTED": "Encodeur \"{{name}}\" déconnecté",
+    "DEVICE_ACCEPTED": "Encodeur \"{{name}}\" accepté",
+    "DEVICE_REFUSED": "Encodeur \"{{name}}\" refusé",
     "CREATE_GROUP": "Création du groupe",
-    "STATE_ERROR": "Erreur",
-    "START_RECORD": "Démarrage de l'enregistrement",
-    "STOP_RECORD": "Arrêt de l'enregistrement",
-    "TAG_RECORD": "Taggage de l'enregistrement",
-    "UPDATE_NAME": "Mise à jour du nom",
-    "ADD_DEVICE_TO_GROUP": "Ajout au groupe",
-    "REMOVE_DEVICE_FROM_GROUP": "Suppression du groupe",
-    "REMOVE_SUCCESS": "Elément supprimé de l'historique",
-    "REMOVE_ERROR": "Erreur lors de la suppression de l'élément depuis l'historique"
+    "ERROR_RECORD": "Erreur sur l'encodeur \"{{name}}\"",
+    "START_RECORD": "Démarrage de l'enregistrement sur l'encodeur \"{{name}}\"",
+    "START_RECORD_ERROR": "Echec du démarrage de l'enregistrementsur l'encodeur \"{{name}}\" (code = {{code}})",
+    "START_RECORD_SCHEDULE": "Démarrage de l'enregistrement planifié sur l'encodeur \"{{name}}\"",
+    "START_RECORD_SCHEDULE_ABORTED": "Démarrage de l'enregistrement planifié annulé sur l'encodeur \"{{name}}\"",
+    "START_RECORD_SCHEDULE_ERROR": "Echec du démarrage de l'enregistrement planifié sur l'encodeur \"{{name}}\" (code = {{code}})",
+    "STOP_RECORD_SCHEDULE": "Arrêt de l'enregistrement planifié sur l'encodeur \"{{name}}\"",
+    "STOP_RECORD_SCHEDULE_ERROR": "Echec de l'arrêt de l'enregistrement planifié sur l'encodeur \"{{name}}\" (code = {{code}})",
+    "STARTED_RECORD": "Enregistrement démarré sur l'encodeur \"{{name}}\"",
+    "STOP_RECORD": "Arrêt de l'enregistrement sur l'encodeur \"{{name}}\"",
+    "STOP_RECORD_ERROR": "Echec de l'arrêt de l'enregistrement sur l'encodeur \"{{name}}\" (code = {{code}})",
+    "STOPPED_RECORD": "Enregistrement arrêté sur l'encodeur \"{{name}}\"",
+    "TAG_RECORD": "Taggage de l'enregistrement sur l'encodeur \"{{name}}\"",
+    "TAG_RECORD_ERROR": "Echec du taggage de l'enregistrement sur l'encodeur \"{{name}}\" (code = {{code}})",
+    "UPDATE_NAME": "Mise à jour du nom en \"{{name}}\"",
+    "UPDATE_NAME_ERROR": "Echec de la mise à jour du nom de l'encodeur \"{{name}}\"",
+    "ADD_DEVICE_TO_GROUP": "Ajout de l'encodeur \"{{name}}\" au groupe \"{{groupName}}\"",
+    "REMOVE_DEVICE_FROM_GROUP": "Suppression de l'encodeur \"{{name}}\" du groupe \"{{groupName}}\""
   },
   "PERMISSIONS" : {
     "ADD_DEVICES_NAME": "Ajouter des encodeurs",
     "UPDATE_DEVICES_NAME": "Editer les encodeurs",
     "DELETE_DEVICES_NAME": "Supprimer les encodeurs",
-    "ADD_GROUPS_NAME": "Ajouter des groupes",
-    "UPDATE_GROUPS_NAME": "Editer les groupes",
-    "DELETE_GROUPS_NAME": "Supprimer les groupes",
+    "ADD_GROUPS_NAME": "Ajouter des groupes d'encodeurs",
+    "UPDATE_GROUPS_NAME": "Editer les groupes d'encodeurs",
+    "DELETE_GROUPS_NAME": "Supprimer les groupes d'encodeurs",
     "GROUP_DEVICES": "Encodeurs",
-    "GROUP_GROUPS": "Groupes",
+    "GROUP_GROUPS": "Groupes d'encodeurs",
     "ACCESS_PAGE_NAME": "Accès à la page du manage",
     "ACCESS_GROUP_DETAIL_PAGE_NAME": "Accès à la page du détail d'un groupe du manage"
   },
@@ -102,9 +144,9 @@
     "ADD_DEVICES_NAME": "Ajouter des encodeurs",
     "UPDATE_DEVICES_NAME": "Mettre à jour les encodeurs",
     "DELETE_DEVICES_NAME": "Supprimer les encodeurs",
-    "GET_GROUPS_NAME": "Récupérer les groupes",
-    "ADD_GROUPS_NAME": "Ajouter des groupes",
-    "UPDATE_GROUPS_NAME": "Mettre à jour les groupes",
-    "DELETE_GROUPS_NAME": "Supprimer les groupes"
+    "GET_GROUPS_NAME": "Récupérer les groupes d'encodeurs",
+    "ADD_GROUPS_NAME": "Ajouter des groupes d'encodeurs",
+    "UPDATE_GROUPS_NAME": "Mettre à jour les groupes d'encodeurs",
+    "DELETE_GROUPS_NAME": "Supprimer les groupes d'encodeurs"
   }
 }

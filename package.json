@@ -5,7 +5,6 @@
   "keywords": [
     "openveo",
     "plugin",
-    "boilerplate",
     "veo-labs",
     "manage"
   ],
@@ -21,7 +20,7 @@
   },
   "dependencies": {
     "cookie": "0.3.1",
-    "node-schedule": "1.1.1",
+    "node-schedule": "1.2.0",
     "socket.io": "1.4.8"
   },
   "devDependencies": {

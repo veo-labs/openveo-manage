@@ -8,92 +8,134 @@
   "PENDING": {
     "TITLE": "Pending encoders"
   },
-  "CONNEXION": {
-    "TITLE": "Connexion request from "
+  "CONNECTION": {
+    "TITLE": "Connection request from "
   },
   "PAGE_TITLE": "Manage",
   "TITLE": "Manage",
   "INFO": "The manage oversees all connected encoders. Il allows to manage groups of encoders, start and stop recording, to score points of interest in the video, as well as to schedule timed recordings.",
   "DETAIL": {
-    "ACTION": "Action",
-    "NO_ACTION": "No action available",
-    "DETAIL": "Detail",
-    "HISTORY": "History",
-    "STATE": "State",
-    "RECURRENT": "Daily record",
-    "RECURRENT_EXPLANATION": "By checking this box you set a daily record",
-    "TABLE": {
-      "NAME": "Name",
-      "STATUS": "Status",
-      "DATE": "Date",
-      "MESSAGE": "Message"
+    "ACTION": {
+      "TAB_TITLE": "Action",
+      "ACTION_TITLE": "Action",
+      "RECURRENT": "Daily record",
+      "PRESET": "Select a preset",
+      "START": "Start",
+      "BEGIN": "Begin",
+      "DURATION": "Duration",
+      "END": "End",
+      "PLANNING_TITLE": "Planning",
+      "PLANNING_TABLE": {
+        "BEGIN": "Begin",
+        "DURATION": "Duration",
+        "END": "End"
+      },
+      "TIME": "Time",
+      "RECORD": "Record",
+      "REMOVE_DEVICE": "Remove encoder",
+      "STOP_RECORDING": "Stop",
+      "TAG": "Tag",
+      "NO_ACTION": "Aucune action disponible"
     },
-    "PRESET": "Select a preset",
-    "START": "Start",
-    "PLANNING": "Planning",
-    "BEGIN": "Begin",
-    "END": "End",
-    "RECORD": "Record",
-    "REMOVE_DEVICE": "Remove encoder"
+    "DETAIL": {
+      "TAB_TITLE": "Detail",
+      "STATE": "State",
+      "DEVICES_TITLE": "Action",
+      "DEVICES_TABLE": {
+        "NAME": "Name",
+        "STATUS": "Status"
+      }
+    },
+    "HISTORY": {
+      "TAB_TITLE": "History",
+      "TABLE": {
+        "DATE": "Date",
+        "MESSAGE": "Message"
+      },
+      "PURGE_HISTORY": "Purge history"
+    }
   },
-  "GROUP": {
-    "NAME": "Group"
-  },
-  "DEVICE": {
-    "NAME": "Encoder",
+  "STATUS": {
     "READY": "Ready",
     "DISCONNECTED": "Disconnected",
     "RECORDING": "Recording",
     "STARTING": "Recording is starting",
-    "SPACE": "Disk space",
-    "ERROR": "Error",
-    "STOP_RECORDING": "Stop",
-    "TAG": "Tag",
-    "ADD_TO_GROUP_SUCCESS": "The encoder has been added to the group: {{name}}",
-    "ADD_TO_GROUP_ERROR": "An error occurred while adding the encoder to the group: {{name}}",
-    "ADD_ACCEPTED_SUCCESS": "Encoder accepted",
-    "ADD_ACCEPTED_ERROR":"An error occurred while updating the encoder to the state accepted",
-    "ADD_REFUSED_SUCCESS": "Encoder refused",
-    "ADD_REFUSED_ERROR":"An error occurred while updating the encoder to the state refused",
-    "REMOVE_SUCCESS": "Encoder successfully removed",
-    "REMOVE_ERROR": "An error occurred. Removal of the encoder could not be performed",
-    "UPDATE_NAME_SUCCESS": "Update name successfully",
-    "UPDATE_NAME_ERROR": "An error occurred while updating the name",
-    "REMOVE_GROUP_SUCCESS": "Group successfully removed",
-    "REMOVE_GROUP_ERROR": "An error occurred. Removal of the group could not be performed",
-    "REMOVE_DEVICE_GROUP_SUCCESS": "The encoder has been removed from the group: {{name}}",
-    "REMOVE_DEVICE_GROUP_ERROR": "An error occurred while removing the encoder from the group: {{name}}"
+    "ERROR": "Error"
   },
-  "SCHEDULE": {
-    "DATE_ERROR": "The dates are not valid",
+  "MANAGEABLE": {
+    "UPDATE_NAME_ERROR": "An error occurred while updating the name (code = {{code}})",
+    "REMOVE_HISTORIC_SUCCESS": "Element removed from history",
+    "REMOVE_HISTORIC_ERROR": "An error occurred while removing the element from the history (code = {{code}})",
+    "REMOVE_HISTORY_SUCCESS": "History purged",
+    "REMOVE_HISTORY_ERROR": "An error occurred while purging the history (code = {{code}})",
+    "BEGIN_DATE_ERROR": "Begin date must be after actual date",
+    "BEGIN_END_DATES_ERROR": "Begin date must be before the end date",
     "CONFLICT_ERROR": "A scheduled job is already planned on this time slot",
-    "SAVE_SUCCESS": "Scheduled job saved",
-    "SAVE_ERROR": "An error occurred while adding the scheduled job",
-    "REMOVE_SUCCESS": "Scheduled job successfully removed",
-    "REMOVE_ERROR": "An error occurred. Removal of the scheduled job could not be performed",
-    "RECORD_IN_PROGRESS": "Unable to remove the scheduled job because the recording is in progress"
+    "GROUP_CONFLICT_ERROR": "A scheduled job is already planned on this time slot for encoders : {{devices}}",
+    "ADD_SCHEDULE_SUCCESS": "Scheduled job saved",
+    "ADD_SCHEDULE_ERROR": "An error occurred while adding the scheduled job (code = {{code}})",
+    "REMOVE_SCHEDULE_SUCCESS": "Scheduled job successfully removed",
+    "REMOVE_SCHEDULE_ERROR": "An error occurred. Removal of the scheduled job could not be performed (code = {{code}})",
+    "SCHEDULE_IN_PROGRESS_ERROR": "Unable to remove the scheduled job because the recording is in progress"
+  },
+  "GROUP": {
+    "DEFAULT_NAME": "Group",
+    "CREATE_ERROR": "An error occurred while creating the group (code = {{code}})",
+    "PRESET_INPUTS_ERROR": "This preset is not available, please verify inputs for the following encoders : {{devices}}",
+    "REMOVE_ERROR": "An error occurred while removing the group (code = {{code}})",
+    "REMOVE_DEVICE_ERROR": "An error occurred while removing encoder \"{{name}}\" from the group (code = {{code}})",
+    "ADD_DEVICE_ERROR": "An error occurred while adding the encoder to the group \"{{name}}\" (code = {{code}})"
+  },
+  "DEVICE": {
+    "DEFAULT_NAME": "Encoder",
+    "SPACE": "Disk space",
+    "INPUTS_STATUS": {
+      "MISSING_CAMERA": "This preset requires a functional video camera",
+      "MISSING_PC": "This preset requires a functional PC",
+      "MISSING_PC_AND_CAMERA": "This preset requires functional video camera and PC"
+    },
+    "ADD_ACCEPTED_ERROR":"An error occurred while updating the encoder to the accepted state (code = {{code}})",
+    "ADD_REFUSED_ERROR":"An error occurred while updating the encoder to the refused state (code = {{code}})",
+    "REMOVE_SUCCESS": "Encoder successfully removed",
+    "REMOVE_ERROR": "An error occurred. Removal of the encoder could not be performed (code = {{code}})",
+    "START_RECORD_ERROR": "An error occurred while starting a record on the encoder \"{{name}}\" (code = {{code}})",
+    "STOP_RECORD_ERROR": "An error occurred while stopping a record on the encoder \"{{name}}\" (code = {{code}})",
+    "INDEX_RECORD_ERROR": "An error occurred while tagging a record on the encoder \"{{name}}\" (code = {{code}})"
   },
   "HISTORY": {
+    "CONNECTED": "Encoder connected",
+    "DISCONNECTED": "Encoder \"{{name}}\" disconnected",
+    "DEVICE_ACCEPTED": "Encoder \"{{name}}\" accepted",
+    "DEVICE_REFUSED": "Encoder \"{{name}}\" refused",
     "CREATE_GROUP": "group creation",
-    "STATE_ERROR": "Error",
-    "START_RECORD": "Start recording",
-    "STOP_RECORD": "Stop recording",
-    "TAG_RECORD": "Record tagged",
-    "UPDATE_NAME": "Update name",
-    "ADD_DEVICE_TO_GROUP": "Add to group",
-    "REMOVE_DEVICE_FROM_GROUP": "Remove from group",
-    "REMOVE_SUCCESS": "Element removed from history",
-    "REMOVE_ERROR": "An error occurred while removing the element from the history"
+    "ERROR_RECORD": "Encoder \"{{name}}\" in error",
+    "START_RECORD": "Starting record on encoder \"{{name}}\"",
+    "START_RECORD_ERROR": "Start record failed on encoder \"{{name}}\" (code = {{code}})",
+    "START_RECORD_SCHEDULE": "Start scheduled record on encoder \"{{name}}\"",
+    "START_RECORD_SCHEDULE_ABORTED": "Start scheduled record aborted on encoder \"{{name}}\"",
+    "START_RECORD_SCHEDULE_ERROR": "Start scheduled record failed on encoder \"{{name}}\" (code = {{code}})",
+    "STOP_RECORD_SCHEDULE": "Stop scheduled record on encoder \"{{name}}\"",
+    "STOP_RECORD_SCHEDULE_ERROR": "Stop scheduled record failed on encoder \"{{name}}\" (code = {{code}})",
+    "STARTED_RECORD": "Record started on encoder \"{{name}}\"",
+    "STOP_RECORD": "Stop record on encoder \"{{name}}\"",
+    "STOP_RECORD_ERROR": "Stop record failed on encoder \"{{name}}\" (code = {{code}})",
+    "STOPPED_RECORD": "Record stopped on encoder \"{{name}}\"",
+    "TAG_RECORD": "Record tagged on encoder \"{{name}}\"",
+    "TAG_RECORD_ERROR": "Record tagging failed on encoder \"{{name}}\" (code = {{code}})",
+    "UPDATE_NAME": "Name updated into \"{{name}}\"",
+    "UPDATE_NAME_ERROR": "Update \"{{name}}\" name failed",
+    "ADD_DEVICE_TO_GROUP": "Add device \"{{name}}\" to group \"{{groupName}}\"",
+    "REMOVE_DEVICE_FROM_GROUP": "Remove device \"{{name}}\" from group \"{{groupName}}\""
   },
-  "PERMISSIONS" : {
+  "PERMISSIONS": {
     "ADD_DEVICES_NAME": "Add encoders",
     "UPDATE_DEVICES_NAME": "Edit encoders",
     "DELETE_DEVICES_NAME": "Remove encoders",
-    "ADD_GROUPS_NAME": "Add groups",
-    "UPDATE_GROUPS_NAME": "Edit groups",
-    "DELETE_GROUPS_NAME": "Remove groups",
+    "ADD_GROUPS_NAME": "Add groups of encoders",
+    "UPDATE_GROUPS_NAME": "Edit groups of encoders",
+    "DELETE_GROUPS_NAME": "Remove groups of encoders",
     "GROUP_DEVICES": "Encoders",
-    "GROUP_GROUPS": "Groups",
+    "GROUP_GROUPS": "Groups of encoders",
     "ACCESS_PAGE_NAME": "Access Manage page",
     "ACCESS_GROUP_DETAIL_PAGE_NAME": "Access Manage group detail page"
   },
@@ -102,9 +144,9 @@
     "ADD_DEVICES_NAME": "Add encoders",
     "UPDATE_DEVICES_NAME": "Update encoders",
     "DELETE_DEVICES_NAME": "Delete encoders",
-    "GET_GROUPS_NAME": "Get groups",
-    "ADD_GROUPS_NAME": "Add groups",
-    "UPDATE_GROUPS_NAME": "Update groups",
-    "DELETE_GROUPS_NAME": "Delete groups"
+    "GET_GROUPS_NAME": "Get groups of encoders",
+    "ADD_GROUPS_NAME": "Add groups of encoders",
+    "UPDATE_GROUPS_NAME": "Update groups of encoders",
+    "DELETE_GROUPS_NAME": "Delete groups of encoders"
   }
 }

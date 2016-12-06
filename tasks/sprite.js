@@ -11,4 +11,5 @@ module.exports = {
     imgPath: '../images/sprite.png',
     cssFormat: 'scss'
   }
+
 };

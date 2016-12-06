@@ -2,9 +2,9 @@
 
 OpenVeo Manage is an [OpenVeo](https://github.com/veo-labs/openveo-core) plugin.
 
-OpenVeo Manage adds the following features (Development in progress):
+OpenVeo Manage adds the following features :
 
-- The possibility to manage encoders:
+- The possibility to manage encoders :
     - Create groups of encoders via drag-and-drop
     - Create/remove scheduled jobs for groups and encoders with the possibility to be recurrent
     - See the details of groups and encoders in a window like scheduled jobs, storage, history ...

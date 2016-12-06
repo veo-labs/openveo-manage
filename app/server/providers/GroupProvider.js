@@ -4,14 +4,34 @@ var util = require('util');
 var openVeoAPI = require('@openveo/api');
 
 /**
- * Creates a GroupProvider.
+ * Creates a GroupProvider to interact with database to manage groups.
+ *
+ * @class GroupProvider
+ * @constructor
+ * @param {Object} database The database configuration
  */
 function GroupProvider(database) {
-
-  // In GroupProvider collection "groups"
   openVeoAPI.EntityProvider.call(this, database, 'manage_groups');
 }
 
-// GroupProvider must extend EntityProvider
 module.exports = GroupProvider;
 util.inherits(GroupProvider, openVeoAPI.EntityProvider);
+
+/**
+ * Creates groups indexes.
+ *
+ * @method createIndexes
+ * @async
+ * @param {Function} callback Function to call when it's done with :
+ *  - **Error** An error if something went wrong, null otherwise
+ */
+GroupProvider.prototype.createIndexes = function(callback) {
+  this.database.createIndexes(this.collection, [
+    {key: {id: 1}, id: 'byId'}
+  ], function(error, result) {
+    if (result && result.note)
+      process.logger.debug('Create manage groups indexes : ' + result.note);
+
+    callback(error);
+  });
+};

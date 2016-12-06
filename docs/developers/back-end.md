@@ -3,7 +3,7 @@
 Manage back end pages are loaded by [OpenVeo](https://github.com/veo-labs/openveo-core).
 
 As expected by OpenVeo, Manage defines a module **ov.manage**.
-It also defines a module **ov.socketIO**.
+It also defines a module **ov.manage.socketIO**.
 
 # Modules
 
@@ -11,7 +11,7 @@ It also defines a module **ov.socketIO**.
 
 Manage main module defines the following routes :
 
-- **/manage/** to access the devices/groups list page
-- **/publish/group-detail/:videoId** to access the group detail page
+- **/manage/** to display the list of groups and devices
+- **/manage/group-detail/:id** to display the content of a group
 
-**Nb:** Available services / filters defined in **ov.manage** and **ov.socketIO** modules are described in the [API](/api/back-end/modules/ov.manage.html).
+**Nb:** Available services / filters defined in **ov.manage** and **ov.manage.socketIO** modules are described in the [API](/api/back-end/modules/ov.manage.html).

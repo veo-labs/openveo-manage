@@ -2,39 +2,38 @@
 
 (function(app) {
 
+  /* global interact, Ps */
   /**
    * Defines the device controller for displaying details
    */
   function DeviceController(
+    $q,
     $scope,
     $rootScope,
     $filter,
     $timeout,
     $location,
-    manageService,
+    ManageFactory,
+    GroupFactory,
+    DeviceFactory,
     entityService,
-    manageName,
-    deviceService) {
+    MANAGE_NAME,
+    MANAGE_DEVICE_STATES) {
 
     var self = this,
-      actionEl = document.querySelector('.device-detail .action-page'),
-      detailEl = document.querySelector('.device-detail .detail-page'),
-      historyEl = document.querySelector('.device-detail .history-page');
-
-    // Available state for device
-    self.STATE_ACCEPTED = 'accepted';
-    self.STATE_PENDING = 'pending';
-    self.STATE_REFUSED = 'refused';
+      actionEl = document.querySelector('.item-detail .action-page'),
+      detailEl = document.querySelector('.item-detail .detail-page'),
+      historyEl = document.querySelector('.item-detail .history-page');
 
     self.lastDeviceSelected = null;
 
     /**
-     * Define an ui-state for a device
+     * Defines an ui-state for a device.
      *
      * @param {Object} target The target device or group
      * @param {String} uiState The ui-state to set for the device
      */
-    function setUiState(target, uiState) {
+    function addUiState(target, uiState) {
       var element = (angular.element(target).scope().$parent.device) ?
         angular.element(target).scope().$parent.device : angular.element(target).scope().group;
 
@@ -46,7 +45,7 @@
     }
 
     /**
-     * Remove an ui-state for a device
+     * Removes an ui-state for a device.
      *
      * @param {Object} target The target device or group
      * @param {String} uiState The ui-state to remove for the device
@@ -61,30 +60,30 @@
     }
 
     /**
-     * Move element on drag
+     * Handles drag move event on manageables.
      *
-     * @param {Object} event the user Event related to the dragEvent
+     * @param {Event} event the user Event related to the dragEvent
      */
     function dragMoveListener(event) {
       var element = angular.element(event.target),
         x = (parseFloat(element.attr('data-x')) || 0) + event.dx,
         y = (parseFloat(element.attr('data-y')) || 0) + event.dy;
 
-      // translate the element
+      // Translate the element
       element.css({
         '-webkit-transform': 'translate(' + x + 'px, ' + y + 'px)',
         transform: 'translate(' + x + 'px, ' + y + 'px)'
       });
 
-      // update the position attributes
+      // Update the position attributes
       element.attr('data-x', x);
       element.attr('data-y', y);
     }
 
     /**
-     * Reset the device element to its initial position
+     * Resets the device element to its initial position.
      *
-     * @param {Object} target the element to reset position
+     * @param {Object} target the element to reset
      */
     function resetPosition(target) {
       var element = angular.element(target);
@@ -100,13 +99,13 @@
         'z-index': 2
       });
 
-      // update the position attributes
+      // Update the position attributes
       element.attr('data-x', 0);
       element.attr('data-y', 0);
     }
 
     /**
-     * Set position of the target element to the dropzone element
+     * Sets position of the target element to the dropzone element.
      *
      * @param {Object} target the dropzone element
      * @param {Object} relatedTarget target the dragged element to move
@@ -133,10 +132,9 @@
     }
 
     /**
-     * Manage the dragging event
+     * Sets items as draggable.
      */
     function draggable() {
-      /* global interact */
       interact('.draggable').draggable({
         inertia: false,
 
@@ -150,7 +148,7 @@
         onstart: function(event) {
           var element = angular.element(event.target);
 
-          setUiState(event.target, 'drag');
+          addUiState(event.target, 'drag');
 
           // Set transition duration for reset
           element.css({
@@ -176,69 +174,36 @@
     }
 
     /**
-     * Add devices to a group, group is created if does not exist
+     * Adds a device to a group.
      *
-     * @param {String} draggableId The id of the device to add to a group
-     * @param {String} dropzoneId The id of the device or group
-     * @param {Boolean} isGroup True if the dropzone is a group
+     * @param {String} deviceId The id of the device to add to the group
+     * @param {String} groupId The id of group
+     * @return {Promise} Promise resolving when device is added
      */
-    function addDeviceToGroup(draggableId, dropzoneId, isGroup) {
-      var group,
-        firstDevice = manageService.getDevice(draggableId),
-        secondDevice = (!isGroup) ? manageService.getDevice(dropzoneId) : null;
+    function addDeviceToGroup(deviceId, groupId) {
 
-      // Create the group if it's two devices
-      if (!isGroup) {
+      // TODO : DO NOT ADD DEVICE TO GROUP IF THERE IS COLLISIONS BETWEEN SCHEDULES
 
-        entityService.addEntity('groups', manageName, {}).then(function(result) {
-          group = result.data.entity;
-          entityService.updateEntity('devices', manageName, draggableId, {group: group.id}).then(function() {
+      var p = $q.defer();
+      var device = DeviceFactory.getDevice(deviceId);
+      var group = GroupFactory.getGroup(groupId);
 
-            // Update device scheduled jobs
-            deviceService.toggleScheduledJobs(draggableId, null, 'createGroup');
-          });
-          entityService.updateEntity('devices', manageName, dropzoneId, {group: group.id}).then(function() {
+      ManageFactory.addDeviceToGroup(deviceId, groupId).then(function() {
+        GroupFactory.addDeviceToGroup(device, groupId);
+        p.resolve();
+      }, function(error) {
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.GROUP.ADD_DEVICE_ERROR', null, {
+          code: error.code,
+          name: group.name
+        }), 4000);
+        p.reject(error);
+      });
 
-            // Update device scheduled jobs
-            deviceService.toggleScheduledJobs(dropzoneId, null, 'createGroup');
-          });
-
-          $scope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: group});
-
-          // Save to history
-          manageService.addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', firstDevice.history, group.name);
-          manageService.addToHistory(dropzoneId, 'devices', 'ADD_DEVICE_TO_GROUP', secondDevice.history, group.name);
-
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_SUCCESS', '',
-            {name: $filter('translate')(group.name)}), 4000);
-        }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_ERROR', '',
-            {name: $filter('translate')(group.name)}), 4000);
-        });
-      } else {
-        group = manageService.getGroup(dropzoneId);
-
-        entityService.updateEntity('devices', manageName, draggableId, {group: dropzoneId}).then(function() {
-
-          // Update device scheduled jobs
-          deviceService.toggleScheduledJobs(draggableId, dropzoneId, 'addDeviceToGroup');
-
-          $scope.socket.emit('group.addDevice', {firstId: draggableId, secondId: dropzoneId, group: null});
-
-          // Save to history
-          manageService.addToHistory(draggableId, 'devices', 'ADD_DEVICE_TO_GROUP', firstDevice.history, group.name);
-
-          $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_SUCCESS', '',
-            {name: $filter('translate')(group.name)}), 4000);
-        }, function() {
-          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_TO_GROUP_ERROR', '',
-            {name: $filter('translate')(group.name)}), 4000);
-        });
-      }
+      return p.promise;
     }
 
     /**
-     * Allow to drop element in dropzones
+     * Sets drag drop zones.
      */
     function dragDropDevice() {
       interact('.dropzone').dropzone({
@@ -250,8 +215,8 @@
         overlap: 0.25,
 
         ondragenter: function(event) {
-          setUiState(event.target, 'can-drop');
-          setUiState(event.relatedTarget, 'drop-target');
+          addUiState(event.target, 'can-drop');
+          addUiState(event.relatedTarget, 'drop-target');
         },
         ondragleave: function(event) {
           removeUiState(event.relatedTarget, 'drop-target');
@@ -263,35 +228,59 @@
 
           mergePosition(event.target, event.relatedTarget);
           $timeout(function() {
-            addDeviceToGroup(relatedTarget.attr('data-id'),
-              target.attr('data-id'), target.hasClass('group'));
+
+            if (!target.hasClass('group')) {
+
+              // No group
+              // Create it
+              ManageFactory.createGroup().then(function(group) {
+                GroupFactory.addGroup(group);
+
+                // Add both devices (the dragged one and the target one)
+                // to the new group
+                addDeviceToGroup(relatedTarget.attr('data-id'), group.id);
+                addDeviceToGroup(target.attr('data-id'), group.id);
+
+              }, function(error) {
+                $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.GROUP.CREATE_ERROR', null, {
+                  code: error.code
+                }), 4000);
+              });
+
+            } else {
+
+              // Add dragged device to the target group
+              addDeviceToGroup(relatedTarget.attr('data-id'), target.attr('data-id'));
+
+            }
+
+            $scope.$apply();
           }, 500);
         }
       });
     }
 
     /**
-     * Initialize the scrollBars for device detail window
+     * Initializes the scrollBars for device detail window.
      */
     function initScrollbar() {
 
       // Recreate elements to avoid errors
-      actionEl = document.querySelector('.device-detail .action-page');
-      detailEl = document.querySelector('.device-detail .detail-page');
-      historyEl = document.querySelector('.device-detail .history-page');
+      actionEl = document.querySelector('.item-detail .action-page');
+      detailEl = document.querySelector('.item-detail .detail-page');
+      historyEl = document.querySelector('.item-detail .history-page');
 
       actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
       detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
       historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
 
-      /* global Ps */
       Ps.initialize(actionEl);
       Ps.initialize(detailEl);
       Ps.initialize(historyEl);
     }
 
     /**
-     * Update the scrollbars on device detail change
+     * Updates the scrollbars on device detail change.
      */
     function updateScrollbar() {
       actionEl.scrollTop = 0;
@@ -304,7 +293,7 @@
     }
 
     /**
-     * Destroy scrollbars when device detail is closed
+     * Destroys scrollbars when device detail is closed.
      */
     function destroyScrollbar() {
       Ps.destroy(actionEl);
@@ -313,11 +302,11 @@
     }
 
     /**
-     * Display the device/group detail on tile click
+     * Sets a click event listener on an item.
      */
-    function clickDevice() {
+    function setItemClickListener() {
 
-      // Avoid to fired the same event multiple times
+      // Avoid to fire the same event multiple times
       var events = interact('.device.accepted > .well, .device-group > .group')._iEvents;
       if (Object.keys(events).length && events.tap) {
         delete events.tap;
@@ -328,37 +317,44 @@
           return;
         }
 
-        var deviceId = event.currentTarget.getAttribute('data-id'),
-          currentTarget = angular.element(event.currentTarget),
-          selectedDevice;
+        var itemId = event.currentTarget.getAttribute('data-id'),
+          currentTarget = angular.element(event.currentTarget);
 
-        if (!$scope.manage.openedDevice) {
+        if (!$scope.manage.openedItem) {
+
+          // No item loaded in the detail panel yet
 
           // Set the selected device
-          selectedDevice = deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
-          manageService.manageSelectedDevice(deviceId, selectedDevice);
-          self.lastDeviceSelected = deviceId;
+          $rootScope.$broadcast('item.load', itemId, currentTarget.hasClass('group'));
 
-          $scope.manage.openedDevice = deviceId;
+          $scope.manage.openedItem = itemId;
           $scope.manage.showDetail = true;
           $scope.organizeLayout($scope.manage.showDetail);
 
           initScrollbar();
-        } else if ($scope.manage.openedDevice == deviceId) {
-          $rootScope.$broadcast('close.window');
+        } else if ($scope.manage.openedItem == itemId) {
+
+          // Item to load in the panel is the one already loaded
+          // Close the panel
+          $rootScope.$broadcast('item.closeDetails');
+
+          GroupFactory.setGroupsProperty('isSelected', false);
+          DeviceFactory.setDevicesProperty('isSelected', false);
+
         } else {
-          $scope.manage.openedDevice = deviceId;
+
+          // Item to load in the details panel is a different item
+          // Display new item details with delay
+          // And activate first tab
+
+          $scope.manage.openedItem = itemId;
           $scope.manage.showDetail = false;
           $scope.setActivePage(0);
 
           // Add a latency to visualize the change of device detail
           $timeout(function() {
-            selectedDevice = deviceService.manageDeviceDetails(deviceId, currentTarget.hasClass('group'));
-            manageService.manageSelectedDevice(deviceId, selectedDevice, self.lastDeviceSelected);
-            self.lastDeviceSelected = deviceId;
-
+            $rootScope.$broadcast('item.load', itemId, currentTarget.hasClass('group'));
             $scope.manage.showDetail = true;
-
             updateScrollbar();
           }, 500);
         }
@@ -368,11 +364,12 @@
     }
 
     /**
-     * Go to the group detail page on double click
+     * Sets a double click event listener on an item.
+     * Go to the group detail page on double click.
      */
-    function dbClickGroupDevices() {
+    function setItemDbClickListener() {
 
-      // Avoid to fired the same event multiple times
+      // Avoid to fire the same event multiple times
       var events = interact('.device-group > .group')._iEvents;
       if (Object.keys(events).length && events.doubletap) {
         delete events.doubletap;
@@ -381,7 +378,7 @@
       interact('.device-group > .group').on('doubletap', function(event) {
         var groupId = event.currentTarget.getAttribute('data-id');
 
-        manageService.manageSelectedDevice(groupId);
+        $rootScope.$broadcast('item.load', groupId, true);
         $scope.manage.showDetail = false;
         $location.path('manage/group-detail/' + groupId);
         $scope.manage.absUrl = $location.absUrl();
@@ -392,45 +389,30 @@
     }
 
     /**
-     * Add pending/refused device to the accepted list of devices
+     * Adds pending/refused device to the accepted list of devices.
      *
-     * @param {Object} device The device object
-     * @param {String} state The old state of the device
+     * @param {Object} device The device to accept
      */
-    self.addToAcceptedDevices = function(device, state) {
-      var deviceToSave = {
-        name: device.name,
-        state: self.STATE_ACCEPTED
-      };
-
-      entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
-
-        // Ask for device detail
-        $scope.socket.emit('settings', [device.id]);
-        $scope.socket.emit('update.state', {device: device, state: state, newState: self.STATE_ACCEPTED});
-        $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_SUCCESS'), 4000);
-      }, function() {
-        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_ERROR'), 4000);
+    self.addToAcceptedDevices = function(device) {
+      ManageFactory.updateDeviceState(device.id, MANAGE_DEVICE_STATES.ACCEPTED).then(function() {
+        ManageFactory.askForDevicesSettings([device.id]);
+      }, function(error) {
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_ACCEPTED_ERROR', null, {
+          code: error.code
+        }), 4000);
       });
     };
 
     /**
-     * Add the new device to the refused list of devices
+     * Adds the new device to the refused list of devices.
      *
      * @param {Object} device The device object
-     * @param {String} state The old state of the device
      */
-    self.addToRefusedDevices = function(device, state) {
-      var deviceToSave = {
-        name: device.name,
-        state: self.STATE_REFUSED
-      };
-
-      entityService.updateEntity('devices', manageName, device.id, deviceToSave).then(function() {
-        $scope.socket.emit('update.state', {device: device, state: state, newState: self.STATE_REFUSED});
-        $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_SUCCESS'), 4000);
-      }, function() {
-        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_ERROR'), 4000);
+    self.addToRefusedDevices = function(device) {
+      ManageFactory.updateDeviceState(device.id, MANAGE_DEVICE_STATES.REFUSED).catch(function(error) {
+        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.ADD_REFUSED_ERROR', null, {
+          code: error.code
+        }), 4000);
       });
     };
 
@@ -439,22 +421,25 @@
     dragDropDevice();
 
     // Manage click events
-    clickDevice();
-    dbClickGroupDevices();
+    setItemClickListener();
+    setItemDbClickListener();
 
   }
 
-  app.controller('DeviceController', DeviceController);
+  app.controller('ManageDeviceController', DeviceController);
   DeviceController.$inject = [
+    '$q',
     '$scope',
     '$rootScope',
     '$filter',
     '$timeout',
     '$location',
-    'manageService',
+    'ManageFactory',
+    'ManageGroupFactory',
+    'ManageDeviceFactory',
     'entityService',
-    'manageName',
-    'deviceService'
+    'MANAGE_NAME',
+    'MANAGE_DEVICE_STATES'
   ];
 
 })(angular.module('ov.manage'));

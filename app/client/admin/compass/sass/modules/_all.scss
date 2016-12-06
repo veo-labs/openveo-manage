@@ -1,6 +1,6 @@
 @import "sprite";
-@import "device-detail";
-@import "device-connexion";
+@import "item-detail";
+@import "device-connection";
 
 .manage-container {
   width: 100%;
@@ -76,7 +76,7 @@
         display: inline-block;
         vertical-align: middle;
         margin: 0 15px;
-        &.stopped {
+        &.stopped, &.wrongConfiguration {
           @include sprite($device-ok);
         }
         &.error {

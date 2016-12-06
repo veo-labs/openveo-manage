@@ -1,19 +1,15 @@
 'use strict';
 
-var path = require('path');
 var util = require('util');
 var openVeoAPI = require('@openveo/api');
 var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
 var EntityController = openVeoAPI.controllers.EntityController;
-var SocketProviderManager = process.requireManage('app/server/services/SocketProviderManager.js');
-var configDir = openVeoAPI.fileSystem.getConfDir();
-var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
-var namespace = manageConf.namespace;
-var errors = process.requireManage('app/server/httpErrors.js');
+var ManageServer = process.requireManage('app/server/services/ManageServer.js');
+var errors = process.requireManage('app/server/errors.js');
 var AccessError = openVeoAPI.errors.AccessError;
 
 /**
- * Creates a DeviceController
+ * Creates a DeviceController to handle actions on devices entities.
  *
  * @class DeviceController
  * @constructor
@@ -27,53 +23,18 @@ module.exports = DeviceController;
 util.inherits(DeviceController, EntityController);
 
 /**
- * Gets a list of devices.
+ * Gets the list of devices.
+ *
+ * @example
+ *     {
+ *       "entities" : [ ... ]
+ *     }
  *
  * @method getEntitiesAction
  */
 DeviceController.prototype.getEntitiesAction = function(request, response, next) {
-  var model = new this.Entity(request.user),
-    socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace),
-    devices = socketProvider.getDevices(),
-    deviceIds = [],
-    orderedDevices = {
-      acceptedDevices: [],
-      pendingDevices: [],
-      refusedDevices: []
-    };
-
-  // Avoid to retrieve in database all connected devices already in cache
-  devices.map(function(device) {
-    deviceIds.push(device.id);
-  });
-
-  model.get({id: {$nin: deviceIds}}, function(error, entities) {
-    if (error) {
-      process.logger.error(error.message, {error: error, method: 'getEntitiesAction'});
-      next(errors.GET_DEVICES_ERROR);
-    } else {
-
-      // Ordered devices by state
-      openVeoAPI.util.joinArray(devices, entities).map(function(device) {
-        switch (device.state) {
-          case DeviceModel.STATE_ACCEPTED:
-            orderedDevices.acceptedDevices.push(device);
-            break;
-          case DeviceModel.STATE_PENDING:
-            orderedDevices.pendingDevices.push(device);
-            break;
-          case DeviceModel.STATE_REFUSED:
-            orderedDevices.refusedDevices.push(device);
-            break;
-          default:
-            break;
-        }
-      });
-
-      response.send({
-        entities: orderedDevices
-      });
-    }
+  response.send({
+    entities: ManageServer.get().getDevices()
   });
 };
 
@@ -91,21 +52,33 @@ DeviceController.prototype.updateEntityAction = function(request, response, next
   if (request.params.id && request.body) {
     var model = new this.Entity(request.user),
       entityId = request.params.id,
-      data = request.body,
-      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
+      data = null;
+
+    try {
+      data = openVeoAPI.util.shallowValidateObject(request.body, {
+        name: {type: 'string'},
+        state: {type: 'array<string>'},
+        history: {type: 'array<object>'},
+        schedules: {type: 'array<object>'}
+      });
+    } catch (error) {
+      return next(errors.UPDATE_DEVICE_WRONG_PARAMETERS);
+    }
 
     model.update(entityId, data, function(error, updateCount) {
       if (error && (error instanceof AccessError))
         next(errors.UPDATE_DEVICE_FORBIDDEN);
       else if (error) {
-        process.logger.error((error && error.message) || 'Fail updating',
-          {method: 'updateEntityAction', entity: entityId});
+        process.logger.error((error && error.message) || 'Fail updating', {
+          method: 'updateEntityAction', entity: entityId
+        });
         next(errors.UPDATE_DEVICE_ERROR);
       } else {
 
         // Update cached device
-        socketProvider.updateDevice(entityId, data);
+        ManageServer.get().update(entityId, data);
         response.send({error: null, status: 'ok'});
+
       }
     });
   } else {
@@ -125,26 +98,26 @@ DeviceController.prototype.updateEntityAction = function(request, response, next
  */
 DeviceController.prototype.removeEntityAction = function(request, response, next) {
   if (request.params.id) {
-    var model = new this.Entity(request.user),
-      entityId = request.params.id,
-      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
+    var entityId = request.params.id,
+      server = ManageServer.get(),
+      device = server.getManageable(entityId);
 
-    socketProvider.scheduleManager.toggleJobs(entityId, null, 'removeDevice', socketProvider, function() {
-      model.remove(entityId, function(error, deleteCount) {
-        if (error) {
-          process.logger.error(error.message, {error: error, method: 'removeEntityAction'});
-          next(errors.REMOVE_DEVICE_ERROR);
-        } else {
+    if (!device)
+      return next(errors.REMOVE_DEVICE_NOT_FOUND_ERROR);
 
-          // Update cached device
-          socketProvider.removeDeviceById(entityId);
-          response.send({error: null, status: 'ok'});
-        }
-      });
+    server.removeDevice(device.id, function(error) {
+      if (error) {
+        process.logger.error(error.message, {error: error, method: 'removeEntityAction'});
+        next(errors.REMOVE_DEVICE_ERROR);
+      }
+
+      response.send({error: null, status: 'ok'});
     });
+
   } else {
 
     // Missing id of the device or the data
     next(errors.REMOVE_DEVICE_MISSING_PARAMETERS);
+
   }
 };

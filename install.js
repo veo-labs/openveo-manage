@@ -1,6 +1,7 @@
 'use strict';
 
 // Module dependencies
+var readline = require('readline');
 var path = require('path');
 var fs = require('fs');
 var os = require('os');
@@ -16,6 +17,12 @@ process.requireManage = function(filePath) {
   return require(path.join(process.rootManage, filePath));
 };
 
+// Create a readline interface to interact with the user
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
 /**
  * Creates conf directory if it does not exist.
  */
@@ -28,15 +35,48 @@ function createConfDir(callback) {
  */
 function createConf(callback) {
   var confFile = path.join(confDir, 'manageConf.json');
+  var conf = {
+    devicesNamespace: '/devices',
+    browsersNamespace: '/browsers',
+    port: 3002
+  };
 
-  fs.exists(confFile, function(exists) {
-    if (exists) {
-      process.stdout.write(confFile + ' already exists\n');
+  async.series([
+    function(callback) {
+      fs.exists(confFile, function(exists) {
+        if (exists)
+          callback(new Error(confFile + ' already exists\n'));
+        else
+          callback();
+      });
+    },
+    function(callback) {
+      rl.question('Enter the socket.io namespace to use for devices (default: ' + conf.devicesNamespace + ') :\n',
+      function(answer) {
+        if (answer) conf.devicesNamespace = answer;
+        callback();
+      });
+    },
+    function(callback) {
+      rl.question('Enter the socket.io namespace to use for browsers (default: ' + conf.browsersNamespace + ') :\n',
+      function(answer) {
+        if (answer) conf.browsersNamespace = answer;
+        callback();
+      });
+    },
+    function(callback) {
+      rl.question('Enter the port to use for the socket.io server (default: ' + conf.port + ') :\n',
+      function(answer) {
+        if (answer) conf.port = Number(answer);
+        callback();
+      });
+    }
+  ],
+  function(error, results) {
+    if (error) {
+      process.stdout.write(error.message);
       callback();
     } else {
-      var conf = {
-        namespace: '/veobox'
-      };
       fs.writeFile(confFile, JSON.stringify(conf, null, '\t'), {encoding: 'utf8'}, callback);
     }
   });
@@ -47,25 +87,27 @@ function createConf(callback) {
  */
 function createLoggerConf(callback) {
   var confFile = path.join(confDir, 'loggerConf.json');
-  var defaultPath = path.join(os.tmpdir(), 'openveo', 'logs');
-  var conf = {
-    manage: {
-      fileName: path.join(defaultPath, 'openveo-manage.log').replace(/\\/g, '/'),
-      level: 'info',
-      maxFileSize: 1048576,
-      maxFiles: 2
-    }
-  };
 
   fs.exists(confFile, function(exists) {
     if (exists) {
       process.stdout.write(confFile + ' already exists\n');
       callback();
-    } else
-      fs.writeFile(confFile, JSON.stringify(conf, null, '\t'), {encoding: 'utf8'}, callback);
+    } else {
+      var defaultPath = path.join(os.tmpdir(), 'openveo', 'logs');
+      rl.question('Enter logger directory path for sockets (default: ' + defaultPath + ') :\n',
+      function(answer) {
+        var conf = {
+          fileName: path.join((answer || defaultPath), 'openveo-socket.log').replace(/\\/g, '/'),
+          level: 'info',
+          maxFileSize: 1048576,
+          maxFiles: 2
+        };
+
+        fs.writeFile(confFile, JSON.stringify(conf, null, '\t'), {encoding: 'utf8'}, callback);
+      });
+    }
   });
 }
-
 
 // Launch installation
 async.series([

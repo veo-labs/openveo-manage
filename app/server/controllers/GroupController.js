@@ -1,19 +1,15 @@
 'use strict';
 
-var path = require('path');
 var util = require('util');
 var openVeoAPI = require('@openveo/api');
 var GroupModel = process.requireManage('app/server/models/GroupModel.js');
 var EntityController = openVeoAPI.controllers.EntityController;
-var SocketProviderManager = process.requireManage('app/server/services/SocketProviderManager.js');
-var configDir = openVeoAPI.fileSystem.getConfDir();
-var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
-var namespace = manageConf.namespace;
-var errors = process.requireManage('app/server/httpErrors.js');
+var ManageServer = process.requireManage('app/server/services/ManageServer.js');
+var errors = process.requireManage('app/server/errors.js');
 var AccessError = openVeoAPI.errors.AccessError;
 
 /**
- * Creates a GroupController
+ * Creates a GroupController to handle actions on groups.
  *
  * @class GroupController
  * @constructor
@@ -27,41 +23,26 @@ module.exports = GroupController;
 util.inherits(GroupController, EntityController);
 
 /**
- * Removes a group.
+ * Gets the list of groups.
  *
- * Parameters :
- *  - **id** The id of the device to remove
+ * @example
+ *     {
+ *       "entities" : [ ... ]
+ *     }
  *
- * @method removeEntityAction
+ * @method getEntitiesAction
  */
-GroupController.prototype.removeEntityAction = function(request, response, next) {
-  if (request.params.id) {
-    var model = new this.Entity(request.user),
-      entityId = request.params.id,
-      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
-
-    socketProvider.scheduleManager.toggleJobs(null, entityId, 'removeGroup', socketProvider, function() {
-      model.remove(entityId, function(error, deleteCount) {
-        if (error) {
-          process.logger.error(error.message, {error: error, method: 'removeEntityAction'});
-          next(errors.REMOVE_GROUP_ERROR);
-        } else {
-          response.send({error: null, status: 'ok'});
-        }
-      });
-    });
-  } else {
-
-    // Missing id of the group
-    next(errors.REMOVE_GROUP_MISSING_PARAMETERS);
-  }
+GroupController.prototype.getEntitiesAction = function(request, response, next) {
+  response.send({
+    entities: ManageServer.get().getGroups()
+  });
 };
 
 /**
  * Updates a group.
  *
  * Expects the following url parameters :
- *  - **id** The id of the entity to update
+ *  - **id** The id of the group to update
  *
  * Also expects data in body.
  *
@@ -71,8 +52,17 @@ EntityController.prototype.updateEntityAction = function(request, response, next
   if (request.params.id && request.body) {
     var model = new this.Entity(request.user),
       entityId = request.params.id,
-      data = request.body,
-      socketProvider = SocketProviderManager.getSocketProviderByNamespace(namespace);
+      data = null;
+
+    try {
+      data = openVeoAPI.util.shallowValidateObject(request.body, {
+        name: {type: 'string'},
+        schedules: {type: 'array<object>'},
+        history: {type: 'array<object>'}
+      });
+    } catch (error) {
+      return next(errors.UPDATE_GROUP_WRONG_PARAMETERS);
+    }
 
     model.update(entityId, request.body, function(error, updateCount) {
       if (error && (error instanceof AccessError))
@@ -83,15 +73,48 @@ EntityController.prototype.updateEntityAction = function(request, response, next
         next(errors.UPDATE_GROUP_ERROR);
       } else {
 
-        // Permits to keep all users up to data
-        socketProvider.updateDevice(entityId, data);
+        // Permits to keep all users up to date
+        ManageServer.get().updateGroup(entityId, data);
+
         response.send({error: null, status: 'ok'});
       }
     });
   } else {
 
-    // Missing id of the entity or the datas
-    next(errors.UPDATE_ENTITY_MISSING_PARAMETERS);
+    // Missing id of the group or the datas
+    next(errors.UPDATE_GROUP_MISSING_PARAMETERS);
 
+  }
+};
+
+/**
+ * Removes a group.
+ *
+ * Parameters :
+ *  - **id** The id of the group to remove
+ *
+ * @method removeEntityAction
+ */
+GroupController.prototype.removeEntityAction = function(request, response, next) {
+  if (request.params.id) {
+    var entityId = request.params.id,
+      server = ManageServer.get(),
+      group = server.getManageable(entityId);
+
+    if (!group)
+      return next(errors.REMOVE_GROUP_NOT_FOUND_ERROR);
+
+    server.removeGroup(group.id, function(error) {
+      if (error) {
+        process.logger.error(error.message, {error: error, method: 'removeEntityAction'});
+        next(errors.REMOVE_GROUP_ERROR);
+      }
+
+      response.send({error: null, status: 'ok'});
+    });
+  } else {
+
+    // Missing id of the group
+    next(errors.REMOVE_GROUP_MISSING_PARAMETERS);
   }
 };

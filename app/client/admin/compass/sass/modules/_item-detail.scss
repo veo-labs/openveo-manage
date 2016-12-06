@@ -1,4 +1,4 @@
-.device-detail {
+.item-detail {
   position: fixed;
   right: 0;
   top: 50px;
@@ -142,6 +142,7 @@
             padding: 0;
             @include sortTable();
             &.trash {
+              padding: 0 8px;
               color: white;
               & > i{
                 text-align: center;
@@ -204,6 +205,11 @@
       .title {
         color: $dark-blue;
         font-weight: 700;
+      }
+
+      .actionError {
+        color: $red;
+        font-size: 12px;
       }
 
       &.action-page {
@@ -283,7 +289,7 @@
               }
             }
           }
-          .recurrent  {
+          .recurrent-block  {
             margin-top: 5px;
             label {
               font-weight: normal;

@@ -1,0 +1,13 @@
+<div ng-controller="ManageDeviceController as vm" class="col-sm-3 demands-container">
+  <div class="demands" ng-repeat="device in incomingDevices track by device.id">
+    <div class="device-connection new well">
+      <div class="title" ng-bind="('MANAGE.CONNECTION.TITLE' | translate) + ((device.name || 'MANAGE.DEVICE.DEFAULT_NAME') | translate)"></div>
+      <div class="mac" ng-bind="'@Mac: ' + device.id"></div>
+      <div class="device"></div>
+      <div class="choice">
+        <button class="refused" ng-click="vm.addToRefusedDevices(device)"></button>
+        <button class="accept" ng-click="vm.addToAcceptedDevices(device)"></button>
+      </div>
+    </div>
+  </div>
+</div>
