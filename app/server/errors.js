@@ -35,144 +35,144 @@ module.exports = {
     module: 'manage'
   },
   REMOVE_DEVICE_NOT_FOUND_ERROR: {
-    code: 0x003,
+    code: 0x004,
     httpCode: 404,
     module: 'manage'
   },
   REMOVE_GROUP_ERROR: {
-    code: 0x004,
-    httpCode: 500,
-    module: 'manage'
-  },
-  REMOVE_GROUP_NOT_FOUND_ERROR: {
-    code: 0x003,
-    httpCode: 404,
-    module: 'manage'
-  },
-  REMOVE_SCHEDULE_ERROR: {
     code: 0x005,
     httpCode: 500,
     module: 'manage'
   },
-  UPDATE_GROUP_ERROR: {
+  REMOVE_GROUP_NOT_FOUND_ERROR: {
     code: 0x006,
+    httpCode: 404,
+    module: 'manage'
+  },
+  REMOVE_SCHEDULE_ERROR: {
+    code: 0x007,
+    httpCode: 500,
+    module: 'manage'
+  },
+  UPDATE_GROUP_ERROR: {
+    code: 0x008,
     httpCode: 500,
     module: 'manage'
   },
   UPDATE_DEVICE_NAME_ERROR: {
-    code: 0x007,
-    module: 'manage'
-  },
-  UPDATE_GROUP_NAME_ERROR: {
-    code: 0x008,
-    module: 'manage'
-  },
-  UPDATE_NAME_DEVICE_NOT_FOUND_ERROR: {
     code: 0x009,
     module: 'manage'
   },
-  UPDATE_NAME_GROUP_NOT_FOUND_ERROR: {
+  UPDATE_GROUP_NAME_ERROR: {
     code: 0x00a,
     module: 'manage'
   },
-  START_DEVICE_SESSION_ERROR: {
+  UPDATE_NAME_DEVICE_NOT_FOUND_ERROR: {
     code: 0x00b,
+    module: 'manage'
+  },
+  UPDATE_NAME_GROUP_NOT_FOUND_ERROR: {
+    code: 0x00c,
+    module: 'manage'
+  },
+  START_DEVICE_SESSION_ERROR: {
+    code: 0x00d,
     module: 'manage'
   },
   START_DEVICE_SESSION_NOT_FOUND_ERROR: {
-    code: 0x00b,
-    module: 'manage'
-  },
-  STOP_DEVICE_SESSION_ERROR: {
-    code: 0x00c,
-    module: 'manage'
-  },
-  STOP_DEVICE_SESSION_NOT_FOUND_ERROR: {
-    code: 0x00c,
-    module: 'manage'
-  },
-  INDEX_DEVICE_SESSION_ERROR: {
-    code: 0x00d,
-    module: 'manage'
-  },
-  INDEX_DEVICE_SESSION_NOT_FOUND_ERROR: {
-    code: 0x00d,
-    module: 'manage'
-  },
-  UPDATE_DEVICE_STATE_ERROR: {
     code: 0x00e,
     module: 'manage'
   },
-  UPDATE_DEVICE_STATE_NOT_FOUND_ERROR: {
+  STOP_DEVICE_SESSION_ERROR: {
     code: 0x00f,
     module: 'manage'
   },
-  REMOVE_HISTORIC_ERROR: {
+  STOP_DEVICE_SESSION_NOT_FOUND_ERROR: {
     code: 0x010,
     module: 'manage'
   },
-  REMOVE_HISTORIC_NOT_FOUND_ERROR: {
-    code: 0x010,
-    module: 'manage'
-  },
-  REMOVE_HISTORY_ERROR: {
+  INDEX_DEVICE_SESSION_ERROR: {
     code: 0x011,
     module: 'manage'
   },
-  REMOVE_HISTORY_NOT_FOUND_ERROR: {
-    code: 0x011,
-    module: 'manage'
-  },
-  REMOVE_GROUP_HISTORIC_ERROR: {
+  INDEX_DEVICE_SESSION_NOT_FOUND_ERROR: {
     code: 0x012,
     module: 'manage'
   },
-  REMOVE_GROUP_HISTORIC_NOT_FOUND_ERROR: {
-    code: 0x012,
-    module: 'manage'
-  },
-  ADD_SCHEDULE_INVALID_ERROR: {
+  UPDATE_DEVICE_STATE_ERROR: {
     code: 0x013,
     module: 'manage'
   },
-  ADD_SCHEDULE_NOT_FOUND_ERROR: {
+  UPDATE_DEVICE_STATE_NOT_FOUND_ERROR: {
     code: 0x014,
     module: 'manage'
   },
-  ADD_SCHEDULE_ERROR: {
+  REMOVE_HISTORIC_ERROR: {
     code: 0x015,
     module: 'manage'
   },
-  REMOVE_SCHEDULE_RUNNING_ERROR: {
+  REMOVE_HISTORIC_NOT_FOUND_ERROR: {
     code: 0x016,
     module: 'manage'
   },
-  REMOVE_SCHEDULE_NOT_FOUND_ERROR: {
-    code: 0x016,
-    module: 'manage'
-  },
-  CREATE_GROUP_ERROR: {
+  REMOVE_HISTORY_ERROR: {
     code: 0x017,
     module: 'manage'
   },
-  ADD_DEVICE_TO_GROUP_ERROR: {
+  REMOVE_HISTORY_NOT_FOUND_ERROR: {
     code: 0x018,
     module: 'manage'
   },
-  ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR: {
+  REMOVE_GROUP_HISTORIC_ERROR: {
     code: 0x019,
     module: 'manage'
   },
-  REMOVE_NOT_FOUND_ERROR: {
+  REMOVE_GROUP_HISTORIC_NOT_FOUND_ERROR: {
     code: 0x01a,
     module: 'manage'
   },
-  REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR: {
+  ADD_SCHEDULE_INVALID_ERROR: {
     code: 0x01b,
     module: 'manage'
   },
-  REMOVE_DEVICE_FROM_GROUP_ERROR: {
+  ADD_SCHEDULE_NOT_FOUND_ERROR: {
     code: 0x01c,
+    module: 'manage'
+  },
+  ADD_SCHEDULE_ERROR: {
+    code: 0x01d,
+    module: 'manage'
+  },
+  REMOVE_SCHEDULE_RUNNING_ERROR: {
+    code: 0x01e,
+    module: 'manage'
+  },
+  REMOVE_SCHEDULE_NOT_FOUND_ERROR: {
+    code: 0x01f,
+    module: 'manage'
+  },
+  CREATE_GROUP_ERROR: {
+    code: 0x020,
+    module: 'manage'
+  },
+  ADD_DEVICE_TO_GROUP_ERROR: {
+    code: 0x021,
+    module: 'manage'
+  },
+  ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR: {
+    code: 0x022,
+    module: 'manage'
+  },
+  REMOVE_NOT_FOUND_ERROR: {
+    code: 0x023,
+    module: 'manage'
+  },
+  REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR: {
+    code: 0x024,
+    module: 'manage'
+  },
+  REMOVE_DEVICE_FROM_GROUP_ERROR: {
+    code: 0x025,
     module: 'manage'
   },
 
@@ -262,7 +262,7 @@ module.exports = {
     module: 'manage'
   },
   REMOVE_GROUP_WRONG_PARAMETERS: {
-    code: 0x30e,
+    code: 0x310,
     module: 'manage'
   }
 };
