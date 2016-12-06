@@ -59,7 +59,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-remove');
 
   // Listen to changes on SCSS files and generate CSS files
-  grunt.registerTask('default', ['compass:dev', 'watch']);
+  grunt.registerTask('default', ['sprite', 'compass:dev', 'watch']);
 
   // Minify and concat back end AngularJS Javascript files
   grunt.registerTask('concatPlugin', ['uglify:dist', 'concat:lib', 'concat:js']);
