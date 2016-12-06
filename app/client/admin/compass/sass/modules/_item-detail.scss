@@ -3,8 +3,8 @@
   right: 0;
   top: 50px;
   height: 100%;
-  width: 300px;
-  margin-right: -300px;
+  width: #{$item-detail-width}px;
+  margin-right: -#{$item-detail-width}px;
   transition: all .5s ease;
   background-color: $selected-grey;
   overflow: hidden;
@@ -84,7 +84,7 @@
   .content {
     position: relative;
     height: 100%;
-    width: 900px;
+    width: #{$item-detail-width * 3}px;
     transition: all .6s ease;
 
     @include mobile() {
@@ -95,14 +95,14 @@
       left: 0;
     }
     &.second {
-      left: -300px;
+      left: -#{$item-detail-width}px;
 
       @include mobile() {
         left: -100%;
       }
     }
     &.third {
-      left: -600px;
+      left: -#{$item-detail-width *2}px;
 
       @include mobile() {
         left: -200%;
@@ -112,7 +112,7 @@
       position: relative;
       float: left;
       left: 0;
-      width: 300px;
+      width: #{$item-detail-width}px;
       display: inline-block;
       padding: 25px 20px;
       height: 100%;
@@ -214,27 +214,24 @@
 
       &.action-page {
         .preset {
-          padding-bottom: 25px;
           border-bottom: 1px solid $border-grey;
           position: relative;
-          margin-bottom: 20px;
           &.disabled {
             opacity: .6;
           }
-
           .selected-preset {
             float: right;
             font-weight: bold;
           }
-
           select {
-            position: absolute;
-            right: 0;
+            width: auto;
+            @include mobile() {
+              width: 100%;
+            }
           }
         }
         .action {
           border-bottom: 1px solid $border-grey;
-          margin-bottom: 20px;
           .start, .recording {
             display: block;
             margin: 10px auto 20px auto;
@@ -245,29 +242,27 @@
         }
         .planning {
           border-bottom: 1px solid $border-grey;
-          margin-bottom: 20px;
-          padding-bottom: 20px;
           .title {
             margin-bottom: 10px;
           }
-          .begin, .end {
+          .form-group label {
             font-size: 12px;
           }
-          .begin-block, .end-block {
-            .date {
-              padding: 6px;
-              width: 35%;
-              float: left;
-              margin-right: 10px;
+          .date-container{
+            width:145px;
+            button{
+              height: 34px;
             }
+          }
+          .begin-block, .end-block {
             .datepicker {
-              float: left;
+              //float: left;
               background-color: transparent;
               border: none;
               width: 35px;
               height: 32px;
               font-size: 26px;
-              margin-left: -3px;
+              //margin-left: -3px;
 
               @include tablet() {
                 padding-left: 7px;
@@ -288,6 +283,11 @@
                 padding: 0 7px;
               }
             }
+          }
+
+          input[type=checkbox]{
+            margin-left: 0;
+            margin-top: 2px;
           }
           .recurrent-block  {
             margin-top: 5px;
@@ -324,6 +324,11 @@
           display: block;
         }
       }
+      &.history-page{
+        .remove{
+          text-align: center;
+        }
+      }
 
       &.detail-page {
         .status {
@@ -342,7 +347,7 @@
             right: -10px;
             top: -5px;
           }
-          input {
+          input4 {
             display: inline-block;
             width: 200px;
             position: absolute;
@@ -380,9 +385,12 @@
         }
         .infos {
           margin-top: 15px;
-          padding-bottom: 15px;
           margin-bottom: 15px;
           border-bottom: 1px solid $border-grey;
+
+          .control-label{
+          padding-top: 0;
+          }
         }
         .storage > .text {
           font-weight: bold;
