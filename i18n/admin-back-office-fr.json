@@ -40,7 +40,7 @@
     "DETAIL": {
       "TAB_TITLE": "Détail",
       "STATE": "Etat",
-      "DEVICES_TITLE": "Action",
+      "DEVICES_TITLE": "Liste des encodeurs du groupe",
       "DEVICES_TABLE": {
         "NAME": "Nom",
         "STATUS": "Statut"

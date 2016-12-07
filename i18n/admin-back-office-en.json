@@ -40,7 +40,7 @@
     "DETAIL": {
       "TAB_TITLE": "Detail",
       "STATE": "State",
-      "DEVICES_TITLE": "Action",
+      "DEVICES_TITLE": "List of devices in the group",
       "DEVICES_TABLE": {
         "NAME": "Name",
         "STATUS": "Status"
