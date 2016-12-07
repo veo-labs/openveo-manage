@@ -242,6 +242,8 @@
       $scope.manage.showDetail = false;
       $scope.manage.openedItem = null;
       $scope.organizeLayout(false);
+      GroupFactory.setGroupsProperty('isSelected', false);
+      DeviceFactory.setDevicesProperty('isSelected', false);
 
       $timeout(function() {
         $scope.setActivePage(0);
@@ -589,8 +591,10 @@
 
     // Listen event to load the selected item details on window opening
     $scope.$on('item.load', function(event, itemId, isGroup) {
-      if (self.selectedItem && self.selectedItem.id === itemId)
+      if (self.selectedItem && self.selectedItem.id === itemId) {
+        self.selectedItem.isSelected = true;
         return;
+      }
 
       // Get the new selected item
       self.selectedItem = isGroup ? GroupFactory.getGroup(itemId) : DeviceFactory.getDevice(itemId);

@@ -338,9 +338,6 @@
           // Close the panel
           $rootScope.$broadcast('item.closeDetails');
 
-          GroupFactory.setGroupsProperty('isSelected', false);
-          DeviceFactory.setDevicesProperty('isSelected', false);
-
         } else {
 
           // Item to load in the details panel is a different item

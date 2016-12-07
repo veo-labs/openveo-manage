@@ -166,6 +166,7 @@
         var history = device.history;
         device.type = MANAGEABLE_TYPES.DEVICE;
         device.history = [];
+        if (!device.status) device.status = DEVICE_STATUS.DISCONNECTED;
         if (!device.inputs) device.inputs = {};
         if (!device.presets) device.presets = [];
 
