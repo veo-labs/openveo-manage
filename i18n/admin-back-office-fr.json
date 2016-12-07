@@ -29,7 +29,7 @@
         "BEGIN": "Début",
         "DURATION": "Durée",
         "END": "Fin",
-        "PRESET": "Preset"
+        "PRESET": "Préréglage"
       },
       "TIME": "Heure",
       "RECORD": "Enregistrer",
@@ -82,7 +82,7 @@
   "GROUP": {
     "DEFAULT_NAME": "Groupe",
     "CREATE_ERROR": "Erreur lors de la création du groupe (code = {{code}})",
-    "PRESET_INPUTS_ERROR": "Ce preset n'est pas disponible, merci de vérifier les entrées des encodeurs suivant : {{devices}}",
+    "PRESET_INPUTS_ERROR": "Ce préréglage n'est pas disponible, merci de vérifier les entrées des encodeurs suivant : {{devices}}",
     "REMOVE_ERROR": "Erreur lors de la suppression du groupe (code = {{code}})",
     "REMOVE_DEVICE_ERROR": "Erreur lors de la suppression de l'encodeur \"{{name}}\" du groupe (code = {{code}})",
     "ADD_DEVICE_ERROR": "Erreur lors de l'ajout de l'encodeur au groupe \"{{name}}\" (code = {{code}})"
@@ -91,9 +91,9 @@
     "DEFAULT_NAME": "Encodeur",
     "SPACE": "Espace disque",
     "INPUTS_STATUS": {
-      "MISSING_CAMERA": "Ce preset nécessite une caméra fonctionnelle",
-      "MISSING_PC": "Ce preset nécessite un PC fonctionnel",
-      "MISSING_PC_AND_CAMERA": "Ce preset nécessite qu'une caméra et un PC soient connectés"
+      "MISSING_CAMERA": "Ce préréglage nécessite une caméra fonctionnelle",
+      "MISSING_PC": "Ce préréglage nécessite un PC fonctionnel",
+      "MISSING_PC_AND_CAMERA": "Ce préréglage nécessite qu'une caméra et un PC soient connectés"
     },
     "ADD_ACCEPTED_ERROR":"Erreur lors du passage au statut accepté de l'encodeur (code = {{code}})",
     "ADD_REFUSED_ERROR":"Erreur lors du passage au statut refusé de l'encodeur (code = {{code}})",
