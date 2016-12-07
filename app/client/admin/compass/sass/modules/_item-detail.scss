@@ -225,6 +225,7 @@
           }
           select {
             width: auto;
+            max-width: 100%;
             @include mobile() {
               width: 100%;
             }
