@@ -601,7 +601,7 @@
     // Watch for preset changes
     $scope.$watch('vm.selectedItem.presets', function() {
       if (self.selectedItem) {
-        var preset = self.selectedItem.presets && self.selectedItem.presets[0].id;
+        var preset = self.selectedItem.presets && self.selectedItem.presets[0] && self.selectedItem.presets[0].id;
         self.itemSchedule.schedule.preset = preset;
         self.validatePreset(preset);
       }

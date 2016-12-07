@@ -188,6 +188,7 @@
         device.type = MANAGEABLE_TYPES.DEVICE;
         device.history = [];
         if (!device.inputs) device.inputs = {};
+        if (!device.presets) device.presets = [];
 
         if (state === DEVICE_STATES.ACCEPTED)
           devices[DEVICE_STATES.ACCEPTED].push(device);
