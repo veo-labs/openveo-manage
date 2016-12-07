@@ -73,8 +73,10 @@ module.exports = Manageable;
  */
 Manageable.prototype.checkSchedulesConflict = function(schedule1, schedule2) {
   var schedule1DateTimeBegin = new Date(schedule1.beginDate);
+  var schedule1DateDailyEnd = new Date(schedule1.endDate);
   var schedule1DateTimeEnd = new Date(schedule1DateTimeBegin.getTime() + schedule1.duration);
   var schedule2DateTimeBegin = new Date(schedule2.beginDate);
+  var schedule2DateDailyEnd = new Date(schedule2.endDate);
   var schedule2DateTimeEnd = new Date(schedule2DateTimeBegin.getTime() + schedule2.duration);
 
   if ((schedule2DateTimeBegin >= schedule1DateTimeBegin && schedule2DateTimeBegin <= schedule1DateTimeEnd) ||
@@ -84,57 +86,60 @@ Manageable.prototype.checkSchedulesConflict = function(schedule1, schedule2) {
     // Conflict between schedules' dates :
 
     // Schedule2 start date is in schedule1 date interval
-    // [------------]
-    //   [------------]
+    // schedule1 : [------------]
+    // schedule2 :   [------------]
 
-    // [------------]
-    //   [--------]
+    // schedule1 : [------------]
+    // schedule2 :   [--------]
 
     // Schedule2 end date is in schedule1 date interval
-    //   [------------]
-    // [------------]
+    // schedule1 :   [------------]
+    // schedule2 : [------------]
 
     // Schedule2 date interval cover the schedule1 date interval
-    //   [------------]
-    // [----------------]
+    // schedule1 :   [------------]
+    // schedule2 : [----------------]
 
-    if (schedule1.recurrent || schedule2.recurrent) {
-
-      // Daily schedule
-      // Compare only time
-
-      var schedule1TimeBegin = schedule1DateTimeBegin.getHours() + ':' + schedule1DateTimeBegin.getMinutes();
-      var schedule1TimeEnd = schedule1DateTimeEnd.getHours() + ':' + schedule1DateTimeEnd.getMinutes();
-      var schedule2TimeBegin = schedule2DateTimeBegin.getHours() + ':' + schedule2DateTimeBegin.getMinutes();
-      var schedule2TimeEnd = schedule2DateTimeEnd.getHours() + ':' + schedule2DateTimeEnd.getMinutes();
-
-      if ((schedule2TimeBegin >= schedule1TimeBegin && schedule2TimeBegin <= schedule1TimeEnd) ||
-        (schedule2TimeEnd >= schedule1TimeBegin && schedule2TimeEnd <= schedule1TimeEnd) ||
-        (schedule2TimeBegin <= schedule1TimeBegin && schedule2TimeEnd >= schedule1TimeEnd)) {
-
-        // Conflict between schedules' times :
-
-        // Schedule2 start time is in schedule1 time interval
-        // [------------]
-        //   [------------]
-
-        // [------------]
-        //   [--------]
-
-        // Schedule2 end time is in schedule1 time interval
-        //   [------------]
-        // [------------]
-
-        // Schedule2 time interval cover the schedule1 time interval
-        //   [------------]
-        // [----------------]
-
-        return true;
-      }
-    } else
-      return true;
+    return true;
   }
 
+  if (((schedule2DateTimeBegin >= schedule1DateTimeBegin && schedule2DateTimeBegin <= schedule1DateDailyEnd) ||
+    (schedule2DateDailyEnd >= schedule1DateTimeBegin && schedule2DateDailyEnd <= schedule1DateDailyEnd) ||
+    (schedule2DateTimeBegin <= schedule1DateTimeBegin && schedule2DateDailyEnd >= schedule1DateDailyEnd)) &&
+     (schedule1.recurrent || schedule2.recurrent)) {
+
+    // Daily schedule with conflicting dates
+    // Compare only time
+
+    var schedule1TimeBegin = schedule1DateTimeBegin.getHours() + ':' + schedule1DateTimeBegin.getMinutes();
+    var schedule1TimeEnd = schedule1DateTimeEnd.getHours() + ':' + schedule1DateTimeEnd.getMinutes();
+    var schedule2TimeBegin = schedule2DateTimeBegin.getHours() + ':' + schedule2DateTimeBegin.getMinutes();
+    var schedule2TimeEnd = schedule2DateTimeEnd.getHours() + ':' + schedule2DateTimeEnd.getMinutes();
+
+    if ((schedule2TimeBegin >= schedule1TimeBegin && schedule2TimeBegin <= schedule1TimeEnd) ||
+      (schedule2TimeEnd >= schedule1TimeBegin && schedule2TimeEnd <= schedule1TimeEnd) ||
+      (schedule2TimeBegin <= schedule1TimeBegin && schedule2TimeEnd >= schedule1TimeEnd)) {
+
+      // Conflict between schedules' times :
+
+      // Schedule2 start time is in schedule1 time interval
+      // schedule1 : [------------]
+      // schedule2 :   [------------]
+
+      // schedule1 : [------------]
+      // schedule2 :   [--------]
+
+      // Schedule2 end time is in schedule1 time interval
+      // schedule1 :   [------------]
+      // schedule2 : [------------]
+
+      // Schedule2 time interval cover the schedule1 time interval
+      // schedule1 :   [------------]
+      // schedule2 : [----------------]
+
+      return true;
+    }
+  }
 
   return false;
 };
