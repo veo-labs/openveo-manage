@@ -314,6 +314,11 @@
       var durationDate = self.itemSchedule.schedule.durationDate;
       var duration = ((durationDate.getHours() * 60) + durationDate.getMinutes()) * 60 * 1000;
       var type = (self.selectedItem.type === MANAGEABLE_TYPES.GROUP) ? MANAGEABLE_TYPES.GROUP : MANAGEABLE_TYPES.DEVICE;
+
+      // Add begin time to begin date
+      self.itemSchedule.schedule.beginDate.setHours(self.itemSchedule.schedule.beginTime.getHours());
+      self.itemSchedule.schedule.beginDate.setMinutes(self.itemSchedule.schedule.beginTime.getMinutes());
+
       var schedule = {
         beginDate: self.itemSchedule.schedule.beginDate,
         endDate: self.itemSchedule.schedule.endDate,
@@ -441,6 +446,39 @@
       }
 
       return null;
+    };
+
+    /**
+     * Resets the action form.
+     *
+     * @method resetActionForm
+     */
+    self.resetActionForm = function() {
+      var beginTimeDate = new Date();
+      var durationDate = new Date();
+      beginTimeDate.setHours(0);
+      beginTimeDate.setMinutes(0);
+      beginTimeDate.setSeconds(0);
+      durationDate.setHours(0);
+      durationDate.setMinutes(1);
+      durationDate.setSeconds(0);
+      self.itemSchedule = {
+        schedule: {
+          beginTime: beginTimeDate,
+          durationDate: durationDate
+        }
+      };
+
+      if ($scope.actionForm) {
+        $scope.actionForm.$setPristine();
+        $scope.actionForm.$setUntouched();
+      }
+
+      if (self.selectedItem) {
+        var preset = self.selectedItem.presets && self.selectedItem.presets[0] && self.selectedItem.presets[0].id;
+        self.itemSchedule.schedule.preset = preset;
+        self.validatePreset(preset);
+      }
     };
 
     /**
@@ -621,9 +659,9 @@
       // Select the new item
       self.selectedItem.isSelected = true;
 
-      var preset = self.selectedItem.presets && self.selectedItem.presets[0] && self.selectedItem.presets[0].id;
-      self.itemSchedule.schedule.preset = preset;
-      self.validatePreset(preset);
+      // Reset action form
+      self.resetActionForm();
+
     });
 
     // Listen event to close item details window
@@ -655,6 +693,8 @@
       detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
       historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
     });
+
+    self.resetActionForm();
   }
 
   app.controller('ManageItemDetailController', ItemDetailController);

@@ -71,7 +71,7 @@
                     <div class="form-group planning" ng-if="vm.selectedItem.status !== DEVICE_STATUS.DISCONNECTED">
                         <label class="title" ng-bind="'MANAGE.DETAIL.ACTION.PLANNING_TITLE' | translate"></label>
                         <div class="row">
-                        <div class="col-xs-6 form-group begin-block" ng-class="{'has-error': actionForm.beginDate.$invalid && vactionForm.beginDate.$touched}">
+                        <div class="col-xs-6 form-group begin-block" ng-class="{'has-error': actionForm.beginDate.$invalid && actionForm.beginDate.$touched}">
                           <label ng-bind="('MANAGE.DETAIL.ACTION.BEGIN' | translate) + ' :'"></label>
                             <span class="input-group date-container">
                               <input name="beginDate"
@@ -95,15 +95,15 @@
                             </span>
                           </div>
 
-
-                        <div class="col-xs-6  form-group time-block">
+                        <div class="col-xs-6 form-group time-block">
                           <label class="duration" for="duration" ng-bind="('MANAGE.DETAIL.ACTION.TIME' | translate) + ' :'"></label>
                           <uib-timepicker class="time"
                                           name="beginTime"
-                                          ng-model="vm.itemSchedule.schedule.beginDate"
+                                          ng-model="vm.itemSchedule.schedule.beginTime"
                                           ng-model-options="{allowInvalid : true}"
                                           show-spinners="false"
                                           show-meridian="false"
+                                          mousewheel="false"
                                           required>
                           </uib-timepicker>
                         </div>
@@ -115,11 +115,11 @@
                                           show-spinners="false"
                                           show-meridian="false"
                                           min="vm.minDuration"
+                                          mousewheel="false"
                                           name="durationDate"
                                           required>
                           </uib-timepicker>
                         </div>
-
 
                          <div class="form-group recurrent-block">
                           <div class="checkbox">
