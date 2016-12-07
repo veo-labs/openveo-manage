@@ -96,27 +96,6 @@
     }
 
     /**
-     * Gets a preset of a device.
-     *
-     * @method getPreset
-     * @param {String} deviceId The device id
-     * @param {String} presetId The device preset to look for
-     * @return {Object|Null} The preset configuration or null if not found
-     */
-    function getPreset(deviceId, presetId) {
-      var device = getDevice(deviceId);
-
-      if (device && presetId) {
-        for (var i = 0; i < device.presets.length; i++) {
-          if (device.presets[i].id === presetId)
-            return device.presets[i];
-        }
-      }
-
-      return null;
-    }
-
-    /**
      * Adds a device historic.
      *
      * @method addHistoric
@@ -342,7 +321,7 @@
       if (device) {
 
         // Find device preset
-        var preset = getPreset(deviceId, presetId);
+        var preset = ManageableFactory.getPreset(device, presetId);
 
         if (preset) {
 

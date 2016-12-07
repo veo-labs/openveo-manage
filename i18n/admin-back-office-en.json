@@ -28,7 +28,8 @@
       "PLANNING_TABLE": {
         "BEGIN": "Begin",
         "DURATION": "Duration",
-        "END": "End"
+        "END": "End",
+        "PRESET": "Preset"
       },
       "TIME": "Time",
       "RECORD": "Record",

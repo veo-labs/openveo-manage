@@ -28,7 +28,8 @@
       "PLANNING_TABLE": {
         "BEGIN": "Début",
         "DURATION": "Durée",
-        "END": "Fin"
+        "END": "Fin",
+        "PRESET": "Preset"
       },
       "TIME": "Heure",
       "RECORD": "Enregistrer",

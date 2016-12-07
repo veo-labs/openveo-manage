@@ -16,6 +16,7 @@
     ManageFactory,
     GroupFactory,
     DeviceFactory,
+    ManageableFactory,
     entityService,
     MANAGE_NAME,
     DEVICE_STATUS,
@@ -408,6 +409,24 @@
     };
 
     /**
+     * Gets selected manageable's preset's name.
+     *
+     * @method getPresetName
+     * @param {String} id The preset id
+     * @return {String|Null} The preset name or null if not found
+     */
+    self.getPresetName = function(id) {
+      if (id) {
+        var preset = ManageableFactory.getPreset(self.selectedItem, id);
+
+        if (preset)
+          return preset.name;
+      }
+
+      return null;
+    };
+
+    /**
      * Removes a schedule from selected manageable.
      *
      * @method removeSchedule
@@ -625,6 +644,7 @@
     'ManageFactory',
     'ManageGroupFactory',
     'ManageDeviceFactory',
+    'ManageManageableFactory',
     'entityService',
     'MANAGE_NAME',
     'MANAGE_DEVICE_STATUS',

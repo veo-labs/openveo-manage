@@ -116,12 +116,32 @@
       }
     }
 
+    /**
+     * Gets a manageable's preset.
+     *
+     * @method getPreset
+     * @param {Object} manageable The manageable
+     * @param {String} presetId The manageable's preset to look for
+     * @return {Object|Null} The preset's configuration or null if not found
+     */
+    function getPreset(manageable, presetId) {
+      if (manageable && presetId) {
+        for (var i = 0; i < manageable.presets.length; i++) {
+          if (manageable.presets[i].id === presetId)
+            return manageable.presets[i];
+        }
+      }
+
+      return null;
+    }
+
     return {
       addHistoric: addHistoric,
       removeHistoric: removeHistoric,
       removeHistory: removeHistory,
       addSchedule: addSchedule,
-      removeSchedule: removeSchedule
+      removeSchedule: removeSchedule,
+      getPreset: getPreset
     };
 
   }

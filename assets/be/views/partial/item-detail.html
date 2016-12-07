@@ -94,7 +94,7 @@
                               </span>
                             </span>
                           </div>
-                      
+
 
                         <div class="col-xs-6  form-group time-block">
                           <label class="duration" for="duration" ng-bind="('MANAGE.DETAIL.ACTION.TIME' | translate) + ' :'"></label>
@@ -120,14 +120,14 @@
                           </uib-timepicker>
                         </div>
 
-                        
+
                          <div class="form-group recurrent-block">
                           <div class="checkbox">
                             <input id="recurrent-schedule" type="checkbox" ng-model="vm.itemSchedule.schedule.recurrent">
                             <label for="recurrent-schedule" ng-bind="'MANAGE.DETAIL.ACTION.RECURRENT' | translate"></label>
                           </div>
                           </div>
-                        
+
 
                         <div class="form-group end-block" ng-show="vm.itemSchedule.schedule.recurrent"  ng-class="{'has-error': actionForm.endDate.$invalid && actionForm.endDate.$touched}">
                           <label class="end" ng-bind="('MANAGE.DETAIL.ACTION.END' | translate) + ' :'"></label>
@@ -159,6 +159,7 @@
                                 <th ov-manage-sort-table order="'beginDate'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.ACTION.PLANNING_TABLE.BEGIN' | translate }}</th>
                                 <th ov-manage-sort-table order="'duration'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.ACTION.PLANNING_TABLE.DURATION' | translate }}</th>
                                 <th ov-manage-sort-table order="'endDate'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.ACTION.PLANNING_TABLE.END' | translate }}</th>
+                                <th ov-manage-sort-table order="'preset'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.ACTION.PLANNING_TABLE.PRESET' | translate }}</th>
                                 <th class="trash"><i class="glyphicon glyphicon-trash"></i></th>
                             </tr>
                             </thead>
@@ -167,19 +168,24 @@
                                 <th>
                                     <div class="periodic">
                                         <i class="glyphicon glyphicon-repeat" ng-if="schedule.recurrent"></i>
-                                        <div class="hour" ng-bind="schedule.beginDate | date:'HH:mm'"></div>
+                                        <div ng-bind="schedule.beginDate | date:'HH:mm'"></div>
                                         <div ng-class="{'right': schedule.recurrent}" class="date" ng-bind="schedule.beginDate | date:'dd/MM/yyyy'"></div>
                                     </div>
                                 </th>
                                 <th>
-                                    <div class="periodic" ng-init="">
-                                        <div class="hour" ng-bind="(vm.zeroTimeDate + schedule.duration) | date:'HH:mm'"></div>
+                                    <div class="periodic">
+                                        <div ng-bind="(vm.zeroTimeDate + schedule.duration) | date:'HH:mm'"></div>
                                     </div>
                                 </th>
                                 <th>
                                     <div class="periodic" ng-if="schedule.recurrent">
-                                        <div class="hour" ng-bind="schedule.endDate | date:'HH:mm'"></div>
-                                        <div class="date" ng-bind="schedule.endDate | date:'dd/MM/yyyy'"></div>
+                                        <div ng-bind="schedule.endDate | date:'HH:mm'"></div>
+                                        <div ng-bind="schedule.endDate | date:'dd/MM/yyyy'"></div>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="periodic">
+                                        <div ng-bind="vm.getPresetName(schedule.preset)"></div>
                                     </div>
                                 </th>
                                 <th class="cross" ng-click="vm.openRemoveModal(schedule.id, 'REMOVE_SCHEDULE')"></th>
@@ -200,7 +206,7 @@
                 <div class="form-group status">
 
                     <!-- Name edition -->
-                    <span class="name" 
+                    <span class="name"
                         ng-bind="(vm.selectedItem.name || 'MANAGE.DEVICE.DEFAULT_NAME') | translate"
                         ng-show="!vm.selectedItem.displayInputName"
                     ></span>
@@ -213,7 +219,7 @@
                           <button type="submit" class="btn btn-primary ng-binding" ng-disabled="vm.deviceNameForm.$invalid || vm.deviceNameForm.$waiting" ng-bind="'CORE.UI.FORM_SAVE' | translate" ng-click="vm.updateName(vm.selectedItemName)">Enregistrer</button>
                           <button type="button" class="btn btn-default ng-binding" ng-disabled="vm.deviceNameForm.$waiting" ng-click="vm.selectedItem.displayInputName = !vm.selectedItem.displayInputName" ng-bind="'CORE.UI.FORM_CANCEL' | translate">Annuler</button>
                         </div>
-                      
+
                     </form>
 
                     <!-- State -->
