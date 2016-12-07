@@ -90,8 +90,8 @@
 
       // Set transition duration for reset
       element.css({
-        '-webkit-transition-duration': '.5s',
-        'transition-duration': '.5s',
+        '-webkit-transition-duration': '.35s',
+        'transition-duration': '.35s',
         '-webkit-transform': 'translate(0, 0)',
         transform: 'translate(0, 0)'
       });
@@ -122,8 +122,8 @@
       }
 
       element.css({
-        '-webkit-transition-duration': '.75s',
-        'transition-duration': '.75s',
+        '-webkit-transition-duration': '.5s',
+        'transition-duration': '.5s',
         '-webkit-transform': 'translate(' + x + 'px, ' + y + 'px)',
         transform: 'translate(' + x + 'px, ' + y + 'px)'
       });
@@ -255,7 +255,7 @@
             }
 
             $scope.$apply();
-          }, 500);
+          }, 350);
         }
       });
     }
@@ -341,19 +341,16 @@
         } else {
 
           // Item to load in the details panel is a different item
-          // Display new item details with delay
+          // Display new item details
           // And activate first tab
 
           $scope.manage.openedItem = itemId;
           $scope.manage.showDetail = false;
           $scope.setActivePage(0);
 
-          // Add a latency to visualize the change of device detail
-          $timeout(function() {
-            $rootScope.$broadcast('item.load', itemId, currentTarget.hasClass('group'));
-            $scope.manage.showDetail = true;
-            updateScrollbar();
-          }, 500);
+          $rootScope.$broadcast('item.load', itemId, currentTarget.hasClass('group'));
+          $scope.manage.showDetail = true;
+          updateScrollbar();
         }
 
         $scope.$apply();

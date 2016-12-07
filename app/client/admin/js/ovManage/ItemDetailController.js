@@ -247,7 +247,7 @@
 
       $timeout(function() {
         $scope.setActivePage(0);
-      }, 400);
+      }, 350);
 
       // Destroy scrollbars
       Ps.destroy(actionEl);

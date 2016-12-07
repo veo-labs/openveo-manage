@@ -5,7 +5,7 @@
   height: 100%;
   width: #{$item-detail-width}px;
   margin-right: -#{$item-detail-width}px;
-  transition: all .5s ease;
+  transition: all .35s ease;
   background-color: $selected-grey;
   overflow: hidden;
   z-index: 3;
@@ -58,7 +58,7 @@
         margin: 0;
         background: $blue;
         border: none;
-        transition: .3s ease-in-out;
+        transition: .2s ease-in-out;
       }
     }
     .exit {
@@ -85,7 +85,7 @@
     position: relative;
     height: 100%;
     width: #{$item-detail-width * 3}px;
-    transition: all .6s ease;
+    transition: all .35s ease;
 
     @include mobile() {
       width: 300%;
