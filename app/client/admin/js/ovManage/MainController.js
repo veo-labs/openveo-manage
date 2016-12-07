@@ -316,7 +316,6 @@
       } else {
         ManageFactory.removeDeviceFromGroup(device.id).then(function() {
           GroupFactory.removeDeviceFromGroup(device.id, device.group);
-          $scope.$apply();
         }, function(error) {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.GROUP.REMOVE_DEVICE_ERROR', null, {
             code: error.code,
