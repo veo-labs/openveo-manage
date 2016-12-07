@@ -394,7 +394,8 @@
           group.inputs.error = $filter('translate')('MANAGE.GROUP.PRESET_INPUTS_ERROR', null, {
             devices: devicesInError.join(', ')
           });
-        }
+        } else
+          group.inputs.error = null;
 
       }
 

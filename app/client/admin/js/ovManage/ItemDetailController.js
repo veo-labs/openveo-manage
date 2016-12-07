@@ -622,6 +622,10 @@
     });
 
     // Watch for preset changes
+    $scope.$watch('vm.selectedItem.devices', function() {
+      if (self.selectedItem && self.selectedItem.devices)
+        self.validatePreset(self.itemSchedule.schedule.preset);
+    }, true);
     $scope.$watch('vm.selectedItem.presets', function() {
       if (self.selectedItem) {
         var preset = self.selectedItem.presets && self.selectedItem.presets[0] && self.selectedItem.presets[0].id;
