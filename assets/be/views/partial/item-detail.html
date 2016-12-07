@@ -265,7 +265,7 @@
                         <tbody>
                             <tr ng-repeat="device in vm.selectedItem.devices | orderBy:order:reverse track by device.id">
                                 <th ng-bind="(device.name || 'MANAGE.DEVICE.DEFAULT_NAME') | translate"></th>
-                                <th ng-init="state = (device.state === DEVICE_STATES.ACCEPTED) ? 'MANAGE.STATUS.DISCONNECTED' : device.statusMessage" ng-bind="state | translate"></th>
+                                <th ng-bind="device.statusMessage | translate"></th>
                                 <th class="cross" ng-click="removeFromGroup(device.id)"></th>
                             </tr>
                         </tbody>
