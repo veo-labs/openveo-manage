@@ -602,7 +602,7 @@
       // Select the new item
       self.selectedItem.isSelected = true;
 
-      var preset = self.selectedItem.presets && self.selectedItem.presets[0].id;
+      var preset = self.selectedItem.presets && self.selectedItem.presets[0] && self.selectedItem.presets[0].id;
       self.itemSchedule.schedule.preset = preset;
       self.validatePreset(preset);
     });
