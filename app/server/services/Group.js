@@ -40,23 +40,27 @@ Group.TYPE = 'group';
  * Group schedule should not be in collision with devices inside the group.
  *
  * @method isValidSchedule
- * @param {Array} devices Group devices
  * @param {Object} schedule The schedule description object
+ * @param {Array} devices Group devices
  * @return {Boolean} true if the schedule is not in collision with other schedules
  * false otherwise
  */
-Group.prototype.isValidSchedule = function(devices, schedule) {
+Group.prototype.isValidSchedule = function(schedule, devices) {
   if (!Group.super_.prototype.isValidSchedule.call(this, schedule))
     return false;
 
-  // Validates that the schedule is not in conflict with one of the
-  // schedules in group's devices
-  for (var i = 0; i < this.devices.length; i++) {
-    var device = this.devices[i];
+  if (devices) {
 
-    for (var j = 0; j < device.schedules.length; j++) {
-      if (this.checkSchedulesConflict(device.schedules[j], schedule))
-        return false;
+    // Validates that the schedule is not in conflict with one of the
+    // schedules in group's devices
+    for (var i = 0; i < devices.length; i++) {
+      var device = devices[i];
+
+      for (var j = 0; j < device.schedules.length; j++) {
+        if (this.checkSchedulesConflict(device.schedules[j], schedule))
+          return false;
+      }
+
     }
 
   }

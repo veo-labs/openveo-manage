@@ -199,13 +199,13 @@
           }
 
           if (isConflict)
-            devicesInConflict.push(device);
+            devicesInConflict.push(device.name);
 
         }
 
         if (devicesInConflict.length) {
-          handleError($filter('translate')('MANAGE.MANAGEABLE.GROUP_CONFLICT_ERROR', null, {
-            encoders: devicesInConflict.join(', ')
+          handleError($filter('translate')('MANAGE.MANAGEABLE.GROUP_DEVICES_CONFLICT_ERROR', null, {
+            devices: devicesInConflict.join(', ')
           }));
           return false;
         }
@@ -215,7 +215,16 @@
         // Selected item is a device associated to a group
 
         // Validate that the new schedule is not in conflict with one of the schedules in the device's group
-        // TODO
+        var group = GroupFactory.getGroup(self.selectedItem.group);
+
+        if (group) {
+          for (i = 0; i < group.schedules.length; i++) {
+            if (checkSchedulesConflict(group.schedules[i], schedule)) {
+              handleError($filter('translate')('MANAGE.MANAGEABLE.GROUP_CONFLICT_ERROR'));
+              return false;
+            }
+          }
+        }
 
       }
 

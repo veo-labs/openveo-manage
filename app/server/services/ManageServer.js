@@ -989,6 +989,7 @@ function initBrowsersNamespaceListeners() {
   this.browsersNamespace.on('addSchedule', function(id, schedule, type, callback) {
     var model = (type === Device.TYPE) ? self.deviceModel : self.groupModel;
     var manageable = self.cache.get(id);
+    var isValidSchedule = false;
 
     if (!manageable) {
       return callback({
@@ -996,9 +997,16 @@ function initBrowsersNamespaceListeners() {
       });
     }
 
-    var groupDevices = self.cache.getManageablesByProperty('group', manageable.id);
+    // Validate that schedule is not in collision with other schedules
+    if (type === Group.TYPE) {
+      var groupDevices = self.cache.getManageablesByProperty('group', manageable.id);
+      isValidSchedule = manageable.isValidSchedule(schedule, groupDevices);
+    } else if (manageable.group) {
+      var deviceGroup = self.cache.get(manageable.group);
+      isValidSchedule = manageable.isValidSchedule(schedule, deviceGroup);
+    }
 
-    if (!manageable.isValidSchedule(groupDevices, schedule)) {
+    if (!isValidSchedule) {
       return callback({
         error: errors.ADD_SCHEDULE_INVALID_ERROR
       });

@@ -141,3 +141,32 @@ Device.prototype.disconnect = function() {
   this.inputs = null;
   this.storage = null;
 };
+
+/**
+ * Checks if a schedule is not in collision with other schedules.
+ *
+ * Device schedule should not be in collision with device's group schedules if inside the group.
+ *
+ * @method isValidSchedule
+ * @param {Object} schedule The schedule description object
+ * @param {Object} group Device's group
+ * @return {Boolean} true if the schedule is not in collision with other schedules
+ * false otherwise
+ */
+Device.prototype.isValidSchedule = function(schedule, group) {
+  if (!Device.super_.prototype.isValidSchedule.call(this, schedule))
+    return false;
+
+  if (group && this.group) {
+
+    // Validates that the schedule is not in conflict with one of the
+    // schedules in device's group
+    for (var i = 0; i < group.schedules.length; i++) {
+      if (this.checkSchedulesConflict(group.schedules[i], schedule))
+        return false;
+    }
+
+  }
+
+  return true;
+};
