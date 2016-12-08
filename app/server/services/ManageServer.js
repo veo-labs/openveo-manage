@@ -1001,8 +1001,8 @@ function initBrowsersNamespaceListeners() {
     if (type === Group.TYPE) {
       var groupDevices = self.cache.getManageablesByProperty('group', manageable.id);
       isValidSchedule = manageable.isValidSchedule(schedule, groupDevices);
-    } else if (manageable.group) {
-      var deviceGroup = self.cache.get(manageable.group);
+    } else if (type === Device.TYPE) {
+      var deviceGroup = (manageable.group) ? self.cache.get(manageable.group) : null;
       isValidSchedule = manageable.isValidSchedule(schedule, deviceGroup);
     }
 
@@ -1146,11 +1146,17 @@ function initBrowsersNamespaceListeners() {
     var device = self.cache.get(deviceId);
     var group = self.cache.get(groupId);
 
-    // TODO : DO NOT ADD DEVICE TO GROUP IF THERE IS COLLISION BETWEEN SCHEDULES
-
     if (!device || !group) {
       return callback({
         error: errors.ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR
+      });
+    }
+
+    var isCollision = device.isGroupSchedulesCollision(group);
+
+    if (isCollision) {
+      return callback({
+        error: errors.ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR
       });
     }
 

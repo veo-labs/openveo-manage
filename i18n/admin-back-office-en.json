@@ -86,7 +86,8 @@
     "PRESET_INPUTS_ERROR": "This preset is not available, please verify inputs for the following encoders : {{devices}}",
     "REMOVE_ERROR": "An error occurred while removing the group (code = {{code}})",
     "REMOVE_DEVICE_ERROR": "An error occurred while removing encoder \"{{name}}\" from the group (code = {{code}})",
-    "ADD_DEVICE_ERROR": "An error occurred while adding the encoder to the group \"{{name}}\" (code = {{code}})"
+    "ADD_DEVICE_ERROR": "An error occurred while adding the encoder to the group \"{{name}}\" (code = {{code}})",
+    "ADD_DEVICE_SCHEDULES_COLLISION_ERROR": "Impossible to add the encoder \"{{deviceName}}\" to group \"{{groupName}}\", schedule jobs between the encoder and the group must not overlap"
   },
   "DEVICE": {
     "DEFAULT_NAME": "Encoder",

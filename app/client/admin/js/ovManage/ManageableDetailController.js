@@ -48,94 +48,6 @@
     self.zeroTimeDate = new Date().setHours(0, 0, 0, 0);
 
     /**
-     * Checks if two schedules are in conflict.
-     *
-     * @method checkSchedulesConflict
-     * @private
-     * @param {Object} schedule1 Schedule object with :
-     *   - **Date** beginDate : The begin date of the schedule
-     *   - **Date** duration : The schedule duration
-     *   - **Boolean** recurrent : true is this is a daily schedule, false otherwise
-     * @param {Object} schedule2 Schedule object with :
-     *   - **Date** beginDate : The begin date of the schedule
-     *   - **Date** duration : The schedule duration
-     *   - **Boolean** recurrent : true is this is a daily schedule, false otherwise
-     * @return {Boolean} true if there are in conflict, false otherwise
-     */
-    function checkSchedulesConflict(schedule1, schedule2) {
-      var schedule1DateTimeBegin = new Date(schedule1.beginDate);
-      var schedule1DateDailyEnd = new Date(schedule1.endDate);
-      var schedule1DateTimeEnd = new Date(schedule1DateTimeBegin.getTime() + schedule1.duration);
-      var schedule2DateTimeBegin = new Date(schedule2.beginDate);
-      var schedule2DateDailyEnd = new Date(schedule2.endDate);
-      var schedule2DateTimeEnd = new Date(schedule2DateTimeBegin.getTime() + schedule2.duration);
-
-      if ((schedule2DateTimeBegin >= schedule1DateTimeBegin && schedule2DateTimeBegin <= schedule1DateTimeEnd) ||
-        (schedule2DateTimeEnd >= schedule1DateTimeBegin && schedule2DateTimeEnd <= schedule1DateTimeEnd) ||
-        (schedule2DateTimeBegin <= schedule1DateTimeBegin && schedule2DateTimeEnd >= schedule1DateTimeEnd)) {
-
-        // Conflict between schedules' dates :
-
-        // Schedule2 start date is in schedule1 date interval
-        // schedule1 : [------------]
-        // schedule2 :   [------------]
-
-        // schedule1 : [------------]
-        // schedule2 :   [--------]
-
-        // Schedule2 end date is in schedule1 date interval
-        // schedule1 :   [------------]
-        // schedule2 : [------------]
-
-        // Schedule2 date interval cover the schedule1 date interval
-        // schedule1 :   [------------]
-        // schedule2 : [----------------]
-
-        return true;
-      }
-
-      if (((schedule2DateTimeBegin >= schedule1DateTimeBegin && schedule2DateTimeBegin <= schedule1DateDailyEnd) ||
-        (schedule2DateDailyEnd >= schedule1DateTimeBegin && schedule2DateDailyEnd <= schedule1DateDailyEnd) ||
-        (schedule2DateTimeBegin <= schedule1DateTimeBegin && schedule2DateDailyEnd >= schedule1DateDailyEnd)) &&
-         (schedule1.recurrent || schedule2.recurrent)) {
-
-        // Daily schedule with conflicting dates
-        // Compare only time
-
-        var schedule1TimeBegin = schedule1DateTimeBegin.getHours() + ':' + schedule1DateTimeBegin.getMinutes();
-        var schedule1TimeEnd = schedule1DateTimeEnd.getHours() + ':' + schedule1DateTimeEnd.getMinutes();
-        var schedule2TimeBegin = schedule2DateTimeBegin.getHours() + ':' + schedule2DateTimeBegin.getMinutes();
-        var schedule2TimeEnd = schedule2DateTimeEnd.getHours() + ':' + schedule2DateTimeEnd.getMinutes();
-
-        if ((schedule2TimeBegin >= schedule1TimeBegin && schedule2TimeBegin <= schedule1TimeEnd) ||
-          (schedule2TimeEnd >= schedule1TimeBegin && schedule2TimeEnd <= schedule1TimeEnd) ||
-          (schedule2TimeBegin <= schedule1TimeBegin && schedule2TimeEnd >= schedule1TimeEnd)) {
-
-          // Conflict between schedules' times :
-
-          // Schedule2 start time is in schedule1 time interval
-          // schedule1 : [------------]
-          // schedule2 :   [------------]
-
-          // schedule1 : [------------]
-          // schedule2 :   [--------]
-
-          // Schedule2 end time is in schedule1 time interval
-          // schedule1 :   [------------]
-          // schedule2 : [------------]
-
-          // Schedule2 time interval cover the schedule1 time interval
-          // schedule1 :   [------------]
-          // schedule2 : [----------------]
-
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    /**
      * Validates that begin and end dates of the new scheduled job are not in conflicts with the other scheduled jobs.
      *
      * @method validateSchedule
@@ -148,83 +60,25 @@
      * @return {Boolean} true if valid, false otherwise
      */
     function validateSchedule(schedule) {
-      var i = 0;
+      var validationError = null;
 
       var handleError = function(message) {
         $scope.$emit('setAlert', 'danger', message, 4000);
       };
 
-      // Start date is after end date
-      if (schedule.beginDate >= schedule.endDate) {
-        handleError($filter('translate')('MANAGE.MANAGEABLE.BEGIN_END_DATES_ERROR'));
-        return false;
-      }
-
-      // Start date is before actual date
-      if (schedule.beginDate <= new Date()) {
-        handleError($filter('translate')('MANAGE.MANAGEABLE.BEGIN_DATE_ERROR'));
-        return false;
-      }
-
-      // Verify if the new scheduled job is not in conflict with the existing jobs
-      if (self.selectedManageable.schedules) {
-
-        // Validates that the new schedule is not in conflict with one of the
-        // selected manageable schedules
-        for (i = 0; i < self.selectedManageable.schedules.length; i++) {
-          if (checkSchedulesConflict(self.selectedManageable.schedules[i], schedule)) {
-            handleError($filter('translate')('MANAGE.MANAGEABLE.CONFLICT_ERROR'));
-            return false;
-          }
-        }
-
-      }
-
       if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP) {
-        var devicesInConflict = [];
-
-        // Selected manageable is a group
-        // Validates that the new schedule is not in conflict with one of the
-        // schedules in group's devices
-        for (i = 0; i < self.selectedManageable.devices.length; i++) {
-          var device = self.selectedManageable.devices[i];
-          var isConflict = false;
-
-          for (var j = 0; j < device.schedules.length; j++) {
-            if (checkSchedulesConflict(device.schedules[j], schedule)) {
-              isConflict = true;
-              break;
-            }
-          }
-
-          if (isConflict)
-            devicesInConflict.push(device.name);
-
-        }
-
-        if (devicesInConflict.length) {
-          handleError($filter('translate')('MANAGE.MANAGEABLE.GROUP_DEVICES_CONFLICT_ERROR', null, {
-            devices: devicesInConflict.join(', ')
-          }));
+        validationError = GroupFactory.isValidSchedule(self.selectedManageable.id, schedule);
+        if (validationError) {
+          handleError(validationError.message);
           return false;
         }
-
-      } else if (self.selectedManageable.type === MANAGEABLE_TYPES.DEVICE && self.selectedManageable.group) {
-
-        // Selected manageable is a device associated to a group
-
-        // Validate that the new schedule is not in conflict with one of the schedules in the device's group
-        var group = GroupFactory.getGroup(self.selectedManageable.group);
-
-        if (group) {
-          for (i = 0; i < group.schedules.length; i++) {
-            if (checkSchedulesConflict(group.schedules[i], schedule)) {
-              handleError($filter('translate')('MANAGE.MANAGEABLE.GROUP_CONFLICT_ERROR'));
-              return false;
-            }
-          }
+      } else if (self.selectedManageable.type === MANAGEABLE_TYPES.DEVICE) {
+        var group = (self.selectedManageable.group) ? GroupFactory.getGroup(self.selectedManageable.group) : null;
+        validationError = DeviceFactory.isValidSchedule(self.selectedManageable.id, schedule, group);
+        if (validationError) {
+          handleError(validationError.message);
+          return false;
         }
-
       }
 
       return true;
@@ -242,7 +96,7 @@
       errors.forEach(function(error) {
         $scope.$emit('setAlert', 'danger', $filter('translate')(message, null, {
           code: error.code,
-          name: error.name
+          name: $filter('translate')(error.name)
         }), 4000);
       });
     }

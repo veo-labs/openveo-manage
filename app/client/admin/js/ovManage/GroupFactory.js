@@ -387,7 +387,7 @@
           DeviceFactory.validatePreset(device.id, presetId);
 
           if (device.inputs.error)
-            devicesInError.push(device.name);
+            devicesInError.push($filter('translate')(device.name));
         });
 
         if (devicesInError.length) {
@@ -399,6 +399,53 @@
 
       }
 
+    }
+
+    /**
+     * Checks if a schedule is not in collision with other schedules.
+     *
+     * Group's schedule should not be in collision with devices' schedule inside the group.
+     *
+     * @method isValidSchedule
+     * @param {String} id The group id
+     * @param {Object} schedule The schedule to validate
+     * @return {Error|Null} The error if validation failed, null otherwise
+     */
+    function isValidSchedule(id, schedule) {
+      var group = getGroup(id);
+
+      if (group) {
+        var validationError = ManageableFactory.isValidSchedule(schedule, group.schedules);
+        if (validationError) return validationError;
+
+        var devicesInConflict = [];
+
+        // Validates that the new schedule is not in conflict with one of the
+        // schedules in group's devices
+        for (var i = 0; i < group.devices.length; i++) {
+          var device = group.devices[i];
+          var isConflict = false;
+
+          for (var j = 0; j < device.schedules.length; j++) {
+            if (ManageableFactory.checkSchedulesConflict(device.schedules[j], schedule)) {
+              isConflict = true;
+              break;
+            }
+          }
+
+          if (isConflict)
+            devicesInConflict.push($filter('translate')(device.name));
+
+        }
+
+        if (devicesInConflict.length) {
+          return new Error($filter('translate')('MANAGE.MANAGEABLE.GROUP_DEVICES_CONFLICT_ERROR', null, {
+            devices: devicesInConflict.join(', ')
+          }));
+        }
+      }
+
+      return null;
     }
 
     return {
@@ -417,7 +464,8 @@
       removeHistory: removeHistory,
       removeSchedule: removeSchedule,
       updateStatus: updateStatus,
-      validatePreset: validatePreset
+      validatePreset: validatePreset,
+      isValidSchedule: isValidSchedule
     };
 
   }

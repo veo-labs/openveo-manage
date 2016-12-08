@@ -86,7 +86,8 @@
     "PRESET_INPUTS_ERROR": "Ce préréglage n'est pas disponible, merci de vérifier les entrées des encodeurs suivant : {{devices}}",
     "REMOVE_ERROR": "Erreur lors de la suppression du groupe (code = {{code}})",
     "REMOVE_DEVICE_ERROR": "Erreur lors de la suppression de l'encodeur \"{{name}}\" du groupe (code = {{code}})",
-    "ADD_DEVICE_ERROR": "Erreur lors de l'ajout de l'encodeur au groupe \"{{name}}\" (code = {{code}})"
+    "ADD_DEVICE_ERROR": "Erreur lors de l'ajout de l'encodeur au groupe \"{{name}}\" (code = {{code}})",
+    "ADD_DEVICE_SCHEDULES_COLLISION_ERROR": "Impossible d'ajouter l'encodeur \"{{deviceName}}\" au groupe \"{{groupName}}\", les programmations de l'encodeur et du groupe ne doivent pas se chevaucher"
   },
   "DEVICE": {
     "DEFAULT_NAME": "Encodeur",

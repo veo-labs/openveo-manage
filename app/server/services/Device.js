@@ -170,3 +170,27 @@ Device.prototype.isValidSchedule = function(schedule, group) {
 
   return true;
 };
+
+/**
+ * Checks if there are collisions between device's schedules and group's schedules.
+ *
+ * @method isGroupSchedulesCollision
+ * @param {Object} group The group
+ * @return {Boolean} true if there is at least one collision, false otherwise
+ */
+Device.prototype.isGroupSchedulesCollision = function(group) {
+  if (group) {
+    for (var i = 0; i < this.schedules.length; i++) {
+      var schedule = this.schedules[i];
+
+      // Validate that the schedule is not in conflict with one of the schedules in the group
+      for (var j = 0; j < group.schedules.length; j++) {
+        if (this.checkSchedulesConflict(group.schedules[j], schedule))
+          return true;
+      }
+
+    }
+  }
+
+  return false;
+};

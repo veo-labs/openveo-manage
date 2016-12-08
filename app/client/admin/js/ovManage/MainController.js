@@ -319,7 +319,7 @@
         }, function(error) {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.GROUP.REMOVE_DEVICE_ERROR', null, {
             code: error.code,
-            name: device.name
+            name: $filter('translate')(device.name)
           }), 4000);
         });
       }

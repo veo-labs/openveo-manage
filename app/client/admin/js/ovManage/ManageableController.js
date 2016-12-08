@@ -181,23 +181,32 @@
      * @return {Promise} Promise resolving when device is added
      */
     function addDeviceToGroup(deviceId, groupId) {
-
-      // TODO : DO NOT ADD DEVICE TO GROUP IF THERE IS COLLISIONS BETWEEN SCHEDULES
-
       var p = $q.defer();
       var device = DeviceFactory.getDevice(deviceId);
       var group = GroupFactory.getGroup(groupId);
+      var isCollision = DeviceFactory.isGroupSchedulesCollision(device.id, group);
 
-      ManageFactory.addDeviceToGroup(deviceId, groupId).then(function() {
-        GroupFactory.addDeviceToGroup(device, groupId);
-        p.resolve();
-      }, function(error) {
-        $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.GROUP.ADD_DEVICE_ERROR', null, {
-          code: error.code,
-          name: group.name
-        }), 4000);
-        p.reject(error);
-      });
+      if (isCollision) {
+        $scope.$emit('setAlert',
+                     'danger',
+                     $filter('translate')('MANAGE.GROUP.ADD_DEVICE_SCHEDULES_COLLISION_ERROR', null, {
+                       deviceName: $filter('translate')(device.name),
+                       groupName: $filter('translate')(group.name)
+                     })
+        );
+        p.reject();
+      } else {
+        ManageFactory.addDeviceToGroup(deviceId, groupId).then(function() {
+          GroupFactory.addDeviceToGroup(device, groupId);
+          p.resolve();
+        }, function(error) {
+          $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.GROUP.ADD_DEVICE_ERROR', null, {
+            code: error.code,
+            name: $filter('translate')(group.name)
+          }), 4000);
+          p.reject(error);
+        });
+      }
 
       return p.promise;
     }
@@ -245,12 +254,16 @@
                 $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.GROUP.CREATE_ERROR', null, {
                   code: error.code
                 }), 4000);
+                resetPosition(relatedTarget);
+                resetPosition(target);
               });
 
             } else {
 
               // Add dragged device to the target group
-              addDeviceToGroup(relatedTarget.attr('data-id'), target.attr('data-id'));
+              addDeviceToGroup(relatedTarget.attr('data-id'), target.attr('data-id')).catch(function() {
+                resetPosition(relatedTarget);
+              });
 
             }
 

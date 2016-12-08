@@ -163,16 +163,20 @@ module.exports = {
     code: 0x022,
     module: 'manage'
   },
-  REMOVE_NOT_FOUND_ERROR: {
+  ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR: {
     code: 0x023,
     module: 'manage'
   },
-  REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR: {
+  REMOVE_NOT_FOUND_ERROR: {
     code: 0x024,
     module: 'manage'
   },
-  REMOVE_DEVICE_FROM_GROUP_ERROR: {
+  REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR: {
     code: 0x025,
+    module: 'manage'
+  },
+  REMOVE_DEVICE_FROM_GROUP_ERROR: {
+    code: 0x026,
     module: 'manage'
   },
 

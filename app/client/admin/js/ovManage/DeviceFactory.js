@@ -403,6 +403,66 @@
       return devices[state];
     }
 
+    /**
+     * Checks if a schedule is not in collision with other schedules.
+     *
+     * Device schedule should not be in collision with device's group schedules if inside the group.
+     *
+     * @method isValidSchedule
+     * @param {String} id The device id
+     * @param {Object} schedule The schedule to validate
+     * @param {Object} [group] The device's group
+     * @return {Error|Null} The error if validation failed, null otherwise
+     */
+    function isValidSchedule(id, schedule, group) {
+      var device = getDevice(id);
+
+      if (device) {
+        var validationError = ManageableFactory.isValidSchedule(schedule, device.schedules);
+        if (validationError) return validationError;
+
+        if (group) {
+
+          // Validate that the schedule is not in conflict with one of the schedules in the device's group
+          for (var i = 0; i < group.schedules.length; i++) {
+            if (ManageableFactory.checkSchedulesConflict(group.schedules[i], schedule))
+              return new Error($filter('translate')('MANAGE.MANAGEABLE.GROUP_CONFLICT_ERROR'));
+          }
+
+        }
+
+      }
+
+      return null;
+    }
+
+    /**
+     * Checks if there are collisions between device's schedules and group's schedules.
+     *
+     * @method isGroupSchedulesCollision
+     * @param {String} id The device id
+     * @param {Object} group The group
+     * @return {Boolean} true if there is at least one collision, false otherwise
+     */
+    function isGroupSchedulesCollision(id, group) {
+      var device = getDevice(id);
+
+      if (device && group) {
+        for (var i = 0; i < device.schedules.length; i++) {
+          var deviceSchedule = device.schedules[i];
+
+          // Validate that the schedule is not in conflict with one of the schedules in the group
+          for (var j = 0; j < group.schedules.length; j++) {
+            if (ManageableFactory.checkSchedulesConflict(group.schedules[j], deviceSchedule))
+              return true;
+          }
+
+        }
+      }
+
+      return false;
+    }
+
     return {
       getDevices: getDevices,
       getDevice: getDevice,
@@ -417,7 +477,9 @@
       removeHistoric: removeHistoric,
       removeHistory: removeHistory,
       removeSchedule: removeSchedule,
-      validatePreset: validatePreset
+      validatePreset: validatePreset,
+      isValidSchedule: isValidSchedule,
+      isGroupSchedulesCollision: isGroupSchedulesCollision
     };
 
   }
