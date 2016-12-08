@@ -59,8 +59,8 @@ module.exports = {
         '/manage/ovManage/ManageableFactory.js',
         '/manage/ovManage/DeviceFactory.js',
         '/manage/ovManage/GroupFactory.js',
-        '/manage/ovManage/DeviceController.js',
-        '/manage/ovManage/ItemDetailController.js',
+        '/manage/ovManage/ManageableController.js',
+        '/manage/ovManage/ManageableDetailController.js',
         '/manage/ovManage/SortTableDirective.js',
         '/manage/socket.io/SocketApp.js'
       ],

@@ -4,10 +4,9 @@
 
   /* global Ps */
   /**
-   * Defines the item detail controller to manage view displaying details about a manageable
-   * (either device or group).
+   * Defines the manageable detail controller to manage view displaying details about a manageable.
    */
-  function ItemDetailController(
+  function ManageableDetailController(
     $scope,
     $filter,
     $uibModal,
@@ -28,8 +27,8 @@
       detailEl = document.querySelector('.item-detail .detail-page'),
       historyEl = document.querySelector('.item-detail .history-page');
 
-    // The actually selected item
-    self.selectedItem = null;
+    // The actually selected manageable
+    self.selectedManageable = null;
 
     // Datepicker options
     self.popupBegin = {
@@ -168,12 +167,12 @@
       }
 
       // Verify if the new scheduled job is not in conflict with the existing jobs
-      if (self.selectedItem.schedules) {
+      if (self.selectedManageable.schedules) {
 
         // Validates that the new schedule is not in conflict with one of the
-        // selected item schedules
-        for (i = 0; i < self.selectedItem.schedules.length; i++) {
-          if (checkSchedulesConflict(self.selectedItem.schedules[i], schedule)) {
+        // selected manageable schedules
+        for (i = 0; i < self.selectedManageable.schedules.length; i++) {
+          if (checkSchedulesConflict(self.selectedManageable.schedules[i], schedule)) {
             handleError($filter('translate')('MANAGE.MANAGEABLE.CONFLICT_ERROR'));
             return false;
           }
@@ -181,14 +180,14 @@
 
       }
 
-      if (self.selectedItem.type === MANAGEABLE_TYPES.GROUP) {
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP) {
         var devicesInConflict = [];
 
-        // Selected item is a group
+        // Selected manageable is a group
         // Validates that the new schedule is not in conflict with one of the
         // schedules in group's devices
-        for (i = 0; i < self.selectedItem.devices.length; i++) {
-          var device = self.selectedItem.devices[i];
+        for (i = 0; i < self.selectedManageable.devices.length; i++) {
+          var device = self.selectedManageable.devices[i];
           var isConflict = false;
 
           for (var j = 0; j < device.schedules.length; j++) {
@@ -210,12 +209,12 @@
           return false;
         }
 
-      } else if (self.selectedItem.type === MANAGEABLE_TYPES.DEVICE && self.selectedItem.group) {
+      } else if (self.selectedManageable.type === MANAGEABLE_TYPES.DEVICE && self.selectedManageable.group) {
 
-        // Selected item is a device associated to a group
+        // Selected manageable is a device associated to a group
 
         // Validate that the new schedule is not in conflict with one of the schedules in the device's group
-        var group = GroupFactory.getGroup(self.selectedItem.group);
+        var group = GroupFactory.getGroup(self.selectedManageable.group);
 
         if (group) {
           for (i = 0; i < group.schedules.length; i++) {
@@ -271,37 +270,37 @@
     };
 
     /**
-     * Displays the input to update the device's name.
+     * Displays the input to update the manageable's name.
      *
-     * @method displayDeviceNameForm
+     * @method displayNameForm
      */
-    self.displayDeviceNameForm = function() {
-      self.selectedItemName = $filter('translate')(self.selectedItem.name);
-      self.selectedItem.displayInputName = !self.selectedItem.displayInputName;
+    self.displayNameForm = function() {
+      self.selectedManageableName = $filter('translate')(self.selectedManageable.name);
+      self.selectedManageable.displayInputName = !self.selectedManageable.displayInputName;
     };
 
     /**
-     * Updates device's name.
+     * Updates manageable's name.
      *
      * @method updateName
-     * @param {String} name The new device name
+     * @param {String} name The new manageable name
      */
     self.updateName = function(name) {
       var type = null;
 
-      if (self.selectedItem.type === MANAGEABLE_TYPES.DEVICE)
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.DEVICE)
         type = MANAGEABLE_TYPES.DEVICE;
       else
         type = MANAGEABLE_TYPES.GROUP;
 
-      ManageFactory.updateName(self.selectedItem.id, name, type).then(function() {
-        self.selectedItem.name = name;
-        self.selectedItem.displayInputName = !self.selectedItem.displayInputName;
+      ManageFactory.updateName(self.selectedManageable.id, name, type).then(function() {
+        self.selectedManageable.name = name;
+        self.selectedManageable.displayInputName = !self.selectedManageable.displayInputName;
       }, function(error) {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.MANAGEABLE.UPDATE_NAME_ERROR', null, {
           code: error.code
         }), 4000);
-        self.selectedItem.displayInputName = !self.selectedItem.displayInputName;
+        self.selectedManageable.displayInputName = !self.selectedManageable.displayInputName;
       });
     };
 
@@ -313,7 +312,12 @@
     self.addSchedule = function() {
       var durationDate = self.itemSchedule.schedule.durationDate;
       var duration = ((durationDate.getHours() * 60) + durationDate.getMinutes()) * 60 * 1000;
-      var type = (self.selectedItem.type === MANAGEABLE_TYPES.GROUP) ? MANAGEABLE_TYPES.GROUP : MANAGEABLE_TYPES.DEVICE;
+      var type = null;
+
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP)
+        type = MANAGEABLE_TYPES.GROUP;
+      else
+        type = MANAGEABLE_TYPES.DEVICE;
 
       // Add begin time to begin date
       self.itemSchedule.schedule.beginDate.setHours(self.itemSchedule.schedule.beginTime.getHours());
@@ -328,7 +332,7 @@
       };
 
       if (validateSchedule(schedule)) {
-        ManageFactory.addSchedule(self.selectedItem.id, schedule, type).then(function() {
+        ManageFactory.addSchedule(self.selectedManageable.id, schedule, type).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.MANAGEABLE.ADD_SCHEDULE_SUCCESS'), 4000);
         }, function(error) {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.MANAGEABLE.ADD_SCHEDULE_ERROR', null, {
@@ -357,11 +361,11 @@
     self.startRecord = function() {
       var ids = [];
 
-      if (self.selectedItem.type === MANAGEABLE_TYPES.GROUP) {
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP) {
 
         // Manageable is a group
         // Start recording on its available devices
-        self.selectedItem.devices.forEach(function(device) {
+        self.selectedManageable.devices.forEach(function(device) {
           if (device.status !== DEVICE_STATUS.STARTING &&
               device.status !== DEVICE_STATUS.STOPPING &&
               device.status.inputs.error)
@@ -369,11 +373,11 @@
         });
 
       } else
-        ids.push(self.selectedItem.id);
+        ids.push(self.selectedManageable.id);
 
       // Start record
       var preset = (self.itemSchedule.schedule.preset) ? self.itemSchedule.schedule.preset : null;
-      ManageFactory.startRecord(ids, self.selectedItem.group, preset).catch(function(errors) {
+      ManageFactory.startRecord(ids, self.selectedManageable.group, preset).catch(function(errors) {
         displayErrors(errors, 'MANAGE.DEVICE.START_RECORD_ERROR');
       });
     };
@@ -386,17 +390,17 @@
     self.stopRecord = function() {
       var ids = [];
 
-      if (self.selectedItem.type === MANAGEABLE_TYPES.GROUP) {
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP) {
 
         // Item is a group
         // Stop recording its started devices
-        self.selectedItem.devices.forEach(function(device) {
+        self.selectedManageable.devices.forEach(function(device) {
           if (device.status === DEVICE_STATUS.STARTED)
             ids.push(device.id);
         });
 
       } else
-        ids.push(self.selectedItem.id);
+        ids.push(self.selectedManageable.id);
 
       // Stop record
       ManageFactory.stopRecord(ids).catch(function(errors) {
@@ -412,17 +416,17 @@
     self.tagRecord = function() {
       var ids = [];
 
-      if (self.selectedItem.type === MANAGEABLE_TYPES.GROUP) {
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP) {
 
         // Item is a group
         // Stop recording its started devices
-        self.selectedItem.devices.forEach(function(device) {
+        self.selectedManageable.devices.forEach(function(device) {
           if (device.status === DEVICE_STATUS.STARTED)
             ids.push(device.id);
         });
 
       } else
-        ids.push(self.selectedItem.id);
+        ids.push(self.selectedManageable.id);
 
       // Tag record
       ManageFactory.tagRecord(ids).catch(function(errors) {
@@ -439,7 +443,7 @@
      */
     self.getPresetName = function(id) {
       if (id) {
-        var preset = ManageableFactory.getPreset(self.selectedItem, id);
+        var preset = ManageableFactory.getPreset(self.selectedManageable, id);
 
         if (preset)
           return preset.name;
@@ -474,8 +478,8 @@
         $scope.actionForm.$setUntouched();
       }
 
-      if (self.selectedItem) {
-        var preset = self.selectedItem.presets && self.selectedItem.presets[0] && self.selectedItem.presets[0].id;
+      if (self.selectedManageable && self.selectedManageable.presets && self.selectedManageable.presets[0]) {
+        var preset = self.selectedManageable.presets[0].id;
         self.itemSchedule.schedule.preset = preset;
         self.validatePreset(preset);
       }
@@ -492,9 +496,9 @@
       var schedule = null;
 
       // Find schedule
-      for (var i = 0; i < self.selectedItem.schedules.length; i++) {
-        if (self.selectedItem.schedules[i].id === scheduleId) {
-          schedule = self.selectedItem.schedules[i];
+      for (var i = 0; i < self.selectedManageable.schedules.length; i++) {
+        if (self.selectedManageable.schedules[i].id === scheduleId) {
+          schedule = self.selectedManageable.schedules[i];
           break;
         }
       }
@@ -505,7 +509,12 @@
       var endTime = endDate.getHours() + ':' + endDate.getMinutes();
       var now = new Date();
       var nowTime = now.getHours() + ':' + now.getMinutes();
-      var type = (self.selectedItem.type === MANAGEABLE_TYPES.GROUP) ? MANAGEABLE_TYPES.GROUP : MANAGEABLE_TYPES.DEVICE;
+      var type = null;
+
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP)
+        type = MANAGEABLE_TYPES.GROUP;
+      else
+        type = MANAGEABLE_TYPES.DEVICE;
 
       if ((beginDate <= now && endDate >= now) ||
          (schedule.recurrent && beginTime <= nowTime && endTime >= nowTime && beginDate <= now)
@@ -515,7 +524,7 @@
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.MANAGEABLE.SCHEDULE_IN_PROGRESS_ERROR'), 4000);
 
       } else {
-        ManageFactory.removeSchedule(self.selectedItem.id, scheduleId, type).then(function() {
+        ManageFactory.removeSchedule(self.selectedManageable.id, scheduleId, type).then(function() {
           $scope.$emit('setAlert', 'success',
                        $filter('translate')('MANAGE.MANAGEABLE.REMOVE_SCHEDULE_SUCCESS'), 4000);
         }, function(error) {
@@ -535,12 +544,12 @@
      */
     function removeHistoric(historicId) {
       var type = null;
-      if (self.selectedItem.type === MANAGEABLE_TYPES.GROUP)
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP)
         type = MANAGEABLE_TYPES.GROUP;
       else
         type = MANAGEABLE_TYPES.DEVICE;
 
-      ManageFactory.removeHistoric(self.selectedItem.id, historicId, type).then(function() {
+      ManageFactory.removeHistoric(self.selectedManageable.id, historicId, type).then(function() {
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.MANAGEABLE.REMOVE_HISTORIC_SUCCESS'), 4000);
       }, function(error) {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.MANAGEABLE.REMOVE_HISTORIC_ERROR', null, {
@@ -556,7 +565,7 @@
      * @private
      */
     function removeHistory() {
-      ManageFactory.removeHistory(self.selectedItem.id, self.selectedItem.type).then(function() {
+      ManageFactory.removeHistory(self.selectedManageable.id, self.selectedManageable.type).then(function() {
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.MANAGEABLE.REMOVE_HISTORY_SUCCESS'), 4000);
       }, function(error) {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.MANAGEABLE.REMOVE_HISTORY_ERROR', null, {
@@ -575,7 +584,7 @@
     function removeDevice(id) {
       ManageFactory.remove(id, MANAGEABLE_TYPES.DEVICE).then(function() {
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_SUCCESS'), 4000);
-        $rootScope.$broadcast('item.closeDetails');
+        $rootScope.$broadcast('manageable.closeDetails');
       }, function(error) {
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.DEVICE.REMOVE_ERROR', null, {
           code: error.code
@@ -627,10 +636,10 @@
     };
 
     /**
-     * Validates the selected item inputs regarding the given preset id.
+     * Validates the selected manageable's inputs regarding the given preset id.
      *
      * It is not possible to start a recording session if the inputs of the
-     * selected item does not correspond to the preset configuration.
+     * selected manageable does not correspond to the preset configuration.
      * e.g. It is not possible to start a recording session with slides extraction
      * without a desktop input.
      *
@@ -638,34 +647,34 @@
      * @param {String} presetId The id of the preset
      */
     self.validatePreset = function(presetId) {
-      var model = self.selectedItem.type === MANAGEABLE_TYPES.DEVICE ? DeviceFactory : GroupFactory;
-      model.validatePreset(self.selectedItem.id, presetId);
+      var model = self.selectedManageable.type === MANAGEABLE_TYPES.DEVICE ? DeviceFactory : GroupFactory;
+      model.validatePreset(self.selectedManageable.id, presetId);
     };
 
-    // Listen event to load the selected item details on window opening
-    $scope.$on('item.load', function(event, itemId, isGroup) {
-      if (self.selectedItem && self.selectedItem.id === itemId) {
-        self.selectedItem.isSelected = true;
+    // Listen event to load the selected manageable details
+    $scope.$on('manageable.load', function(event, itemId, isGroup) {
+      if (self.selectedManageable && self.selectedManageable.id === itemId) {
+        self.selectedManageable.isSelected = true;
         return;
       }
 
-      // Get the new selected item
-      self.selectedItem = isGroup ? GroupFactory.getGroup(itemId) : DeviceFactory.getDevice(itemId);
+      // Get the new selected manageable
+      self.selectedManageable = isGroup ? GroupFactory.getGroup(itemId) : DeviceFactory.getDevice(itemId);
 
-      // Unselect all groups and all devices
+      // Unselect all manageables
       GroupFactory.setGroupsProperty('isSelected', false);
       DeviceFactory.setDevicesProperty('isSelected', false);
 
-      // Select the new item
-      self.selectedItem.isSelected = true;
+      // Select the new manageable
+      self.selectedManageable.isSelected = true;
 
       // Reset action form
       self.resetActionForm();
 
     });
 
-    // Listen event to close item details window
-    $scope.$on('item.closeDetails', function(event) {
+    // Listen event to close manageable details window
+    $scope.$on('manageable.closeDetails', function(event) {
       self.closeDetail();
     });
 
@@ -674,14 +683,16 @@
       $scope.back();
     });
 
-    // Watch for preset changes
-    $scope.$watch('vm.selectedItem.devices', function() {
-      if (self.selectedItem && self.selectedItem.devices)
+    // Watch for devices' changes
+    $scope.$watch('vm.selectedManageable.devices', function() {
+      if (self.selectedManageable && self.selectedManageable.devices)
         self.validatePreset(self.itemSchedule.schedule.preset);
     }, true);
-    $scope.$watch('vm.selectedItem.presets', function() {
-      if (self.selectedItem) {
-        var preset = self.selectedItem.presets && self.selectedItem.presets[0] && self.selectedItem.presets[0].id;
+
+    // Watch for preset changes
+    $scope.$watch('vm.selectedManageable.presets', function() {
+      if (self.selectedManageable && self.selectedManageable.presets && self.selectedManageable.presets[0]) {
+        var preset = self.selectedManageable.presets[0].id;
         self.itemSchedule.schedule.preset = preset;
         self.validatePreset(preset);
       }
@@ -697,8 +708,8 @@
     self.resetActionForm();
   }
 
-  app.controller('ManageItemDetailController', ItemDetailController);
-  ItemDetailController.$inject = [
+  app.controller('ManageManageableDetailController', ManageableDetailController);
+  ManageableDetailController.$inject = [
     '$scope',
     '$filter',
     '$uibModal',

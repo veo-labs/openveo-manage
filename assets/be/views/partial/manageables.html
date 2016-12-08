@@ -1,4 +1,4 @@
-<div ng-controller="ManageDeviceController as deviceCtrl" class="devices row">
+<div ng-controller="ManageManageableController as deviceCtrl" class="devices row">
 
     <!-- Groups -->
     <div class="device-group col-sm-4 col-md-3" ng-repeat="group in groups track by group.id" ng-class="manage.resize">
@@ -92,7 +92,7 @@
 </div>
 
 <!-- Refused devices -->
-<div ng-controller="ManageDeviceController as deviceCtrl" class="refused-devices row" ng-if="refusedDevices.length">
+<div ng-controller="ManageManageableController as deviceCtrl" class="refused-devices row" ng-if="refusedDevices.length">
     <h3 ng-bind="'MANAGE.REFUSED.TITLE' | translate"></h3>
     <div class="device col-sm-4 col-md-3" ng-repeat="device in refusedDevices track by device.id" ng-class="manage.resize">
         <div class="well" ng-attr-data-id="{{ device.id }}">
@@ -106,7 +106,7 @@
 </div>
 
 <!-- Pending devices -->
-<div ng-controller="ManageDeviceController as deviceCtrl" class="pending-devices row" ng-if="pendingDevices.length">
+<div ng-controller="ManageManageableController as deviceCtrl" class="pending-devices row" ng-if="pendingDevices.length">
     <h3 ng-bind="'MANAGE.PENDING.TITLE' | translate"></h3>
     <div class="device demands col-sm-4 col-md-3" ng-repeat="device in pendingDevices track by device.id" ng-class="manage.resize">
         <div class="device-connection well" ng-attr-data-id="{{ device.id }}">

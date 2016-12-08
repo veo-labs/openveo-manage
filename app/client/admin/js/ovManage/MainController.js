@@ -87,7 +87,7 @@
           }
 
           DeviceFactory.remove(data.id);
-          $scope.$broadcast('item.closeDetails');
+          $scope.$broadcast('manageable.closeDetails');
         } else if (data.type === MANAGEABLE_TYPES.GROUP) {
           GroupFactory.removeGroup(data.id);
 
@@ -95,7 +95,7 @@
           if ($route.current.params.id)
             $scope.$broadcast('back');
           else
-            $scope.$broadcast('item.closeDetails');
+            $scope.$broadcast('manageable.closeDetails');
         }
       });
 
@@ -197,7 +197,7 @@
 
           // Send an event to close the device detail window
           $timeout(function() {
-            $rootScope.$broadcast('item.closeDetails');
+            $rootScope.$broadcast('manageable.closeDetails');
           }, 250);
 
         }
@@ -217,7 +217,7 @@
             GroupFactory.removeDeviceFromGroup(device, device.group);
 
             // Send an event to close the device detail window
-            $rootScope.$broadcast('item.closeDetails');
+            $rootScope.$broadcast('manageable.closeDetails');
 
           }
 
@@ -273,10 +273,10 @@
 
       // Remove an eventually selected device or group
       $scope.acceptedDevices.forEach(function(device) {
-        $rootScope.$broadcast('item.load', device.id, false);
+        $rootScope.$broadcast('manageable.load', device.id, false);
       });
       $scope.groups.forEach(function(group) {
-        $rootScope.$broadcast('item.load', group.id, true);
+        $rootScope.$broadcast('manageable.load', group.id, true);
       });
       $scope.manage.showDetail = false;
       $scope.manage.openedItem = null;

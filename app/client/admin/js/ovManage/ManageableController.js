@@ -4,9 +4,9 @@
 
   /* global interact, Ps */
   /**
-   * Defines the device controller for displaying details
+   * Controls the view responsible of a list of manageables.
    */
-  function DeviceController(
+  function ManageableController(
     $q,
     $scope,
     $rootScope,
@@ -28,10 +28,10 @@
     self.lastDeviceSelected = null;
 
     /**
-     * Defines an ui-state for a device.
+     * Defines an ui-state for a manageable.
      *
-     * @param {Object} target The target device or group
-     * @param {String} uiState The ui-state to set for the device
+     * @param {Object} target The target manageable
+     * @param {String} uiState The ui-state to set for the manageable
      */
     function addUiState(target, uiState) {
       var element = (angular.element(target).scope().$parent.device) ?
@@ -45,10 +45,10 @@
     }
 
     /**
-     * Removes an ui-state for a device.
+     * Removes an ui-state for a manageable.
      *
-     * @param {Object} target The target device or group
-     * @param {String} uiState The ui-state to remove for the device
+     * @param {Object} target The target manageable
+     * @param {String} uiState The ui-state to remove for the manageable
      */
     function removeUiState(target, uiState) {
       var element = (angular.element(target).scope().device) ?
@@ -81,7 +81,7 @@
     }
 
     /**
-     * Resets the device element to its initial position.
+     * Resets the manageable element to its initial position.
      *
      * @param {Object} target the element to reset
      */
@@ -302,9 +302,9 @@
     }
 
     /**
-     * Sets a click event listener on an item.
+     * Sets a click event listener on a manageable.
      */
-    function setItemClickListener() {
+    function setManageableClickListener() {
 
       // Avoid to fire the same event multiple times
       var events = interact('.device.accepted > .well, .device-group > .group')._iEvents;
@@ -317,38 +317,38 @@
           return;
         }
 
-        var itemId = event.currentTarget.getAttribute('data-id'),
+        var manageableId = event.currentTarget.getAttribute('data-id'),
           currentTarget = angular.element(event.currentTarget);
 
         if (!$scope.manage.openedItem) {
 
-          // No item loaded in the detail panel yet
+          // No manageable loaded in the detail panel yet
 
-          // Set the selected device
-          $rootScope.$broadcast('item.load', itemId, currentTarget.hasClass('group'));
+          // Set the selected manageable
+          $rootScope.$broadcast('manageable.load', manageableId, currentTarget.hasClass('group'));
 
-          $scope.manage.openedItem = itemId;
+          $scope.manage.openedItem = manageableId;
           $scope.manage.showDetail = true;
           $scope.organizeLayout($scope.manage.showDetail);
 
           initScrollbar();
-        } else if ($scope.manage.openedItem == itemId) {
+        } else if ($scope.manage.openedItem == manageableId) {
 
-          // Item to load in the panel is the one already loaded
+          // Manageable to load in the panel is the one already loaded
           // Close the panel
-          $rootScope.$broadcast('item.closeDetails');
+          $rootScope.$broadcast('manageable.closeDetails');
 
         } else {
 
-          // Item to load in the details panel is a different item
-          // Display new item details
+          // Manageable to load in the details panel is a different manageable
+          // Display new manageable details
           // And activate first tab
 
-          $scope.manage.openedItem = itemId;
+          $scope.manage.openedItem = manageableId;
           $scope.manage.showDetail = false;
           $scope.setActivePage(0);
 
-          $rootScope.$broadcast('item.load', itemId, currentTarget.hasClass('group'));
+          $rootScope.$broadcast('manageable.load', manageableId, currentTarget.hasClass('group'));
           $scope.manage.showDetail = true;
           updateScrollbar();
         }
@@ -358,10 +358,10 @@
     }
 
     /**
-     * Sets a double click event listener on an item.
+     * Sets a double click event listener on a manageable.
      * Go to the group detail page on double click.
      */
-    function setItemDbClickListener() {
+    function setManageableDbClickListener() {
 
       // Avoid to fire the same event multiple times
       var events = interact('.device-group > .group')._iEvents;
@@ -372,7 +372,7 @@
       interact('.device-group > .group').on('doubletap', function(event) {
         var groupId = event.currentTarget.getAttribute('data-id');
 
-        $rootScope.$broadcast('item.load', groupId, true);
+        $rootScope.$broadcast('manageable.load', groupId, true);
         $scope.manage.showDetail = false;
         $location.path('manage/group-detail/' + groupId);
         $scope.manage.absUrl = $location.absUrl();
@@ -385,6 +385,7 @@
     /**
      * Adds pending/refused device to the accepted list of devices.
      *
+     * @method addToAcceptedDevices
      * @param {Object} device The device to accept
      */
     self.addToAcceptedDevices = function(device) {
@@ -400,6 +401,7 @@
     /**
      * Adds the new device to the refused list of devices.
      *
+     * @method addToRefusedDevices
      * @param {Object} device The device object
      */
     self.addToRefusedDevices = function(device) {
@@ -415,13 +417,13 @@
     dragDropDevice();
 
     // Manage click events
-    setItemClickListener();
-    setItemDbClickListener();
+    setManageableClickListener();
+    setManageableDbClickListener();
 
   }
 
-  app.controller('ManageDeviceController', DeviceController);
-  DeviceController.$inject = [
+  app.controller('ManageManageableController', ManageableController);
+  ManageableController.$inject = [
     '$q',
     '$scope',
     '$rootScope',

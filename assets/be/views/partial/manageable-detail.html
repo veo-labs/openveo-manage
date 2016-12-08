@@ -1,4 +1,4 @@
-<div ng-controller="ManageItemDetailController as vm">
+<div ng-controller="ManageManageableDetailController as vm">
     <div class="item-detail" ng-class="{'opened' : manage.showDetail}">
         <div class="header">
             <ul class="menu">
@@ -24,51 +24,51 @@
 
                   <!-- Preset selector -->
                   <div class="form-group preset"
-                  ng-if="vm.selectedItem.status !== DEVICE_STATUS.DISCONNECTED">
-                  <div ng-class="['form-group', {'disabled': !vm.selectedItem.presets, 'has-error': vm.selectedItem.inputs.error}]">
+                  ng-if="vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED">
+                  <div ng-class="['form-group', {'disabled': !vm.selectedManageable.presets, 'has-error': vm.selectedManageable.inputs.error}]">
                     <label class="title" ng-bind="'MANAGE.DETAIL.ACTION.PRESET' | translate"></label >
                       <select class="form-control" ng-model="vm.itemSchedule.schedule.preset"
-                      ng-options="preset.id as (preset.name) for preset in vm.selectedItem.presets |orderBy:'profile'"
-                      ng-disabled="!vm.selectedItem.presets"
-                      ng-if="vm.selectedItem.presets.length > 1"
+                      ng-options="preset.id as (preset.name) for preset in vm.selectedManageable.presets |orderBy:'profile'"
+                      ng-disabled="!vm.selectedManageable.presets"
+                      ng-if="vm.selectedManageable.presets.length > 1"
                       ng-change="vm.validatePreset(vm.itemSchedule.schedule.preset);">
                       <option value="" selected hidden />
                     </select>
-                    <label class="selected-preset" ng-if="vm.selectedItem.presets.length === 1" ng-bind="vm.selectedItem.presets[0].name"></label>
+                    <label class="selected-preset" ng-if="vm.selectedManageable.presets.length === 1" ng-bind="vm.selectedManageable.presets[0].name"></label>
                   </div>
-                  <div class="form-group" ng-if="vm.selectedItem.inputs.error">
-                    <div ng-bind="vm.selectedItem.inputs.error | translate" class="text-danger actionError">
+                  <div class="form-group" ng-if="vm.selectedManageable.inputs.error">
+                    <div ng-bind="vm.selectedManageable.inputs.error | translate" class="text-danger actionError">
                   </div>
                 </div>
               </div>
 
                     <!-- Record actions -->
-                    <div class="form-group action" ng-if="vm.selectedItem.status !== DEVICE_STATUS.DISCONNECTED">
+                    <div class="form-group action" ng-if="vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED">
                         <label class="title" ng-bind="'MANAGE.DETAIL.ACTION.ACTION_TITLE' | translate"></label>
                         <button class="start btn btn-primary"
                                 type="button"
                                 ng-click="vm.startRecord()"
-                                ng-if="vm.selectedItem.status === DEVICE_STATUS.STOPPED || vm.selectedItem.status === DEVICE_STATUS.STARTING || vm.selectedItem.status === DEVICE_STATUS.ERROR"
-                                ng-disabled="vm.selectedItem.status === DEVICE_STATUS.STARTING || vm.selectedItem.status === DEVICE_STATUS.STOPPING || vm.selectedItem.inputs.error"
+                                ng-if="vm.selectedManageable.status === DEVICE_STATUS.STOPPED || vm.selectedManageable.status === DEVICE_STATUS.STARTING || vm.selectedManageable.status === DEVICE_STATUS.ERROR"
+                                ng-disabled="vm.selectedManageable.status === DEVICE_STATUS.STARTING || vm.selectedManageable.status === DEVICE_STATUS.STOPPING || vm.selectedManageable.inputs.error"
                                 ng-bind="'MANAGE.DETAIL.ACTION.START' | translate"></button>
                         <div class="recording">
                             <button class="stop btn"
                                     type="button"
                                     ng-click="vm.stopRecord()"
-                                    ng-if="vm.selectedItem.status === DEVICE_STATUS.STARTED || vm.selectedItem.status === DEVICE_STATUS.STOPPING"
-                                    ng-disabled="vm.selectedItem.status === DEVICE_STATUS.STOPPING"
+                                    ng-if="vm.selectedManageable.status === DEVICE_STATUS.STARTED || vm.selectedManageable.status === DEVICE_STATUS.STOPPING"
+                                    ng-disabled="vm.selectedManageable.status === DEVICE_STATUS.STOPPING"
                                     ng-bind="'MANAGE.DETAIL.ACTION.STOP_RECORDING' | translate"></button>
                             <button class="tag btn btn-primary"
                                     type="button"
                                     ng-click="vm.tagRecord()"
-                                    ng-if="vm.selectedItem.status === DEVICE_STATUS.STARTED || vm.selectedItem.status === DEVICE_STATUS.STOPPING"
-                                    ng-disabled="vm.selectedItem.status === DEVICE_STATUS.STOPPING"
+                                    ng-if="vm.selectedManageable.status === DEVICE_STATUS.STARTED || vm.selectedManageable.status === DEVICE_STATUS.STOPPING"
+                                    ng-disabled="vm.selectedManageable.status === DEVICE_STATUS.STOPPING"
                                     ng-bind="'MANAGE.DETAIL.ACTION.TAG' | translate"></button>
                         </div>
                     </div>
 
                     <!-- Scheduling -->
-                    <div class="form-group planning" ng-if="vm.selectedItem.status !== DEVICE_STATUS.DISCONNECTED">
+                    <div class="form-group planning" ng-if="vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED">
                         <label class="title" ng-bind="'MANAGE.DETAIL.ACTION.PLANNING_TITLE' | translate"></label>
                         <div class="row">
                         <div class="col-xs-6 form-group begin-block" ng-class="{'has-error': actionForm.beginDate.$invalid && actionForm.beginDate.$touched}">
@@ -151,7 +151,7 @@
                           </div>
                         </div>
 
-                        <button type="submit" class="record btn btn-primary" ng-disabled="actionForm.$invalid || vm.selectedItem.inputs.error" ng-bind="'MANAGE.DETAIL.ACTION.RECORD' | translate"></button>
+                        <button type="submit" class="record btn btn-primary" ng-disabled="actionForm.$invalid || vm.selectedManageable.inputs.error" ng-bind="'MANAGE.DETAIL.ACTION.RECORD' | translate"></button>
 
                         <table class="table" border="0">
                             <thead>
@@ -164,7 +164,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="schedule in vm.selectedItem.schedules | orderBy:order:reverse track by schedule.id">
+                            <tr ng-repeat="schedule in vm.selectedManageable.schedules | orderBy:order:reverse track by schedule.id">
                                 <th>
                                     <div class="periodic">
                                         <i class="glyphicon glyphicon-repeat" ng-if="schedule.recurrent"></i>
@@ -196,8 +196,8 @@
                 </form>
 
                 <!-- Actions -->
-                <button ng-if="vm.selectedItem.type !== MANAGEABLE_TYPES.GROUP" class="btn btn-primary remove" ng-click="vm.openRemoveModal(vm.selectedItem.id, 'REMOVE_DEVICE')" ng-bind="'MANAGE.DETAIL.ACTION.REMOVE_DEVICE' | translate"></button>
-                <div class="title" ng-if="vm.selectedItem.type === MANAGEABLE_TYPES.GROUP && vm.selectedItem.status === DEVICE_STATUS.DISCONNECTED" ng-bind="'MANAGE.DETAIL.ACTION.NO_ACTION' | translate"></div>
+                <button ng-if="vm.selectedManageable.type !== MANAGEABLE_TYPES.GROUP" class="btn btn-primary remove" ng-click="vm.openRemoveModal(vm.selectedManageable.id, 'REMOVE_DEVICE')" ng-bind="'MANAGE.DETAIL.ACTION.REMOVE_DEVICE' | translate"></button>
+                <div class="title" ng-if="vm.selectedManageable.type === MANAGEABLE_TYPES.GROUP && vm.selectedManageable.status === DEVICE_STATUS.DISCONNECTED" ng-bind="'MANAGE.DETAIL.ACTION.NO_ACTION' | translate"></div>
             </div>
 
             <!-- Detail tab -->
@@ -207,17 +207,17 @@
 
                     <!-- Name edition -->
                     <span class="name"
-                        ng-bind="(vm.selectedItem.name || 'MANAGE.DEVICE.DEFAULT_NAME') | translate"
-                        ng-show="!vm.selectedItem.displayInputName"
+                        ng-bind="(vm.selectedManageable.name || 'MANAGE.DEVICE.DEFAULT_NAME') | translate"
+                        ng-show="!vm.selectedManageable.displayInputName"
                     ></span>
-                    <i class="pencil glyphicon glyphicon-pencil" ng-show="!vm.selectedItem.displayInputName && ((vm.selectedItem.status !== DEVICE_STATUS.DISCONNECTED) || vm.selectedItem.type === MANAGEABLE_TYPES.GROUP)" ng-click="vm.displayDeviceNameForm()"></i>
-                    <form  name="vm.deviceNameForm" novalidate ng-show="vm.selectedItem.displayInputName">
+                    <i class="pencil glyphicon glyphicon-pencil" ng-show="!vm.selectedManageable.displayInputName && ((vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED) || vm.selectedManageable.type === MANAGEABLE_TYPES.GROUP)" ng-click="vm.displayNameForm()"></i>
+                    <form  name="vm.deviceNameForm" novalidate ng-show="vm.selectedManageable.displayInputName">
                         <div class="form-group">
-                          <input type="text" class="form-control input-name" ng-model="vm.selectedItemName" required>
+                          <input type="text" class="form-control input-name" ng-model="vm.selectedManageableName" required>
                         </div>
                         <div class="form-group">
-                          <button type="submit" class="btn btn-primary ng-binding" ng-disabled="vm.deviceNameForm.$invalid || vm.deviceNameForm.$waiting" ng-bind="'CORE.UI.FORM_SAVE' | translate" ng-click="vm.updateName(vm.selectedItemName)">Enregistrer</button>
-                          <button type="button" class="btn btn-default ng-binding" ng-disabled="vm.deviceNameForm.$waiting" ng-click="vm.selectedItem.displayInputName = !vm.selectedItem.displayInputName" ng-bind="'CORE.UI.FORM_CANCEL' | translate">Annuler</button>
+                          <button type="submit" class="btn btn-primary ng-binding" ng-disabled="vm.deviceNameForm.$invalid || vm.deviceNameForm.$waiting" ng-bind="'CORE.UI.FORM_SAVE' | translate" ng-click="vm.updateName(vm.selectedManageableName)">Enregistrer</button>
+                          <button type="button" class="btn btn-default ng-binding" ng-disabled="vm.deviceNameForm.$waiting" ng-click="vm.selectedManageable.displayInputName = !vm.selectedManageable.displayInputName" ng-bind="'CORE.UI.FORM_CANCEL' | translate">Annuler</button>
                         </div>
 
                     </form>
@@ -225,40 +225,40 @@
                     <!-- State -->
                     <div class="state">
                         {{ ('MANAGE.DETAIL.DETAIL.STATE' | translate) + ' : ' }}
-                        <span ng-class="vm.selectedItem.status" ng-bind="vm.selectedItem.statusMessage | translate"></span>
+                        <span ng-class="vm.selectedManageable.status" ng-bind="vm.selectedManageable.statusMessage | translate"></span>
                     </div>
                 </div>
 
                 <!-- Device info -->
-                <div class="infos form-horizontal" ng-if="vm.selectedItem.type !== MANAGEABLE_TYPES.GROUP && vm.selectedItem.status !== DEVICE_STATUS.DISCONNECTED">
+                <div class="infos form-horizontal" ng-if="vm.selectedManageable.type !== MANAGEABLE_TYPES.GROUP && vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED">
                   <div class="form-group">
                     <label  class="col-xs-3 control-label">IP :</label>
                     <div class="col-xs-9">
-                      <span ng-bind="vm.selectedItem.ip"></span>
+                      <span ng-bind="vm.selectedManageable.ip"></span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label  class="col-xs-3 control-label">@MAC :</label>
                     <div class="col-xs-9">
-                      <span ng-bind="vm.selectedItem.id"></span>
+                      <span ng-bind="vm.selectedManageable.id"></span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label  class="col-xs-3 control-label">URL :</label>
                     <div class="col-xs-9">
-                      <a ng-href="{{ vm.selectedItem.url }}" target="_blank" ng-bind="vm.selectedItem.url"></a>
+                      <a ng-href="{{ vm.selectedManageable.url }}" target="_blank" ng-bind="vm.selectedManageable.url"></a>
                     </div>
                     </div>
                 </div>
 
                 <!-- Device storage info -->
-                <div class="storage" ng-if="vm.selectedItem.type !== MANAGEABLE_TYPES.GROUP && vm.selectedItem.status !== DEVICE_STATUS.DISCONNECTED">
+                <div class="storage" ng-if="vm.selectedManageable.type !== MANAGEABLE_TYPES.GROUP && vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED">
                     <span class="text" ng-bind="('MANAGE.DEVICE.SPACE' | translate) + ' : '"></span>
-                    <span ng-bind="(vm.selectedItem.storage.used | number : '1') + ' Go / ' + (vm.selectedItem.storage.total | number : '1') + ' Go'"></span>
+                    <span ng-bind="(vm.selectedManageable.storage.used | number : '1') + ' Go / ' + (vm.selectedManageable.storage.total | number : '1') + ' Go'"></span>
                 </div>
 
                 <!-- List of devices in the group -->
-                <div class="action" ng-if="vm.selectedItem.type === MANAGEABLE_TYPES.GROUP">
+                <div class="action" ng-if="vm.selectedManageable.type === MANAGEABLE_TYPES.GROUP">
                     <div class="name" ng-bind="'MANAGE.DETAIL.DETAIL.DEVICES_TITLE' | translate"></div>
                     <table class="table" border="0">
                         <thead>
@@ -269,7 +269,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="device in vm.selectedItem.devices | orderBy:order:reverse track by device.id">
+                            <tr ng-repeat="device in vm.selectedManageable.devices | orderBy:order:reverse track by device.id">
                                 <th ng-bind="(device.name || 'MANAGE.DEVICE.DEFAULT_NAME') | translate"></th>
                                 <th ng-bind="device.statusMessage | translate"></th>
                                 <th class="cross" ng-click="removeFromGroup(device.id)"></th>
@@ -282,7 +282,7 @@
             <!-- History tab -->
             <div class="history-page page" ng-class="{'active': isActivePage(2)}">
                 <div class="form-group remove">
-                  <button class="btn btn-primary" ng-click="vm.openRemoveModal(vm.selectedItem.id, 'PURGE_HISTORY')" ng-bind="'MANAGE.DETAIL.HISTORY.PURGE_HISTORY' | translate"></button>
+                  <button class="btn btn-primary" ng-click="vm.openRemoveModal(vm.selectedManageable.id, 'PURGE_HISTORY')" ng-bind="'MANAGE.DETAIL.HISTORY.PURGE_HISTORY' | translate"></button>
                 </div>
                 <table class="form-group table" border="0">
                     <thead>
@@ -293,7 +293,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="history in vm.selectedItem.history | orderBy:order:!reverse track by history.id">
+                    <tr ng-repeat="history in vm.selectedManageable.history | orderBy:order:!reverse track by history.id">
                         <th ng-bind="history.date | date:'dd/MM/yyyy HH:mm'"></th>
                         <th ng-bind="history.message.data | translate:'':history.message.params"></th>
                         <th class="cross" ng-click="vm.openRemoveModal(history.id, 'REMOVE_HISTORY')"></th>
