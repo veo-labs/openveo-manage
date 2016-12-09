@@ -9,6 +9,7 @@ pages:
 - 'INTRODUCTION': 'index.md'
 - 'USERS':
   - 'Getting started': 'getting-started.md'
+  - 'Web Service': 'web-service.md'
   - 'Advanced configuration': 'advanced-configuration.md'
 - 'DEVELOPERS':
   - 'Basics': 'developers/basics.md'
