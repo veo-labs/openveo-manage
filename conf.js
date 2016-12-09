@@ -28,15 +28,9 @@ module.exports = {
   backOffice: {
     menu: [
       {
-        weight: -50,
         label: 'MANAGE.MENU.MANAGE',
-        subMenu: [
-          {
-            label: 'MANAGE.MENU.MANAGE',
-            path: 'manage',
-            permission: 'manage-access-page'
-          }
-        ]
+        path: 'manage',
+        permission: 'manage-access-page'
       }
     ],
     scriptLibFiles: {
