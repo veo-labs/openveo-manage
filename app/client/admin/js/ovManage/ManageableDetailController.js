@@ -222,7 +222,7 @@
         self.selectedManageable.devices.forEach(function(device) {
           if (device.status !== DEVICE_STATUS.STARTING &&
               device.status !== DEVICE_STATUS.STOPPING &&
-              device.status.inputs.error)
+              !device.inputs.error)
             ids.push(device.id);
         });
 

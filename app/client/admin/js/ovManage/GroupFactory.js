@@ -69,6 +69,7 @@
               group.status = DEVICE_STATUS.ERROR;
               return;
             case DEVICE_STATUS.STARTED:
+            case DEVICE_STATUS.STOPPING:
               group.statusMessage = 'MANAGE.STATUS.RECORDING';
               group.status = DEVICE_STATUS.STARTED;
               return;
