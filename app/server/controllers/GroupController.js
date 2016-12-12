@@ -74,7 +74,7 @@ EntityController.prototype.updateEntityAction = function(request, response, next
       } else {
 
         // Permits to keep all users up to date
-        ManageServer.get().updateGroup(entityId, data);
+        ManageServer.get().update(entityId, data);
 
         response.send({error: null, status: 'ok'});
       }
