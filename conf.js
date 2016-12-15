@@ -39,7 +39,9 @@ module.exports = {
         '/manage/lib/socket.io-client/socket.io.js',
         '/manage/lib/perfect-scrollbar/js/perfect-scrollbar.min.js'
       ],
-      dev: [],
+      dev: [
+        '/manage/socket.io/SocketApp.js'
+      ],
       prod: [
         '/manage/be/js/libOpenveoManage.js'
       ]
@@ -55,8 +57,7 @@ module.exports = {
         '/manage/ovManage/GroupFactory.js',
         '/manage/ovManage/ManageableController.js',
         '/manage/ovManage/ManageableDetailController.js',
-        '/manage/ovManage/SortTableDirective.js',
-        '/manage/socket.io/SocketApp.js'
+        '/manage/ovManage/SortTableDirective.js'
       ],
       prod: [
         '/manage/be/js/openveoManage.js'

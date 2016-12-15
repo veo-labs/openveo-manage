@@ -62,7 +62,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['sprite', 'compass:dev', 'watch']);
 
   // Minify and concat back end AngularJS Javascript files
-  grunt.registerTask('concatPlugin', ['uglify:dist', 'concat:lib', 'concat:js']);
+  grunt.registerTask('concatPlugin', ['uglify', 'concat:lib', 'concat:js']);
 
   // Prepare project for production
   grunt.registerTask('prod', ['sprite', 'compass:dist', 'concatPlugin']);

@@ -4,24 +4,50 @@
 // For more information about Grunt uglify, have a look at https://www.npmjs.com/package/grunt-contrib-uglify
 module.exports = {
 
-  // Obfuscate project's client JavaScript files
-  dist: {
+  // Obfuscate client manage's libraries
+  manageLib: {
     files: [
       {
-        expand: true, // Enable dynamic expansion.
-        cwd: '<%= project.beJS %>/', // Src matches are relative to this path.
-        src: ['**/*.js', '!ovManage/*.js'], // Actual pattern(s) to match.
-        dest: '<%= project.uglify %>/lib', // Destination path prefix.
-        ext: '.min.js', // Dest filepaths will have this extension.
-        extDot: 'first' // Extensions in filenames begin after the first dot
-      },
+
+        // Enable dynamic expansion
+        expand: true,
+
+        // Base path for patterns
+        cwd: '<%= project.beJS %>/',
+
+        // Match all JavaScript library files
+        src: ['socket.io/*.js'],
+
+        // Set destination directory
+        dest: '<%= project.uglify %>/',
+
+        // Generated files extension
+        ext: '.min.js'
+
+      }
+    ]
+  },
+
+  // Obfuscate client manage's JavaScript files
+  manage: {
+    files: [
       {
-        expand: true, // Enable dynamic expansion.
-        cwd: '<%= project.beJS %>/', // Src matches are relative to this path.
-        src: ['*.js', 'ovManage/*.js'], // Actual pattern(s) to match.
-        dest: '<%= project.uglify %>/', // Destination path prefix.
-        ext: '.min.js', // Dest filepaths will have this extension.
-        extDot: 'first' // Extensions in filenames begin after the first dot
+
+        // Enable dynamic expansion
+        expand: true,
+
+        // Base path for patterns
+        cwd: '<%= project.beJS %>/',
+
+        // Match all JavaScript files
+        src: ['ovManage/*.js'],
+
+        // Set destination directory
+        dest: '<%= project.uglify %>/',
+
+        // Generated files extension
+        ext: '.min.js'
+
       }
     ]
   }
