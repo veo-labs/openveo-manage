@@ -375,7 +375,6 @@ BrowsersSocketNamespace.prototype.connect = function(socketServer, name) {
     // With :
     //   - **Object* data Data with :
     //     - **Array** ids The list of devices ids on which a new recording session must be started
-    //     - **[String]** sessionId The id of recording session to start
     //     - **[String]** presetId The id of the preset for the recording session
     //   - **Function** callback The function to respond to the browser
     socket.on('device.startSession', function(data, callback) {
@@ -385,7 +384,6 @@ BrowsersSocketNamespace.prototype.connect = function(socketServer, name) {
       try {
         data = openVeoAPI.util.shallowValidateObject(data, {
           ids: {type: 'array<string>', required: true},
-          sessionId: {type: 'string'},
           presetId: {type: 'string'}
         });
       } catch (error) {
@@ -395,7 +393,7 @@ BrowsersSocketNamespace.prototype.connect = function(socketServer, name) {
         });
       }
 
-      self.emit('device.startSession', data.ids, data.sessionId, data.presetId, callback);
+      self.emit('device.startSession', data.ids, data.presetId, callback);
     });
 
     // Listen for a browser requesting one or several devices to stop a recording session

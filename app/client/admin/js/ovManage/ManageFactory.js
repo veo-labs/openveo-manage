@@ -377,11 +377,10 @@
      *
      * @method startRecord
      * @param {Array} ids The list of devices' ids
-     * @param {String} sessionId The record session id
      * @param {String} presetId The record session preset id
      * @return {Promise} Promise resolving when a start request has been sent to devices
      */
-    function startRecord(ids, sessionId, presetId) {
+    function startRecord(ids, presetId) {
       var p = $q.defer();
 
       getConfiguration().then(function(configuration) {
@@ -389,7 +388,6 @@
 
         socket.emit('device.startSession', {
           ids: ids,
-          sessionId: sessionId,
           presetId: presetId
         }, function(response) {
           if (response && response.errors)

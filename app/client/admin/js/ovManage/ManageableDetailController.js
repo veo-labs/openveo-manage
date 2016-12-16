@@ -231,7 +231,7 @@
 
       // Start record
       var preset = (self.itemSchedule.schedule.preset) ? self.itemSchedule.schedule.preset : null;
-      ManageFactory.startRecord(ids, self.selectedManageable.group, preset).catch(function(errors) {
+      ManageFactory.startRecord(ids, preset).catch(function(errors) {
         displayErrors(errors, 'MANAGE.DEVICE.START_RECORD_ERROR');
       });
     };

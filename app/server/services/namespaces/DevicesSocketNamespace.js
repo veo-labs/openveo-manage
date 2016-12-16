@@ -1,6 +1,7 @@
 'use strict';
 
 var util = require('util');
+var shortid = require('shortid');
 var async = require('async');
 var openVeoAPI = require('@openveo/api');
 var SocketNamespace = process.requireManage('app/server/socket/SocketNamespace.js');
@@ -321,21 +322,20 @@ DevicesSocketNamespace.prototype.askForUpdateName = function(socket, name, callb
  * @method askForStartRecord
  * @async
  * @param {Array} sockets The list of sockets associated to connected devices to start
- * @param {Number} [sessionId] The id of the recording session to start
  * @param {Number} [presetId] The id of the preset for the recording session
  * @param {Function} callback Function to call when it's done with :
  *  - **Array** The result for each device with :
  *    - **error** An error if something went wrong
  *    - **value** The device id
  */
-DevicesSocketNamespace.prototype.askForStartRecord = function(sockets, sessionId, presetId, callback) {
+DevicesSocketNamespace.prototype.askForStartRecord = function(sockets, presetId, callback) {
   var actions = [];
 
   sockets.forEach(function(socket) {
     if (socket) {
       actions.push(function(callback) {
         var data = {
-          id: (sessionId) ? sessionId : null,
+          id: shortid.generate(),
           preset: (presetId) ? presetId : null
         };
         process.socketLogger.debug('Say "session.start" to device', {socketId: socket.id, data: data});

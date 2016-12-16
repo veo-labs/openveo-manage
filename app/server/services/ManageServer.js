@@ -348,7 +348,7 @@ function registerSchedule(manageable, schedule) {
       }
 
       if (!abort) {
-        self.devicesNamespace.askForStartRecord(sockets, schedule.id, schedule.preset, function(error, results) {
+        self.devicesNamespace.askForStartRecord(sockets, schedule.preset, function(error, results) {
           results.forEach(function(result) {
             var device;
             if (result.error) {
@@ -727,10 +727,9 @@ function initBrowsersNamespaceListeners() {
   // Listen for a browser requesting one or several devices to start a new recording session
   // With :
   //   - **Array** ids The list of devices ids on which a new recording session must be started
-  //   - **String** sessionId The id of recording session to start
   //   - **String** presetId The id of the preset for the recording session
   //   - **Function** callback The function to respond to the browser
-  this.browsersNamespace.on('device.startSession', function(ids, sessionId, presetId, callback) {
+  this.browsersNamespace.on('device.startSession', function(ids, presetId, callback) {
     var sockets = [];
     var errors = [];
 
@@ -750,7 +749,7 @@ function initBrowsersNamespaceListeners() {
     if (errors.length)
       return callback({errors: errors});
 
-    self.devicesNamespace.askForStartRecord(sockets, sessionId, presetId, function(error, results) {
+    self.devicesNamespace.askForStartRecord(sockets, presetId, function(error, results) {
       results.forEach(function(result) {
         var device;
         if (result.error) {
