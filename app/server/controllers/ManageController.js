@@ -29,6 +29,7 @@ util.inherits(ManageController, Controller);
 ManageController.prototype.getConfigurationAction = function(request, response, next) {
   response.send({
     port: manageConf.port,
+    frontalPort: manageConf.frontalPort,
     browsersNamespace: manageConf.browsersNamespace,
     devicesNamespace: manageConf.devicesNamespace
   });

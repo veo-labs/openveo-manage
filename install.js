@@ -38,7 +38,8 @@ function createConf(callback) {
   var conf = {
     devicesNamespace: '/devices',
     browsersNamespace: '/browsers',
-    port: 3002
+    port: 3002,
+    frontalPort: 8081
   };
 
   async.series([
@@ -68,6 +69,13 @@ function createConf(callback) {
       rl.question('Enter the port to use for the socket.io server (default: ' + conf.port + ') :\n',
       function(answer) {
         if (answer) conf.port = Number(answer);
+        callback();
+      });
+    },
+    function(callback) {
+      rl.question('Enter the frontal port to use for the socket.io client (default: ' + conf.port + ') :\n',
+      function(answer) {
+        if (answer) conf.frontalPort = Number(answer);
         callback();
       });
     }

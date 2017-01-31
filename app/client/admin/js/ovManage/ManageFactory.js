@@ -42,7 +42,7 @@
       var p = $q.defer();
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
         socket.emit('groups', null, function(response) {
           if (response.error)
             p.reject(response.error.message);
@@ -65,7 +65,7 @@
       var p = $q.defer();
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
         socket.emit('devices', null, function(response) {
           if (response.error)
             p.reject(response.error.message);
@@ -87,7 +87,7 @@
       var p = $q.defer();
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
 
         socket.emit('group.create', null, function(response) {
           if (response.error)
@@ -117,7 +117,7 @@
       };
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
 
         socket.emit('group.addDevice', data, function(response) {
           if (response && response.error)
@@ -144,7 +144,7 @@
       };
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
 
         socket.emit('group.removeDevice', data, function(response) {
           if (response && response.error)
@@ -173,7 +173,7 @@
       };
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
 
         socket.emit('device.updateState', data, function(response) {
           if (response && response.error)
@@ -197,7 +197,7 @@
       var p = $q.defer();
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
 
         socket.emit('device.settings', {
           ids: ids
@@ -237,7 +237,7 @@
       };
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
         socket.once('update', handleResponse);
         socket.emit('updateName', data, handleResponse);
       });
@@ -270,7 +270,7 @@
       };
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
         socket.once('addSchedule', handleResponse);
         socket.emit('addSchedule', data, handleResponse);
       });
@@ -303,7 +303,7 @@
       };
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
         socket.once('removeSchedule', handleResponse);
         socket.emit('removeSchedule', data, handleResponse);
       });
@@ -336,7 +336,7 @@
       };
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
         socket.once('removeHistoric', handleResponse);
         socket.emit('removeHistoric', data, handleResponse);
       });
@@ -360,7 +360,7 @@
       };
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
         socket.emit('removeHistory', data, function(response) {
           if (response && response.error)
             p.reject(response.error);
@@ -384,7 +384,7 @@
       var p = $q.defer();
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
 
         socket.emit('device.startSession', {
           ids: ids,
@@ -411,7 +411,7 @@
       var p = $q.defer();
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
 
         socket.emit('device.stopSession', {
           ids: ids
@@ -437,7 +437,7 @@
       var p = $q.defer();
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
 
         socket.emit('device.indexSession', {
           ids: ids
@@ -468,7 +468,7 @@
       };
 
       getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
+        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.frontalPort);
 
         socket.emit('remove', data, function(response) {
           if (response && response.errors)
