@@ -1,0 +1,24 @@
+<div class="manage">
+  <h2 ng-bind="'MANAGE.TITLE' | translate"></h2>
+  <div class="well well-lg" ng-bind="'MANAGE.INFO' | translate"></div>
+
+  <div class="todo" ng-bind="todo.datas"></div>
+
+  <div ui-tree="options">
+    <div ui-tree-nodes ng-model="devices">
+      <div class="col-sm-3" ng-repeat="device in devices" ui-tree-node ng-include="'devices_renderer.html'"></div>
+    </div>
+  </div>
+
+  <!-- Nested device template -->
+  <script type="text/ng-template" id="devices_renderer.html">
+    <div ui-tree-handle>
+      <span ng-bind='device.name'></span>
+    </div>
+    <div ui-tree-nodes="options" ng-model="device.devices" ng-class="{hidden: collapsed}">
+      <div ng-repeat="device in device.devices" ui-tree-node ng-include="'devices_renderer.html'">
+      </div>
+    </div>
+  </script>
+
+</div>

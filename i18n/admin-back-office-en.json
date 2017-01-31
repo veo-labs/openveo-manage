@@ -1,0 +1,11 @@
+{
+	"MENU": {
+		"TODO": "Manage example",
+		"MANAGE": "Manage"
+	},
+	"TODO": {
+		"PAGE_TITLE": "Manage example"
+	},
+	"TITLE": "Manage example",
+	"INFO": "Manage : page informations"
+}

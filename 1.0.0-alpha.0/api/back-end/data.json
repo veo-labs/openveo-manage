@@ -1,0 +1,2152 @@
+{
+    "project": {
+        "name": "OpenVeo Manage AngularJS back end",
+        "description": "AngularJS OpenVeo Manage plugin back end documentation",
+        "version": "1.0.0-alpha.0"
+    },
+    "files": {
+        "app/client/admin/js/ovManage/App.js": {
+            "name": "app/client/admin/js/ovManage/App.js",
+            "modules": {
+                "ov.manage": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "app/client/admin/js/ovManage/DeviceFactory.js": {
+            "name": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "modules": {},
+            "classes": {
+                "ManageDeviceFactory": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app/client/admin/js/ovManage/GroupFactory.js": {
+            "name": "app/client/admin/js/ovManage/GroupFactory.js",
+            "modules": {},
+            "classes": {
+                "GroupFactory": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app/client/admin/js/ovManage/MainController.js": {
+            "name": "app/client/admin/js/ovManage/MainController.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "app/client/admin/js/ovManage/ManageFactory.js": {
+            "name": "app/client/admin/js/ovManage/ManageFactory.js",
+            "modules": {},
+            "classes": {
+                "ManageFactory": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app/client/admin/js/ovManage/ManageableController.js": {
+            "name": "app/client/admin/js/ovManage/ManageableController.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "app/client/admin/js/ovManage/ManageableDetailController.js": {
+            "name": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "app/client/admin/js/ovManage/ManageableFactory.js": {
+            "name": "app/client/admin/js/ovManage/ManageableFactory.js",
+            "modules": {},
+            "classes": {
+                "ManageManageableFactory": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app/client/admin/js/ovManage/SortTableDirective.js": {
+            "name": "app/client/admin/js/ovManage/SortTableDirective.js",
+            "modules": {},
+            "classes": {
+                "ovManageSortTable": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app/client/admin/js/socket.io/SocketApp.js": {
+            "name": "app/client/admin/js/socket.io/SocketApp.js",
+            "modules": {
+                "ov.manage.socketIO": 1
+            },
+            "classes": {
+                "ManageSocketService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "ov.manage": {
+            "name": "ov.manage",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "ManageDeviceFactory": 1,
+                "GroupFactory": 1,
+                "ManageFactory": 1,
+                "ManageManageableFactory": 1,
+                "ovManageSortTable": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "main",
+            "file": "app/client/admin/js/ovManage/SortTableDirective.js",
+            "line": 5,
+            "description": "Defines components responsible of the manage plugin back end pages.\n\nIt creates two back end pages. One to display the list of devices and groups, the other\none to display the list of devices inside a group.",
+            "itemtype": "main",
+            "example": [
+                "\n <th ov-manage-sort-table order=\"'name'\" by=\"order\" reverse=\"reverse\">Name</th>"
+            ]
+        },
+        "ov.manage.socketIO": {
+            "name": "ov.manage.socketIO",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "ManageSocketService": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "main",
+            "file": "app/client/admin/js/socket.io/SocketApp.js",
+            "line": 14,
+            "description": "Defines the ov.manage.socketIO module to build a socket.io client.",
+            "itemtype": "main"
+        }
+    },
+    "classes": {
+        "ManageDeviceFactory": {
+            "name": "ManageDeviceFactory",
+            "shortname": "ManageDeviceFactory",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ov.manage",
+            "namespace": "",
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 5,
+            "description": "Defines a factory to manage devices.\n\nDevices are categorized by state.\nEither \"accepted\", \"refused\", \"pending\" or \"incoming\".\nAn \"incoming\" device is a newly connected device manifesting after retrieving\nthe list of known devices from the server.\nA \"pending\" device is a connected device not in server's list of known devices."
+        },
+        "GroupFactory": {
+            "name": "GroupFactory",
+            "shortname": "GroupFactory",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ov.manage",
+            "namespace": "",
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 5,
+            "description": "Defines a factory to manage groups."
+        },
+        "ManageFactory": {
+            "name": "ManageFactory",
+            "shortname": "ManageFactory",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ov.manage",
+            "namespace": "",
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 5,
+            "description": "Defines a factory to manage communications with the server."
+        },
+        "ManageManageableFactory": {
+            "name": "ManageManageableFactory",
+            "shortname": "ManageManageableFactory",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ov.manage",
+            "namespace": "",
+            "file": "app/client/admin/js/ovManage/ManageableFactory.js",
+            "line": 5,
+            "description": "Defines a factory to manage manageables."
+        },
+        "ovManageSortTable": {
+            "name": "ovManageSortTable",
+            "shortname": "ovManageSortTable",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ov.manage",
+            "namespace": "",
+            "file": "app/client/admin/js/ovManage/SortTableDirective.js",
+            "line": 5,
+            "description": "Creates a new Angular directive as an HTML attribute ov-manage-sort-table to be able to create a sort table.",
+            "example": [
+                "\n <th ov-manage-sort-table order=\"'name'\" by=\"order\" reverse=\"reverse\">Name</th>"
+            ]
+        },
+        "ManageSocketService": {
+            "name": "ManageSocketService",
+            "shortname": "ManageSocketService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ov.manage.socketIO",
+            "namespace": "",
+            "file": "app/client/admin/js/socket.io/SocketApp.js",
+            "line": 14,
+            "description": "Defines a ManageSocketService holding a socket.io client singleton."
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 31,
+            "description": "Retrieves a device by its id.\n\nSearch is made on all devices, accepted, pending, refused and incoming devices.",
+            "itemtype": "method",
+            "name": "getDevice",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The device or null if not found",
+                "type": "Object|Null"
+            },
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 57,
+            "description": "Updates device's status message depending on its actual status.\nDevice's status message is a human readable explanation about the device's status.",
+            "itemtype": "method",
+            "name": "updateDeviceStatusMessage",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 98,
+            "description": "Adds a device historic.",
+            "itemtype": "method",
+            "name": "addHistoric",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "historic",
+                    "description": "The history",
+                    "type": "Object"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 110,
+            "description": "Adds a device schedule.",
+            "itemtype": "method",
+            "name": "addSchedule",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "schedule",
+                    "description": "The schedule",
+                    "type": "Object"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 122,
+            "description": "Removes a device historic.",
+            "itemtype": "method",
+            "name": "removeHistoric",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "historicId",
+                    "description": "The historic id",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 134,
+            "description": "Removes a device's history.",
+            "itemtype": "method",
+            "name": "removeHistory",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 145,
+            "description": "Removes a device's schedule.",
+            "itemtype": "method",
+            "name": "removeSchedule",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "scheduleId",
+                    "description": "The schedule id",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 157,
+            "description": "Adds a new device to the manage interface as a connected device.",
+            "itemtype": "method",
+            "name": "addDevice",
+            "params": [
+                {
+                    "name": "device",
+                    "description": "The new device description object",
+                    "type": "Object"
+                },
+                {
+                    "name": "state",
+                    "description": "The device state",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 188,
+            "description": "Gets all devices from server.",
+            "itemtype": "method",
+            "name": "getDevices",
+            "return": {
+                "description": "A promise resolving with the list of devices categorized\nby state (either \"pending\", \"accepted\" or \"refused\")",
+                "type": "Promise"
+            },
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 229,
+            "description": "Removes a device.",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The removed device",
+                "type": "Object"
+            },
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 263,
+            "description": "Sets a property on all devices.",
+            "itemtype": "method",
+            "name": "setDevicesProperty",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "The name of the property to set",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The value for the property",
+                    "type": "Mixed"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 276,
+            "description": "Updates a device's property.",
+            "itemtype": "method",
+            "name": "setProperty",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "property",
+                    "description": "The property to modify",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The property value",
+                    "type": "Mixed"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 311,
+            "description": "Validates a device preset confronting its available inputs.\nInputs error is available in device.inputs property.",
+            "itemtype": "method",
+            "name": "validatePreset",
+            "params": [
+                {
+                    "name": "deviceId",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "presetId",
+                    "description": "The device preset id",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 372,
+            "description": "Updates a device's state.",
+            "itemtype": "method",
+            "name": "updateDeviceState",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The updated device id",
+                    "type": "String"
+                },
+                {
+                    "name": "newState",
+                    "description": "The new state of the device",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 395,
+            "description": "Gets devices corresponding to the given state.",
+            "itemtype": "method",
+            "name": "getDevicesByState",
+            "params": [
+                {
+                    "name": "state",
+                    "description": "The state to look for",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The list of devices",
+                "type": "Array"
+            },
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 406,
+            "description": "Checks if a schedule is not in collision with other schedules.\n\nDevice schedule should not be in collision with device's group schedules if inside the group.",
+            "itemtype": "method",
+            "name": "isValidSchedule",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "schedule",
+                    "description": "The schedule to validate",
+                    "type": "Object"
+                },
+                {
+                    "name": "group",
+                    "description": "The device's group",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The error if validation failed, null otherwise",
+                "type": "Error|Null"
+            },
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/DeviceFactory.js",
+            "line": 439,
+            "description": "Checks if there are collisions between device's schedules and group's schedules.",
+            "itemtype": "method",
+            "name": "isGroupSchedulesCollision",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "group",
+                    "description": "The group",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "true if there is at least one collision, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "ManageDeviceFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 30,
+            "description": "Gets a group by its id.\n\nIt implies that the list of groups has been retrieved\nfrom server using GroupFactory.getGroups().",
+            "itemtype": "method",
+            "name": "getGroup",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The group id",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The group or null if not found",
+                "type": "Object|Null"
+            },
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 47,
+            "description": "Updates status of a group regarding the status of its devices.",
+            "itemtype": "method",
+            "name": "updateStatus",
+            "params": [
+                {
+                    "name": "groupId",
+                    "description": "The group id",
+                    "type": "String"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 103,
+            "description": "Adds a group historic.",
+            "itemtype": "method",
+            "name": "addHistoric",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The group id",
+                    "type": "String"
+                },
+                {
+                    "name": "historic",
+                    "description": "The historic",
+                    "type": "Object"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 115,
+            "description": "Adds a group schedule.",
+            "itemtype": "method",
+            "name": "addSchedule",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The group id",
+                    "type": "String"
+                },
+                {
+                    "name": "schedule",
+                    "description": "The schedule",
+                    "type": "Object"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 127,
+            "description": "Removes a group historic.",
+            "itemtype": "method",
+            "name": "removeHistoric",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The group id",
+                    "type": "String"
+                },
+                {
+                    "name": "historicId",
+                    "description": "The historic id",
+                    "type": "String"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 139,
+            "description": "Removes a device's history.",
+            "itemtype": "method",
+            "name": "removeHistory",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 150,
+            "description": "Removes a group schedule.",
+            "itemtype": "method",
+            "name": "removeSchedule",
+            "params": [
+                {
+                    "name": "groupId",
+                    "description": "The group id",
+                    "type": "String"
+                },
+                {
+                    "name": "scheduleId",
+                    "description": "The schedule id",
+                    "type": "String"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 162,
+            "description": "Gets a device from a group.",
+            "itemtype": "method",
+            "name": "getDeviceFromGroup",
+            "params": [
+                {
+                    "name": "deviceId",
+                    "description": "The id of the device",
+                    "type": "String"
+                },
+                {
+                    "name": "groupId",
+                    "description": "The id of the group",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The device or null if not found",
+                "type": "Object|Null"
+            },
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 181,
+            "description": "Adds a device to a group.",
+            "itemtype": "method",
+            "name": "addDeviceToGroup",
+            "params": [
+                {
+                    "name": "device",
+                    "description": "The device to add to the group",
+                    "type": "Object"
+                },
+                {
+                    "name": "groupId",
+                    "description": "The id of the group",
+                    "type": "String"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 206,
+            "description": "Adds a new group.",
+            "itemtype": "method",
+            "name": "addGroup",
+            "params": [
+                {
+                    "name": "group",
+                    "description": "The new group description object",
+                    "type": "Object"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 230,
+            "description": "Gets all groups of devices from server.",
+            "itemtype": "method",
+            "name": "getGroups",
+            "return": {
+                "description": "A promise resolving with the list of groups",
+                "type": "Promise"
+            },
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 257,
+            "description": "Adds devices to their respecting group.\n\nIt uses the group property of each device",
+            "itemtype": "method",
+            "name": "addDevices",
+            "params": [
+                {
+                    "name": "devices",
+                    "description": "The list of devices",
+                    "type": "Array"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 288,
+            "description": "Sets a property on all groups.",
+            "itemtype": "method",
+            "name": "setGroupsProperty",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "The name of the property to set",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The value for the property",
+                    "type": "Mixed"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 301,
+            "description": "Removes a group.",
+            "itemtype": "method",
+            "name": "removeGroup",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The group id",
+                    "type": "String"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 330,
+            "description": "Updates a group property.",
+            "itemtype": "method",
+            "name": "setProperty",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The group id",
+                    "type": "String"
+                },
+                {
+                    "name": "property",
+                    "description": "The property to modify",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The property value",
+                    "type": "Mixed"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 345,
+            "description": "Removes a device from a group.",
+            "itemtype": "method",
+            "name": "removeDeviceFromGroup",
+            "params": [
+                {
+                    "name": "device",
+                    "description": "The device to remove",
+                    "type": "Object"
+                },
+                {
+                    "name": "groupId",
+                    "description": "The group id",
+                    "type": "String"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 371,
+            "description": "Validates a preset confronting group's devices' available inputs.\n\nIf one of the devices has invalid inputs regarding the preset, preset\nis considered invalid.",
+            "itemtype": "method",
+            "name": "validatePreset",
+            "params": [
+                {
+                    "name": "groupId",
+                    "description": "The group id",
+                    "type": "String"
+                },
+                {
+                    "name": "presetId",
+                    "description": "The preset id",
+                    "type": "String"
+                }
+            ],
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/GroupFactory.js",
+            "line": 405,
+            "description": "Checks if a schedule is not in collision with other schedules.\n\nGroup's schedule should not be in collision with devices' schedule inside the group.",
+            "itemtype": "method",
+            "name": "isValidSchedule",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The group id",
+                    "type": "String"
+                },
+                {
+                    "name": "schedule",
+                    "description": "The schedule to validate",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The error if validation failed, null otherwise",
+                "type": "Error|Null"
+            },
+            "class": "GroupFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/MainController.js",
+            "line": 5,
+            "description": "Defines the manage controller",
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/MainController.js",
+            "line": 229,
+            "description": "Defines the active page index.",
+            "params": [
+                {
+                    "name": "index",
+                    "description": "The tab index"
+                }
+            ],
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/MainController.js",
+            "line": 238,
+            "description": "Determines if the passed index is the active page index.",
+            "params": [
+                {
+                    "name": "index",
+                    "description": "The tab index"
+                }
+            ],
+            "return": {
+                "description": "true if the given index is the selected tab index",
+                "type": "Boolean"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/MainController.js",
+            "line": 248,
+            "description": "Permits to organize the view when the details is opened/closed.",
+            "params": [
+                {
+                    "name": "opening",
+                    "description": ""
+                }
+            ],
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/MainController.js",
+            "line": 269,
+            "description": "Navigates to the previous page in browser's history.",
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/MainController.js",
+            "line": 288,
+            "description": "Removes a group.",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The id of the group to remove",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/MainController.js",
+            "line": 301,
+            "description": "Removes a device from its group.",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The id of the device to remove",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 14,
+            "description": "Gets Manage plugin configuration.",
+            "itemtype": "method",
+            "name": "getConfiguration",
+            "return": {
+                "description": "A promise resolving with manage's configuration",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 35,
+            "description": "Gets all groups devices from server.",
+            "itemtype": "method",
+            "name": "getGroups",
+            "return": {
+                "description": "A promise resolving with the list of groups",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 57,
+            "description": "Gets all devices from server.",
+            "itemtype": "method",
+            "name": "getDevices",
+            "return": {
+                "description": "A promise resolving with the list of devices categorized\nby state (either \"pending\", \"accepted\" or \"refused\")",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 80,
+            "description": "Creates a new group.",
+            "itemtype": "method",
+            "name": "createGroup",
+            "return": {
+                "description": "Promise resolving with the new created group",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 104,
+            "description": "Adds a device to a group.",
+            "itemtype": "method",
+            "name": "addDeviceToGroup",
+            "params": [
+                {
+                    "name": "deviceId",
+                    "description": "The id of the device to add to the group",
+                    "type": "String"
+                },
+                {
+                    "name": "groupId",
+                    "description": "The id of group",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when device has been added",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 133,
+            "description": "Removes a device from its group.",
+            "itemtype": "method",
+            "name": "removeDeviceFromGroup",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The id of the device to remove from its group",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when device has been removed from its group",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 160,
+            "description": "Updates the state of a device.",
+            "itemtype": "method",
+            "name": "updateDeviceState",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "state",
+                    "description": "The new device state",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when state has been changed",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 189,
+            "description": "Asks server for devices' settings.",
+            "itemtype": "method",
+            "name": "askForDevicesSettings",
+            "params": [
+                {
+                    "name": "ids",
+                    "description": "The devices' ids",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when request to devices have been sent",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 215,
+            "description": "Updates a manageable's name.",
+            "itemtype": "method",
+            "name": "updateName",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "name",
+                    "description": "The manageable name",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "The manageable type",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when name has been updated",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 248,
+            "description": "Adds a manageable's schedule.",
+            "itemtype": "method",
+            "name": "addSchedule",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "schedule",
+                    "description": "The schedule to add",
+                    "type": "Object"
+                },
+                {
+                    "name": "type",
+                    "description": "The manageable type",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when schedule has been added",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 281,
+            "description": "Removes a manageable's schedule.",
+            "itemtype": "method",
+            "name": "removeSchedule",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "scheduleId",
+                    "description": "The schedule id",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "The manageable type",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when schedule has been removed",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 314,
+            "description": "Removes a manageable's historic.",
+            "itemtype": "method",
+            "name": "removeHistoric",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "historicId",
+                    "description": "The historic id",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "The manageable type",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when historic has been removed",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 347,
+            "description": "Removes the whole manageable's history.",
+            "itemtype": "method",
+            "name": "removeHistory",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "The manageable type",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when history has been removed",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 375,
+            "description": "Starts a new record session on devices.",
+            "itemtype": "method",
+            "name": "startRecord",
+            "params": [
+                {
+                    "name": "ids",
+                    "description": "The list of devices' ids",
+                    "type": "Array"
+                },
+                {
+                    "name": "presetId",
+                    "description": "The record session preset id",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when a start request has been sent to devices",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 403,
+            "description": "Stops a recording session on devices.",
+            "itemtype": "method",
+            "name": "stopRecord",
+            "params": [
+                {
+                    "name": "ids",
+                    "description": "The list of devices' ids",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when a stop request has been sent to devices",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 429,
+            "description": "Tags a recording session on devices.",
+            "itemtype": "method",
+            "name": "tagRecord",
+            "params": [
+                {
+                    "name": "ids",
+                    "description": "The list of devices' ids",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when a tag request has been sent to devices",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageFactory.js",
+            "line": 455,
+            "description": "Removes a manageable.",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "The manageable type",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when the manageable has been removed",
+                "type": "Promise"
+            },
+            "class": "ManageFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 6,
+            "description": "Controls the view responsible of a list of manageables.",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 30,
+            "description": "Defines an ui-state for a manageable.",
+            "params": [
+                {
+                    "name": "target",
+                    "description": "The target manageable",
+                    "type": "Object"
+                },
+                {
+                    "name": "uiState",
+                    "description": "The ui-state to set for the manageable",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 47,
+            "description": "Removes an ui-state for a manageable.",
+            "params": [
+                {
+                    "name": "target",
+                    "description": "The target manageable",
+                    "type": "Object"
+                },
+                {
+                    "name": "uiState",
+                    "description": "The ui-state to remove for the manageable",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 62,
+            "description": "Handles drag move event on manageables.",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "the user Event related to the dragEvent",
+                    "type": "Event"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 83,
+            "description": "Resets the manageable element to its initial position.",
+            "params": [
+                {
+                    "name": "target",
+                    "description": "the element to reset",
+                    "type": "Object"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 107,
+            "description": "Sets position of the target element to the dropzone element.",
+            "params": [
+                {
+                    "name": "target",
+                    "description": "the dropzone element",
+                    "type": "Object"
+                },
+                {
+                    "name": "relatedTarget",
+                    "description": "target the dragged element to move",
+                    "type": "Object"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 134,
+            "description": "Sets items as draggable.",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 176,
+            "description": "Adds a device to a group.",
+            "params": [
+                {
+                    "name": "deviceId",
+                    "description": "The id of the device to add to the group",
+                    "type": "String"
+                },
+                {
+                    "name": "groupId",
+                    "description": "The id of group",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise resolving when device is added",
+                "type": "Promise"
+            },
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 214,
+            "description": "Sets drag drop zones.",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 276,
+            "description": "Initializes the scrollBars for device detail window.",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 295,
+            "description": "Updates the scrollbars on device detail change.",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 308,
+            "description": "Destroys scrollbars when device detail is closed.",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 317,
+            "description": "Sets a click event listener on a manageable.",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 373,
+            "description": "Sets a double click event listener on a manageable.\nGo to the group detail page on double click.",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 398,
+            "description": "Adds pending/refused device to the accepted list of devices.",
+            "itemtype": "method",
+            "name": "addToAcceptedDevices",
+            "params": [
+                {
+                    "name": "device",
+                    "description": "The device to accept",
+                    "type": "Object"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableController.js",
+            "line": 414,
+            "description": "Adds the new device to the refused list of devices.",
+            "itemtype": "method",
+            "name": "addToRefusedDevices",
+            "params": [
+                {
+                    "name": "device",
+                    "description": "The device object",
+                    "type": "Object"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 6,
+            "description": "Defines the manageable detail controller to manage view displaying details about a manageable.",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 50,
+            "description": "Validates that begin and end dates of the new scheduled job are not in conflicts with the other scheduled jobs.",
+            "itemtype": "method",
+            "name": "validateSchedule",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "schedule",
+                    "description": "Schedule object with :\n  - **Date** beginDate The begin date of the schedule\n  - **Date** endDate The end date of the schedule\n  - **Number** duration The schedule duration in milliseconds\n  - **Boolean** recurrent true is this is a daily schedule, false otherwise",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "true if valid, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 87,
+            "description": "Displays an error message for each given errors.",
+            "itemtype": "method",
+            "name": "displayErrors",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "errors",
+                    "description": "The list of errors",
+                    "type": "Array"
+                },
+                {
+                    "name": "message",
+                    "description": "The message to display for each error",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 104,
+            "description": "Closes the details panel.",
+            "itemtype": "method",
+            "name": "closeDetail",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 126,
+            "description": "Displays the input to update the manageable's name.",
+            "itemtype": "method",
+            "name": "displayNameForm",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 136,
+            "description": "Updates manageable's name.",
+            "itemtype": "method",
+            "name": "updateName",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "The new manageable name",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 161,
+            "description": "Adds a new schedule.",
+            "itemtype": "method",
+            "name": "addSchedule",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 199,
+            "description": "Validates the end date regarding the begin date.\nEnd date should not be inferior to begin date.",
+            "itemtype": "method",
+            "name": "validateEndDate",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 210,
+            "description": "Starts a new recording session on the selected manageable.",
+            "itemtype": "method",
+            "name": "startRecord",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 239,
+            "description": "Stops recording session on the selected manageable.",
+            "itemtype": "method",
+            "name": "startRecord",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 265,
+            "description": "Creates a new tag on the recording session of the selected manageable.",
+            "itemtype": "method",
+            "name": "startRecord",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 291,
+            "description": "Gets selected manageable's preset's name.",
+            "itemtype": "method",
+            "name": "getPresetName",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The preset id",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The preset name or null if not found",
+                "type": "String|Null"
+            },
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 309,
+            "description": "Resets the action form.",
+            "itemtype": "method",
+            "name": "resetActionForm",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 342,
+            "description": "Removes a schedule from selected manageable.",
+            "itemtype": "method",
+            "name": "removeSchedule",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "scheduleId",
+                    "description": "The schedule id",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 392,
+            "description": "Removes an historic from selected manageable.",
+            "itemtype": "method",
+            "name": "removeHistoric",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "historicId",
+                    "description": "The historic id",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 415,
+            "description": "Removes the whole history.",
+            "itemtype": "method",
+            "name": "removeHistory",
+            "access": "private",
+            "tagname": "",
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 431,
+            "description": "Removes a device.",
+            "itemtype": "method",
+            "name": "removeDevice",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The id of the device to remove",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 449,
+            "description": "Opens a modal to remove something.",
+            "itemtype": "method",
+            "name": "openRemoveModal",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The id of the object to remove",
+                    "type": "String"
+                },
+                {
+                    "name": "action",
+                    "description": "The type of action to perform",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableDetailController.js",
+            "line": 492,
+            "description": "Validates the selected manageable's inputs regarding the given preset id.\n\nIt is not possible to start a recording session if the inputs of the\nselected manageable does not correspond to the preset configuration.\ne.g. It is not possible to start a recording session with slides extraction\nwithout a desktop input.",
+            "itemtype": "method",
+            "name": "validatePreset",
+            "params": [
+                {
+                    "name": "presetId",
+                    "description": "The id of the preset",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableFactory.js",
+            "line": 13,
+            "description": "Checks if two schedules are in conflict.",
+            "itemtype": "method",
+            "name": "checkSchedulesConflict",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "schedule1",
+                    "description": "Schedule object with :\n  - **Date** beginDate : The begin date of the schedule\n  - **Date** duration : The schedule duration\n  - **Boolean** recurrent : true is this is a daily schedule, false otherwise",
+                    "type": "Object"
+                },
+                {
+                    "name": "schedule2",
+                    "description": "Schedule object with :\n  - **Date** beginDate : The begin date of the schedule\n  - **Date** duration : The schedule duration\n  - **Boolean** recurrent : true is this is a daily schedule, false otherwise",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "true if there are in conflict, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableFactory.js",
+            "line": 101,
+            "description": "Adds a manageable historic.",
+            "itemtype": "method",
+            "name": "addHistoric",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Object"
+                },
+                {
+                    "name": "historic",
+                    "description": "The historic to add",
+                    "type": "Object"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableFactory.js",
+            "line": 128,
+            "description": "Removes a manageable historic.",
+            "itemtype": "method",
+            "name": "removeHistoric",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Object"
+                },
+                {
+                    "name": "historicId",
+                    "description": "The historic id",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableFactory.js",
+            "line": 150,
+            "description": "Removes a manageable's history.",
+            "itemtype": "method",
+            "name": "removeHistory",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Object"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableFactory.js",
+            "line": 161,
+            "description": "Adds a manageable schedule.",
+            "itemtype": "method",
+            "name": "addSchedule",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Object"
+                },
+                {
+                    "name": "schedule",
+                    "description": "The schedule",
+                    "type": "Object"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableFactory.js",
+            "line": 185,
+            "description": "Removes a manageable's schedule.",
+            "itemtype": "method",
+            "name": "removeSchedule",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Object"
+                },
+                {
+                    "name": "scheduleId",
+                    "description": "The schedule id",
+                    "type": "String"
+                }
+            ],
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableFactory.js",
+            "line": 207,
+            "description": "Gets a manageable's preset.",
+            "itemtype": "method",
+            "name": "getPreset",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Object"
+                },
+                {
+                    "name": "presetId",
+                    "description": "The manageable's preset to look for",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The preset's configuration or null if not found",
+                "type": "Object|Null"
+            },
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/ovManage/ManageableFactory.js",
+            "line": 226,
+            "description": "Checks if a schedule is not in collision with other schedules.",
+            "itemtype": "method",
+            "name": "isValidSchedule",
+            "params": [
+                {
+                    "name": "schedule",
+                    "description": "The schedule to validate",
+                    "type": "Object"
+                },
+                {
+                    "name": "schedules",
+                    "description": "The list of schedules",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "The error if validation failed, null otherwise",
+                "type": "Error|Null"
+            },
+            "class": "ManageManageableFactory",
+            "module": "ov.manage"
+        },
+        {
+            "file": "app/client/admin/js/socket.io/SocketApp.js",
+            "line": 23,
+            "description": "Initializes a socket.io connection with the server if not already initialized.",
+            "itemtype": "method",
+            "name": "initSocket",
+            "params": [
+                {
+                    "name": "namespace",
+                    "description": "socket.io namespace name to connect to",
+                    "type": "String"
+                },
+                {
+                    "name": "port",
+                    "description": "socket.io server port to connect to",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "The socket.io client",
+                "type": "Client"
+            },
+            "class": "ManageSocketService",
+            "module": "ov.manage.socketIO"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\nDefines the manage controller",
+            "line": " app/client/admin/js/ovManage/MainController.js:5"
+        },
+        {
+            "message": "Missing item type\nDefines the active page index.",
+            "line": " app/client/admin/js/ovManage/MainController.js:229"
+        },
+        {
+            "message": "Missing item type\nDetermines if the passed index is the active page index.",
+            "line": " app/client/admin/js/ovManage/MainController.js:238"
+        },
+        {
+            "message": "Missing item type\nPermits to organize the view when the details is opened/closed.",
+            "line": " app/client/admin/js/ovManage/MainController.js:248"
+        },
+        {
+            "message": "Missing item type\nNavigates to the previous page in browser's history.",
+            "line": " app/client/admin/js/ovManage/MainController.js:269"
+        },
+        {
+            "message": "Missing item type\nRemoves a group.",
+            "line": " app/client/admin/js/ovManage/MainController.js:288"
+        },
+        {
+            "message": "Missing item type\nRemoves a device from its group.",
+            "line": " app/client/admin/js/ovManage/MainController.js:301"
+        },
+        {
+            "message": "Missing item type\nControls the view responsible of a list of manageables.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:6"
+        },
+        {
+            "message": "Missing item type\nDefines an ui-state for a manageable.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:30"
+        },
+        {
+            "message": "Missing item type\nRemoves an ui-state for a manageable.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:47"
+        },
+        {
+            "message": "Missing item type\nHandles drag move event on manageables.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:62"
+        },
+        {
+            "message": "Missing item type\nResets the manageable element to its initial position.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:83"
+        },
+        {
+            "message": "Missing item type\nSets position of the target element to the dropzone element.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:107"
+        },
+        {
+            "message": "Missing item type\nSets items as draggable.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:134"
+        },
+        {
+            "message": "Missing item type\nAdds a device to a group.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:176"
+        },
+        {
+            "message": "Missing item type\nSets drag drop zones.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:214"
+        },
+        {
+            "message": "Missing item type\nInitializes the scrollBars for device detail window.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:276"
+        },
+        {
+            "message": "Missing item type\nUpdates the scrollbars on device detail change.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:295"
+        },
+        {
+            "message": "Missing item type\nDestroys scrollbars when device detail is closed.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:308"
+        },
+        {
+            "message": "Missing item type\nSets a click event listener on a manageable.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:317"
+        },
+        {
+            "message": "Missing item type\nSets a double click event listener on a manageable.\nGo to the group detail page on double click.",
+            "line": " app/client/admin/js/ovManage/ManageableController.js:373"
+        },
+        {
+            "message": "Missing item type\nDefines the manageable detail controller to manage view displaying details about a manageable.",
+            "line": " app/client/admin/js/ovManage/ManageableDetailController.js:6"
+        }
+    ]
+}
