@@ -17,7 +17,7 @@ OpenVeo Manage adds the following features (Development in progress):
 All data are synchronized in real-time in order to keep all users connected to the manage up to date.
 
 # Documentation
-Documentation available on [Github pages](http://veo-labs.github.io/openveo-manage/1.0.0-alpha.0)
+Documentation available on [Github pages](http://veo-labs.github.io/openveo-manage/1.0.0-alpha.1)
 
 # Contributors
 Maintainer : [Veo-Labs](http://www.veo-labs.com/)

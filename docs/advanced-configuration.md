@@ -14,7 +14,8 @@ Open **~/.openveo/manage/manageConf.json**
 {
   "devicesNamespace": "/devices", // The namespace for socket.io in order to initialize the dialog with encoders
   "browsersNamespace": "/browsers", // The namespace for socket.io in order to initialize the dialog with browsers
-  "port": 3002 // The socket.io server port to use
+  "port": 3002, // The socket.io server port to listen,
+  "frontalPort": 8081 // The socket.io frontal port to use by socket client
 }
 ```
 
