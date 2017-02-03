@@ -125,8 +125,9 @@
     "STOPPED_RECORD": "Record stopped on encoder \"{{name}}\"",
     "TAG_RECORD": "Record tagged on encoder \"{{name}}\"",
     "TAG_RECORD_ERROR": "Record tagging failed on encoder \"{{name}}\" (code = {{code}})",
-    "UPDATE_NAME": "Name updated into \"{{name}}\"",
+    "UPDATE_DEVICE_NAME_ERROR": "Name updated into \"{{name}}\"",
     "UPDATE_NAME_ERROR": "Update \"{{name}}\" name failed",
+    "UPDATE_GROUP_NAME_ERROR": "Update group's \"{{name}}\" name failed",
     "ADD_DEVICE_TO_GROUP": "Add device \"{{name}}\" to group \"{{groupName}}\"",
     "REMOVE_DEVICE_FROM_GROUP": "Remove device \"{{name}}\" from group \"{{groupName}}\""
   },

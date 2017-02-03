@@ -3,10 +3,14 @@
 (function(app) {
 
   /**
+   * @module ov.manage
+   */
+
+  /**
    * Defines a factory to manage groups.
    *
-   * @module ov.manage
-   * @class GroupFactory
+   * @class ManageGroupFactory
+   * @static
    */
   function GroupFactory($q,
                          $rootScope,
@@ -101,7 +105,7 @@
     }
 
     /**
-     * Adds a group historic.
+     * Adds a group's historic.
      *
      * @method addHistoric
      * @param {String} id The group id
@@ -113,7 +117,7 @@
     }
 
     /**
-     * Adds a group schedule.
+     * Adds a group's schedule.
      *
      * @method addSchedule
      * @param {String} id The group id
@@ -125,7 +129,7 @@
     }
 
     /**
-     * Removes a group historic.
+     * Removes a group's historic.
      *
      * @method removeHistoric
      * @param {String} id The group id
@@ -148,7 +152,7 @@
     }
 
     /**
-     * Removes a group schedule.
+     * Removes a group's schedule.
      *
      * @method removeSchedule
      * @param {String} groupId The group id
@@ -208,6 +212,8 @@
      *
      * @method addGroup
      * @param {Object} group The new group description object
+     * @param {String} group.id Group's id
+     * @param {Array} [group.history] Group's history
      */
     function addGroup(group) {
       if (!getGroup(group.id)) {
@@ -228,7 +234,7 @@
     }
 
     /**
-     * Gets all groups of devices from server.
+     * Gets all groups from server.
      *
      * @method getGroups
      * @return {Promise} A promise resolving with the list of groups
@@ -257,7 +263,7 @@
     /**
      * Adds devices to their respecting group.
      *
-     * It uses the group property of each device
+     * It uses the group property of each device.
      *
      * @method addDevices
      * @param {Array} devices The list of devices
@@ -347,6 +353,8 @@
      *
      * @method removeDeviceFromGroup
      * @param {Object} device The device to remove
+     * @param {String} device.id The device's id
+     * @param {String} device.group The device's group
      * @param {String} groupId The group id
      */
     function removeDeviceFromGroup(device, groupId) {

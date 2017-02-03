@@ -3,52 +3,33 @@
 (function(app) {
 
   /**
+   * @module ov.manage
+   */
+
+  /**
    * Defines a factory to manage communications with the server.
    *
-   * @module ov.manage
    * @class ManageFactory
+   * @static
    */
-  function ManageFactory($http, $q, entityService, SocketService, MANAGE_NAME) {
-    var configuration = null, basePath = '/be/manage/';
+  function ManageFactory($http, $q, entityService, SocketFactory, MANAGE_NAME) {
+    var socketNamespace = '/manage/browser';
 
     /**
-     * Gets Manage plugin configuration.
-     *
-     * @method getConfiguration
-     * @return {Promise} A promise resolving with manage's configuration
-     */
-    function getConfiguration() {
-      var p = $q.defer();
-
-      if (!configuration)
-        $http.get(basePath + 'configuration/').then(function(response) {
-          p.resolve(response.data);
-        }).catch(function(error) {
-          p.reject(error);
-        });
-      else
-        p.resolve(configuration);
-
-      return p.promise;
-    }
-
-    /**
-     * Gets all groups devices from server.
+     * Gets all groups from server.
      *
      * @method getGroups
      * @return {Promise} A promise resolving with the list of groups
      */
     function getGroups() {
       var p = $q.defer();
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-        socket.emit('groups', null, function(response) {
-          if (response.error)
-            p.reject(response.error.message);
-          else
-            p.resolve(response.data);
-        });
+      socket.emit('groups', null, function(response) {
+        if (response.error)
+          p.reject(response.error.message);
+        else
+          p.resolve(response.data);
       });
 
       return p.promise;
@@ -63,15 +44,13 @@
      */
     function getDevices() {
       var p = $q.defer();
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-        socket.emit('devices', null, function(response) {
-          if (response.error)
-            p.reject(response.error.message);
-          else
-            p.resolve(response.data);
-        });
+      socket.emit('devices', null, function(response) {
+        if (response.error)
+          p.reject(response.error.message);
+        else
+          p.resolve(response.data);
       });
 
       return p.promise;
@@ -85,18 +64,14 @@
      */
     function createGroup() {
       var p = $q.defer();
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-
-        socket.emit('group.create', null, function(response) {
-          if (response.error)
-            p.reject(response.error);
-          else
-            p.resolve(response.group);
-        });
+      socket.emit('group.create', null, function(response) {
+        if (response.error)
+          p.reject(response.error);
+        else
+          p.resolve(response.group);
       });
-
 
       return p.promise;
     }
@@ -115,16 +90,13 @@
         deviceId: deviceId,
         groupId: groupId
       };
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-
-        socket.emit('group.addDevice', data, function(response) {
-          if (response && response.error)
-            p.reject(response.error);
-          else
-            p.resolve();
-        });
+      socket.emit('group.addDevice', data, function(response) {
+        if (response && response.error)
+          p.reject(response.error);
+        else
+          p.resolve();
       });
 
       return p.promise;
@@ -142,16 +114,13 @@
       var data = {
         id: id
       };
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-
-        socket.emit('group.removeDevice', data, function(response) {
-          if (response && response.error)
-            p.reject(response.error);
-          else
-            p.resolve();
-        });
+      socket.emit('group.removeDevice', data, function(response) {
+        if (response && response.error)
+          p.reject(response.error);
+        else
+          p.resolve();
       });
 
       return p.promise;
@@ -171,16 +140,13 @@
         id: id,
         state: state
       };
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-
-        socket.emit('device.updateState', data, function(response) {
-          if (response && response.error)
-            p.reject(response.error);
-          else
-            p.resolve();
-        });
+      socket.emit('device.updateState', data, function(response) {
+        if (response && response.error)
+          p.reject(response.error);
+        else
+          p.resolve();
       });
 
       return p.promise;
@@ -195,18 +161,15 @@
      */
     function askForDevicesSettings(ids) {
       var p = $q.defer();
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-
-        socket.emit('device.settings', {
-          ids: ids
-        }, function(response) {
-          if (response && response.error)
-            p.reject(response.error);
-          else
-            p.resolve();
-        });
+      socket.emit('device.settings', {
+        ids: ids
+      }, function(response) {
+        if (response && response.error)
+          p.reject(response.error);
+        else
+          p.resolve();
       });
 
       return p.promise;
@@ -236,11 +199,9 @@
           p.resolve();
       };
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-        socket.once('update', handleResponse);
-        socket.emit('updateName', data, handleResponse);
-      });
+      var socket = SocketFactory.initSocket(socketNamespace);
+      socket.once('update', handleResponse);
+      socket.emit('updateName', data, handleResponse);
 
       return p.promise;
     }
@@ -269,11 +230,9 @@
           p.resolve();
       };
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-        socket.once('addSchedule', handleResponse);
-        socket.emit('addSchedule', data, handleResponse);
-      });
+      var socket = SocketFactory.initSocket(socketNamespace);
+      socket.once('addSchedule', handleResponse);
+      socket.emit('addSchedule', data, handleResponse);
 
       return p.promise;
     }
@@ -302,11 +261,9 @@
           p.resolve();
       };
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-        socket.once('removeSchedule', handleResponse);
-        socket.emit('removeSchedule', data, handleResponse);
-      });
+      var socket = SocketFactory.initSocket(socketNamespace);
+      socket.once('removeSchedule', handleResponse);
+      socket.emit('removeSchedule', data, handleResponse);
 
       return p.promise;
     }
@@ -335,11 +292,9 @@
           p.resolve();
       };
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-        socket.once('removeHistoric', handleResponse);
-        socket.emit('removeHistoric', data, handleResponse);
-      });
+      var socket = SocketFactory.initSocket(socketNamespace);
+      socket.once('removeHistoric', handleResponse);
+      socket.emit('removeHistoric', data, handleResponse);
 
       return p.promise;
     }
@@ -358,15 +313,13 @@
         id: id,
         type: type
       };
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-        socket.emit('removeHistory', data, function(response) {
-          if (response && response.error)
-            p.reject(response.error);
-          else
-            p.resolve();
-        });
+      socket.emit('removeHistory', data, function(response) {
+        if (response && response.error)
+          p.reject(response.error);
+        else
+          p.resolve();
       });
 
       return p.promise;
@@ -382,19 +335,16 @@
      */
     function startRecord(ids, presetId) {
       var p = $q.defer();
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-
-        socket.emit('device.startSession', {
-          ids: ids,
-          presetId: presetId
-        }, function(response) {
-          if (response && response.errors)
-            p.reject(response.errors);
-          else
-            p.resolve();
-        });
+      socket.emit('device.startSession', {
+        ids: ids,
+        presetId: presetId
+      }, function(response) {
+        if (response && response.errors)
+          p.reject(response.errors);
+        else
+          p.resolve();
       });
 
       return p.promise;
@@ -409,25 +359,22 @@
      */
     function stopRecord(ids) {
       var p = $q.defer();
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-
-        socket.emit('device.stopSession', {
-          ids: ids
-        }, function(response) {
-          if (response && response.errors)
-            p.reject(response.errors);
-          else
-            p.resolve();
-        });
+      socket.emit('device.stopSession', {
+        ids: ids
+      }, function(response) {
+        if (response && response.errors)
+          p.reject(response.errors);
+        else
+          p.resolve();
       });
 
       return p.promise;
     }
 
     /**
-     * Tags a recording session on devices.
+     * Tags recording sessions on devices.
      *
      * @method tagRecord
      * @param {Array} ids The list of devices' ids
@@ -435,18 +382,15 @@
      */
     function tagRecord(ids) {
       var p = $q.defer();
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-
-        socket.emit('device.indexSession', {
-          ids: ids
-        }, function(response) {
-          if (response && response.errors)
-            p.reject(response.errors);
-          else
-            p.resolve();
-        });
+      socket.emit('device.indexSession', {
+        ids: ids
+      }, function(response) {
+        if (response && response.errors)
+          p.reject(response.errors);
+        else
+          p.resolve();
       });
 
       return p.promise;
@@ -466,16 +410,13 @@
         id: id,
         type: type
       };
+      var socket = SocketFactory.initSocket(socketNamespace);
 
-      getConfiguration().then(function(configuration) {
-        var socket = SocketService.initSocket(configuration.browsersNamespace, configuration.port);
-
-        socket.emit('remove', data, function(response) {
-          if (response && response.errors)
-            p.reject(response.errors);
-          else
-            p.resolve();
-        });
+      socket.emit('remove', data, function(response) {
+        if (response && response.errors)
+          p.reject(response.errors);
+        else
+          p.resolve();
       });
 
       return p.promise;
@@ -484,7 +425,6 @@
     return {
       getGroups: getGroups,
       getDevices: getDevices,
-      getConfiguration: getConfiguration,
       createGroup: createGroup,
       addDeviceToGroup: addDeviceToGroup,
       removeDeviceFromGroup: removeDeviceFromGroup,
@@ -508,7 +448,7 @@
     '$http',
     '$q',
     'entityService',
-    'ManageSocketService',
+    'SocketFactory',
     'MANAGE_NAME'
   ];
 

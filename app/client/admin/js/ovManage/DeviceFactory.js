@@ -3,6 +3,10 @@
 (function(app) {
 
   /**
+   * @module ov.manage
+   */
+
+  /**
    * Defines a factory to manage devices.
    *
    * Devices are categorized by state.
@@ -11,8 +15,8 @@
    * the list of known devices from the server.
    * A "pending" device is a connected device not in server's list of known devices.
    *
-   * @module ov.manage
    * @class ManageDeviceFactory
+   * @static
    */
   function DeviceFactory($q,
                           $rootScope,
@@ -120,7 +124,7 @@
     }
 
     /**
-     * Removes a device historic.
+     * Removes a device's historic.
      *
      * @method removeHistoric
      * @param {String} id The device id
@@ -159,7 +163,13 @@
      *
      * @method addDevice
      * @param {Object} device The new device description object
-     * @param {String} state The device state
+     * @param {String} device.id The device's id
+     * @param {Array} device.history The device's history
+     * @param {String} device.type The device's type
+     * @param {String} [device.status] The device's status
+     * @param {Object} [device.inputs] The device's inputs
+     * @param {Object} [device.presets] The device's presets
+     * @param {String} state The device's state
      */
     function addDevice(device, state) {
       if (!getDevice(device.id)) {
@@ -412,6 +422,7 @@
      * @param {String} id The device id
      * @param {Object} schedule The schedule to validate
      * @param {Object} [group] The device's group
+     * @param {Array} [group.schedules] The group's schedules
      * @return {Error|Null} The error if validation failed, null otherwise
      */
     function isValidSchedule(id, schedule, group) {
@@ -442,6 +453,7 @@
      * @method isGroupSchedulesCollision
      * @param {String} id The device id
      * @param {Object} group The group
+     * @param {Array} [group.schedules] The group's schedules
      * @return {Boolean} true if there is at least one collision, false otherwise
      */
     function isGroupSchedulesCollision(id, group) {

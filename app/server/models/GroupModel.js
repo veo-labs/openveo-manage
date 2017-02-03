@@ -1,29 +1,37 @@
 'use strict';
 
+/**
+ * @module models
+ */
+
 var util = require('util');
 var shortid = require('shortid');
-var openVeoAPI = require('@openveo/api');
-var GroupProvider = process.requireManage('app/server/providers/GroupProvider.js');
-var DeviceProvider = process.requireManage('app/server/providers/DeviceProvider.js');
 var ManageableModel = process.requireManage('app/server/models/ManageableModel.js');
 
 /**
- * Creates a GroupModel to manage devices' groups.
+ * Defines a GroupModel to manage groups' entities.
  *
  * @class GroupModel
- * @constructor
  * @extends ManageableModel
+ * @constructor
+ * @param {GroupProvider} groupProvider The group provider
+ * @param {DeviceProvider} deviceProvider The device provider
  */
-function GroupModel() {
-  ManageableModel.call(this, new GroupProvider(openVeoAPI.applicationStorage.getDatabase()));
+function GroupModel(groupProvider, deviceProvider) {
+  GroupModel.super_.call(this, groupProvider);
 
-  /**
-   * Device provider.
-   *
-   * @property deviceProvider
-   * @type DeviceProvider
-   */
-  this.deviceProvider = new DeviceProvider(openVeoAPI.applicationStorage.getDatabase());
+  Object.defineProperties(this, {
+
+    /**
+     * Device provider.
+     *
+     * @property deviceProvider
+     * @type DeviceProvider
+     * @final
+     */
+    deviceProvider: {value: deviceProvider}
+
+  });
 }
 
 module.exports = GroupModel;
@@ -32,18 +40,12 @@ util.inherits(GroupModel, ManageableModel);
 /**
  * Adds a new group.
  *
- * @example
- *     var GroupModel = new process.require("app/server/models/GroupModel.js");
- *     var group = new GroupModel();
- *     group.add({
- *       id : "Optional group id",
- *       name : "Optional group name (default to 'MANAGE.GROUP.DEFAULT_NAME')",
- *       history : [] // Optional history
- *     }, callback);
- *
  * @method add
  * @async
  * @param {Object} data A group description object
+ * @param {String} [data.id] Group's id
+ * @param {String} [data.name] Group's name
+ * @param {Array} [data.history] Group's history
  * @param {Function} [callback] The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
  *   - **Number** The total amount of items inserted

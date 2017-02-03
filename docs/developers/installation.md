@@ -1,17 +1,27 @@
 # Clone project from git
 
-From OpenVeo root directory :
+From OpenVeo parent directory :
 
-    cd node_modules/@openveo
-    git clone git@github.com:veo-labs/openveo-manage.git manage
+    git clone git@github.com:veo-labs/openveo-manage.git
+
+You should have someting like this :
+
+```
+.
+├── openveo-core
+├── openveo-manage
+```
 
 # Install project's dependencies
 
-    cd manage
+    cd openveo-manage
     npm install
 
-# Remove installed peer dependencies
+# Link plugin to the core
 
-From OpenVeo plugin root directory :
+    cd openveo-manage
+    npm link
 
-    rm -Rf node_modules/@openveo
+    cd openveo-core
+    npm link @openveo/manage
+

@@ -1,5 +1,6 @@
 'use strict';
 
+// Rename resources (files or directories)
 // For more information about Grunt rename, have a look at https://www.npmjs.com/package/grunt-rename
 module.exports = {
 

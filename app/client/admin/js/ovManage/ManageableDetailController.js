@@ -1,10 +1,17 @@
 'use strict';
 
+/* global Ps */
 (function(app) {
 
-  /* global Ps */
+  /**
+   * @module ov.manage
+   */
+
   /**
    * Defines the manageable detail controller to manage view displaying details about a manageable.
+   *
+   * @class ManageManageableDetailController
+   * @static
    */
   function ManageableDetailController(
     $scope,
@@ -27,19 +34,41 @@
       detailEl = document.querySelector('.item-detail .detail-page'),
       historyEl = document.querySelector('.item-detail .history-page');
 
-    // The actually selected manageable
+    /**
+     * The actually selected manageable.
+     *
+     * @property selectedManageable
+     * @type Object
+     */
     self.selectedManageable = null;
 
-    // Datepicker options
+    /**
+     * Begin datepicker options.
+     *
+     * @property popupBegin
+     * @type Object
+     */
     self.popupBegin = {
       opened: false,
       minDate: today
     };
+
+    /**
+     * End datepicker options.
+     *
+     * @property popupEnd
+     * @type Object
+     */
     self.popupEnd = {
       opened: false
     };
 
-    // Minimum schedule duration allowed
+    /**
+     * Minimum schedule duration allowed.
+     *
+     * @property minDuration
+     * @type Date
+     */
     self.minDuration = new Date();
     self.minDuration.setHours(0);
     self.minDuration.setMinutes(1);
@@ -53,10 +82,10 @@
      * @method validateSchedule
      * @private
      * @param {Object} schedule Schedule object with :
-     *   - **Date** beginDate The begin date of the schedule
-     *   - **Date** endDate The end date of the schedule
-     *   - **Number** duration The schedule duration in milliseconds
-     *   - **Boolean** recurrent true is this is a daily schedule, false otherwise
+     * @param {Date} schedule.beginDate The begin date of the schedule
+     * @param {Number} schedule.duration The schedule duration in milliseconds
+     * @param {Boolean} [schedule.recurrent] true is this is a daily schedule, false otherwise
+     * @param {Date} [schedule.endDate] The end date of the schedule
      * @return {Boolean} true if valid, false otherwise
      */
     function validateSchedule(schedule) {

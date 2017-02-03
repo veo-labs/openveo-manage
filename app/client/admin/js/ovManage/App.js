@@ -14,7 +14,7 @@
   var app = angular.module('ov.manage', [
     'ov.i18n',
     'ov.entity',
-    'ov.manage.socketIO'
+    'ov.socket'
   ]);
 
   app.run(['$rootScope', function($rootScope) {

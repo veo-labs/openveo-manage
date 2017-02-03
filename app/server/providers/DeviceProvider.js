@@ -1,21 +1,26 @@
 'use strict';
 
+/**
+ * @module providers
+ */
+
 var util = require('util');
-var openVeoAPI = require('@openveo/api');
+var openVeoApi = require('@openveo/api');
 
 /**
- * Creates a DeviceProvider to interact with database to manage devices.
+ * Defines a DeviceProvider to interact with database to manage devices' entities.
  *
  * @class DeviceProvider
+ * @extends EntityProvider
  * @constructor
- * @param {Object} database The database configuration
+ * @param {Database} database The database to interact with
  */
 function DeviceProvider(database) {
-  openVeoAPI.EntityProvider.call(this, database, 'manage_devices');
+  DeviceProvider.super_.call(this, database, 'manage_devices');
 }
 
 module.exports = DeviceProvider;
-util.inherits(DeviceProvider, openVeoAPI.EntityProvider);
+util.inherits(DeviceProvider, openVeoApi.providers.EntityProvider);
 
 /**
  * Creates devices indexes.

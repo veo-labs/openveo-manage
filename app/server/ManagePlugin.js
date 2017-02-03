@@ -1,72 +1,72 @@
 'use strict';
 
-var path = require('path');
 var util = require('util');
 var express = require('express');
 var async = require('async');
-var openVeoAPI = require('@openveo/api');
+var openVeoApi = require('@openveo/api');
+var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
+var GroupModel = process.requireManage('app/server/models/GroupModel.js');
+var ScheduleManager = process.requireManage('app/server/ScheduleManager.js');
 var DeviceProvider = process.requireManage('app/server/providers/DeviceProvider.js');
 var GroupProvider = process.requireManage('app/server/providers/GroupProvider.js');
-var SocketServerManager = process.requireManage('app/server/socket/SocketServerManager.js');
-var ManageServer = process.requireManage('app/server/services/ManageServer.js');
-var DevicesSocketNamespace = process.requireManage('app/server/services/namespaces/DevicesSocketNamespace.js');
-var BrowsersSocketNamespace = process.requireManage('app/server/services/namespaces/BrowsersSocketNamespace.js');
-var configDir = openVeoAPI.fileSystem.getConfDir();
-var manageConf = require(path.join(configDir, 'manage/manageConf.json'));
+var BrowserPilot = process.requireManage('app/server/BrowserPilot.js');
+var Manager = process.requireManage('app/server/Manager.js');
 
 /**
- * Creates a ManagePlugin.
+ * OpenVeo Manage Plugin.
  *
+ * @module manage
+ * @main manage
  * @class ManagePlugin
  * @constructor
  * @extends Plugin
  */
 function ManagePlugin() {
+  ManagePlugin.super_.call(this);
 
-  /**
-   * Creates a public router.
-   * It will be automatically mounted on /manage/ by the core.
-   *
-   * Manage public router.
-   *
-   * @property router
-   * @type Router
-   */
-  this.router = express.Router();
+  Object.defineProperties(this, {
 
-  /**
-   * Creates a private router.
-   * All routes associated to the private router require a back end authentication.
-   * It will be automatically mounted on /be/manage/ by the core.
-   *
-   * Manage private router.
-   *
-   * @property router
-   * @type Router
-   */
-  this.privateRouter = express.Router();
+    /**
+     * Manage public router.
+     *
+     * It will be automatically mounted on /manage/ by the core.
+     *
+     * @property router
+     * @type Router
+     * @final
+     */
+    router: {value: express.Router()},
 
-  /**
-   * Creates a Web Service router.
-   * All routes associated to the Web Service router will be part of the Web Service.
-   * It will be automatically mounted on /manage/ by the core (but on another server).
-   *
-   * Manage web service router.
-   *
-   * @property router
-   * @type Router
-   */
-  this.webServiceRouter = express.Router();
+    /**
+     * Manage private router.
+     *
+     * All routes associated to the private router require a back end authentication.
+     * It will be automatically mounted on /be/manage/ by the core.
+     *
+     * @property privateRouter
+     * @type Router
+     * @final
+     */
+    privateRouter: {value: express.Router()},
 
-  // Define routes directly here or in the configuration file
+    /**
+     * Manage web service router.
+     *
+     * All routes associated to the Web Service router will require a Web Service authentication.
+     * It will be automatically mounted on /manage/ by the core (but on another server).
+     *
+     * @property webServiceRouter
+     * @type Router
+     * @final
+     */
+    webServiceRouter: {value: express.Router()}
+
+  });
 
 }
 
-// Expose ManagePlugin
 module.exports = ManagePlugin;
-
-// Extends Plugin
-util.inherits(ManagePlugin, openVeoAPI.Plugin);
+util.inherits(ManagePlugin, openVeoApi.plugin.Plugin);
 
 /**
  * Prepares plugin by creating required database indexes.
@@ -80,8 +80,7 @@ util.inherits(ManagePlugin, openVeoAPI.Plugin);
  *  - **Error** An error if something went wrong, null otherwise
  */
 ManagePlugin.prototype.init = function(callback) {
-
-  var database = openVeoAPI.applicationStorage.getDatabase();
+  var database = openVeoApi.api.getCoreApi().getDatabase();
   var asyncFunctions = [];
   var providers = [
     new DeviceProvider(database),
@@ -102,8 +101,7 @@ ManagePlugin.prototype.init = function(callback) {
 };
 
 /**
- * Creates and starts a socket server to establish communication
- * with devices and browsers.
+ * Creates a manager to handle groups and devices through socket namespaces.
  *
  * Browsers (back end interfaces) are live-synchronized with connected devices.
  *
@@ -117,24 +115,23 @@ ManagePlugin.prototype.init = function(callback) {
  */
 ManagePlugin.prototype.start = function(callback) {
   if (!process.isWebService) {
+    var devicesApi = openVeoApi.api.getApi('devices-api');
+    var coreApi = openVeoApi.api.getCoreApi();
+    var deviceProvider = new DeviceProvider(coreApi.getDatabase());
+    var groupProvider = new GroupProvider(coreApi.getDatabase());
+    var DEVICES_TYPES = devicesApi.getDevicesTypes();
+    var devicesPilot = devicesApi.getPilot(DEVICES_TYPES.VEOBOX);
+    var browsersPilot = BrowserPilot.get();
 
-    // Start server
-    var server = SocketServerManager.getServer();
-    server.listen(manageConf.port);
-    process.socketLogger.info('Start socket server on port ' + manageConf.port);
+    var manager = Manager.get(
+      devicesPilot,
+      browsersPilot,
+      new DeviceModel(deviceProvider),
+      new GroupModel(groupProvider, deviceProvider),
+      new ScheduleManager()
+    );
 
-    // Add devices and browsers socket namespaces
-    var devicesNamespace = new DevicesSocketNamespace();
-    var browsersNamespace = new BrowsersSocketNamespace();
-    server.addNamespace(devicesNamespace, manageConf.devicesNamespace);
-    server.addNamespace(browsersNamespace, manageConf.browsersNamespace);
-    process.socketLogger.info('Connect devices on namespace "' + manageConf.devicesNamespace + '"');
-    process.socketLogger.info('Connect browsers on namespace "' + manageConf.browsersNamespace + '"');
-
-    // Create a manage server to live synchronize browsers with devices information
-    var manageServer = ManageServer.get(devicesNamespace, browsersNamespace);
-    manageServer.connect(callback);
-
+    manager.start(callback);
   } else
     callback();
 };

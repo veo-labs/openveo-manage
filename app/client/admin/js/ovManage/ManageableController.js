@@ -1,10 +1,17 @@
 'use strict';
 
+/* global interact, Ps */
 (function(app) {
 
-  /* global interact, Ps */
+  /**
+   * @module ov.manage
+   */
+
   /**
    * Controls the view responsible of a list of manageables.
+   *
+   * @class ManageManageableController
+   * @static
    */
   function ManageableController(
     $q,
@@ -25,12 +32,12 @@
       detailEl = document.querySelector('.item-detail .detail-page'),
       historyEl = document.querySelector('.item-detail .history-page');
 
-    self.lastDeviceSelected = null;
-
     /**
      * Defines an ui-state for a manageable.
      *
-     * @param {Object} target The target manageable
+     * @method addUiState
+     * @private
+     * @param {HTMLElement} target The target manageable
      * @param {String} uiState The ui-state to set for the manageable
      */
     function addUiState(target, uiState) {
@@ -47,7 +54,9 @@
     /**
      * Removes an ui-state for a manageable.
      *
-     * @param {Object} target The target manageable
+     * @method removeUiState
+     * @private
+     * @param {HTMLElement} target The target manageable
      * @param {String} uiState The ui-state to remove for the manageable
      */
     function removeUiState(target, uiState) {
@@ -62,6 +71,8 @@
     /**
      * Handles drag move event on manageables.
      *
+     * @method dragMoveListener
+     * @private
      * @param {Event} event the user Event related to the dragEvent
      */
     function dragMoveListener(event) {
@@ -83,7 +94,9 @@
     /**
      * Resets the manageable element to its initial position.
      *
-     * @param {Object} target the element to reset
+     * @method resetPosition
+     * @private
+     * @param {HTMLElement} target the element to reset
      */
     function resetPosition(target) {
       var element = angular.element(target);
@@ -107,7 +120,9 @@
     /**
      * Sets position of the target element to the dropzone element.
      *
-     * @param {Object} target the dropzone element
+     * @method mergePosition
+     * @private
+     * @param {HTMLElement} target the dropzone element
      * @param {Object} relatedTarget target the dragged element to move
      */
     function mergePosition(target, relatedTarget) {
@@ -133,6 +148,9 @@
 
     /**
      * Sets items as draggable.
+     *
+     * @method draggable
+     * @private
      */
     function draggable() {
       interact('.draggable').draggable({
@@ -176,6 +194,8 @@
     /**
      * Adds a device to a group.
      *
+     * @method addDeviceToGroup
+     * @private
      * @param {String} deviceId The id of the device to add to the group
      * @param {String} groupId The id of group
      * @return {Promise} Promise resolving when device is added
@@ -213,6 +233,9 @@
 
     /**
      * Sets drag drop zones.
+     *
+     * @method dragDropDevice
+     * @private
      */
     function dragDropDevice() {
       interact('.dropzone').dropzone({
@@ -275,6 +298,9 @@
 
     /**
      * Initializes the scrollBars for device detail window.
+     *
+     * @method initScrollbar
+     * @private
      */
     function initScrollbar() {
 
@@ -294,6 +320,9 @@
 
     /**
      * Updates the scrollbars on device detail change.
+     *
+     * @method updateScrollbar
+     * @private
      */
     function updateScrollbar() {
       actionEl.scrollTop = 0;
@@ -307,6 +336,9 @@
 
     /**
      * Destroys scrollbars when device detail is closed.
+     *
+     * @method destroyScrollbar
+     * @private
      */
     function destroyScrollbar() {
       Ps.destroy(actionEl);
@@ -316,6 +348,9 @@
 
     /**
      * Sets a click event listener on a manageable.
+     *
+     * @method setManageableClickListener
+     * @private
      */
     function setManageableClickListener() {
 
@@ -373,6 +408,9 @@
     /**
      * Sets a double click event listener on a manageable.
      * Go to the group detail page on double click.
+     *
+     * @method setManageableDbClickListener
+     * @private
      */
     function setManageableDbClickListener() {
 
@@ -400,6 +438,7 @@
      *
      * @method addToAcceptedDevices
      * @param {Object} device The device to accept
+     * @param {String} device.id The device's id
      */
     self.addToAcceptedDevices = function(device) {
       ManageFactory.updateDeviceState(device.id, MANAGE_DEVICE_STATES.ACCEPTED).then(function() {
@@ -416,6 +455,7 @@
      *
      * @method addToRefusedDevices
      * @param {Object} device The device object
+     * @param {String} device.id The device's id
      */
     self.addToRefusedDevices = function(device) {
       ManageFactory.updateDeviceState(device.id, MANAGE_DEVICE_STATES.REFUSED).catch(function(error) {

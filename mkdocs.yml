@@ -9,11 +9,12 @@ pages:
 - 'INTRODUCTION': 'index.md'
 - 'USERS':
   - 'Getting started': 'getting-started.md'
-  - 'Web Service': 'web-service.md'
-  - 'Advanced configuration': 'advanced-configuration.md'
-- 'DEVELOPERS':
+- 'PLUGINS DEVELOPERS':
+  - 'API' : 'pluginsDevelopers/api.md'
+- 'MANAGE DEVELOPERS':
   - 'Basics': 'developers/basics.md'
   - 'Installation': 'developers/installation.md'
   - 'Back end AngularJS': 'developers/back-end.md'
   - 'CSS / SASS / JS compilation': 'developers/compilation.md'
-- 'API' : 'api.md'
+  - 'Unit tests': 'developers/unit-tests.md'
+  - 'API': 'developers/api.md'

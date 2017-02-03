@@ -1,10 +1,7 @@
-# Socket Server
+# Interact with encoders
 
-Manage uses [Socket.io](http://socket.io) to interact with encoders and its back end interface. As Manage plugin is loaded, it instantiates a socket.io server with 2 namespaces. The first one to interact with encoders. The second one to control the back end interface and thus communicate with browsers.
+Manage uses [OpenVeo Devices API Plugin](https://github.com/veo-labs/openveo-devices-api) to interact with encoders.
 
-# Entities
+# Interact with browsers
 
-Manage defines new entities :
-
-- **devices** - Devices like encoders
-- **groups** - Groups of devices
+Manage uses OpenVeo Socket namespaces to control the back end interface and thus communicate with browsers in real time.

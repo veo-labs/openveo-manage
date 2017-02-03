@@ -3,26 +3,55 @@
 (function(app) {
 
   /**
+   * @module ov.manage
+   */
+
+  /**
    * Defines a factory to manage manageables.
    *
-   * @module ov.manage
    * @class ManageManageableFactory
+   * @static
    */
   function ManageableFactory($filter) {
 
     /**
      * Checks if two schedules are in conflict.
      *
+     * Conflict examples :
+     *
+     * schedule1 : [------------]
+     * schedule2 : [------------]
+     *
+     * schedule1 : [------------]
+     * schedule2 :              [------------]
+     *
+     * schedule1 :              [------------]
+     * schedule2 : [------------]
+     *
+     * schedule1 : [------------]
+     * schedule2 :   [------------]
+     *
+     * schedule1 :   [------------]
+     * schedule2 : [------------]
+     *
+     * schedule1 : [------------]
+     * schedule2 :   [--------]
+     *
+     * schedule1 :   [--------]
+     * schedule2 : [------------]
+     *
      * @method checkSchedulesConflict
      * @private
      * @param {Object} schedule1 Schedule object with :
-     *   - **Date** beginDate : The begin date of the schedule
-     *   - **Date** duration : The schedule duration
-     *   - **Boolean** recurrent : true is this is a daily schedule, false otherwise
+     * @param {Date} schedule1.beginDate The begin date of the schedule
+     * @param {Number} schedule1.duration The schedule duration (in ms)
+     * @param {Boolean} [schedule1.recurrent=false] true if this is a daily schedule, false otherwise
+     * @param {Date} [schedule1.endDate] The end date of the daily schedule (required if recurrent is set to true)
      * @param {Object} schedule2 Schedule object with :
-     *   - **Date** beginDate : The begin date of the schedule
-     *   - **Date** duration : The schedule duration
-     *   - **Boolean** recurrent : true is this is a daily schedule, false otherwise
+     * @param {Date} schedule2.beginDate The begin date of the schedule
+     * @param {Number} schedule2.duration The schedule duration
+     * @param {Boolean} [schedule2.recurrent=false] true if this is a daily schedule, false otherwise
+     * @param {Date} [schedule2.endDate] The end date of the daily schedule (required if recurrent is set to true)
      * @return {Boolean} true if there are in conflict, false otherwise
      */
     function checkSchedulesConflict(schedule1, schedule2) {
@@ -37,27 +66,12 @@
         (schedule2DateTimeEnd >= schedule1DateTimeBegin && schedule2DateTimeEnd <= schedule1DateTimeEnd) ||
         (schedule2DateTimeBegin <= schedule1DateTimeBegin && schedule2DateTimeEnd >= schedule1DateTimeEnd)) {
 
-        // Conflict between schedules' dates :
-
-        // Schedule2 start date is in schedule1 date interval
-        // schedule1 : [------------]
-        // schedule2 :   [------------]
-
-        // schedule1 : [------------]
-        // schedule2 :   [--------]
-
-        // Schedule2 end date is in schedule1 date interval
-        // schedule1 :   [------------]
-        // schedule2 : [------------]
-
-        // Schedule2 date interval cover the schedule1 date interval
-        // schedule1 :   [------------]
-        // schedule2 : [----------------]
-
+        // Conflict between schedules' dates
         return true;
       }
 
       if (((schedule2DateTimeBegin >= schedule1DateTimeBegin && schedule2DateTimeBegin <= schedule1DateDailyEnd) ||
+        (schedule1DateTimeBegin >= schedule2DateTimeBegin && schedule1DateTimeBegin <= schedule2DateDailyEnd) ||
         (schedule2DateDailyEnd >= schedule1DateTimeBegin && schedule2DateDailyEnd <= schedule1DateDailyEnd) ||
         (schedule2DateTimeBegin <= schedule1DateTimeBegin && schedule2DateDailyEnd >= schedule1DateDailyEnd)) &&
          (schedule1.recurrent || schedule2.recurrent)) {
@@ -65,32 +79,24 @@
         // Daily schedule with conflicting dates
         // Compare only time
 
-        var schedule1TimeBegin = schedule1DateTimeBegin.getHours() + ':' + schedule1DateTimeBegin.getMinutes();
-        var schedule1TimeEnd = schedule1DateTimeEnd.getHours() + ':' + schedule1DateTimeEnd.getMinutes();
-        var schedule2TimeBegin = schedule2DateTimeBegin.getHours() + ':' + schedule2DateTimeBegin.getMinutes();
-        var schedule2TimeEnd = schedule2DateTimeEnd.getHours() + ':' + schedule2DateTimeEnd.getMinutes();
+        var schedule1TimeBegin = (schedule1DateTimeBegin.getHours() * 3600000) +
+            (schedule1DateTimeBegin.getMinutes() * 60000) +
+            schedule1DateTimeBegin.getSeconds() * 1000;
+        var schedule1TimeEnd = (schedule1DateTimeEnd.getHours() * 3600000) +
+            (schedule1DateTimeEnd.getMinutes() * 60000) +
+            schedule1DateTimeEnd.getSeconds() * 1000;
+        var schedule2TimeBegin = (schedule2DateTimeBegin.getHours() * 3600000) +
+            (schedule2DateTimeBegin.getMinutes() * 60000) +
+            schedule2DateTimeBegin.getSeconds();
+        var schedule2TimeEnd = (schedule2DateTimeEnd.getHours() * 3600000) +
+            (schedule2DateTimeEnd.getMinutes() * 60000) +
+            schedule2DateTimeEnd.getSeconds() * 1000;
 
         if ((schedule2TimeBegin >= schedule1TimeBegin && schedule2TimeBegin <= schedule1TimeEnd) ||
           (schedule2TimeEnd >= schedule1TimeBegin && schedule2TimeEnd <= schedule1TimeEnd) ||
           (schedule2TimeBegin <= schedule1TimeBegin && schedule2TimeEnd >= schedule1TimeEnd)) {
 
-          // Conflict between schedules' times :
-
-          // Schedule2 start time is in schedule1 time interval
-          // schedule1 : [------------]
-          // schedule2 :   [------------]
-
-          // schedule1 : [------------]
-          // schedule2 :   [--------]
-
-          // Schedule2 end time is in schedule1 time interval
-          // schedule1 :   [------------]
-          // schedule2 : [------------]
-
-          // Schedule2 time interval cover the schedule1 time interval
-          // schedule1 :   [------------]
-          // schedule2 : [----------------]
-
+          // Conflict between schedules' times
           return true;
         }
       }
@@ -234,7 +240,7 @@
     function isValidSchedule(schedule, schedules) {
 
       // Start date is after end date
-      if (schedule.beginDate >= schedule.endDate)
+      if (schedule.endDate && schedule.beginDate >= schedule.endDate)
         return new Error($filter('translate')('MANAGE.MANAGEABLE.BEGIN_END_DATES_ERROR'));
 
       // Start date is before actual date

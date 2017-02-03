@@ -1,23 +1,27 @@
 'use strict';
 
+/**
+ * @module models
+ */
+
 var util = require('util');
 var shortid = require('shortid');
-var openVeoAPI = require('@openveo/api');
+var openVeoApi = require('@openveo/api');
 
 /**
- * Creates an entity model for entities with an history and a planning.
+ * Defines an entity model for entities with an history and a planning.
  *
  * @class ManageableModel
- * @constructor
  * @extends EntityModel
+ * @constructor
  * @param {EntityProvider} provider The entity provider associated to the entity model
  */
 function ManageableModel(provider) {
-  openVeoAPI.EntityModel.call(this, provider);
+  ManageableModel.super_.call(this, provider);
 }
 
 module.exports = ManageableModel;
-util.inherits(ManageableModel, openVeoAPI.EntityModel);
+util.inherits(ManageableModel, openVeoApi.models.EntityModel);
 
 /**
  * Adds an item to an array in a manageable.
@@ -30,6 +34,7 @@ util.inherits(ManageableModel, openVeoAPI.EntityModel);
  * @param {Mixed} value The value to add
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** The total amount of items updated
  */
 function addArrayItem(id, property, value, callback) {
   var self = this;
@@ -60,6 +65,7 @@ function addArrayItem(id, property, value, callback) {
  * @param {String} value The value of the property to analyze in array objects to find the item to remove
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** The total amount of items updated
  */
 function removeArrayItem(id, property, propertyKey, value, callback) {
   var self = this;
@@ -78,14 +84,14 @@ function removeArrayItem(id, property, propertyKey, value, callback) {
       }
     }
 
-    if (index > -1) {
-      item[property].splice(index, 1);
+    if (index === -1)
+      return callback(new Error('No matching property'));
 
-      var data = {};
-      data[property] = item[property];
-      self.update(id, data, callback);
-    } else
-      callback();
+    item[property].splice(index, 1);
+
+    var data = {};
+    data[property] = item[property];
+    self.update(id, data, callback);
   });
 }
 
@@ -113,6 +119,7 @@ ManageableModel.prototype.addHistoric = function(id, historic, callback) {
  * @param {String} historicId The historic id
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** The total amount of items updated
  */
 ManageableModel.prototype.removeHistoric = function(id, historicId, callback) {
   removeArrayItem.call(this, id, 'history', 'id', historicId, callback);
@@ -126,6 +133,7 @@ ManageableModel.prototype.removeHistoric = function(id, historicId, callback) {
  * @param {String} id The manageable id
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** The total amount of items updated
  */
 ManageableModel.prototype.removeHistory = function(id, callback) {
   this.update(id, {history: []}, callback);
@@ -140,6 +148,7 @@ ManageableModel.prototype.removeHistory = function(id, callback) {
  * @param {Object} schedule A schedule description object
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** The total amount of items updated
  */
 ManageableModel.prototype.addSchedule = function(id, schedule, callback) {
   schedule.id = shortid.generate();
@@ -155,6 +164,7 @@ ManageableModel.prototype.addSchedule = function(id, schedule, callback) {
  * @param {String} scheduleId The schedule id
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** The total amount of items updated
  */
 ManageableModel.prototype.removeSchedule = function(id, scheduleId, callback) {
   removeArrayItem.call(this, id, 'schedules', 'id', scheduleId, callback);

@@ -9,7 +9,15 @@ module.exports = {
     options: {
       reporter: 'spec'
     },
-    src: ['tests/server/init.js', 'tests/server/*.js']
+    src: [
+      'tests/server/init.js',
+      'tests/server/controllers/*.js',
+      'tests/server/manageables/*.js',
+      'tests/server/models/*.js',
+      'tests/server/providers/*.js',
+      'tests/server/pilot/*.js',
+      'tests/server/managers/*.js'
+    ]
   }
 
 };

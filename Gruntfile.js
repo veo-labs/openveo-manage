@@ -1,7 +1,9 @@
 'use strict';
 
-// Module dependencies
+/* eslint no-sync: 0 */
 var path = require('path');
+var fs = require('fs');
+var openVeoApi = require('@openveo/api');
 
 process.rootManage = __dirname;
 process.requireManage = function(filePath) {
@@ -12,26 +14,20 @@ process.requireManage = function(filePath) {
  * Loads a bunch of grunt configuration files from the given directory.
  *
  * Loaded configurations can be referenced using the configuration file name.
- * For example, if myConf.js describes a property "test", it will be accessible
- * using myConf.test.
+ * For example, if myConf.js returns an object with a property "test", it will be accessible using myConf.test.
  *
- * @param String path Path of the directory containing configuration files
- * @return Object The list of configurations indexed by filename without
- * the extension
+ * @param {String} path Path of the directory containing configuration files
+ * @return {Object} The list of configurations indexed by filename without the extension
  */
 function loadConfig(path) {
-  var glob = require('glob');
-  var object = {};
-  var key;
+  var configuration = {};
+  var configurationFiles = fs.readdirSync(path);
 
-  glob.sync('*', {
-    cwd: path
-  }).forEach(function(option) {
-    key = option.replace(/\.js$/, '');
-    object[key] = require(path + '/' + option);
+  configurationFiles.forEach(function(configurationFile) {
+    configuration[configurationFile.replace(/\.js$/, '')] = require(path + '/' + configurationFile);
   });
 
-  return object;
+  return configuration;
 }
 
 module.exports = function(grunt) {
@@ -55,14 +51,15 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-mkdocs');
   grunt.loadNpmTasks('grunt-gh-pages');
-  grunt.loadNpmTasks('grunt-rename');
-  grunt.loadNpmTasks('grunt-remove');
+
+  grunt.registerMultiTask('rename', openVeoApi.grunt.renameTask(grunt));
+  grunt.registerMultiTask('remove', openVeoApi.grunt.removeTask(grunt));
 
   // Listen to changes on SCSS files and generate CSS files
   grunt.registerTask('default', ['sprite', 'compass:dev', 'watch']);
 
   // Minify and concat back end AngularJS Javascript files
-  grunt.registerTask('concatPlugin', ['uglify', 'concat:lib', 'concat:js']);
+  grunt.registerTask('concatPlugin', ['uglify', 'concat:js']);
 
   // Prepare project for production
   grunt.registerTask('prod', ['sprite', 'compass:dist', 'concatPlugin']);

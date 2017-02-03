@@ -3,7 +3,14 @@
 (function(app) {
 
   /**
-   * Defines the manage controller
+   * @module ov.manage
+   */
+
+  /**
+   * Defines the manage controller.
+   *
+   * @class ManageMainController
+   * @static
    */
   function MainController(
     $q,
@@ -19,7 +26,7 @@
     ManageFactory,
     GroupFactory,
     DeviceFactory,
-    SocketService,
+    SocketFactory,
     entityService,
     MANAGE_NAME,
     DEVICE_STATES,
@@ -58,11 +65,11 @@
 
     // Initialize socket.io connection
     if (!$scope.socket) {
-      $scope.socket = SocketService.initSocket();
+      $scope.socket = SocketFactory.initSocket();
 
       // Listen for the server informing about a new connected device with :
       //   - **Object** device The new connected device information
-      $scope.socket.on('device.connect', function(device) {
+      $scope.socket.on('device.connected', function(device) {
         if (device) {
           DeviceFactory.addDevice(device, DEVICE_STATES.PENDING);
           $scope.$apply();
@@ -73,7 +80,7 @@
       //   - **Object** date Data from server with :
       //     - **String** id The manageable id
       //     - **String** type The manageable type
-      $scope.socket.on('remove', function(data) {
+      $scope.socket.on('removed', function(data) {
         if (data.type === MANAGEABLE_TYPES.DEVICE) {
           var device = DeviceFactory.getDevice(data.id);
 
@@ -105,7 +112,7 @@
       //     - **String** key The property to update
       //     - **Mixed** value The property value
       //     - **String** type The manageable type
-      $scope.socket.on('update', function(data) {
+      $scope.socket.on('updated', function(data) {
         if (data.type === MANAGEABLE_TYPES.DEVICE) {
           var device = DeviceFactory.getDevice(data.id);
           DeviceFactory.setProperty(data.id, data.key, data.value);
@@ -121,7 +128,7 @@
       //     - **String** id The manageable id
       //     - **Object** historic The historic to add to history
       //     - **String** type The manageable type
-      $scope.socket.on('addHistoric', function(data) {
+      $scope.socket.on('newHistoric', function(data) {
         var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
         factory.addHistoric(data.id, data.historic);
         $scope.$apply();
@@ -132,7 +139,7 @@
       //     - **String** id The manageable id
       //     - **Object** historicId The historic id
       //     - **String** type The manageable type
-      $scope.socket.on('removeHistoric', function(data) {
+      $scope.socket.on('removedHistoric', function(data) {
         var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
         factory.removeHistoric(data.id, data.historicId);
         $scope.$apply();
@@ -142,7 +149,7 @@
       //   - **Object** data Data from server with :
       //     - **String** id The manageable id
       //     - **String** type The manageable type
-      $scope.socket.on('removeHistory', function(data) {
+      $scope.socket.on('removedHistory', function(data) {
         var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
         factory.removeHistory(data.id);
         $scope.$apply();
@@ -153,7 +160,7 @@
       //     - **String** id The manageable id
       //     - **Object** schedule The schedule
       //     - **String** type The manageable type
-      $scope.socket.on('addSchedule', function(data) {
+      $scope.socket.on('newSchedule', function(data) {
         var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
         factory.addSchedule(data.id, data.schedule);
         $scope.$apply();
@@ -164,7 +171,7 @@
       //     - **String** id The manageable id
       //     - **Object** scheduleId The schedule id
       //     - **String** type The manageable type
-      $scope.socket.on('removeSchedule', function(data) {
+      $scope.socket.on('removedSchedule', function(data) {
         var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
         factory.removeSchedule(data.id, data.scheduleId);
         $scope.$apply();
@@ -174,7 +181,7 @@
       //   - **Object** data Data from server with :
       //     - **String** id The device id
       //     - **String** state The device new state
-      $scope.socket.on('device.updateState', function(data) {
+      $scope.socket.on('device.updatedState', function(data) {
         DeviceFactory.updateDeviceState(data.id, data.state);
         $scope.$apply();
       });
@@ -182,7 +189,7 @@
       // Listen for server requesting a group to be created :
       //   - **Object** data Data from server with :
       //     - **Object** group The group to add
-      $scope.socket.on('group.create', function(data) {
+      $scope.socket.on('group.created', function(data) {
         if (data.group)
           GroupFactory.addGroup(data.group);
       });
@@ -191,7 +198,7 @@
       //   - **Object** data Data from server with :
       //     - **String** deviceId The device id
       //     - **String** groupId The group id
-      $scope.socket.on('group.addDevice', function(data) {
+      $scope.socket.on('group.newDevice', function(data) {
         if (data.deviceId && data.groupId) {
           GroupFactory.addDeviceToGroup(DeviceFactory.getDevice(data.deviceId), data.groupId);
 
@@ -206,7 +213,7 @@
       // Listen for server requesting a device to be removed from a group :
       //   - **Object** data Data from server with :
       //     - **String** id The device id
-      $scope.socket.on('group.removeDevice', function(data) {
+      $scope.socket.on('group.removedDevice', function(data) {
         var device = DeviceFactory.getDevice(data.id);
 
         if (device) {
@@ -229,6 +236,7 @@
     /**
      * Defines the active page index.
      *
+     * @method setActivePage
      * @param index The tab index
      */
     $scope.setActivePage = function(index) {
@@ -238,6 +246,7 @@
     /**
      * Determines if the passed index is the active page index.
      *
+     * @method isActivePage
      * @param index The tab index
      * @return {Boolean} true if the given index is the selected tab index
      */
@@ -248,7 +257,8 @@
     /**
      * Permits to organize the view when the details is opened/closed.
      *
-     * @param opening
+     * @method organizeLayout
+     * @param {Boolean} opening ????
      */
     $scope.organizeLayout = function(opening) {
       var screenWidth = $window.innerWidth,
@@ -268,6 +278,8 @@
 
     /**
      * Navigates to the previous page in browser's history.
+     *
+     * @method back
      */
     $scope.back = function() {
 
@@ -288,6 +300,7 @@
     /**
      * Removes a group.
      *
+     * @method removeGroup
      * @param {String} id The id of the group to remove
      */
     $scope.removeGroup = function(id) {
@@ -301,6 +314,7 @@
     /**
      * Removes a device from its group.
      *
+     * @method removeFromGroup
      * @param {String} id The id of the device to remove
      */
     $scope.removeFromGroup = function(id) {
@@ -351,7 +365,7 @@
     'ManageFactory',
     'ManageGroupFactory',
     'ManageDeviceFactory',
-    'ManageSocketService',
+    'SocketFactory',
     'entityService',
     'MANAGE_NAME',
     'MANAGE_DEVICE_STATES',

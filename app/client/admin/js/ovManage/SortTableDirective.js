@@ -3,13 +3,17 @@
 (function(app) {
 
   /**
+   * @module ov.manage
+   */
+
+  /**
    * Creates a new Angular directive as an HTML attribute ov-manage-sort-table to be able to create a sort table.
    *
    * @example
    *  <th ov-manage-sort-table order="'name'" by="order" reverse="reverse">Name</th>
    *
-   * @module ov.manage
    * @class ovManageSortTable
+   * @static
    */
   function ovManageSortTable() {
 

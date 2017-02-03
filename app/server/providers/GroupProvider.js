@@ -1,21 +1,26 @@
 'use strict';
 
+/**
+ * @module providers
+ */
+
 var util = require('util');
-var openVeoAPI = require('@openveo/api');
+var openVeoApi = require('@openveo/api');
 
 /**
- * Creates a GroupProvider to interact with database to manage groups.
+ * Defines a GroupProvider to interact with database to manage groups' entities.
  *
  * @class GroupProvider
+ * @extends EntityProvider
  * @constructor
- * @param {Object} database The database configuration
+ * @param {Database} database The database to interact with
  */
 function GroupProvider(database) {
-  openVeoAPI.EntityProvider.call(this, database, 'manage_groups');
+  GroupProvider.super_.call(this, database, 'manage_groups');
 }
 
 module.exports = GroupProvider;
-util.inherits(GroupProvider, openVeoAPI.EntityProvider);
+util.inherits(GroupProvider, openVeoApi.providers.EntityProvider);
 
 /**
  * Creates groups indexes.

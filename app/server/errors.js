@@ -1,272 +1,563 @@
 'use strict';
 
 /**
- * The list of server errors with, for each error, its associated hexadecimal code
- * and an eventual HTTP return code.
- *
- * @example
- *     var errors = process.require("app/server/errors.js");
- *     console.log(errors.UNKNOWN_ERROR);
- *
- * @module errors
- * @main errors
+ * @module manage
  */
-module.exports = {
+
+/**
+ * The list of server errors.
+ *
+ * @class ERRORS
+ * @static
+ */
+
+var ERRORS = {
 
   // Server errors
+
+  /**
+   * Unidentified error.
+   *
+   * @property UNKNOWN_ERROR
+   * @type Object
+   * @final
+   */
   UNKNOWN_ERROR: {
     code: 0x000,
-    httpCode: 500,
     module: 'manage'
   },
-  UPDATE_DEVICE_ERROR: {
-    code: 0x001,
-    httpCode: 500,
-    module: 'manage'
-  },
+
+  /**
+   * Removing a manageable failed.
+   *
+   * @property REMOVE_ERROR
+   * @type Object
+   * @final
+   */
   REMOVE_ERROR: {
-    code: 0x002,
-    httpCode: 500,
+    code: 0x001,
     module: 'manage'
   },
-  REMOVE_DEVICE_ERROR: {
-    code: 0x003,
-    httpCode: 500,
-    module: 'manage'
-  },
-  REMOVE_DEVICE_NOT_FOUND_ERROR: {
-    code: 0x004,
-    httpCode: 404,
-    module: 'manage'
-  },
-  REMOVE_GROUP_ERROR: {
-    code: 0x005,
-    httpCode: 500,
-    module: 'manage'
-  },
-  REMOVE_GROUP_NOT_FOUND_ERROR: {
-    code: 0x006,
-    httpCode: 404,
-    module: 'manage'
-  },
+
+  /**
+   * Removing a group failed, group was not found.
+   *
+   * @property REMOVE_GROUP_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
   REMOVE_SCHEDULE_ERROR: {
-    code: 0x007,
-    httpCode: 500,
+    code: 0x002,
     module: 'manage'
   },
-  UPDATE_GROUP_ERROR: {
-    code: 0x008,
-    httpCode: 500,
-    module: 'manage'
-  },
+
+  /**
+   * Updating device's name failed.
+   *
+   * @property UPDATE_DEVICE_NAME_ERROR
+   * @type Object
+   * @final
+   */
   UPDATE_DEVICE_NAME_ERROR: {
+    code: 0x003,
+    module: 'manage'
+  },
+
+  /**
+   * Updating group's name failed.
+   *
+   * @property UPDATE_GROUP_NAME_ERROR
+   * @type Object
+   * @final
+   */
+  UPDATE_GROUP_NAME_ERROR: {
+    code: 0x004,
+    module: 'manage'
+  },
+
+  /**
+   * Updating device's name failed, device was not found.
+   *
+   * @property UPDATE_DEVICE_NAME_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  UPDATE_DEVICE_NAME_NOT_FOUND_ERROR: {
+    code: 0x005,
+    module: 'manage'
+  },
+
+  /**
+   * Updating group's name failed, group was not found.
+   *
+   * @property UPDATE_GROUP_NAME_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  UPDATE_GROUP_NAME_NOT_FOUND_ERROR: {
+    code: 0x006,
+    module: 'manage'
+  },
+
+  /**
+   * Starting a device's record failed.
+   *
+   * @property START_DEVICE_SESSION_ERROR
+   * @type Object
+   * @final
+   */
+  START_DEVICE_SESSION_ERROR: {
+    code: 0x007,
+    module: 'manage'
+  },
+
+  /**
+   * Starting a device's record failed, device was not found.
+   *
+   * @property START_DEVICE_SESSION_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  START_DEVICE_SESSION_NOT_FOUND_ERROR: {
+    code: 0x008,
+    module: 'manage'
+  },
+
+  /**
+   * Stopping a device's record failed.
+   *
+   * @property STOP_DEVICE_SESSION_ERROR
+   * @type Object
+   * @final
+   */
+  STOP_DEVICE_SESSION_ERROR: {
     code: 0x009,
     module: 'manage'
   },
-  UPDATE_GROUP_NAME_ERROR: {
+
+  /**
+   * Stopping a device's record failed, device was not found.
+   *
+   * @property STOP_DEVICE_SESSION_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  STOP_DEVICE_SESSION_NOT_FOUND_ERROR: {
     code: 0x00a,
     module: 'manage'
   },
-  UPDATE_NAME_DEVICE_NOT_FOUND_ERROR: {
+
+  /**
+   * Indexing a device's record failed.
+   *
+   * @property INDEX_DEVICE_SESSION_ERROR
+   * @type Object
+   * @final
+   */
+  INDEX_DEVICE_SESSION_ERROR: {
     code: 0x00b,
     module: 'manage'
   },
-  UPDATE_NAME_GROUP_NOT_FOUND_ERROR: {
+
+  /**
+   * Indexing a device's record failed, device was not found.
+   *
+   * @property INDEX_DEVICE_SESSION_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  INDEX_DEVICE_SESSION_NOT_FOUND_ERROR: {
     code: 0x00c,
     module: 'manage'
   },
-  START_DEVICE_SESSION_ERROR: {
+
+  /**
+   * Updating a device's state failed.
+   *
+   * @property UPDATE_DEVICE_STATE_ERROR
+   * @type Object
+   * @final
+   */
+  UPDATE_DEVICE_STATE_ERROR: {
     code: 0x00d,
     module: 'manage'
   },
-  START_DEVICE_SESSION_NOT_FOUND_ERROR: {
+
+  /**
+   * Updating a device's state failed, device was not found.
+   *
+   * @property UPDATE_DEVICE_STATE_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  UPDATE_DEVICE_STATE_NOT_FOUND_ERROR: {
     code: 0x00e,
     module: 'manage'
   },
-  STOP_DEVICE_SESSION_ERROR: {
+
+  /**
+   * Removing an historic from a manageable's history failed.
+   *
+   * @property REMOVE_HISTORIC_ERROR
+   * @type Object
+   * @final
+   */
+  REMOVE_HISTORIC_ERROR: {
     code: 0x00f,
     module: 'manage'
   },
-  STOP_DEVICE_SESSION_NOT_FOUND_ERROR: {
+
+  /**
+   * Removing an historic from a manageable's history failed, manageable was not found.
+   *
+   * @property REMOVE_HISTORIC_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  REMOVE_HISTORIC_NOT_FOUND_ERROR: {
     code: 0x010,
     module: 'manage'
   },
-  INDEX_DEVICE_SESSION_ERROR: {
+
+  /**
+   * Removing a manageable's history failed.
+   *
+   * @property REMOVE_HISTORY_ERROR
+   * @type Object
+   * @final
+   */
+  REMOVE_HISTORY_ERROR: {
     code: 0x011,
     module: 'manage'
   },
-  INDEX_DEVICE_SESSION_NOT_FOUND_ERROR: {
+
+  /**
+   * Removing a manageable's history failed, manageable was not found.
+   *
+   * @property REMOVE_HISTORY_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  REMOVE_HISTORY_NOT_FOUND_ERROR: {
     code: 0x012,
     module: 'manage'
   },
-  UPDATE_DEVICE_STATE_ERROR: {
+
+  /**
+   * Adding a schedule to a manageable failed, schedule is not valid.
+   *
+   * @property ADD_SCHEDULE_INVALID_ERROR
+   * @type Object
+   * @final
+   */
+  ADD_SCHEDULE_INVALID_ERROR: {
     code: 0x013,
     module: 'manage'
   },
-  UPDATE_DEVICE_STATE_NOT_FOUND_ERROR: {
+
+  /**
+   * Adding a schedule to a manageable failed, manageable was not found.
+   *
+   * @property ADD_SCHEDULE_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  ADD_SCHEDULE_NOT_FOUND_ERROR: {
     code: 0x014,
     module: 'manage'
   },
-  REMOVE_HISTORIC_ERROR: {
+
+  /**
+   * Adding a schedule to a manageable failed.
+   *
+   * @property ADD_SCHEDULE_ERROR
+   * @type Object
+   * @final
+   */
+  ADD_SCHEDULE_ERROR: {
     code: 0x015,
     module: 'manage'
   },
-  REMOVE_HISTORIC_NOT_FOUND_ERROR: {
+
+  /**
+   * Removing a schedule from a manageable failed, schedule is actually running.
+   *
+   * @property REMOVE_SCHEDULE_RUNNING_ERROR
+   * @type Object
+   * @final
+   */
+  REMOVE_SCHEDULE_RUNNING_ERROR: {
     code: 0x016,
     module: 'manage'
   },
-  REMOVE_HISTORY_ERROR: {
+
+  /**
+   * Removing a schedule from a manageable failed, manageable or schedule was not found.
+   *
+   * @property REMOVE_SCHEDULE_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  REMOVE_SCHEDULE_NOT_FOUND_ERROR: {
     code: 0x017,
     module: 'manage'
   },
-  REMOVE_HISTORY_NOT_FOUND_ERROR: {
+
+  /**
+   * Creating a group failed.
+   *
+   * @property CREATE_GROUP_ERROR
+   * @type Object
+   * @final
+   */
+  CREATE_GROUP_ERROR: {
     code: 0x018,
     module: 'manage'
   },
-  REMOVE_GROUP_HISTORIC_ERROR: {
+
+  /**
+   * Adding a device to a group failed.
+   *
+   * @property ADD_DEVICE_TO_GROUP_ERROR
+   * @type Object
+   * @final
+   */
+  ADD_DEVICE_TO_GROUP_ERROR: {
     code: 0x019,
     module: 'manage'
   },
-  REMOVE_GROUP_HISTORIC_NOT_FOUND_ERROR: {
+
+  /**
+   * Adding a device to a group failed, device or group was not found.
+   *
+   * @property ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR: {
     code: 0x01a,
     module: 'manage'
   },
-  ADD_SCHEDULE_INVALID_ERROR: {
+
+  /**
+   * Adding a device to a group failed, schedules of the device are in conflict with schedules of the group.
+   *
+   * @property ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR
+   * @type Object
+   * @final
+   */
+  ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR: {
     code: 0x01b,
     module: 'manage'
   },
-  ADD_SCHEDULE_NOT_FOUND_ERROR: {
+
+  /**
+   * Removing a manageable failed, manageable was not found.
+   *
+   * @property REMOVE_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  REMOVE_NOT_FOUND_ERROR: {
     code: 0x01c,
     module: 'manage'
   },
-  ADD_SCHEDULE_ERROR: {
+
+  /**
+   * Removing a device from a group failed, device or group was not found.
+   *
+   * @property REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR
+   * @type Object
+   * @final
+   */
+  REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR: {
     code: 0x01d,
     module: 'manage'
   },
-  REMOVE_SCHEDULE_RUNNING_ERROR: {
-    code: 0x01e,
-    module: 'manage'
-  },
-  REMOVE_SCHEDULE_NOT_FOUND_ERROR: {
-    code: 0x01f,
-    module: 'manage'
-  },
-  CREATE_GROUP_ERROR: {
-    code: 0x020,
-    module: 'manage'
-  },
-  ADD_DEVICE_TO_GROUP_ERROR: {
-    code: 0x021,
-    module: 'manage'
-  },
-  ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR: {
-    code: 0x022,
-    module: 'manage'
-  },
-  ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR: {
-    code: 0x023,
-    module: 'manage'
-  },
-  REMOVE_NOT_FOUND_ERROR: {
-    code: 0x024,
-    module: 'manage'
-  },
-  REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR: {
-    code: 0x025,
-    module: 'manage'
-  },
-  REMOVE_DEVICE_FROM_GROUP_ERROR: {
-    code: 0x026,
-    module: 'manage'
-  },
 
-  // Authentication errors
-  UPDATE_DEVICE_FORBIDDEN: {
-    code: 0x200,
-    httpCode: 403,
-    module: 'manage'
-  },
-  UPDATE_GROUP_FORBIDDEN: {
-    code: 0x201,
-    httpCode: 403,
-    module: 'manage'
-  },
-  BACK_END_UNAUTHORIZED: {
-    code: 0x202,
+  /**
+   * Removing a device from a group failed.
+   *
+   * @property REMOVE_DEVICE_FROM_GROUP_ERROR
+   * @type Object
+   * @final
+   */
+  REMOVE_DEVICE_FROM_GROUP_ERROR: {
+    code: 0x01e,
     module: 'manage'
   },
 
   // Wrong parameters
-  UPDATE_DEVICE_WRONG_PARAMETERS: {
-    code: 0x300,
-    httpCode: 400,
-    module: 'manage'
-  },
-  UPDATE_GROUP_WRONG_PARAMETERS: {
-    code: 0x301,
-    httpCode: 400,
-    module: 'manage'
-  },
-  UPDATE_DEVICE_MISSING_PARAMETERS: {
-    code: 0x302,
-    httpCode: 400,
-    module: 'manage'
-  },
-  UPDATE_GROUP_MISSING_PARAMETERS: {
-    code: 0x303,
-    httpCode: 400,
-    module: 'manage'
-  },
+
+  /**
+   * Updating manageable's name failed, wrong parameters.
+   *
+   * @property UPDATE_NAME_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   UPDATE_NAME_WRONG_PARAMETERS: {
-    code: 0x304,
+    code: 0x100,
     module: 'manage'
   },
+
+  /**
+   * Removing a manageable failed, wrong parameters.
+   *
+   * @property REMOVE_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   REMOVE_WRONG_PARAMETERS: {
-    code: 0x305,
+    code: 0x101,
     module: 'manage'
   },
+
+  /**
+   * Updating a device's state failed, wrong parameters.
+   *
+   * @property UPDATE_DEVICE_STATE_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   UPDATE_DEVICE_STATE_WRONG_PARAMETERS: {
-    code: 0x306,
+    code: 0x102,
     module: 'manage'
   },
+
+  /**
+   * Removing an historic from a manageable's history failed, wrong parameters.
+   *
+   * @property REMOVE_HISTORIC_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   REMOVE_HISTORIC_WRONG_PARAMETERS: {
-    code: 0x307,
+    code: 0x103,
     module: 'manage'
   },
+
+  /**
+   * Adding a schedule to a manageable failed, wrong parameters.
+   *
+   * @property ADD_SCHEDULE_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   ADD_SCHEDULE_WRONG_PARAMETERS: {
-    code: 0x308,
+    code: 0x104,
     module: 'manage'
   },
+
+  /**
+   * Starting a device's record failed, wrong parameters.
+   *
+   * @property START_DEVICE_SESSION_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   START_DEVICE_SESSION_WRONG_PARAMETERS: {
-    code: 0x309,
+    code: 0x105,
     module: 'manage'
   },
+
+  /**
+   * Stopping a device's record failed, wrong parameters.
+   *
+   * @property STOP_DEVICE_SESSION_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   STOP_DEVICE_SESSION_WRONG_PARAMETERS: {
-    code: 0x30a,
+    code: 0x106,
     module: 'manage'
   },
+
+  /**
+   * Indexing a device's record failed, wrong parameters.
+   *
+   * @property INDEX_DEVICE_SESSION_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   INDEX_DEVICE_SESSION_WRONG_PARAMETERS: {
-    code: 0x30b,
+    code: 0x107,
     module: 'manage'
   },
+
+  /**
+   * Removing a schedule from a manageable failed, wrong parameters.
+   *
+   * @property REMOVE_SCHEDULE_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   REMOVE_SCHEDULE_WRONG_PARAMETERS: {
-    code: 0x30c,
+    code: 0x108,
     module: 'manage'
   },
+
+  /**
+   * Removing the whole history of a manageable failed, wrong parameters.
+   *
+   * @property REMOVE_HISTORY_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   REMOVE_HISTORY_WRONG_PARAMETERS: {
-    code: 0x30d,
+    code: 0x109,
     module: 'manage'
   },
+
+  /**
+   * Gettings device's settings failed, wrong parameters.
+   *
+   * @property GET_DEVICE_SETTINGS_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
+  GET_DEVICE_SETTINGS_WRONG_PARAMETERS: {
+    code: 0x10a,
+    module: 'manage'
+  },
+
+  /**
+   * Adding a device to a group failed, wrong parameters.
+   *
+   * @property ADD_DEVICE_TO_GROUP_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   ADD_DEVICE_TO_GROUP_WRONG_PARAMETERS: {
-    code: 0x30e,
+    code: 0x10b,
     module: 'manage'
   },
+
+  /**
+   * Removing a device from a group failed, wrong parameters.
+   *
+   * @property REMOVE_DEVICE_FROM_GROUP_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   REMOVE_DEVICE_FROM_GROUP_WRONG_PARAMETERS: {
-    code: 0x30f,
+    code: 0x10c,
     module: 'manage'
   },
+
+  /**
+   * Removing a group failed, wrong parameters.
+   *
+   * @property REMOVE_GROUP_WRONG_PARAMETERS
+   * @type Object
+   * @final
+   */
   REMOVE_GROUP_WRONG_PARAMETERS: {
-    code: 0x310,
+    code: 0x10d,
     module: 'manage'
   }
+
 };
+
+Object.freeze(ERRORS);
+module.exports = ERRORS;
