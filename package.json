@@ -22,7 +22,8 @@
     "cookie": "0.3.1",
     "node-schedule": "1.2.0",
     "shortid": "2.2.6",
-    "async": "2.1.4"
+    "async": "2.1.4",
+    "express": "4.14.0"
   },
   "devDependencies": {
     "@openveo/test": "3.*",
