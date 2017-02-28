@@ -80,7 +80,7 @@ util.inherits(ManagePlugin, openVeoApi.plugin.Plugin);
  *  - **Error** An error if something went wrong, null otherwise
  */
 ManagePlugin.prototype.init = function(callback) {
-  var database = openVeoApi.api.getCoreApi().getDatabase();
+  var database = process.api.getCoreApi().getDatabase();
   var asyncFunctions = [];
   var providers = [
     new DeviceProvider(database),
@@ -115,8 +115,8 @@ ManagePlugin.prototype.init = function(callback) {
  */
 ManagePlugin.prototype.start = function(callback) {
   if (!process.isWebService) {
-    var devicesApi = openVeoApi.api.getApi('devices-api');
-    var coreApi = openVeoApi.api.getCoreApi();
+    var devicesApi = process.api.getApi('devices-api');
+    var coreApi = process.api.getCoreApi();
     var deviceProvider = new DeviceProvider(coreApi.getDatabase());
     var groupProvider = new GroupProvider(coreApi.getDatabase());
     var DEVICES_TYPES = devicesApi.getDevicesTypes();
