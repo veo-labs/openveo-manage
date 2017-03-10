@@ -71,7 +71,7 @@
      */
     self.minDuration = new Date();
     self.minDuration.setHours(0);
-    self.minDuration.setMinutes(1);
+    self.minDuration.setMinutes(0);
     self.minDuration.setSeconds(0);
 
     self.zeroTimeDate = new Date().setHours(0, 0, 0, 0);
