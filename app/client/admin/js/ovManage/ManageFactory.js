@@ -200,7 +200,7 @@
       };
 
       var socket = SocketFactory.initSocket(socketNamespace);
-      socket.once('update', handleResponse);
+      socket.once('updated', handleResponse);
       socket.emit('updateName', data, handleResponse);
 
       return p.promise;
@@ -231,7 +231,7 @@
       };
 
       var socket = SocketFactory.initSocket(socketNamespace);
-      socket.once('addSchedule', handleResponse);
+      socket.once('newSchedule', handleResponse);
       socket.emit('addSchedule', data, handleResponse);
 
       return p.promise;
@@ -262,7 +262,7 @@
       };
 
       var socket = SocketFactory.initSocket(socketNamespace);
-      socket.once('removeSchedule', handleResponse);
+      socket.once('removedSchedule', handleResponse);
       socket.emit('removeSchedule', data, handleResponse);
 
       return p.promise;
@@ -293,7 +293,7 @@
       };
 
       var socket = SocketFactory.initSocket(socketNamespace);
-      socket.once('removeHistoric', handleResponse);
+      socket.once('removedHistoric', handleResponse);
       socket.emit('removeHistoric', data, handleResponse);
 
       return p.promise;
