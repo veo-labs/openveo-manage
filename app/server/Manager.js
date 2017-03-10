@@ -450,16 +450,16 @@ function initDevicesListeners() {
 
   // Listen for a new connected device
   // With :
-  //   - **String** id The new connected device id
   //   - **String** deviceIp The device IP address
+  //   - **String** id The new connected device id
   //   - **Function** callback The function to call to respond to the device
-  this.devicesPilot.on(MESSAGES.CONNECTED, function(id, deviceIp, callback) {
+  this.devicesPilot.on(MESSAGES.AUTHENTICATED, function(deviceIp, id, callback) {
 
     // Try to register the new connected device (if it's not already registered)
     registerDevice.call(self, id, function(error, device, isNew) {
       var handleError = function(error, response) {
         if (error)
-          process.logger.error(error.message, {error: error, event: MESSAGES.CONNECTED});
+          process.logger.error(error.message, {error: error, event: MESSAGES.AUTHENTICATED});
       };
       if (error) {
         handleError(error);
@@ -471,7 +471,7 @@ function initDevicesListeners() {
       // If the IP is a V4 IP wrapped in an IP V6 address, extract it
       var ipChunks = /(?:(?:::ffff:(.*)))|(.*)/.exec(deviceIp);
       device.ip = (ipChunks[1]) ? ipChunks[1] : ipChunks[2];
-      device.url = 'http://' + ((ipChunks[1]) ? '[' + ipChunks[0] + ']' : ipChunks[0]);
+      device.url = 'http://' + ((ipChunks[1]) ? device.ip : '[' + device.ip + ']');
 
       // Device is already accepted
       // Asks the device its settings

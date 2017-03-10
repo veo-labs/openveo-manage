@@ -32,6 +32,7 @@ describe('Manager', function() {
 
     DevicePilot.prototype.MESSAGES = {
       CONNECTED: 'connected',
+      AUTHENTICATED: 'hello',
       NAME_UPDATED: 'nameUpdated',
       STORAGE_UPDATED: 'storageUpdated',
       INPUTS_UPDATED: 'inputsUpdated',
@@ -141,8 +142,8 @@ describe('Manager', function() {
   describe('devices\' event', function() {
     var deviceGroup;
 
-    // CONNECTED event
-    describe('CONNECTED', function() {
+    // AUTHENTICATED event
+    describe('AUTHENTICATED', function() {
 
       beforeEach(function() {
         devicesPilot.askForName = function() {
@@ -159,7 +160,7 @@ describe('Manager', function() {
 
       it('should register the new connected device into the database and cache', function() {
         var expectedDeviceId = '42';
-        var expectedDeviceIp = '192.168.1.42';
+        var deviceIp = '::ffff:192.168.1.42';
         var expectedDevice = {id: expectedDeviceId};
 
         deviceModel.add = function(data, callback) {
@@ -167,7 +168,7 @@ describe('Manager', function() {
           callback(null, 1, expectedDevice);
         };
 
-        devicesPilot.emit(devicesPilot.MESSAGES.CONNECTED, expectedDeviceId, expectedDeviceIp);
+        devicesPilot.emit(devicesPilot.MESSAGES.AUTHENTICATED, deviceIp, expectedDeviceId);
 
         var device = manager.cache.get(expectedDeviceId);
         assert.strictEqual(device.id, expectedDevice.id, 'Wrong device id');
@@ -181,7 +182,7 @@ describe('Manager', function() {
           callback(null, 1, data);
         };
 
-        devicesPilot.emit(devicesPilot.MESSAGES.CONNECTED, expectedDeviceId, expectedDeviceIp);
+        devicesPilot.emit(devicesPilot.MESSAGES.AUTHENTICATED, '::ffff:' + expectedDeviceIp, expectedDeviceId);
 
         var device = manager.cache.get(expectedDeviceId);
         assert.strictEqual(device.ip, expectedDeviceIp, 'Wrong ip');
@@ -190,22 +191,22 @@ describe('Manager', function() {
 
       it('should find device\'s ip v6 address and build web interface url', function() {
         var expectedDeviceId = '42';
-        var expectedDeviceIp = '192.168.1.42';
+        var expectedDeviceIp = '2001:0db8:0000:85a3:0000:0000:ac1f:8001';
 
         deviceModel.add = function(data, callback) {
           callback(null, 1, data);
         };
 
-        devicesPilot.emit(devicesPilot.MESSAGES.CONNECTED, expectedDeviceId, '::ffff:' + expectedDeviceIp);
+        devicesPilot.emit(devicesPilot.MESSAGES.AUTHENTICATED, expectedDeviceIp, expectedDeviceId);
 
         var device = manager.cache.get(expectedDeviceId);
         assert.strictEqual(device.ip, expectedDeviceIp, 'Wrong ip');
-        assert.strictEqual(device.url, 'http://[::ffff:' + expectedDeviceIp + ']', 'Wrong url');
+        assert.strictEqual(device.url, 'http://[' + expectedDeviceIp + ']', 'Wrong url');
       });
 
       it('should ask for device\'s settings if it has already been accepted', function() {
         var expectedDeviceId = '42';
-        var expectedDeviceIp = '192.168.1.42';
+        var deviceIp = '::ffff:192.168.1.42';
         var expectedDevice = new Device({id: expectedDeviceId, state: deviceModel.STATES.ACCEPTED});
 
         manager.cache.add(expectedDevice);
@@ -213,14 +214,14 @@ describe('Manager', function() {
         devicesPilot.askForSettings = chai.spy(function() {
         });
 
-        devicesPilot.emit(devicesPilot.MESSAGES.CONNECTED, expectedDeviceId, '::ffff:' + expectedDeviceIp);
+        devicesPilot.emit(devicesPilot.MESSAGES.AUTHENTICATED, deviceIp, expectedDeviceId);
 
         devicesPilot.askForSettings.should.have.been.called.exactly(1);
       });
 
       it('should inform browsers about the new connected device', function() {
         var expectedDeviceId = '42';
-        var expectedDeviceIp = '192.168.1.42';
+        var deviceIp = '::ffff:192.168.1.42';
         var expectedDevice = new Device({id: expectedDeviceId});
 
         manager.cache.add(expectedDevice);
@@ -231,14 +232,14 @@ describe('Manager', function() {
         devicesPilot.askForSettings = function() {
         };
 
-        devicesPilot.emit(devicesPilot.MESSAGES.CONNECTED, expectedDeviceId, '::ffff:' + expectedDeviceIp);
+        devicesPilot.emit(devicesPilot.MESSAGES.AUTHENTICATED, deviceIp, expectedDeviceId);
 
         browsersPilot.connectDevice.should.have.been.called.with.exactly(expectedDevice);
       });
 
       it('should not register device if already registered', function() {
         var expectedDeviceId = '42';
-        var expectedDeviceIp = '192.168.1.42';
+        var deviceIp = '::ffff:192.168.1.42';
         var expectedDevice = new Device({id: expectedDeviceId});
         manager.cache.add(expectedDevice);
 
@@ -246,7 +247,7 @@ describe('Manager', function() {
 
         });
 
-        devicesPilot.emit(devicesPilot.MESSAGES.CONNECTED, expectedDeviceId, '::ffff:' + expectedDeviceIp);
+        devicesPilot.emit(devicesPilot.MESSAGES.AUTHENTICATED, deviceIp, expectedDeviceId);
 
         deviceModel.add.should.have.been.called.exactly(0);
       });
