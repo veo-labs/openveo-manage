@@ -573,6 +573,12 @@
         self.validatePreset(self.itemSchedule.schedule.preset);
     }, true);
 
+    // Watch for device inputs changes
+    $scope.$watch('vm.selectedManageable.inputs', function() {
+      if (self.selectedManageable && self.selectedManageable.inputs)
+        self.validatePreset(self.itemSchedule.schedule.preset);
+    });
+
     // Watch for preset changes
     $scope.$watch('vm.selectedManageable.presets', function() {
       if (self.selectedManageable && self.selectedManageable.presets && self.selectedManageable.presets[0]) {

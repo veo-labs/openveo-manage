@@ -219,7 +219,7 @@
      * @return {Object|Null} The preset's configuration or null if not found
      */
     function getPreset(manageable, presetId) {
-      if (manageable && presetId) {
+      if (manageable && presetId && manageable.presets) {
         for (var i = 0; i < manageable.presets.length; i++) {
           if (manageable.presets[i].id === presetId)
             return manageable.presets[i];
