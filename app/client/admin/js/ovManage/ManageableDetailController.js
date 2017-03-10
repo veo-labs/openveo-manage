@@ -217,6 +217,7 @@
       if (validateSchedule(schedule)) {
         ManageFactory.addSchedule(self.selectedManageable.id, schedule, type).then(function() {
           $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.MANAGEABLE.ADD_SCHEDULE_SUCCESS'), 4000);
+          self.resetActionForm();
         }, function(error) {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.MANAGEABLE.ADD_SCHEDULE_ERROR', null, {
             code: error.code
