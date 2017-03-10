@@ -61,6 +61,7 @@
     "DISCONNECTED": "Déconnecté",
     "RECORDING": "En cours d'enregistrement",
     "STARTING": "Démarrage de l'enregistrement",
+    "STOPPING": "Arrêt de l'enregistrement en cours",
     "ERROR": "Erreur"
   },
   "MANAGEABLE": {

@@ -92,6 +92,11 @@
             device.statusMessage = 'MANAGE.STATUS.STARTING';
             break;
 
+          // Device recording session stopping
+          case DEVICE_STATUS.STOPPING:
+            device.statusMessage = 'MANAGE.STATUS.STOPPING';
+            break;
+
           // Device disconnected
           default:
             device.statusMessage = 'MANAGE.STATUS.DISCONNECTED';

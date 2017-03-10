@@ -61,6 +61,7 @@
     "DISCONNECTED": "Disconnected",
     "RECORDING": "Recording",
     "STARTING": "Recording is starting",
+    "STOPPING": "Recording is stopping",
     "ERROR": "Error"
   },
   "MANAGEABLE": {
