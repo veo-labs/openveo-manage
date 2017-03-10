@@ -127,6 +127,7 @@
     "TAG_RECORD": "Taggage de l'enregistrement sur l'encodeur \"{{name}}\"",
     "TAG_RECORD_ERROR": "Echec du taggage de l'enregistrement sur l'encodeur \"{{name}}\" (code = {{code}})",
     "UPDATE_DEVICE_NAME_ERROR": "Mise à jour du nom en \"{{name}}\"",
+    "UPDATE_NAME": "Nom de l'encodeur \"{{name}}\" modifié",
     "UPDATE_NAME_ERROR": "Echec de la mise à jour du nom de l'encodeur \"{{name}}\"",
     "UPDATE_GROUP_NAME_ERROR": "Echec de la mise à jour du nom du groupe \"{{name}}\"",
     "ADD_DEVICE_TO_GROUP": "Ajout de l'encodeur \"{{name}}\" au groupe \"{{groupName}}\"",
