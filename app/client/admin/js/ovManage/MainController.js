@@ -282,14 +282,6 @@
      * @method back
      */
     $scope.back = function() {
-
-      // Remove an eventually selected device or group
-      $scope.acceptedDevices.forEach(function(device) {
-        $rootScope.$broadcast('manageable.load', device.id, false);
-      });
-      $scope.groups.forEach(function(group) {
-        $rootScope.$broadcast('manageable.load', group.id, true);
-      });
       $scope.manage.showDetail = false;
       $scope.manage.openedItem = null;
       $scope.organizeLayout(false);
@@ -326,6 +318,7 @@
 
         // Remove group
         $scope.removeGroup(group.id);
+        $rootScope.$broadcast('manageable.closeDetails');
 
       } else {
         ManageFactory.removeDeviceFromGroup(device.id).then(function() {
