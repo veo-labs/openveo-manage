@@ -71,7 +71,7 @@
       //   - **Object** device The new connected device information
       $scope.socket.on('device.connected', function(device) {
         if (device) {
-          DeviceFactory.addDevice(device, DEVICE_STATES.PENDING);
+          DeviceFactory.addDevice(device, DEVICE_STATES.INCOMING);
           $scope.$apply();
         }
       });

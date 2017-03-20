@@ -185,13 +185,18 @@
         if (!device.inputs) device.inputs = {};
         if (!device.presets) device.presets = [];
 
-        if (state === DEVICE_STATES.ACCEPTED)
-          devices[DEVICE_STATES.ACCEPTED].push(device);
-        else if (state === DEVICE_STATES.REFUSED)
-          devices[DEVICE_STATES.REFUSED].push(device);
-        else {
-          device.state = DEVICE_STATES.INCOMING;
-          devices[DEVICE_STATES.INCOMING].push(device);
+        switch (state) {
+          case DEVICE_STATES.ACCEPTED:
+            devices[DEVICE_STATES.ACCEPTED].push(device);
+            break;
+          case DEVICE_STATES.REFUSED:
+            devices[DEVICE_STATES.REFUSED].push(device);
+            break;
+          case DEVICE_STATES.PENDING:
+            devices[DEVICE_STATES.PENDING].push(device);
+            break;
+          default:
+            devices[DEVICE_STATES.INCOMING].push(device);
         }
 
         history.forEach(function(historic) {
@@ -312,9 +317,9 @@
             delete device.inputs;
             delete device.storage;
 
-            // If the device is not acceted or refused
+            // If the device is not accepted, refused or pending
             // Remove it
-            if (device.state === DEVICE_STATES.INCOMING || device.state === DEVICE_STATES.PENDING)
+            if (device.state === DEVICE_STATES.INCOMING)
               remove(device.id);
           }
 
