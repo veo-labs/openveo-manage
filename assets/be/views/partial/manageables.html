@@ -1,8 +1,8 @@
-<div ng-controller="ManageManageableController as deviceCtrl" class="devices row">
+<div ng-controller="ManageManageableController as ctrl" class="devices row">
 
     <!-- Groups -->
     <div class="device-group col-sm-4 col-md-3" ng-repeat="group in groups track by group.id" ng-class="manage.resize">
-        <div class="dropzone well group" ng-attr-data-id="{{ group.id }}" ng-class="group['ui-state']" ng-attr-data-selected="{{ group.isSelected }}">
+        <div class="dropzone well group" ng-attr-data-id="{{ group.id }}" ng-class="group['ui-state']" ng-attr-data-selected="{{ group.isSelected }}" ng-click="ctrl.handleManageableClick($event)">
             <span class="title" ng-bind="group.name | translate"></span>
             <span class="count">
               {{ group.devices.length }}
@@ -20,7 +20,7 @@
 
     <!-- Devices -->
     <div class="device accepted col-sm-4 col-md-3" ng-repeat="device in acceptedDevices | orderBy:'name' track by device.id" ng-class="manage.resize" ng-if="!device.group">
-        <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']" ng-attr-data-selected="{{ device.isSelected }}">
+        <div class="draggable dropzone well" ng-attr-data-id="{{ device.id }}" ng-class="device['ui-state']" ng-attr-data-selected="{{ device.isSelected }}" ng-click="ctrl.handleManageableClick($event)">
             <span class="title" ng-bind="(device.name || 'MANAGE.DEVICE.DEFAULT_NAME') | translate"></span>
             <div class="equipments">
                 <span class="camera" ng-class="device.inputs.camera || 'disconnected'"></span>
@@ -92,7 +92,7 @@
 </div>
 
 <!-- Refused devices -->
-<div ng-controller="ManageManageableController as deviceCtrl" class="refused-devices row" ng-if="refusedDevices.length">
+<div ng-controller="ManageManageableController as ctrl" class="refused-devices row" ng-if="refusedDevices.length">
     <h3 ng-bind="'MANAGE.REFUSED.TITLE' | translate"></h3>
     <div class="device col-sm-4 col-md-3" ng-repeat="device in refusedDevices track by device.id" ng-class="manage.resize">
         <div class="well" ng-attr-data-id="{{ device.id }}">
@@ -100,13 +100,13 @@
             <div class="equipments">
                 <span class="box disconnected"></span>
             </div>
-            <button class="accept" ng-click="deviceCtrl.addToAcceptedDevices(device)"></button>
+            <button class="accept" ng-click="ctrl.addToAcceptedDevices(device)"></button>
         </div>
     </div>
 </div>
 
 <!-- Pending devices -->
-<div ng-controller="ManageManageableController as deviceCtrl" class="pending-devices row" ng-if="pendingDevices.length">
+<div ng-controller="ManageManageableController as ctrl" class="pending-devices row" ng-if="pendingDevices.length">
     <h3 ng-bind="'MANAGE.PENDING.TITLE' | translate"></h3>
     <div class="device demands col-sm-4 col-md-3" ng-repeat="device in pendingDevices track by device.id" ng-class="manage.resize">
         <div class="device-connection well" ng-attr-data-id="{{ device.id }}">
@@ -114,8 +114,8 @@
             <div class="mac" ng-bind="'@Mac: ' + device.id"></div>
             <div class="device"></div>
             <div class="choice">
-                <button class="refused" ng-click="deviceCtrl.addToRefusedDevices(device)"></button>
-                <button class="accept" ng-click="deviceCtrl.addToAcceptedDevices(device)"></button>
+                <button class="refused" ng-click="ctrl.addToRefusedDevices(device)"></button>
+                <button class="accept" ng-click="ctrl.addToAcceptedDevices(device)"></button>
             </div>
         </div>
     </div>

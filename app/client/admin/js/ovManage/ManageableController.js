@@ -20,17 +20,33 @@
     $filter,
     $timeout,
     $location,
+    $element,
     ManageFactory,
     GroupFactory,
     DeviceFactory,
     entityService,
     MANAGE_NAME,
     MANAGE_DEVICE_STATES) {
-
     var self = this,
       actionEl = document.querySelector('.item-detail .action-page'),
       detailEl = document.querySelector('.item-detail .detail-page'),
       historyEl = document.querySelector('.item-detail .history-page');
+
+    /**
+     * Indicates if a drag & drop is on the move.
+     *
+     * @property currentlyDragging
+     * @type Boolean
+     */
+    self.currentlyDragging = false;
+
+    /**
+     * Double clicks promise.
+     *
+     * @property doubleClickPromise
+     * @type Promise
+     */
+    self.doubleClickPromise = null;
 
     /**
      * Defines an ui-state for a manageable.
@@ -73,7 +89,7 @@
      *
      * @method dragMoveListener
      * @private
-     * @param {Event} event the user Event related to the dragEvent
+     * @param {Event} event The drag event
      */
     function dragMoveListener(event) {
       var element = angular.element(event.target),
@@ -165,8 +181,8 @@
 
         onstart: function(event) {
           var element = angular.element(event.target);
-
           addUiState(event.target, 'drag');
+          self.currentlyDragging = true;
 
           // Set transition duration for reset
           element.css({
@@ -259,6 +275,9 @@
             target = angular.element(event.target);
 
           mergePosition(event.target, event.relatedTarget);
+          removeUiState(event.target, 'can-drop');
+          removeUiState(event.relatedTarget, 'drop-target');
+
           $timeout(function() {
 
             if (!target.hasClass('group')) {
@@ -347,91 +366,94 @@
     }
 
     /**
-     * Sets a click event listener on a manageable.
+     * Toggles the detail panel corresponding to the given manageable.
      *
-     * @method setManageableClickListener
+     * @method toggleDetails
+     * @param {String} id The manageable id
+     * @param {Boolean} isGroup true if the manageable is a group, false if it is a device
      * @private
      */
-    function setManageableClickListener() {
+    function toggleDetails(id, isGroup) {
+      if (!$scope.manage.openedItem) {
 
-      // Avoid to fire the same event multiple times
-      var events = interact('.device.accepted > .well, .device-group > .group')._iEvents;
-      if (Object.keys(events).length && events.tap) {
-        delete events.tap;
+        // No manageable loaded in the detail panel yet
+
+        // Set the selected manageable
+        $rootScope.$broadcast('manageable.load', id, isGroup);
+
+        $scope.manage.openedItem = id;
+        $scope.manage.showDetail = true;
+        $scope.organizeLayout($scope.manage.showDetail);
+
+        initScrollbar();
+      } else if ($scope.manage.openedItem == id) {
+
+        // Manageable to load in the panel is the one already loaded
+        // Close the panel
+        $rootScope.$broadcast('manageable.closeDetails');
+
+      } else {
+
+        // Manageable to load in the details panel is a different manageable
+        // Display new manageable details
+        // And activate first tab
+
+        $scope.manage.openedItem = id;
+        $scope.manage.showDetail = false;
+        $scope.setActivePage(0);
+
+        $rootScope.$broadcast('manageable.load', id, isGroup);
+        $scope.manage.showDetail = true;
+        updateScrollbar();
       }
-
-      interact('.device.accepted > .well, .device-group > .group').on('tap', function(event) {
-        if (event.double) {
-          return;
-        }
-
-        var manageableId = event.currentTarget.getAttribute('data-id'),
-          currentTarget = angular.element(event.currentTarget);
-
-        if (!$scope.manage.openedItem) {
-
-          // No manageable loaded in the detail panel yet
-
-          // Set the selected manageable
-          $rootScope.$broadcast('manageable.load', manageableId, currentTarget.hasClass('group'));
-
-          $scope.manage.openedItem = manageableId;
-          $scope.manage.showDetail = true;
-          $scope.organizeLayout($scope.manage.showDetail);
-
-          initScrollbar();
-        } else if ($scope.manage.openedItem == manageableId) {
-
-          // Manageable to load in the panel is the one already loaded
-          // Close the panel
-          $rootScope.$broadcast('manageable.closeDetails');
-
-        } else {
-
-          // Manageable to load in the details panel is a different manageable
-          // Display new manageable details
-          // And activate first tab
-
-          $scope.manage.openedItem = manageableId;
-          $scope.manage.showDetail = false;
-          $scope.setActivePage(0);
-
-          $rootScope.$broadcast('manageable.load', manageableId, currentTarget.hasClass('group'));
-          $scope.manage.showDetail = true;
-          updateScrollbar();
-        }
-
-        $scope.$apply();
-      });
     }
 
     /**
-     * Sets a double click event listener on a manageable.
-     * Go to the group detail page on double click.
+     * Opens the detail view corresponding to the given group.
      *
-     * @method setManageableDbClickListener
+     * @method openGroup
+     * @param {String} id The group id
      * @private
      */
-    function setManageableDbClickListener() {
+    function openGroup(id) {
+      $rootScope.$broadcast('manageable.closeDetails');
+      $scope.manage.showDetail = false;
+      $location.path('manage/group-detail/' + id);
+      $scope.manage.absUrl = $location.absUrl();
+      destroyScrollbar();
+    }
 
-      // Avoid to fire the same event multiple times
-      var events = interact('.device-group > .group')._iEvents;
-      if (Object.keys(events).length && events.doubletap) {
-        delete events.doubletap;
+    /**
+     * Handles clicks and double clicks on manageable items to toggle details or open groups.
+     *
+     * @method handleManageableClick
+     * @param {Event} The click event
+     */
+    self.handleManageableClick = function(event) {
+      var manageableId = event.currentTarget.getAttribute('data-id');
+      var isGroup = angular.element(event.currentTarget).hasClass('group');
+
+      if (self.doubleClickPromise) {
+        $timeout.cancel(self.doubleClickPromise);
+        self.doubleClickPromise = null;
+
+        // Double click
+
+        // Only for groups
+        if (isGroup && manageableId)
+          openGroup(manageableId);
+
+        return;
       }
 
-      interact('.device-group > .group').on('doubletap', function(event) {
-        var groupId = event.currentTarget.getAttribute('data-id');
+      self.doubleClickPromise = $timeout(function() {
 
-        $rootScope.$broadcast('manageable.load', groupId, true);
-        $scope.manage.showDetail = false;
-        $location.path('manage/group-detail/' + groupId);
-        $scope.manage.absUrl = $location.absUrl();
-        destroyScrollbar();
+        // Single click
+        self.doubleClickPromise = null;
+        toggleDetails(manageableId, isGroup);
 
-        $scope.$apply();
-      });
-    }
+      }, 200);
+    };
 
     /**
      * Adds pending/refused device to the accepted list of devices.
@@ -466,12 +488,10 @@
     };
 
     // Manage drag and drop events
-    draggable();
-    dragDropDevice();
-
-    // Manage click events
-    setManageableClickListener();
-    setManageableDbClickListener();
+    if ($element.hasClass('devices')) {
+      draggable();
+      dragDropDevice();
+    }
 
   }
 
@@ -483,6 +503,7 @@
     '$filter',
     '$timeout',
     '$location',
+    '$element',
     'ManageFactory',
     'ManageGroupFactory',
     'ManageDeviceFactory',
