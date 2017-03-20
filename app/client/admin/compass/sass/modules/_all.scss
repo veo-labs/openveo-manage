@@ -191,6 +191,7 @@ $item-detail-width: 400;
     z-index: 3;
     perspective: 600px;
     position: relative;
+    @include user-select(none);
     .well {
       position: relative;
       cursor: pointer;
