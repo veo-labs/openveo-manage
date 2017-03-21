@@ -10,7 +10,7 @@ var openVeoApi = require('@openveo/api');
 var Cache = process.requireManage('app/server/manageables/Cache.js');
 var Device = process.requireManage('app/server/manageables/Device.js');
 var Group = process.requireManage('app/server/manageables/Group.js');
-var errors = process.requireManage('app/server/errors.js');
+var ERRORS = process.requireManage('app/server/errors.js');
 var NotFoundError = openVeoApi.errors.NotFoundError;
 
 /**
@@ -682,9 +682,9 @@ function initBrowsersListeners() {
           process.logger.error(error.message, {error: error, event: MESSAGES.UPDATE_NAME});
 
         if (error instanceof NotFoundError)
-          return callback({error: errors.UPDATE_DEVICE_NAME_NOT_FOUND_ERROR});
+          return callback({error: ERRORS.UPDATE_DEVICE_NAME_NOT_FOUND_ERROR});
         else if (error)
-          return callback({error: errors.UPDATE_DEVICE_NAME_ERROR});
+          return callback({error: ERRORS.UPDATE_DEVICE_NAME_ERROR});
 
         callback();
       });
@@ -694,9 +694,9 @@ function initBrowsersListeners() {
           process.logger.error(error.message, {error: error, event: MESSAGES.UPDATE_NAME});
 
         if (error instanceof NotFoundError)
-          return callback({error: errors.UPDATE_GROUP_NAME_NOT_FOUND_ERROR});
+          return callback({error: ERRORS.UPDATE_GROUP_NAME_NOT_FOUND_ERROR});
         else if (error)
-          return callback({error: errors.UPDATE_GROUP_NAME_ERROR});
+          return callback({error: ERRORS.UPDATE_GROUP_NAME_ERROR});
 
         callback();
       });
@@ -716,7 +716,7 @@ function initBrowsersListeners() {
 
       if (!device) {
         errors.push({
-          error: errors.START_DEVICE_SESSION_NOT_FOUND_ERROR,
+          error: ERRORS.START_DEVICE_SESSION_NOT_FOUND_ERROR,
           name: ids[i]
         });
       }
@@ -738,8 +738,8 @@ function initBrowsersListeners() {
           }, true);
 
           errors.push({
-            error: errors.START_DEVICE_SESSION_ERROR,
-            name: device.name
+            name: device.name,
+            code: ERRORS.START_DEVICE_SESSION_ERROR.code
           });
         } else {
           device = self.cache.get(result.value);
@@ -763,7 +763,7 @@ function initBrowsersListeners() {
 
       if (!device) {
         errors.push({
-          error: errors.STOP_DEVICE_SESSION_NOT_FOUND_ERROR,
+          error: ERRORS.STOP_DEVICE_SESSION_NOT_FOUND_ERROR,
           name: ids[i]
         });
       }
@@ -785,8 +785,8 @@ function initBrowsersListeners() {
           }, true);
 
           errors.push({
-            error: errors.STOP_DEVICE_SESSION_ERROR,
-            name: device.name
+            name: device.name,
+            code: ERRORS.STOP_DEVICE_SESSION_ERROR.code
           });
         } else {
           device = self.cache.get(result.value);
@@ -810,7 +810,7 @@ function initBrowsersListeners() {
 
       if (!device) {
         errors.push({
-          error: errors.INDEX_DEVICE_SESSION_NOT_FOUND_ERROR,
+          error: ERRORS.INDEX_DEVICE_SESSION_NOT_FOUND_ERROR,
           name: ids[i]
         });
       }
@@ -832,8 +832,8 @@ function initBrowsersListeners() {
           }, true);
 
           errors.push({
-            error: errors.INDEX_DEVICE_SESSION_ERROR,
-            name: device.name
+            name: device.name,
+            code: ERRORS.INDEX_DEVICE_SESSION_ERROR.code
           });
         } else {
           device = self.cache.get(result.value);
@@ -855,7 +855,7 @@ function initBrowsersListeners() {
 
     if (self.deviceModel.AVAILABLE_STATES.indexOf(newState) === -1 || !device) {
       return callback({
-        error: errors.UPDATE_DEVICE_STATE_NOT_FOUND_ERROR
+        error: ERRORS.UPDATE_DEVICE_STATE_NOT_FOUND_ERROR
       });
     }
 
@@ -868,7 +868,7 @@ function initBrowsersListeners() {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.UPDATE_DEVICE_STATE});
         return callback({
-          error: errors.UPDATE_DEVICE_STATE_ERROR
+          error: ERRORS.UPDATE_DEVICE_STATE_ERROR
         });
       }
 
@@ -899,7 +899,7 @@ function initBrowsersListeners() {
 
     if (!manageable) {
       return callback({
-        error: errors.REMOVE_NOT_FOUND_ERROR
+        error: ERRORS.REMOVE_NOT_FOUND_ERROR
       });
     }
 
@@ -907,7 +907,7 @@ function initBrowsersListeners() {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.REMOVE});
         return callback({
-          error: errors.REMOVE_ERROR
+          error: ERRORS.REMOVE_ERROR
         });
       }
 
@@ -928,7 +928,7 @@ function initBrowsersListeners() {
 
     if (!manageable) {
       return callback({
-        error: errors.REMOVE_HISTORIC_NOT_FOUND_ERROR
+        error: ERRORS.REMOVE_HISTORIC_NOT_FOUND_ERROR
       });
     }
 
@@ -936,7 +936,7 @@ function initBrowsersListeners() {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.REMOVE_HISTORIC});
         return callback({
-          error: errors.REMOVE_HISTORIC_ERROR
+          error: ERRORS.REMOVE_HISTORIC_ERROR
         });
       }
 
@@ -961,7 +961,7 @@ function initBrowsersListeners() {
 
     if (!manageable) {
       return callback({
-        error: errors.ADD_SCHEDULE_NOT_FOUND_ERROR
+        error: ERRORS.ADD_SCHEDULE_NOT_FOUND_ERROR
       });
     }
 
@@ -976,7 +976,7 @@ function initBrowsersListeners() {
 
     if (!isValidSchedule) {
       return callback({
-        error: errors.ADD_SCHEDULE_INVALID_ERROR
+        error: ERRORS.ADD_SCHEDULE_INVALID_ERROR
       });
     }
 
@@ -985,7 +985,7 @@ function initBrowsersListeners() {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.ADD_SCHEDULE});
         return callback({
-          error: errors.ADD_SCHEDULE_ERROR
+          error: ERRORS.ADD_SCHEDULE_ERROR
         });
       }
 
@@ -1010,13 +1010,13 @@ function initBrowsersListeners() {
 
     if (!schedule || !manageable) {
       return callback({
-        error: errors.REMOVE_SCHEDULE_NOT_FOUND_ERROR
+        error: ERRORS.REMOVE_SCHEDULE_NOT_FOUND_ERROR
       });
     }
 
     if (manageable.isScheduleRunning(manageable.getSchedule(scheduleId))) {
       return callback({
-        error: errors.REMOVE_SCHEDULE_RUNNING_ERROR
+        error: ERRORS.REMOVE_SCHEDULE_RUNNING_ERROR
       });
     }
 
@@ -1025,7 +1025,7 @@ function initBrowsersListeners() {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.REMOVE_SCHEDULE});
         return callback({
-          error: errors.REMOVE_SCHEDULE_ERROR
+          error: ERRORS.REMOVE_SCHEDULE_ERROR
         });
       }
 
@@ -1048,7 +1048,7 @@ function initBrowsersListeners() {
 
     if (!manageable) {
       return callback({
-        error: errors.REMOVE_HISTORY_NOT_FOUND_ERROR
+        error: ERRORS.REMOVE_HISTORY_NOT_FOUND_ERROR
       });
     }
 
@@ -1056,7 +1056,7 @@ function initBrowsersListeners() {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.REMOVE_HISTORY});
         return callback({
-          error: errors.REMOVE_HISTORY_ERROR
+          error: ERRORS.REMOVE_HISTORY_ERROR
         });
       }
 
@@ -1087,7 +1087,7 @@ function initBrowsersListeners() {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.CREATE_GROUP});
         return callback({
-          error: errors.CREATE_GROUP_ERROR
+          error: ERRORS.CREATE_GROUP_ERROR
         });
       }
 
@@ -1114,7 +1114,7 @@ function initBrowsersListeners() {
 
     if (!device || !group) {
       return callback({
-        error: errors.ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR
+        error: ERRORS.ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR
       });
     }
 
@@ -1122,7 +1122,7 @@ function initBrowsersListeners() {
 
     if (isCollision) {
       return callback({
-        error: errors.ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR
+        error: ERRORS.ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR
       });
     }
 
@@ -1131,7 +1131,7 @@ function initBrowsersListeners() {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.ADD_DEVICE_TO_GROUP});
         return callback({
-          error: errors.ADD_DEVICE_TO_GROUP_ERROR
+          error: ERRORS.ADD_DEVICE_TO_GROUP_ERROR
         });
       }
 
@@ -1158,7 +1158,7 @@ function initBrowsersListeners() {
 
     if (!device || !group) {
       return callback({
-        error: errors.REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR
+        error: ERRORS.REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR
       });
     }
 
@@ -1166,7 +1166,7 @@ function initBrowsersListeners() {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.REMOVE_DEVICE_FROM_GROUP});
         return callback({
-          error: errors.REMOVE_DEVICE_FROM_GROUP_ERROR
+          error: ERRORS.REMOVE_DEVICE_FROM_GROUP_ERROR
         });
       }
 
@@ -1305,7 +1305,7 @@ Manager.prototype.updateDeviceName = function(id, name, callback) {
   this.devicesPilot.askForUpdateName(id, name, function(error) {
     if (error) {
       addDeviceHistoric.call(self, device, 'MANAGE.HISTORY.UPDATE_DEVICE_NAME_ERROR', null, true);
-      return callback(new Error('Failed updating device\'s name'));
+      return callback(error);
     }
 
     callback();
@@ -1332,7 +1332,7 @@ Manager.prototype.updateGroupName = function(id, name, callback) {
   this.groupModel.update(group.id, {name: name}, function(error) {
     if (error) {
       addGroupHistoric.call(self, group, 'MANAGE.HISTORY.UPDATE_GROUP_NAME_ERROR');
-      return callback(new Error('Failed updating group\'s name'));
+      return callback(error);
     }
 
     // Update cache and inform browsers
