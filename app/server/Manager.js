@@ -469,9 +469,11 @@ function initDevicesListeners() {
       // socket.io works with IP v6 addresses even if the connected device
       // uses an IP v4 address
       // If the IP is a V4 IP wrapped in an IP V6 address, extract it
-      var ipChunks = /(?:(?:::ffff:(.*)))|(.*)/.exec(deviceIp);
-      device.ip = (ipChunks[1]) ? ipChunks[1] : ipChunks[2];
-      device.url = 'http://' + ((ipChunks[1]) ? device.ip : '[' + device.ip + ']');
+      // First and third matches correspond to an IP V4 address
+      // Second match correspond to an IP V6 address
+      var ipChunks = /(?:(?:::ffff:(.*)))|(.*:.*)|(.*)/.exec(deviceIp);
+      device.ip = ipChunks[1] || ipChunks[2] || ipChunks[3];
+      device.url = 'http://' + ((ipChunks[1] || ipChunks[3]) ? device.ip : '[' + device.ip + ']');
 
       // Device is already accepted
       // Asks the device its settings
