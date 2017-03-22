@@ -57,11 +57,12 @@ describe('Device', function() {
       var device = new Device({});
       var free = 80000000000;
       var used = 40000000000;
+      var bytesToGbytes = Math.pow(1024, 3);
       device.setStorage(free, used);
 
-      assert.equal(device.storage.free, free / 1000000000);
-      assert.equal(device.storage.used, used / 1000000000);
-      assert.equal(device.storage.total, (free + used) / 1000000000);
+      assert.equal(device.storage.free, free / bytesToGbytes);
+      assert.equal(device.storage.used, used / bytesToGbytes);
+      assert.equal(device.storage.total, (free + used) / bytesToGbytes);
       assert.equal(device.storage.percent, (used / (free + used)) * 100);
     });
 

@@ -131,17 +131,18 @@ Object.defineProperty(Device, 'TYPE', {value: 'device'});
  *
  * @method setStorage
  * @param {Number} free Number of free Bytes
- * @param {Number} used Number of free Bytes
+ * @param {Number} used Number of used Bytes
  */
 Device.prototype.setStorage = function(free, used) {
   free = parseInt(free);
   used = parseInt(used);
 
   if (free || used) {
+    var bytesToGbytes = Math.pow(1024, 3);
     this.storage = {
-      free: free / 1000000000,
-      used: used / 1000000000,
-      total: (free + used) / 1000000000,
+      free: free / bytesToGbytes,
+      used: used / bytesToGbytes,
+      total: (free + used) / bytesToGbytes,
       percent: (used / (free + used)) * 100
     };
   }
