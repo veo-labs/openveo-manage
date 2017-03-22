@@ -133,7 +133,7 @@ function buildHistoric(message, params) {
  * @param {Group} group The group
  * @param {String} message The historic message
  * @param {Object} messageParams Message parameters for message translation
- * @param {Function} callback Function to call when it's done with :
+ * @param {Function} [callback] Function to call when it's done with :
  *  - **Error** An error is something went wrong
  */
 function addGroupHistoric(group, message, messageParams, callback) {
@@ -149,7 +149,8 @@ function addGroupHistoric(group, message, messageParams, callback) {
 
     }
 
-    callback(error);
+    if (callback)
+      callback(error);
   });
 }
 
