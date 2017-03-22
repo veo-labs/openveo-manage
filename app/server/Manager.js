@@ -1433,6 +1433,9 @@ Manager.prototype.removeDevice = function(id, callback) {
     // Remove device from cache and informs browsers
     self.removeFromCache(device.id);
 
+    // Disconnect device
+    self.devicesPilot.disconnect([device.id]);
+
     callback();
   });
 };

@@ -1309,6 +1309,9 @@ describe('Manager', function() {
         browsersPilot.remove = function() {
 
         };
+        devicesPilot.disconnect = function() {
+
+        };
       });
 
       it('should be able to remove a device from database and cache', function(done) {
@@ -3163,6 +3166,9 @@ describe('Manager', function() {
       browsersPilot.remove = function() {
 
       };
+      devicesPilot.disconnect = function() {
+
+      };
     });
 
     it('should remove a device from database and cache', function(done) {
@@ -3180,6 +3186,22 @@ describe('Manager', function() {
         browsersPilot.remove.should.have.been.called.with.exactly(expectedDevice);
         assert.isUndefined(manager.cache.get(expectedId), 'Unexpected device');
         assert.isUndefined(error, 'Unexpected error');
+        done();
+      });
+    });
+
+    it('should disconnect the device', function(done) {
+      var expectedId = '42';
+      var expectedDevice = new Device({id: expectedId});
+      manager.cache.add(expectedDevice);
+      devicesPilot.disconnect = chai.spy(devicesPilot.disconnect);
+
+      deviceModel.remove = function(id, callback) {
+        callback();
+      };
+
+      manager.removeDevice(expectedId, function(error) {
+        devicesPilot.disconnect.should.have.been.called.with.exactly([expectedId]);
         done();
       });
     });
@@ -3277,7 +3299,6 @@ describe('Manager', function() {
         done();
       });
     });
-
   });
 
   // removeGroup method
