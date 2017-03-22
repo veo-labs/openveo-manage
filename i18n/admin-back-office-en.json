@@ -129,6 +129,7 @@
     "UPDATE_DEVICE_NAME_ERROR": "Name updated into \"{{name}}\"",
     "UPDATE_NAME": "Encoder \"{{name}}\" name modified",
     "UPDATE_NAME_ERROR": "Update \"{{name}}\" name failed",
+    "UPDATE_GROUP_NAME": "Group \"{{name}}\" name modified",
     "UPDATE_GROUP_NAME_ERROR": "Update group's \"{{name}}\" name failed",
     "ADD_DEVICE_TO_GROUP": "Add device \"{{name}}\" to group \"{{groupName}}\"",
     "REMOVE_DEVICE_FROM_GROUP": "Remove device \"{{name}}\" from group \"{{groupName}}\""

@@ -1340,6 +1340,11 @@ Manager.prototype.updateGroupName = function(id, name, callback) {
     group.name = name;
     self.browsersPilot.update(group, 'name', group.name);
 
+    // Save update name action to history
+    addGroupHistoric.call(self, group, 'MANAGE.HISTORY.UPDATE_GROUP_NAME', {
+      name: group.name
+    });
+
     callback();
   });
 };

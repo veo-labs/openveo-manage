@@ -3045,6 +3045,7 @@ describe('Manager', function() {
       var expectedName = 'name';
       var expectedGroup = new Group({id: expectedId});
       manager.cache.add(expectedGroup);
+      groupModel.addHistoric = chai.spy(groupModel.addHistoric);
 
       groupModel.update = function(id, data, callback) {
         assert.strictEqual(id, expectedId, 'Wrong id');
@@ -3054,6 +3055,7 @@ describe('Manager', function() {
 
       manager.updateGroupName(expectedId, expectedName, function(error) {
         assert.isUndefined(error, 'Unexpected error');
+        groupModel.addHistoric.should.have.been.called.exactly(1);
         done();
       });
     });

@@ -129,6 +129,7 @@
     "UPDATE_DEVICE_NAME_ERROR": "Mise à jour du nom en \"{{name}}\"",
     "UPDATE_NAME": "Nom de l'encodeur \"{{name}}\" modifié",
     "UPDATE_NAME_ERROR": "Echec de la mise à jour du nom de l'encodeur \"{{name}}\"",
+    "UPDATE_GROUP_NAME": "Nom du groupe \"{{name}}\" modifié",
     "UPDATE_GROUP_NAME_ERROR": "Echec de la mise à jour du nom du groupe \"{{name}}\"",
     "ADD_DEVICE_TO_GROUP": "Ajout de l'encodeur \"{{name}}\" au groupe \"{{groupName}}\"",
     "REMOVE_DEVICE_FROM_GROUP": "Suppression de l'encodeur \"{{name}}\" du groupe \"{{groupName}}\""
