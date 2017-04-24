@@ -71,11 +71,15 @@ ScheduleManager.prototype.addJob = function(date, endDate, isDaily, functionToEx
 
     if (isDaily) {
 
+      // node-schedule restriction :
+      // The recurrent time must always be greater than the start time even if the start date is in the future
+      var startDate = new Date(date.getTime() + 1000);
+
       // Daily job
       var rule = new schedule.RecurrenceRule();
-      rule.dayOfWeek = [new schedule.Range(0, 6)];
-      rule.hour = date.getHours();
-      rule.minute = date.getMinutes();
+      rule.hour = startDate.getHours();
+      rule.minute = startDate.getMinutes();
+      rule.second = startDate.getSeconds();
       job = schedule.scheduleJob(id, {start: date, end: endDate, rule: rule}, functionToExecute);
 
     } else {
