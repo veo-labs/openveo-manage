@@ -16,7 +16,6 @@ ehthumbs.db
 
 # Logs
 *.log
-/logs
 
 # Project npm dependencies
 /node_modules
@@ -26,8 +25,9 @@ ehthumbs.db
 
 # IDE
 /nbproject
+.idea/
 
-# Deliver
+# Build
 /build
 
 # Sass
@@ -43,12 +43,12 @@ ehthumbs.db
 # Documentation
 /docs
 /site
-/.grunt
 /mkdocs.yml
 
 # Grunt files
 /Gruntfile.js
 /tasks
+/.grunt
 
 # Git
 .gitignore

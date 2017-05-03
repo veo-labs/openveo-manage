@@ -11,8 +11,6 @@ Icon?
 # Windows
 Thumbs.db
 Desktop.ini
-
-# Windows XP
 ehthumbs.db
 
 # Logs
@@ -28,21 +26,19 @@ ehthumbs.db
 nbproject/
 .idea/
 
-# Deliver
+# Build
 /build
+/assets/be/js/*
+/assets/be/css/*
+/assets/be/images/sprite.png
+/tests/client/e2eTests/build
 
 # Sass
 .sass-cache
 /app/client/admin/compass/sass/modules/_sprite.scss
 
-# Compiled file
-/assets/be/js/*
-/assets/be/css/*
-/assets/be/images/sprite.png
-
 # Documentation
 /site
-/.grunt
 
-# End to end tests
-/tests/client/e2eTests/build
+# Grunt files
+/.grunt
