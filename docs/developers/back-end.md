@@ -8,7 +8,7 @@ As expected by OpenVeo, Manage defines an AngularJS module **ov.manage**.
 
 ## Main module (**ov.manage**)
 
-Manage main module defines the following routes :
+Manage main module defines the following routes:
 
 - **/manage/** to display the list of groups and devices
 - **/manage/group-detail/:id** to display the content of a group

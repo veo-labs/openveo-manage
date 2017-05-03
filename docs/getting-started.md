@@ -1,12 +1,12 @@
 # Installation
 
-From [OpenVeo](https://github.com/veo-labs/openveo-core) root :
+From [OpenVeo](https://github.com/veo-labs/openveo-core) root:
 
     npm install @openveo/manage
 
 # Start / Restart OpenVeo
 
-OpenVeo Manage is now installed. You can start / restart OpenVeo :
+OpenVeo Manage is now installed. You can start / restart OpenVeo:
 
     node server.js
 
