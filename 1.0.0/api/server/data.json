@@ -1,0 +1,4779 @@
+{
+    "project": {
+        "name": "OpenVeo Manage server",
+        "description": "Node.js OpenVeo Manage plugin documentation",
+        "version": "1.0.0"
+    },
+    "files": {
+        "app\\server\\controllers\\BrowserSocketController.js": {
+            "name": "app\\server\\controllers\\BrowserSocketController.js",
+            "modules": {},
+            "classes": {
+                "BrowserSocketController": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\controllers\\doc.js": {
+            "name": "app\\server\\controllers\\doc.js",
+            "modules": {
+                "controllers": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\manageables\\Cache.js": {
+            "name": "app\\server\\manageables\\Cache.js",
+            "modules": {},
+            "classes": {
+                "Cache": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\manageables\\Device.js": {
+            "name": "app\\server\\manageables\\Device.js",
+            "modules": {},
+            "classes": {
+                "Device": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\manageables\\Group.js": {
+            "name": "app\\server\\manageables\\Group.js",
+            "modules": {},
+            "classes": {
+                "Group": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\manageables\\Manageable.js": {
+            "name": "app\\server\\manageables\\Manageable.js",
+            "modules": {},
+            "classes": {
+                "Manageable": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\manageables\\doc.js": {
+            "name": "app\\server\\manageables\\doc.js",
+            "modules": {
+                "manageables": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\models\\DeviceModel.js": {
+            "name": "app\\server\\models\\DeviceModel.js",
+            "modules": {},
+            "classes": {
+                "DeviceModel": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\models\\GroupModel.js": {
+            "name": "app\\server\\models\\GroupModel.js",
+            "modules": {},
+            "classes": {
+                "GroupModel": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\models\\ManageableModel.js": {
+            "name": "app\\server\\models\\ManageableModel.js",
+            "modules": {},
+            "classes": {
+                "ManageableModel": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\models\\doc.js": {
+            "name": "app\\server\\models\\doc.js",
+            "modules": {
+                "models": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\providers\\DeviceProvider.js": {
+            "name": "app\\server\\providers\\DeviceProvider.js",
+            "modules": {},
+            "classes": {
+                "DeviceProvider": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\providers\\GroupProvider.js": {
+            "name": "app\\server\\providers\\GroupProvider.js",
+            "modules": {},
+            "classes": {
+                "GroupProvider": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\providers\\doc.js": {
+            "name": "app\\server\\providers\\doc.js",
+            "modules": {
+                "providers": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\BrowserPilot.js": {
+            "name": "app\\server\\BrowserPilot.js",
+            "modules": {},
+            "classes": {
+                "BrowserPilot": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\ManagePlugin.js": {
+            "name": "app\\server\\ManagePlugin.js",
+            "modules": {
+                "manage": 1
+            },
+            "classes": {
+                "ManagePlugin": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\Manager.js": {
+            "name": "app\\server\\Manager.js",
+            "modules": {},
+            "classes": {
+                "Manager": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\ScheduleManager.js": {
+            "name": "app\\server\\ScheduleManager.js",
+            "modules": {},
+            "classes": {
+                "ScheduleManager": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\browsersMessages.js": {
+            "name": "app\\server\\browsersMessages.js",
+            "modules": {},
+            "classes": {
+                "BROWSERS_MESSAGES": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\browsersPilotManager.js": {
+            "name": "app\\server\\browsersPilotManager.js",
+            "modules": {},
+            "classes": {
+                "browsersPilotManager": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "app\\server\\errors.js": {
+            "name": "app\\server\\errors.js",
+            "modules": {},
+            "classes": {
+                "ERRORS": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "controllers": {
+            "name": "controllers",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "BrowserSocketController": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "main",
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 15,
+            "description": "Include all plugin's controllers to handle HTTP or socket messages.",
+            "itemtype": "main"
+        },
+        "manageables": {
+            "name": "manageables",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "Cache": 1,
+                "Device": 1,
+                "Group": 1,
+                "Manageable": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "main",
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 7,
+            "description": "Manageables are elements with an history and a planning.",
+            "itemtype": "main"
+        },
+        "models": {
+            "name": "models",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "DeviceModel": 1,
+                "GroupModel": 1,
+                "ManageableModel": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "main",
+            "file": "app\\server\\models\\ManageableModel.js",
+            "line": 11,
+            "description": "Includes all Manage's models.",
+            "itemtype": "main"
+        },
+        "providers": {
+            "name": "providers",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "DeviceProvider": 1,
+                "GroupProvider": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "main",
+            "file": "app\\server\\providers\\GroupProvider.js",
+            "line": 10,
+            "description": "Includes all Manage's providers.",
+            "itemtype": "main"
+        },
+        "manage": {
+            "name": "manage",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "BrowserPilot": 1,
+                "ManagePlugin": 1,
+                "Manager": 1,
+                "ScheduleManager": 1,
+                "BROWSERS_MESSAGES": 1,
+                "browsersPilotManager": 1,
+                "ERRORS": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "main",
+            "file": "app\\server\\errors.js",
+            "line": 7,
+            "description": "OpenVeo Manage Plugin.",
+            "itemtype": "main"
+        }
+    },
+    "classes": {
+        "BrowserSocketController": {
+            "name": "BrowserSocketController",
+            "shortname": "BrowserSocketController",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "controllers",
+            "namespace": "",
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 15,
+            "description": "Defines a BrowserSocketController to Handle messages sent by browsers through socket namespace.",
+            "extends": "SocketController",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "namespace",
+                    "description": "The browser's namespace",
+                    "type": "SocketNamespace"
+                }
+            ]
+        },
+        "Cache": {
+            "name": "Cache",
+            "shortname": "Cache",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manageables",
+            "namespace": "",
+            "file": "app\\server\\manageables\\Cache.js",
+            "line": 9,
+            "description": "Defines a memory cache for manageables.",
+            "is_constructor": 1
+        },
+        "Device": {
+            "name": "Device",
+            "shortname": "Device",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manageables",
+            "namespace": "",
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 10,
+            "description": "Defines a Device.\n\nA Device is a Manageable structure holding information about a device.",
+            "extends": "Manageable",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "device",
+                    "description": "A device description object",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The device id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "name",
+                            "description": "The device name",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "state",
+                            "description": "The device state",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "history",
+                            "description": "The list of history events related to the device",
+                            "type": "Array",
+                            "optional": true
+                        },
+                        {
+                            "name": "schedules",
+                            "description": "The list of device's schedules",
+                            "type": "Array",
+                            "optional": true
+                        },
+                        {
+                            "name": "storage",
+                            "description": "The device's storage information",
+                            "type": "Object",
+                            "optional": true
+                        },
+                        {
+                            "name": "inputs",
+                            "description": "The device's inputs information",
+                            "type": "Object",
+                            "optional": true
+                        },
+                        {
+                            "name": "presets",
+                            "description": "The list of device's presets",
+                            "type": "Array",
+                            "optional": true
+                        },
+                        {
+                            "name": "group",
+                            "description": "The device's group",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "ip",
+                            "description": "The device's ip",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "url",
+                            "description": "The device's web interface url",
+                            "type": "String",
+                            "optional": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "Group": {
+            "name": "Group",
+            "shortname": "Group",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manageables",
+            "namespace": "",
+            "file": "app\\server\\manageables\\Group.js",
+            "line": 10,
+            "description": "Defines a Group.",
+            "extends": "Manageable",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "group",
+                    "description": "A group description object",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The group's id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "name",
+                            "description": "The group's name",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "state",
+                            "description": "The group's state",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "history",
+                            "description": "The list of history events related to the group",
+                            "type": "Array",
+                            "optional": true
+                        },
+                        {
+                            "name": "schedules",
+                            "description": "The list of group's schedules",
+                            "type": "Array",
+                            "optional": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "Manageable": {
+            "name": "Manageable",
+            "shortname": "Manageable",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manageables",
+            "namespace": "",
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 7,
+            "description": "Defines a Manageable which is an element with an history and a planning.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "A device description object",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "name",
+                            "description": "The manageable name",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "state",
+                            "description": "The manageable state",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "history",
+                            "description": "The list of history events related to the manageable",
+                            "type": "Array",
+                            "optional": true
+                        },
+                        {
+                            "name": "schedules",
+                            "description": "The list of manageable's schedules",
+                            "type": "Array",
+                            "optional": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "DeviceModel": {
+            "name": "DeviceModel",
+            "shortname": "DeviceModel",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "models",
+            "namespace": "",
+            "file": "app\\server\\models\\DeviceModel.js",
+            "line": 18,
+            "description": "Defines a DeviceModel to manage devices' entities.",
+            "extends": "ManageableModel",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "provider",
+                    "description": "The device provider",
+                    "type": "DeviceProvider"
+                }
+            ]
+        },
+        "GroupModel": {
+            "name": "GroupModel",
+            "shortname": "GroupModel",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "models",
+            "namespace": "",
+            "file": "app\\server\\models\\GroupModel.js",
+            "line": 11,
+            "description": "Defines a GroupModel to manage groups' entities.",
+            "extends": "ManageableModel",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "groupProvider",
+                    "description": "The group provider",
+                    "type": "GroupProvider"
+                },
+                {
+                    "name": "deviceProvider",
+                    "description": "The device provider",
+                    "type": "DeviceProvider"
+                }
+            ]
+        },
+        "ManageableModel": {
+            "name": "ManageableModel",
+            "shortname": "ManageableModel",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "models",
+            "namespace": "",
+            "file": "app\\server\\models\\ManageableModel.js",
+            "line": 11,
+            "description": "Defines an entity model for entities with an history and a planning.",
+            "extends": "EntityModel",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "provider",
+                    "description": "The entity provider associated to the entity model",
+                    "type": "EntityProvider"
+                }
+            ]
+        },
+        "DeviceProvider": {
+            "name": "DeviceProvider",
+            "shortname": "DeviceProvider",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "providers",
+            "namespace": "",
+            "file": "app\\server\\providers\\DeviceProvider.js",
+            "line": 10,
+            "description": "Defines a DeviceProvider to interact with database to manage devices' entities.",
+            "extends": "EntityProvider",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "database",
+                    "description": "The database to interact with",
+                    "type": "Database"
+                }
+            ]
+        },
+        "GroupProvider": {
+            "name": "GroupProvider",
+            "shortname": "GroupProvider",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "providers",
+            "namespace": "",
+            "file": "app\\server\\providers\\GroupProvider.js",
+            "line": 10,
+            "description": "Defines a GroupProvider to interact with database to manage groups' entities.",
+            "extends": "EntityProvider",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "database",
+                    "description": "The database to interact with",
+                    "type": "Database"
+                }
+            ]
+        },
+        "BrowserPilot": {
+            "name": "BrowserPilot",
+            "shortname": "BrowserPilot",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manage",
+            "namespace": "",
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 166,
+            "description": "Defines Browser's pilot.\n\nA BrowserPilot interacts with browsers.\nIt emits events received by the browsers and offers methods to control the browsers.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "browsersEmitter",
+                    "description": "The browsers' emitter",
+                    "type": "AdvancedEmitter"
+                },
+                {
+                    "name": "namespace",
+                    "description": "The socket browsers' namespace",
+                    "type": "SocketNamespace"
+                }
+            ]
+        },
+        "ManagePlugin": {
+            "name": "ManagePlugin",
+            "shortname": "ManagePlugin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manage",
+            "namespace": "",
+            "file": "app\\server\\ManagePlugin.js",
+            "line": 15,
+            "description": "OpenVeo Manage Plugin.",
+            "mainName": "manage",
+            "tag": "main",
+            "itemtype": "main",
+            "_main": true
+        },
+        "Manager": {
+            "name": "Manager",
+            "shortname": "Manager",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manage",
+            "namespace": "",
+            "file": "app\\server\\Manager.js",
+            "line": 25,
+            "description": "Orchestrates devices and browsers to keep them live-synchronized.\n\nUse Manager.get() to get an instance of the Manager.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "devicesPilot",
+                    "description": "Devices' pilot to interact with devices",
+                    "type": "DevicePilot"
+                },
+                {
+                    "name": "browsersPilot",
+                    "description": "Browsers' pilot to interact with browsers",
+                    "type": "BrowserPilot"
+                },
+                {
+                    "name": "deviceModel",
+                    "description": "Model to manipulate devices",
+                    "type": "DeviceModel"
+                },
+                {
+                    "name": "groupModel",
+                    "description": "Model to manipulate groups",
+                    "type": "GroupModel"
+                },
+                {
+                    "name": "scheduleManager",
+                    "description": "A schedule manager to add / remove schedule jobs",
+                    "type": "ScheduleManager"
+                }
+            ]
+        },
+        "ScheduleManager": {
+            "name": "ScheduleManager",
+            "shortname": "ScheduleManager",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manage",
+            "namespace": "",
+            "file": "app\\server\\ScheduleManager.js",
+            "line": 10,
+            "description": "Manages process dependent scheduled jobs, for session recording, using\nnode-shedule (https://www.npmjs.com/package/node-schedule).\n\nRecording a job is process dependent, meaning that jobs have to be recreated if process\nis restarted.",
+            "is_constructor": 1
+        },
+        "BROWSERS_MESSAGES": {
+            "name": "BROWSERS_MESSAGES",
+            "shortname": "BROWSERS_MESSAGES",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manage",
+            "namespace": "",
+            "file": "app\\server\\browsersMessages.js",
+            "line": 7,
+            "description": "Defines the list of socket messages sent by browsers.",
+            "static": 1
+        },
+        "browsersPilotManager": {
+            "name": "browsersPilotManager",
+            "shortname": "browsersPilotManager",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manage",
+            "namespace": "",
+            "file": "app\\server\\browsersPilotManager.js",
+            "line": 7,
+            "description": "Holds the browsers' pilot singleton.",
+            "static": 1
+        },
+        "ERRORS": {
+            "name": "ERRORS",
+            "shortname": "ERRORS",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "manage",
+            "namespace": "",
+            "file": "app\\server\\errors.js",
+            "line": 7,
+            "description": "The list of server errors.",
+            "static": 1
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 28,
+            "description": "The browsers' pilot.",
+            "itemtype": "property",
+            "name": "pilot",
+            "type": "BrowserPilot",
+            "final": 1,
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 43,
+            "description": "Handles message informing about a browser requesting a device's name update.",
+            "itemtype": "method",
+            "name": "updateNameAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "name",
+                            "description": "The new manageable's name",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 76,
+            "description": "Handles message informing about a browser requesting a manageable's to be removed.",
+            "itemtype": "method",
+            "name": "removeAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 105,
+            "description": "Handles message informing about a browser requesting a manageable's historic to be removed.",
+            "itemtype": "method",
+            "name": "removeHistoricAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "historicId",
+                            "description": "The historic id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 138,
+            "description": "Handles message informing about a browser requesting a schedule to be added to a manageable.",
+            "itemtype": "method",
+            "name": "addScheduleAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "schedule",
+                            "description": "The schedule",
+                            "type": "Object",
+                            "props": [
+                                {
+                                    "name": "beginDate",
+                                    "description": "The begin date, can be either a date or a date literal",
+                                    "type": "Date|String"
+                                },
+                                {
+                                    "name": "duration",
+                                    "description": "The duration of the record (in ms)",
+                                    "type": "Number"
+                                },
+                                {
+                                    "name": "preset",
+                                    "description": "The id of the record",
+                                    "type": "String"
+                                },
+                                {
+                                    "name": "endDate",
+                                    "description": "The end date, can be either a date or a date literal",
+                                    "type": "Date|String",
+                                    "optional": true
+                                },
+                                {
+                                    "name": "recurrent",
+                                    "description": "true to execute the schedule every day",
+                                    "type": "Boolean",
+                                    "optional": true,
+                                    "optdefault": "false"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "Object"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 202,
+            "description": "Handles message informing about a browser requesting a schedule to be removed from a manageable.",
+            "itemtype": "method",
+            "name": "removeScheduleAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "scheduleId",
+                            "description": "The schedule id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 235,
+            "description": "Handles message informing about a browser requesting manageable's history to be purged.",
+            "itemtype": "method",
+            "name": "removeHistoryAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 264,
+            "description": "Handles message informing about a browser requesting the list of devices.",
+            "itemtype": "method",
+            "name": "getDevicesAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Nothing",
+                    "type": "Null"
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 277,
+            "description": "Handles message informing about a browser requesting one or several devices' settings.",
+            "itemtype": "method",
+            "name": "getDeviceSettingsAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "ids",
+                            "description": "The list of devices ids which need settings information",
+                            "type": "Array"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 304,
+            "description": "Handles message informing about a browser requesting a device state update.",
+            "itemtype": "method",
+            "name": "updateDeviceStateAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The device id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "state",
+                            "description": "The new device state",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 335,
+            "description": "Handles message informing about a browser requesting one or several devices to start a new recording session.",
+            "itemtype": "method",
+            "name": "startDeviceSessionAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "ids",
+                            "description": "The list of devices ids on which a new recording session must be started",
+                            "type": "Array"
+                        },
+                        {
+                            "name": "presetId",
+                            "description": "The id of the preset for the recording session",
+                            "type": "String",
+                            "optional": true
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 366,
+            "description": "Handles message informing about a browser requesting one or several devices to stop a recording session.",
+            "itemtype": "method",
+            "name": "stopDeviceSessionAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "ids",
+                            "description": "The list of devices ids on which a new recording session must be stopped",
+                            "type": "Array"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 393,
+            "description": "Handles message informing about a browser requesting one or several devices to tag their current recording sessions.",
+            "itemtype": "method",
+            "name": "indexDeviceSessionAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "ids",
+                            "description": "The list of devices ids on which a current recording session must be tagged",
+                            "type": "Array"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 420,
+            "description": "Handles message informing about a browser requesting the list of groups.",
+            "itemtype": "method",
+            "name": "getGroupsAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Nothing",
+                    "type": "Null"
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 433,
+            "description": "Handles message informing about a browser requesting the creation of a new group.",
+            "itemtype": "method",
+            "name": "createGroupAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Nothing",
+                    "type": "Null"
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 446,
+            "description": "Handles message informing about a browser requesting a device to be added to a group.",
+            "itemtype": "method",
+            "name": "addDeviceToGroupAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "deviceId",
+                            "description": "The device id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "groupId",
+                            "description": "The group id",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 477,
+            "description": "Handles message informing about a browser requesting a device to be removed from its group.",
+            "itemtype": "method",
+            "name": "removeDeviceFromGroupAction",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Message's datas",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The id of the device",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "socket",
+                    "description": "The opened socket",
+                    "type": "Socket"
+                },
+                {
+                    "name": "callback",
+                    "description": "The callback to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 504,
+            "description": "Handles socket's connection.\n\nSocket's connection has been established with a browser.",
+            "itemtype": "method",
+            "name": "connectAction",
+            "params": [
+                {
+                    "name": "socket",
+                    "description": "The socket",
+                    "type": "Socket"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 517,
+            "description": "Handles socket's disconnection.\n\nConnection with a browser has been lost.",
+            "itemtype": "method",
+            "name": "disconnectAction",
+            "params": [
+                {
+                    "name": "socket",
+                    "description": "The socket",
+                    "type": "Socket"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\controllers\\BrowserSocketController.js",
+            "line": 530,
+            "description": "Handles socket's connection errors.\n\nAn error occurred on socket's communication.",
+            "itemtype": "method",
+            "name": "errorAction",
+            "params": [
+                {
+                    "name": "error",
+                    "description": "The error",
+                    "type": "Error"
+                },
+                {
+                    "name": "socket",
+                    "description": "The socket",
+                    "type": "Socket"
+                }
+            ],
+            "class": "BrowserSocketController",
+            "module": "controllers"
+        },
+        {
+            "file": "app\\server\\manageables\\Cache.js",
+            "line": 18,
+            "description": "The list of manageables in the cache.",
+            "itemtype": "property",
+            "name": "manageables",
+            "type": "Array",
+            "final": 1,
+            "class": "Cache",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Cache.js",
+            "line": 32,
+            "description": "Gets a manageable index, in the list of manageables, by a property.",
+            "itemtype": "method",
+            "name": "getManageableIndexByProperty",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "The item property to look for",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The expected property value",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "The index of the manageable in the list of manageables, -1 if not found",
+                "type": "Number"
+            },
+            "class": "Cache",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Cache.js",
+            "line": 47,
+            "description": "Gets a manageable by a property.",
+            "itemtype": "method",
+            "name": "getManageableByProperty",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "The manageable property to look for",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The expected property value",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "The manageable or undefined if not found",
+                "type": "Manageable|Undefined"
+            },
+            "class": "Cache",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Cache.js",
+            "line": 61,
+            "description": "Gets a list of manageables by a property.",
+            "itemtype": "method",
+            "name": "getManageablesByProperty",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "The item property to look for",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The expected property value",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "The list of found manageables",
+                "type": "Array"
+            },
+            "class": "Cache",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Cache.js",
+            "line": 80,
+            "description": "Gets a manageable by its id.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The manageable or undefined if not found",
+                "type": "Manageable|Undefined"
+            },
+            "class": "Cache",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Cache.js",
+            "line": 91,
+            "description": "Stores a new manageable in cache.",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "newManageable",
+                    "description": "The new manageable",
+                    "type": "Manageable"
+                }
+            ],
+            "class": "Cache",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Cache.js",
+            "line": 111,
+            "description": "Removes a manageable from cache.",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "Either the manageable or the manageable id",
+                    "type": "Manageable|String"
+                }
+            ],
+            "return": {
+                "description": "The manageable or null if not found",
+                "type": "Manageable|Null"
+            },
+            "class": "Cache",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 36,
+            "description": "The device's type.",
+            "itemtype": "property",
+            "name": "type",
+            "type": "String",
+            "final": 1,
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 45,
+            "description": "The device's state.",
+            "itemtype": "property",
+            "name": "state",
+            "type": "String",
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 53,
+            "description": "The device's storage information.",
+            "itemtype": "property",
+            "name": "storage",
+            "type": "Object",
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 61,
+            "description": "The device's inputs information.",
+            "itemtype": "property",
+            "name": "inputs",
+            "type": "Object",
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 69,
+            "description": "The device's presets.",
+            "itemtype": "property",
+            "name": "presets",
+            "type": "Array",
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 77,
+            "description": "The device's group.",
+            "itemtype": "property",
+            "name": "group",
+            "type": "String",
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 85,
+            "description": "The device's ip address.",
+            "itemtype": "property",
+            "name": "ip",
+            "type": "String",
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 93,
+            "description": "The device's web interface url.",
+            "itemtype": "property",
+            "name": "url",
+            "type": "String",
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 101,
+            "description": "The device's status.",
+            "itemtype": "property",
+            "name": "status",
+            "type": "String",
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 118,
+            "description": "Device type.",
+            "itemtype": "property",
+            "name": "TYPE",
+            "type": "String",
+            "access": "private",
+            "tagname": "",
+            "final": 1,
+            "default": "'device'",
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 129,
+            "description": "Sets device's storage information.",
+            "itemtype": "method",
+            "name": "setStorage",
+            "params": [
+                {
+                    "name": "free",
+                    "description": "Number of free Bytes",
+                    "type": "Number"
+                },
+                {
+                    "name": "used",
+                    "description": "Number of used Bytes",
+                    "type": "Number"
+                }
+            ],
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 151,
+            "description": "Sets device's inputs information.",
+            "itemtype": "method",
+            "name": "setInputs",
+            "params": [
+                {
+                    "name": "camera Information",
+                    "description": "about the video camera connected to the device",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "camera.timings",
+                    "description": "Information about video camera's configuration",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "camera.timings.supported",
+                    "description": "true if the connected video camera is supported, false otherwise",
+                    "type": "Boolean",
+                    "optional": true
+                },
+                {
+                    "name": "slides Information",
+                    "description": "about the slides connected to the device",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "slides.timings",
+                    "description": "Information about the slides' input configuration",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "slides.timings.supported",
+                    "description": "true if the connected slides' input is supported, false otherwise",
+                    "type": "Boolean",
+                    "optional": true
+                }
+            ],
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 175,
+            "description": "Sets device's presets.",
+            "itemtype": "method",
+            "name": "setPresets",
+            "params": [
+                {
+                    "name": "presets",
+                    "description": "The list of presets referenced by ids",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 190,
+            "description": "Disconnects the device which removes all volatile information.",
+            "itemtype": "method",
+            "name": "disconnect",
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 201,
+            "description": "Checks if a schedule is not in collision with schedules of a group.\n\nDevice schedule should not be in collision with group's schedules.",
+            "itemtype": "method",
+            "name": "isValidSchedule",
+            "params": [
+                {
+                    "name": "schedule",
+                    "description": "The schedule description object",
+                    "type": "Object"
+                },
+                {
+                    "name": "group",
+                    "description": "The group to test the schedule with",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "true if the schedule is not in collision with other schedules\nfalse otherwise",
+                "type": "Boolean"
+            },
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Device.js",
+            "line": 230,
+            "description": "Checks if there are collisions between device's schedules and group's schedules.",
+            "itemtype": "method",
+            "name": "isGroupSchedulesCollision",
+            "params": [
+                {
+                    "name": "group",
+                    "description": "The group",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "true if there is at least one collision, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "Device",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Group.js",
+            "line": 28,
+            "description": "The group type.",
+            "itemtype": "property",
+            "name": "type",
+            "type": "String",
+            "final": 1,
+            "class": "Group",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Group.js",
+            "line": 43,
+            "description": "Group type.",
+            "itemtype": "property",
+            "name": "TYPE",
+            "type": "String",
+            "access": "private",
+            "tagname": "",
+            "final": 1,
+            "default": "'group'",
+            "class": "Group",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Group.js",
+            "line": 54,
+            "description": "Checks if a schedule is not in collision with other schedules.\n\nGroup schedule should not be in collision with devices inside the group.",
+            "itemtype": "method",
+            "name": "isValidSchedule",
+            "params": [
+                {
+                    "name": "schedule",
+                    "description": "The schedule description object",
+                    "type": "Object"
+                },
+                {
+                    "name": "devices",
+                    "description": "Group devices",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "true if the schedule is not in collision with other schedules\nfalse otherwise",
+                "type": "Boolean"
+            },
+            "class": "Group",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 22,
+            "description": "The manageable's id.",
+            "itemtype": "property",
+            "name": "id",
+            "type": "String",
+            "final": 1,
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 31,
+            "description": "The manageable's name.",
+            "itemtype": "property",
+            "name": "name",
+            "type": "String",
+            "final": 1,
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 40,
+            "description": "The manageable's history.",
+            "itemtype": "property",
+            "name": "history",
+            "type": "Array",
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 48,
+            "description": "The manageable's schedules.",
+            "itemtype": "property",
+            "name": "schedules",
+            "type": "Array",
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 61,
+            "description": "Checks if two schedules are in conflict.",
+            "example": [
+                "\n\n     Conflict examples :\n\n      schedule1 : [------------]\n      schedule2 : [------------]\n\n      schedule1 : [------------]\n      schedule2 :              [------------]\n\n      schedule1 :              [------------]\n      schedule2 : [------------]\n\n      schedule1 : [------------]\n      schedule2 :   [------------]\n\n      schedule1 :   [------------]\n      schedule2 : [------------]\n\n      schedule1 : [------------]\n      schedule2 :   [--------]\n\n      schedule1 :   [--------]\n      schedule2 : [------------]"
+            ],
+            "itemtype": "method",
+            "name": "checkSchedulesConflict",
+            "params": [
+                {
+                    "name": "schedule1",
+                    "description": "Schedule object with :",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "beginDate",
+                            "description": "The begin date of the schedule",
+                            "type": "Date"
+                        },
+                        {
+                            "name": "duration",
+                            "description": "The schedule duration (in ms)",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "recurrent",
+                            "description": "true if this is a daily schedule, false otherwise",
+                            "type": "Boolean",
+                            "optional": true,
+                            "optdefault": "false"
+                        },
+                        {
+                            "name": "endDate",
+                            "description": "The end date of the daily schedule (required if recurrent is set to true)",
+                            "type": "Date",
+                            "optional": true
+                        }
+                    ]
+                },
+                {
+                    "name": "schedule2",
+                    "description": "Schedule object with :",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "beginDate",
+                            "description": "The begin date of the schedule",
+                            "type": "Date"
+                        },
+                        {
+                            "name": "duration",
+                            "description": "The schedule duration",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "recurrent",
+                            "description": "true if this is a daily schedule, false otherwise",
+                            "type": "Boolean",
+                            "optional": true,
+                            "optdefault": "false"
+                        },
+                        {
+                            "name": "endDate",
+                            "description": "The end date of the daily schedule (required if recurrent is set to true)",
+                            "type": "Date",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "true if there are in conflict, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 152,
+            "description": "Adds an historic to manageable's history.",
+            "itemtype": "method",
+            "name": "addHistoric",
+            "params": [
+                {
+                    "name": "historic",
+                    "description": "The historic",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The historic id",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 163,
+            "description": "Removes an historic from manageable's history.",
+            "itemtype": "method",
+            "name": "removeHistoric",
+            "params": [
+                {
+                    "name": "historicId",
+                    "description": "The historic id",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The removed historic or null if not found",
+                "type": "Object|Null"
+            },
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 181,
+            "description": "Removes manageable's history.",
+            "itemtype": "method",
+            "name": "removeHistory",
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 190,
+            "description": "Adds a schedule to manageable's schedules.",
+            "itemtype": "method",
+            "name": "addSchedule",
+            "params": [
+                {
+                    "name": "schedule",
+                    "description": "The schedule",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The schedule id",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 201,
+            "description": "Removes a schedule from manageable's schedules.",
+            "itemtype": "method",
+            "name": "removeSchedule",
+            "params": [
+                {
+                    "name": "scheduleId",
+                    "description": "The schedule id",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The removed schedule or null if not found",
+                "type": "Object|Null"
+            },
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 219,
+            "description": "Gets a schedule.",
+            "itemtype": "method",
+            "name": "getSchedule",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The schedule id",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The schedule or null if not found",
+                "type": "Object|Undefined"
+            },
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 232,
+            "description": "Checks if a schedule is not in collision with other schedules.",
+            "itemtype": "method",
+            "name": "isValidSchedule",
+            "params": [
+                {
+                    "name": "schedule",
+                    "description": "The schedule description object",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "beginDate",
+                            "description": "The begin date of the schedule",
+                            "type": "Date"
+                        },
+                        {
+                            "name": "duration",
+                            "description": "The schedule duration (in ms)",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "recurrent",
+                            "description": "true if this is a daily schedule, false otherwise",
+                            "type": "Boolean",
+                            "optional": true,
+                            "optdefault": "false"
+                        },
+                        {
+                            "name": "endDate",
+                            "description": "The end date of the daily schedule (required if recurrent is set to true)",
+                            "type": "Date",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "true if the schedule is not in collision with other schedules\nfalse otherwise",
+                "type": "Boolean"
+            },
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 261,
+            "description": "Checks if a schedule is actually running.",
+            "itemtype": "method",
+            "name": "isScheduleRunning",
+            "params": [
+                {
+                    "name": "schedule",
+                    "description": "The schedule description object",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "beginDate",
+                            "description": "The begin date of the schedule",
+                            "type": "Date"
+                        },
+                        {
+                            "name": "duration",
+                            "description": "The schedule duration (in ms)",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "recurrent",
+                            "description": "true if this is a daily schedule, false otherwise",
+                            "type": "Boolean",
+                            "optional": true,
+                            "optdefault": "false"
+                        },
+                        {
+                            "name": "endDate",
+                            "description": "The end date of the daily schedule (required if recurrent is set to true)",
+                            "type": "Date",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "true if the schedule is running, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\manageables\\Manageable.js",
+            "line": 297,
+            "description": "Checks if a schedule has expired.\n\nSchedule is considered expired if one of the following condition is filled :\n  - Schedule is not recurrent and schedule has finished\n  - Schedule is recurrent and this is the end date and day schedule has finished",
+            "itemtype": "method",
+            "name": "isScheduleExpired",
+            "params": [
+                {
+                    "name": "schedule",
+                    "description": "The schedule description object",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "beginDate",
+                            "description": "The begin date of the schedule",
+                            "type": "Date"
+                        },
+                        {
+                            "name": "duration",
+                            "description": "The schedule duration (in ms)",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "recurrent",
+                            "description": "true if this is a daily schedule, false otherwise",
+                            "type": "Boolean",
+                            "optional": true,
+                            "optdefault": "false"
+                        },
+                        {
+                            "name": "endDate",
+                            "description": "The end date of the daily schedule (required if recurrent is set to true)",
+                            "type": "Date",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "true if the schedule has expired, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "Manageable",
+            "module": "manageables"
+        },
+        {
+            "file": "app\\server\\models\\DeviceModel.js",
+            "line": 31,
+            "description": "The list of devices' states.",
+            "itemtype": "property",
+            "name": "STATES",
+            "type": "Object",
+            "final": 1,
+            "class": "DeviceModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\DeviceModel.js",
+            "line": 40,
+            "description": "The list of devices' available states.",
+            "itemtype": "property",
+            "name": "AVAILABLE_STATES",
+            "type": "Array",
+            "final": 1,
+            "class": "DeviceModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\DeviceModel.js",
+            "line": 59,
+            "description": "Adds a new device to the devices' collection.",
+            "itemtype": "method",
+            "name": "add",
+            "async": 1,
+            "params": [
+                {
+                    "name": "data",
+                    "description": "A device description object",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "Device's id",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "state",
+                            "description": "Device's state",
+                            "type": "String",
+                            "optional": true
+                        }
+                    ]
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to call when it's done\n  - **Error** The error if an error occurred, null otherwise\n  - **Number** The total amount of items inserted\n  - **Object** The inserted device",
+                    "type": "Function",
+                    "optional": true
+                }
+            ],
+            "class": "DeviceModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\GroupModel.js",
+            "line": 25,
+            "description": "Device provider.",
+            "itemtype": "property",
+            "name": "deviceProvider",
+            "type": "DeviceProvider",
+            "final": 1,
+            "class": "GroupModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\GroupModel.js",
+            "line": 40,
+            "description": "Adds a new group.",
+            "itemtype": "method",
+            "name": "add",
+            "async": 1,
+            "params": [
+                {
+                    "name": "data",
+                    "description": "A group description object",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "Group's id",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "name",
+                            "description": "Group's name",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "history",
+                            "description": "Group's history",
+                            "type": "Array",
+                            "optional": true
+                        }
+                    ]
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to call when it's done\n  - **Error** The error if an error occurred, null otherwise\n  - **Number** The total amount of items inserted\n  - **Object** The inserted group",
+                    "type": "Function",
+                    "optional": true
+                }
+            ],
+            "class": "GroupModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\ManageableModel.js",
+            "line": 26,
+            "description": "Adds an item to an array in a manageable.",
+            "itemtype": "method",
+            "name": "addArrayItem",
+            "access": "private",
+            "tagname": "",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "property",
+                    "description": "The property containing an array",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The value to add",
+                    "type": "Mixed"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to call when it's done\n  - **Error** The error if an error occurred, null otherwise\n  - **Number** The total amount of items updated",
+                    "type": "Function"
+                }
+            ],
+            "class": "ManageableModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\ManageableModel.js",
+            "line": 56,
+            "description": "Removes an item from an array of objects in a manageable.",
+            "itemtype": "method",
+            "name": "removeArrayItem",
+            "access": "private",
+            "tagname": "",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "property",
+                    "description": "The property containing an array",
+                    "type": "String"
+                },
+                {
+                    "name": "propertyKey",
+                    "description": "The property to analyze in array objects to find the item to remove",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The value of the property to analyze in array objects to find the item to remove",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to call when it's done\n  - **Error** The error if an error occurred, null otherwise\n  - **Number** The total amount of items updated",
+                    "type": "Function"
+                }
+            ],
+            "class": "ManageableModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\ManageableModel.js",
+            "line": 98,
+            "description": "Adds a new historic to manageable's history.",
+            "itemtype": "method",
+            "name": "addHistoric",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable item id",
+                    "type": "String"
+                },
+                {
+                    "name": "historic",
+                    "description": "An historic description object",
+                    "type": "Object"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to call when it's done\n  - **Error** The error if an error occurred, null otherwise\n  - **Number** The total amount of items updated",
+                    "type": "Function"
+                }
+            ],
+            "class": "ManageableModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\ManageableModel.js",
+            "line": 113,
+            "description": "Removes an entry from a manageable's history.",
+            "itemtype": "method",
+            "name": "removeHistoric",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "historicId",
+                    "description": "The historic id",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to call when it's done\n  - **Error** The error if an error occurred, null otherwise\n  - **Number** The total amount of items updated",
+                    "type": "Function"
+                }
+            ],
+            "class": "ManageableModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\ManageableModel.js",
+            "line": 128,
+            "description": "Removes an entry from a manageable's history.",
+            "itemtype": "method",
+            "name": "removeHistory",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to call when it's done\n  - **Error** The error if an error occurred, null otherwise\n  - **Number** The total amount of items updated",
+                    "type": "Function"
+                }
+            ],
+            "class": "ManageableModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\ManageableModel.js",
+            "line": 142,
+            "description": "Adds a new schedule to manageable.",
+            "itemtype": "method",
+            "name": "addSchedule",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "schedule",
+                    "description": "A schedule description object",
+                    "type": "Object"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to call when it's done\n  - **Error** The error if an error occurred, null otherwise\n  - **Number** The total amount of items updated",
+                    "type": "Function"
+                }
+            ],
+            "class": "ManageableModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\models\\ManageableModel.js",
+            "line": 158,
+            "description": "Removes a manageable's schedule.",
+            "itemtype": "method",
+            "name": "removeSchedule",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                },
+                {
+                    "name": "scheduleId",
+                    "description": "The schedule id",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to call when it's done\n  - **Error** The error if an error occurred, null otherwise\n  - **Number** The total amount of items updated",
+                    "type": "Function"
+                }
+            ],
+            "class": "ManageableModel",
+            "module": "models"
+        },
+        {
+            "file": "app\\server\\providers\\DeviceProvider.js",
+            "line": 25,
+            "description": "Creates devices indexes.",
+            "itemtype": "method",
+            "name": "createIndexes",
+            "async": 1,
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error if something went wrong, null otherwise",
+                    "type": "Function"
+                }
+            ],
+            "class": "DeviceProvider",
+            "module": "providers"
+        },
+        {
+            "file": "app\\server\\providers\\GroupProvider.js",
+            "line": 25,
+            "description": "Creates groups indexes.",
+            "itemtype": "method",
+            "name": "createIndexes",
+            "async": 1,
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error if something went wrong, null otherwise",
+                    "type": "Function"
+                }
+            ],
+            "class": "GroupProvider",
+            "module": "providers"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 12,
+            "description": "BrowserPilot singleton.",
+            "itemtype": "property",
+            "name": "pilot",
+            "type": "BrowserPilot",
+            "access": "private",
+            "tagname": "",
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 21,
+            "description": "Fired when a browser requests a name modification on a manageable.",
+            "itemtype": "event",
+            "name": "UPDATE_NAME",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable's id",
+                    "type": "String"
+                },
+                {
+                    "name": "name",
+                    "description": "The new manageable name",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "The manageable's type",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 31,
+            "description": "Fired when a browser requests a manageable to be removed.",
+            "itemtype": "event",
+            "name": "REMOVE",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable's id",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "The manageable's type",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 40,
+            "description": "Fired when a browser requests a schedule to be added to a manageable.",
+            "itemtype": "event",
+            "name": "ADD_SCHEDULE",
+            "params": [
+                {
+                    "name": "manageableId",
+                    "description": "The manageable's id",
+                    "type": "String"
+                },
+                {
+                    "name": "schedule",
+                    "description": "The schedule",
+                    "type": "Object"
+                },
+                {
+                    "name": "manageableType",
+                    "description": "The manageable's type",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 50,
+            "description": "Fired when a browser requests a schedule to be removed from a manageable.",
+            "itemtype": "event",
+            "name": "REMOVE_SCHEDULE",
+            "params": [
+                {
+                    "name": "manageableId",
+                    "description": "The manageable's id",
+                    "type": "String"
+                },
+                {
+                    "name": "scheduleId",
+                    "description": "The schedule's id",
+                    "type": "String"
+                },
+                {
+                    "name": "manageableType",
+                    "description": "The manageable's type",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 60,
+            "description": "Fired when a browser requests an historic to be removed from a manageable.",
+            "itemtype": "event",
+            "name": "REMOVE_HISTORIC",
+            "params": [
+                {
+                    "name": "manageableId",
+                    "description": "The manageable's id",
+                    "type": "String"
+                },
+                {
+                    "name": "historicId",
+                    "description": "The historic id",
+                    "type": "String"
+                },
+                {
+                    "name": "manageableType",
+                    "description": "The manageable's type",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 70,
+            "description": "Fired when a browser requests a manageable's history to be purged.",
+            "itemtype": "event",
+            "name": "REMOVE_HISTORY",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable's id",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "The manageable's type",
+                    "type": "Object"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 79,
+            "description": "Fired when something went wrong on the connection with a browser.",
+            "itemtype": "event",
+            "name": "ERROR",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The id of the browser's socket",
+                    "type": "String"
+                },
+                {
+                    "name": "error",
+                    "description": "The socket.io error",
+                    "type": "Error"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 87,
+            "description": "Fired when a browser requests the list of devices.",
+            "itemtype": "event",
+            "name": "GET_DEVICES",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 94,
+            "description": "Fired when a browser requests an update for one or several devices settings.",
+            "itemtype": "event",
+            "name": "GET_DEVICE_SETTINGS",
+            "params": [
+                {
+                    "name": "ids",
+                    "description": "The list of outdated devices",
+                    "type": "Array"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 101,
+            "description": "Fired when a browser requests a state modification on a device.",
+            "itemtype": "event",
+            "name": "UPDATE_DEVICE_STATE",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "state",
+                    "description": "The new device state",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 110,
+            "description": "Fired when a browser requests one or several devices to start a recording session.",
+            "itemtype": "event",
+            "name": "START_DEVICE_SESSION",
+            "params": [
+                {
+                    "name": "ids",
+                    "description": "The list of devices ids on which a new recording session must be started",
+                    "type": "Array"
+                },
+                {
+                    "name": "recordId",
+                    "description": "The id of the recording session to start",
+                    "type": "String",
+                    "optional": true
+                },
+                {
+                    "name": "presetId",
+                    "description": "The id of the preset for the recording session",
+                    "type": "String",
+                    "optional": true
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 120,
+            "description": "Fired when a browser requests one or several devices to stop a recording session.",
+            "itemtype": "event",
+            "name": "STOP_DEVICE_SESSION",
+            "params": [
+                {
+                    "name": "ids",
+                    "description": "The list of devices ids on which a current recording session must be stopped",
+                    "type": "Array"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 128,
+            "description": "Fired when a browser requests one or several devices to add a tag to the recording session.",
+            "itemtype": "event",
+            "name": "INDEX_DEVICE_SESSION",
+            "params": [
+                {
+                    "name": "ids",
+                    "description": "The list of devices ids on which a current recording session must be tagged",
+                    "type": "Array"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 136,
+            "description": "Fired when a browser requests the list of groups.",
+            "itemtype": "event",
+            "name": "GET_GROUPS",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 143,
+            "description": "Fired when a browser requests creation of a new group.",
+            "itemtype": "event",
+            "name": "CREATE_GROUP",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 150,
+            "description": "Fired when a browser requests to add a device to a group.",
+            "itemtype": "event",
+            "name": "ADD_DEVICE_TO_GROUP",
+            "params": [
+                {
+                    "name": "deviceId",
+                    "description": "The device id",
+                    "type": "DeviceId"
+                },
+                {
+                    "name": "groupId",
+                    "description": "The group id",
+                    "type": "GroupId"
+                },
+                {
+                    "name": "callback",
+                    "description": "The function to respond to the browser",
+                    "type": "Function"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 159,
+            "description": "Fired when a browser requests to remove a device from a group.",
+            "itemtype": "event",
+            "name": "REMOVE_DEVICE_FROM_GROUP",
+            "params": [
+                {
+                    "name": "deviceId",
+                    "description": "The device id",
+                    "type": "DeviceId"
+                },
+                {
+                    "name": "groupId",
+                    "description": "The group id",
+                    "type": "GroupId"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 183,
+            "description": "Available browsers' messages fired by the pilot.",
+            "itemtype": "property",
+            "name": "MESSAGES",
+            "type": "Object",
+            "final": 1,
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 237,
+            "description": "Gets BrowserPilot singleton.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "browsersEmitter",
+                    "description": "The browsers' emitter",
+                    "type": "AdvancedEmitter"
+                },
+                {
+                    "name": "namespace",
+                    "description": "The socket browsers' namespace",
+                    "type": "SocketNamespace"
+                }
+            ],
+            "return": {
+                "description": "The browser's pilot",
+                "type": "BrowserPilot"
+            },
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 256,
+            "description": "Informs connected browsers about a new connected device.",
+            "itemtype": "method",
+            "name": "connect",
+            "params": [
+                {
+                    "name": "device",
+                    "description": "The new device",
+                    "type": "Object"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 267,
+            "description": "Informs connected browsers about a manageable's removal.",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Manageable",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable's id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 284,
+            "description": "Informs connected browsers about an update on a manageable's property.",
+            "itemtype": "method",
+            "name": "update",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable to update",
+                    "type": "Manageable",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable's id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "key",
+                    "description": "The manageable property to update",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The new property value",
+                    "type": "Mixed"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 305,
+            "description": "Informs connected browsers that a new schedule has been added to a manageable.",
+            "itemtype": "method",
+            "name": "addSchedule",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Manageable",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable's id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "schedule",
+                    "description": "The new schedule",
+                    "type": "Object"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 324,
+            "description": "Informs connected browsers that a manageable's schedule has been removed.",
+            "itemtype": "method",
+            "name": "removeSchedule",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Manageable",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable's id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "scheduleId",
+                    "description": "The schedule's id",
+                    "type": "String"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 343,
+            "description": "Informs connected browsers that an historic has been added to a manageable's history.",
+            "itemtype": "method",
+            "name": "addHistoric",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Manageable",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable's id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "historic",
+                    "description": "The new historic",
+                    "type": "Object"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 362,
+            "description": "Informs connected browsers that an historic has been removed from a manageable's history.",
+            "itemtype": "method",
+            "name": "removeHistoric",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Manageable",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable's id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "historicId",
+                    "description": "The historic id",
+                    "type": "String"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 381,
+            "description": "Informs connected browsers that history of a manageable has been purged.",
+            "itemtype": "method",
+            "name": "removeHistory",
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable",
+                    "type": "Manageable",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "The manageable's id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "The manageable's type",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 398,
+            "description": "Informs connected browsers that a device's state has changed.",
+            "itemtype": "method",
+            "name": "updateDeviceState",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "newState",
+                    "description": "The new device state",
+                    "type": "String"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 414,
+            "description": "Informs connected browsers that a new group has been created.",
+            "itemtype": "method",
+            "name": "createGroup",
+            "params": [
+                {
+                    "name": "group",
+                    "description": "The new group",
+                    "type": "Group"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 428,
+            "description": "Informs connected browsers that a new device has been added to a group.",
+            "itemtype": "method",
+            "name": "addDeviceToGroup",
+            "params": [
+                {
+                    "name": "deviceId",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "groupId",
+                    "description": "The group id",
+                    "type": "String"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\BrowserPilot.js",
+            "line": 444,
+            "description": "Informs connected browsers that a device has been removed from a group.",
+            "itemtype": "method",
+            "name": "removeDeviceFromGroup",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "Number"
+                }
+            ],
+            "class": "BrowserPilot",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\ManagePlugin.js",
+            "line": 29,
+            "description": "Manage public router.\n\nIt will be automatically mounted on /manage/ by the core.",
+            "itemtype": "property",
+            "name": "router",
+            "type": "Router",
+            "final": 1,
+            "class": "ManagePlugin",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\ManagePlugin.js",
+            "line": 40,
+            "description": "Manage private router.\n\nAll routes associated to the private router require a back end authentication.\nIt will be automatically mounted on /be/manage/ by the core.",
+            "itemtype": "property",
+            "name": "privateRouter",
+            "type": "Router",
+            "final": 1,
+            "class": "ManagePlugin",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\ManagePlugin.js",
+            "line": 52,
+            "description": "Manage web service router.\n\nAll routes associated to the Web Service router will require a Web Service authentication.\nIt will be automatically mounted on /manage/ by the core (but on another server).",
+            "itemtype": "property",
+            "name": "webServiceRouter",
+            "type": "Router",
+            "final": 1,
+            "class": "ManagePlugin",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\ManagePlugin.js",
+            "line": 71,
+            "description": "Prepares plugin by creating required database indexes.\n\nOptional \"init\" method automatically called by core application\nafter plugin is loaded and before it is started.",
+            "itemtype": "method",
+            "name": "init",
+            "async": 1,
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error if something went wrong, null otherwise",
+                    "type": "Function"
+                }
+            ],
+            "class": "ManagePlugin",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\ManagePlugin.js",
+            "line": 103,
+            "description": "Creates a manager to handle groups and devices through socket namespaces.\n\nBrowsers (back end interfaces) are live-synchronized with connected devices.\n\nOptional \"start\" method automatically called by core application\nafter plugin is loaded and initialized.",
+            "itemtype": "method",
+            "name": "start",
+            "async": 1,
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error if something went wrong, null otherwise",
+                    "type": "Function"
+                }
+            ],
+            "class": "ManagePlugin",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 16,
+            "description": "Manager singleton.",
+            "itemtype": "property",
+            "name": "manager",
+            "type": "Manager",
+            "access": "private",
+            "tagname": "",
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 41,
+            "description": "The browsers' pilot to interact with browsers.",
+            "itemtype": "property",
+            "name": "browsersPilot",
+            "type": "BrowserPilot",
+            "final": 1,
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 50,
+            "description": "The devices' pilot to interact with devices.",
+            "itemtype": "property",
+            "name": "devicesPilot",
+            "type": "DevicePilot",
+            "final": 1,
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 59,
+            "description": "The cache to store devices and groups.",
+            "itemtype": "property",
+            "name": "cache",
+            "type": "Cache",
+            "final": 1,
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 68,
+            "description": "The schedule manager.",
+            "itemtype": "property",
+            "name": "scheduleManager",
+            "type": "ScheduleManager",
+            "final": 1,
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 77,
+            "description": "Model to manage groups.",
+            "itemtype": "property",
+            "name": "groupModel",
+            "type": "GroupModel",
+            "final": 1,
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 86,
+            "description": "Model to manage devices.",
+            "itemtype": "property",
+            "name": "deviceModel",
+            "type": "DeviceModel",
+            "final": 1,
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 101,
+            "description": "Builds an history message.\n\nHistoric are composed of a date, a message as a translation key\nand parameters for the translation key.",
+            "itemtype": "method",
+            "name": "buildHistoric",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "The historic message",
+                    "type": "String"
+                },
+                {
+                    "name": "params",
+                    "description": "Message parameters",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The historic object",
+                "type": "Object"
+            },
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 124,
+            "description": "Adds an historic to device's history.\n\nSaves the historic in database and cache then informs browsers about\nthe new historic.",
+            "itemtype": "method",
+            "name": "addGroupHistoric",
+            "access": "private",
+            "tagname": "",
+            "async": 1,
+            "params": [
+                {
+                    "name": "group",
+                    "description": "The group",
+                    "type": "Group"
+                },
+                {
+                    "name": "message",
+                    "description": "The historic message",
+                    "type": "String"
+                },
+                {
+                    "name": "messageParams",
+                    "description": "Message parameters for message translation",
+                    "type": "Object"
+                },
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error is something went wrong",
+                    "type": "Function",
+                    "optional": true
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 157,
+            "description": "Adds an historic to device's history.\n\nUse modifier *addToGroup* to also add the historic into history of device's group.\nSaves the history in database and cache then informs browsers about\nthe new historic.",
+            "itemtype": "method",
+            "name": "addDeviceHistoric",
+            "access": "private",
+            "tagname": "",
+            "async": 1,
+            "params": [
+                {
+                    "name": "device",
+                    "description": "The device",
+                    "type": "Device"
+                },
+                {
+                    "name": "message",
+                    "description": "The historic message",
+                    "type": "String"
+                },
+                {
+                    "name": "messageParams",
+                    "description": "Message parameters for message translation",
+                    "type": "Object"
+                },
+                {
+                    "name": "addToGroup",
+                    "description": "true to also add the historic to the history of the device's group",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error is something went wrong",
+                    "type": "Function"
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 212,
+            "description": "Registers a device if not already registered.\n\nAdds devide to database and cache.",
+            "itemtype": "method",
+            "name": "registerDevice",
+            "access": "private",
+            "tagname": "",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The id of the device to register",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error if something went wrong, null otherwise\n - **Object** The registered device\n - **Boolean** true if the device wasn't registered",
+                    "type": "Function"
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 249,
+            "description": "Deregisters a schedule.",
+            "itemtype": "method",
+            "name": "deregisterSchedule",
+            "access": "private",
+            "tagname": "",
+            "async": 1,
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable associated to the schedule",
+                    "type": "String"
+                },
+                {
+                    "name": "scheduleId",
+                    "description": "The schedule id",
+                    "type": "Object"
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 268,
+            "description": "Registers a new schedule.",
+            "itemtype": "method",
+            "name": "registerSchedule",
+            "access": "private",
+            "tagname": "",
+            "async": 1,
+            "params": [
+                {
+                    "name": "manageable",
+                    "description": "The manageable associated to the schedule",
+                    "type": "String"
+                },
+                {
+                    "name": "schedule",
+                    "description": "The schedule description object",
+                    "type": "Object"
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 442,
+            "description": "Initializes listeners on devices' messages.",
+            "itemtype": "method",
+            "name": "initDevicesListeners",
+            "access": "private",
+            "tagname": "",
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 643,
+            "description": "Initializes listeners on browsers' messages.",
+            "itemtype": "method",
+            "name": "initBrowsersListeners",
+            "access": "private",
+            "tagname": "",
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 1195,
+            "description": "Starts manager.\n\nWhen started the manager starts receiving events from\nboth devices and browsers. It also populates cache with all registered\ndevices and groups.\n\nAll expired schedules' jobs of devices and groups are removed. Other schedules\nare registered.",
+            "itemtype": "method",
+            "name": "start",
+            "async": 1,
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error if something went wrong, null otherwise",
+                    "type": "Function"
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 1288,
+            "description": "Asks device to modify its name.",
+            "itemtype": "method",
+            "name": "updateDeviceName",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The id of the device",
+                    "type": "String"
+                },
+                {
+                    "name": "name",
+                    "description": "The new device's name",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error if something went wrong, null otherwise",
+                    "type": "Function"
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 1316,
+            "description": "Updates a group's name.",
+            "itemtype": "method",
+            "name": "updateGroupName",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The id of the group",
+                    "type": "String"
+                },
+                {
+                    "name": "name",
+                    "description": "The new group's name",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error if something went wrong, null otherwise",
+                    "type": "Function"
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 1352,
+            "description": "Removes an in-memory stored manageable with its id.",
+            "itemtype": "method",
+            "name": "removeFromCache",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The manageable id",
+                    "type": "String"
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 1365,
+            "description": "Gets the list of devices from cache.",
+            "itemtype": "method",
+            "name": "getDevices",
+            "return": {
+                "description": "The list of devices in cache",
+                "type": "Array"
+            },
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 1380,
+            "description": "Gets the list of groups from cache.",
+            "itemtype": "method",
+            "name": "getGroups",
+            "return": {
+                "description": "The list of groups in cache",
+                "type": "Array"
+            },
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 1395,
+            "description": "Removes a device.",
+            "itemtype": "method",
+            "name": "removeDevice",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error if something went wrong",
+                    "type": "Function"
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 1449,
+            "description": "Removes a group.",
+            "itemtype": "method",
+            "name": "removeGroup",
+            "async": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The device id",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "Function to call when it's done with :\n - **Error** An error if something went wrong",
+                    "type": "Function"
+                }
+            ],
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\Manager.js",
+            "line": 1498,
+            "description": "Gets Manager singleton.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "devicesPilot",
+                    "description": "Devices' pilot to interact with devices",
+                    "type": "DevicePilot",
+                    "optional": true
+                },
+                {
+                    "name": "browsersPilot",
+                    "description": "Browsers' pilot to interact with browsers",
+                    "type": "BrowserPilot",
+                    "optional": true
+                },
+                {
+                    "name": "deviceModel",
+                    "description": "Model to manipulate devices",
+                    "type": "DeviceModel",
+                    "optional": true
+                },
+                {
+                    "name": "groupModel",
+                    "description": "Model to manipulate groups",
+                    "type": "GroupModel",
+                    "optional": true
+                },
+                {
+                    "name": "scheduleManager",
+                    "description": "A schedule manager to add / remove schedule jobs",
+                    "type": "ScheduleManager",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The manager",
+                "type": "Manager"
+            },
+            "class": "Manager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\ScheduleManager.js",
+            "line": 23,
+            "description": "The list of registered jobs in the cron.",
+            "itemtype": "property",
+            "name": "jobs",
+            "type": "Array",
+            "final": 1,
+            "class": "ScheduleManager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\ScheduleManager.js",
+            "line": 37,
+            "description": "Removes a job.",
+            "itemtype": "method",
+            "name": "removeJob",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The id of the job to remove",
+                    "type": "String"
+                }
+            ],
+            "class": "ScheduleManager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\ScheduleManager.js",
+            "line": 57,
+            "description": "Creates a new job.",
+            "itemtype": "method",
+            "name": "addJob",
+            "params": [
+                {
+                    "name": "date",
+                    "description": "The date to execute the job",
+                    "type": "Date"
+                },
+                {
+                    "name": "endDate",
+                    "description": "End date for daily jobs",
+                    "type": "Date",
+                    "optional": true
+                },
+                {
+                    "name": "isDaily",
+                    "description": "true if the job must be daily, false otherwise",
+                    "type": "Boolean",
+                    "optional": true
+                },
+                {
+                    "name": "functionToExecute",
+                    "description": "The function to execute at the specified date",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "The job id",
+                "type": "String"
+            },
+            "class": "ScheduleManager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 16,
+            "description": "A socket connection has been established with the browser.",
+            "itemtype": "property",
+            "name": "CONNECTED",
+            "type": "String",
+            "default": "'connection'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 26,
+            "description": "Browser asks for the modification of a manageable's name.",
+            "itemtype": "property",
+            "name": "UPDATE_NAME",
+            "type": "String",
+            "default": "'updateName'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 36,
+            "description": "Browser asks to remove a manageable.",
+            "itemtype": "property",
+            "name": "REMOVE",
+            "type": "String",
+            "default": "'remove'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 46,
+            "description": "Browser asks to remove a manageable's historic.",
+            "itemtype": "property",
+            "name": "REMOVE_HISTORIC",
+            "type": "String",
+            "default": "'removeHistoric'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 56,
+            "description": "Browser asks to add a schedule to a manageable.",
+            "itemtype": "property",
+            "name": "ADD_SCHEDULE",
+            "type": "String",
+            "default": "'addSchedule'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 66,
+            "description": "Browser asks to remove a schedule from a manageable.",
+            "itemtype": "property",
+            "name": "REMOVE_SCHEDULE",
+            "type": "String",
+            "default": "'removeSchedule'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 76,
+            "description": "Browser asks to remove the whole history from a manageable.",
+            "itemtype": "property",
+            "name": "REMOVE_HISTORY",
+            "type": "String",
+            "default": "'removeHistory'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 86,
+            "description": "Browser asks the list of devices.",
+            "itemtype": "property",
+            "name": "GET_DEVICES",
+            "type": "String",
+            "default": "'devices'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 96,
+            "description": "Browser asks devices' settings.",
+            "itemtype": "property",
+            "name": "GET_DEVICE_SETTINGS",
+            "type": "String",
+            "default": "'devices.settings'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 106,
+            "description": "Browser asks a device's state.",
+            "itemtype": "property",
+            "name": "UPDATE_DEVICE_STATE",
+            "type": "String",
+            "default": "'devices.updateState'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 116,
+            "description": "Browser asks devices' to start a recording session.",
+            "itemtype": "property",
+            "name": "START_DEVICE_SESSION",
+            "type": "String",
+            "default": "'devices.startSession'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 126,
+            "description": "Browser asks devices' to stop a recording session.",
+            "itemtype": "property",
+            "name": "STOP_DEVICE_SESSION",
+            "type": "String",
+            "default": "'devices.stopSession'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 136,
+            "description": "Browser asks devices' to index a recording session.",
+            "itemtype": "property",
+            "name": "INDEX_DEVICE_SESSION",
+            "type": "String",
+            "default": "'devices.indexSession'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 146,
+            "description": "Browser asks the list of groups.",
+            "itemtype": "property",
+            "name": "GET_GROUPS",
+            "type": "String",
+            "default": "'groups'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 156,
+            "description": "Browser asks to create a new group.",
+            "itemtype": "property",
+            "name": "CREATE_GROUP",
+            "type": "String",
+            "default": "'group.create'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 166,
+            "description": "Browser asks to add a device to a group.",
+            "itemtype": "property",
+            "name": "ADD_DEVICE_TO_GROUP",
+            "type": "String",
+            "default": "'group.addDevice'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 176,
+            "description": "Browser asks to remove a device from a group.",
+            "itemtype": "property",
+            "name": "REMOVE_DEVICE_FROM_GROUP",
+            "type": "String",
+            "default": "'group.removeDevice'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 186,
+            "description": "Socket connection with a browser has been lost.",
+            "itemtype": "property",
+            "name": "DISCONNECTED",
+            "type": "String",
+            "default": "'disconnect'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersMessages.js",
+            "line": 196,
+            "description": "Socket connection with a browser encountered an error.",
+            "itemtype": "property",
+            "name": "ERROR",
+            "type": "String",
+            "default": "'error'",
+            "final": 1,
+            "class": "BROWSERS_MESSAGES",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersPilotManager.js",
+            "line": 16,
+            "description": "The browsers' pilot.",
+            "itemtype": "property",
+            "name": "pilot",
+            "type": "BrowserPilot",
+            "access": "private",
+            "tagname": "",
+            "class": "browsersPilotManager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersPilotManager.js",
+            "line": 25,
+            "description": "Sets the browsers' pilot singleton.",
+            "itemtype": "method",
+            "name": "set",
+            "static": 1,
+            "params": [
+                {
+                    "name": "pilot",
+                    "description": "The new browsers' pilot",
+                    "type": "BrowserPilot"
+                }
+            ],
+            "class": "browsersPilotManager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersPilotManager.js",
+            "line": 37,
+            "description": "Gets browsers' pilot singleton.",
+            "itemtype": "method",
+            "name": "get",
+            "static": 1,
+            "return": {
+                "description": "The browsers' pilot",
+                "type": "BrowserPilot|Null"
+            },
+            "class": "browsersPilotManager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\browsersPilotManager.js",
+            "line": 48,
+            "description": "Removes browsers' pilot singleton from the manager.",
+            "itemtype": "method",
+            "name": "remove",
+            "static": 1,
+            "class": "browsersPilotManager",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 18,
+            "description": "Unidentified error.",
+            "itemtype": "property",
+            "name": "UNKNOWN_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 30,
+            "description": "Removing a manageable failed.",
+            "itemtype": "property",
+            "name": "REMOVE_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 42,
+            "description": "Removing a group failed, group was not found.",
+            "itemtype": "property",
+            "name": "REMOVE_GROUP_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 54,
+            "description": "Updating device's name failed.",
+            "itemtype": "property",
+            "name": "UPDATE_DEVICE_NAME_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 66,
+            "description": "Updating group's name failed.",
+            "itemtype": "property",
+            "name": "UPDATE_GROUP_NAME_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 78,
+            "description": "Updating device's name failed, device was not found.",
+            "itemtype": "property",
+            "name": "UPDATE_DEVICE_NAME_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 90,
+            "description": "Updating group's name failed, group was not found.",
+            "itemtype": "property",
+            "name": "UPDATE_GROUP_NAME_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 102,
+            "description": "Starting a device's record failed.",
+            "itemtype": "property",
+            "name": "START_DEVICE_SESSION_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 114,
+            "description": "Starting a device's record failed, device was not found.",
+            "itemtype": "property",
+            "name": "START_DEVICE_SESSION_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 126,
+            "description": "Stopping a device's record failed.",
+            "itemtype": "property",
+            "name": "STOP_DEVICE_SESSION_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 138,
+            "description": "Stopping a device's record failed, device was not found.",
+            "itemtype": "property",
+            "name": "STOP_DEVICE_SESSION_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 150,
+            "description": "Indexing a device's record failed.",
+            "itemtype": "property",
+            "name": "INDEX_DEVICE_SESSION_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 162,
+            "description": "Indexing a device's record failed, device was not found.",
+            "itemtype": "property",
+            "name": "INDEX_DEVICE_SESSION_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 174,
+            "description": "Updating a device's state failed.",
+            "itemtype": "property",
+            "name": "UPDATE_DEVICE_STATE_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 186,
+            "description": "Updating a device's state failed, device was not found.",
+            "itemtype": "property",
+            "name": "UPDATE_DEVICE_STATE_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 198,
+            "description": "Removing an historic from a manageable's history failed.",
+            "itemtype": "property",
+            "name": "REMOVE_HISTORIC_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 210,
+            "description": "Removing an historic from a manageable's history failed, manageable was not found.",
+            "itemtype": "property",
+            "name": "REMOVE_HISTORIC_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 222,
+            "description": "Removing a manageable's history failed.",
+            "itemtype": "property",
+            "name": "REMOVE_HISTORY_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 234,
+            "description": "Removing a manageable's history failed, manageable was not found.",
+            "itemtype": "property",
+            "name": "REMOVE_HISTORY_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 246,
+            "description": "Adding a schedule to a manageable failed, schedule is not valid.",
+            "itemtype": "property",
+            "name": "ADD_SCHEDULE_INVALID_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 258,
+            "description": "Adding a schedule to a manageable failed, manageable was not found.",
+            "itemtype": "property",
+            "name": "ADD_SCHEDULE_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 270,
+            "description": "Adding a schedule to a manageable failed.",
+            "itemtype": "property",
+            "name": "ADD_SCHEDULE_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 282,
+            "description": "Removing a schedule from a manageable failed, schedule is actually running.",
+            "itemtype": "property",
+            "name": "REMOVE_SCHEDULE_RUNNING_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 294,
+            "description": "Removing a schedule from a manageable failed, manageable or schedule was not found.",
+            "itemtype": "property",
+            "name": "REMOVE_SCHEDULE_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 306,
+            "description": "Creating a group failed.",
+            "itemtype": "property",
+            "name": "CREATE_GROUP_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 318,
+            "description": "Adding a device to a group failed.",
+            "itemtype": "property",
+            "name": "ADD_DEVICE_TO_GROUP_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 330,
+            "description": "Adding a device to a group failed, device or group was not found.",
+            "itemtype": "property",
+            "name": "ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 342,
+            "description": "Adding a device to a group failed, schedules of the device are in conflict with schedules of the group.",
+            "itemtype": "property",
+            "name": "ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 354,
+            "description": "Removing a manageable failed, manageable was not found.",
+            "itemtype": "property",
+            "name": "REMOVE_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 366,
+            "description": "Removing a device from a group failed, device or group was not found.",
+            "itemtype": "property",
+            "name": "REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 378,
+            "description": "Removing a device from a group failed.",
+            "itemtype": "property",
+            "name": "REMOVE_DEVICE_FROM_GROUP_ERROR",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 392,
+            "description": "Updating manageable's name failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "UPDATE_NAME_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 404,
+            "description": "Removing a manageable failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "REMOVE_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 416,
+            "description": "Updating a device's state failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "UPDATE_DEVICE_STATE_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 428,
+            "description": "Removing an historic from a manageable's history failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "REMOVE_HISTORIC_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 440,
+            "description": "Adding a schedule to a manageable failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "ADD_SCHEDULE_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 452,
+            "description": "Starting a device's record failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "START_DEVICE_SESSION_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 464,
+            "description": "Stopping a device's record failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "STOP_DEVICE_SESSION_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 476,
+            "description": "Indexing a device's record failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "INDEX_DEVICE_SESSION_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 488,
+            "description": "Removing a schedule from a manageable failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "REMOVE_SCHEDULE_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 500,
+            "description": "Removing the whole history of a manageable failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "REMOVE_HISTORY_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 512,
+            "description": "Gettings device's settings failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "GET_DEVICE_SETTINGS_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 524,
+            "description": "Adding a device to a group failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "ADD_DEVICE_TO_GROUP_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 536,
+            "description": "Removing a device from a group failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "REMOVE_DEVICE_FROM_GROUP_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        },
+        {
+            "file": "app\\server\\errors.js",
+            "line": 548,
+            "description": "Removing a group failed, wrong parameters.",
+            "itemtype": "property",
+            "name": "REMOVE_GROUP_WRONG_PARAMETERS",
+            "type": "Object",
+            "final": 1,
+            "class": "ERRORS",
+            "module": "manage"
+        }
+    ],
+    "warnings": []
+}
