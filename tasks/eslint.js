@@ -11,6 +11,7 @@ module.exports = {
       'conf.js',
       'Gruntfile.js',
       'install.js',
+      'flightplan.js',
       'tasks/**/*.js',
       'tests/**/*.js',
       'app/**/*.js',
