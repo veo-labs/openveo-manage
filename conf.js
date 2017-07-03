@@ -40,14 +40,19 @@ module.exports = {
   },
   permissions: [
     {
-      id: 'manage-access-page',
-      name: 'MANAGE.PERMISSIONS.ACCESS_PAGE_NAME'
-    },
-    {
-      id: 'manage-group-detail-access-page',
-      name: 'MANAGE.PERMISSIONS.ACCESS_GROUP_DETAIL_PAGE_NAME',
-      paths: [
-        'get /manage/group-detail*'
+      label: 'MANAGE.PERMISSIONS.GROUP_MANAGE',
+      permissions: [
+        {
+          id: 'manage-access-page',
+          name: 'MANAGE.PERMISSIONS.ACCESS_PAGE_NAME'
+        },
+        {
+          id: 'manage-group-detail-access-page',
+          name: 'MANAGE.PERMISSIONS.ACCESS_GROUP_DETAIL_PAGE_NAME',
+          paths: [
+            'get /manage/group-detail*'
+          ]
+        }
       ]
     }
   ],

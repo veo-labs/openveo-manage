@@ -1,6 +1,6 @@
 {
   "MENU": {
-	"MANAGE": "Manage"
+  "MANAGE": "Manage"
   },
   "REFUSED": {
     "TITLE": "Encodeurs refusés"
@@ -143,6 +143,7 @@
     "DELETE_GROUPS_NAME": "Supprimer les groupes d'encodeurs",
     "GROUP_DEVICES": "Encodeurs",
     "GROUP_GROUPS": "Groupes d'encodeurs",
+    "GROUP_MANAGE": "Manage",
     "ACCESS_PAGE_NAME": "Accès à la page du manage",
     "ACCESS_GROUP_DETAIL_PAGE_NAME": "Accès à la page du détail d'un groupe du manage"
   },

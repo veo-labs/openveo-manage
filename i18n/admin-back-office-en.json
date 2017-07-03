@@ -143,6 +143,7 @@
     "DELETE_GROUPS_NAME": "Remove groups of encoders",
     "GROUP_DEVICES": "Encoders",
     "GROUP_GROUPS": "Groups of encoders",
+    "GROUP_MANAGE": "Manage",
     "ACCESS_PAGE_NAME": "Access Manage page",
     "ACCESS_GROUP_DETAIL_PAGE_NAME": "Access Manage group detail page"
   },
