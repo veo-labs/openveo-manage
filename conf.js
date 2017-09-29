@@ -59,6 +59,7 @@ module.exports = {
   backOffice: {
     menu: [
       {
+        weight: -101,
         label: 'MANAGE.MENU.MANAGE',
         path: 'manage',
         permission: 'manage-access-page'
