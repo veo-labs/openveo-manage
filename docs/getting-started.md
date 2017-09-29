@@ -2,7 +2,7 @@
 
 From [OpenVeo](https://github.com/veo-labs/openveo-core) root:
 
-    npm install @openveo/manage
+    npm install @openveo/manage --production
 
 # Start / Restart OpenVeo
 
