@@ -1,0 +1,209 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "What's OpenVeo Manage?\n\n\nOpenVeo Manage is an \nOpenVeo\n plugin.\n\n\nOpenVeo Manage offers the possibility to manage encoders:\n\n\n\n\nList all encoders and groups of encoders\n\n\nCreate / remove encoders or groups of encoders\n\n\nCreate / remove scheduled jobs from encoders or group of encoders\n\n\nDisplay encoders' information\n\n\nStart, tag and stop a record\n\n\n\n\nScreenshots\n\n\nBack end manage\n\n\n\n\nBack end manage group detail",
+            "title": "INTRODUCTION"
+        },
+        {
+            "location": "/#whats-openveo-manage",
+            "text": "OpenVeo Manage is an  OpenVeo  plugin.  OpenVeo Manage offers the possibility to manage encoders:   List all encoders and groups of encoders  Create / remove encoders or groups of encoders  Create / remove scheduled jobs from encoders or group of encoders  Display encoders' information  Start, tag and stop a record",
+            "title": "What's OpenVeo Manage?"
+        },
+        {
+            "location": "/#screenshots",
+            "text": "",
+            "title": "Screenshots"
+        },
+        {
+            "location": "/#back-end-manage",
+            "text": "",
+            "title": "Back end manage"
+        },
+        {
+            "location": "/#back-end-manage-group-detail",
+            "text": "",
+            "title": "Back end manage group detail"
+        },
+        {
+            "location": "/getting-started/",
+            "text": "Installation\n\n\nFrom \nOpenVeo\n root:\n\n\nnpm install @openveo/manage --production\n\n\n\nStart / Restart OpenVeo\n\n\nOpenVeo Manage is now installed. You can start / restart OpenVeo:\n\n\nnode server.js\n\n\n\nLog to the back end\n\n\nYou can now log to the back end to access Manage plugin administration pages.",
+            "title": "Getting started"
+        },
+        {
+            "location": "/getting-started/#installation",
+            "text": "From  OpenVeo  root:  npm install @openveo/manage --production",
+            "title": "Installation"
+        },
+        {
+            "location": "/getting-started/#start-restart-openveo",
+            "text": "OpenVeo Manage is now installed. You can start / restart OpenVeo:  node server.js",
+            "title": "Start / Restart OpenVeo"
+        },
+        {
+            "location": "/getting-started/#log-to-the-back-end",
+            "text": "You can now log to the back end to access Manage plugin administration pages.",
+            "title": "Log to the back end"
+        },
+        {
+            "location": "/pluginsDevelopers/api/",
+            "text": "Server side API (Node.js)\n\n\nActually, OpenVeo Manage does not expose any server side APIs.\n\n\nBackend client side API (AngularJS)\n\n\nOpenVeo Manage \nbackend API\n exposes an API (AngularJS components) to be used by other plugins.",
+            "title": "API"
+        },
+        {
+            "location": "/pluginsDevelopers/api/#server-side-api-nodejs",
+            "text": "Actually, OpenVeo Manage does not expose any server side APIs.",
+            "title": "Server side API (Node.js)"
+        },
+        {
+            "location": "/pluginsDevelopers/api/#backend-client-side-api-angularjs",
+            "text": "OpenVeo Manage  backend API  exposes an API (AngularJS components) to be used by other plugins.",
+            "title": "Backend client side API (AngularJS)"
+        },
+        {
+            "location": "/developers/basics/",
+            "text": "Interact with encoders\n\n\nManage uses \nOpenVeo Devices API Plugin\n to interact with encoders.\n\n\nInteract with browsers\n\n\nManage uses OpenVeo Socket namespaces to control the back end interface and thus communicate with browsers in real time.",
+            "title": "Basics"
+        },
+        {
+            "location": "/developers/basics/#interact-with-encoders",
+            "text": "Manage uses  OpenVeo Devices API Plugin  to interact with encoders.",
+            "title": "Interact with encoders"
+        },
+        {
+            "location": "/developers/basics/#interact-with-browsers",
+            "text": "Manage uses OpenVeo Socket namespaces to control the back end interface and thus communicate with browsers in real time.",
+            "title": "Interact with browsers"
+        },
+        {
+            "location": "/developers/installation/",
+            "text": "Installation\n\n\nTo install OpenVeo Manage you first need to install OpenVeo Core if not already done.\n\n\nOpenVeo Core\n\n\nInstall @openveo/core package\n\n\n# Move to your workspace directory\ncd /WORKSPACE_PATH\n\n# Create directory for OpenVeo core\nmkdir openveo-core\n\n# Install OpenVeo core in this directory\n# See OpenVeo core documentation for more information\n\n\n\nYour workspace should look like this:\n\n\n.\n\u251c\u2500\u2500 openveo-core\n\n\n\n\nCreate NPM links for openveo-api and openveo-test\n\n\nIn a classical NPM project @openveo/manage package should be installed in /WORKSPACE_PATH/openveo-core/node_modules/@openveo/manage. For development, the first thing which comes to mind is to create a clone of the OpenVeo Manage project inside this repository. But doing this will prevent npm install from working and will create a complicated development architecture with the risk to erase the repository at any time.\n\n\nWe use \nNPM links\n to deal with this problem and store OpenVeo Manage inside /WORKSPACE_PATH/openveo-manage. But there is a catch. OpenVeo Manage need both @openveo/api and @openveo/test of the core. As packages @openveo/manage and @openveo/core are installed in two different locations, package @openveo/manage won't find @openveo/api nor @openveo/test in its Node.JS path. That's why we have to create NPM links for both @openveo/api and @openveo/test and refer to it inside @openveo/manage.\n\n\n# Create a link for @openveo/api\ncd /WORKSPACE_PATH/openveo-core/node_modules/@openveo/api\nnpm link\n\n# Create a link for @openveo/test\ncd /WORKSPACE_PATH/openveo-core/node_modules/@openveo/test\nnpm link\n\n\n\nOpenVeo Manage\n\n\nClone project from git\n\n\n# Clone project into workspace\ncd /WORKSPACE_PATH/\ngit clone git@github.com:veo-labs/openveo-manage.git\n\n\n\nYour workspace should look like this:\n\n\n.\n\u251c\u2500\u2500 openveo-core\n\u251c\u2500\u2500 openveo-manage\n\n\n\n\nLink openveo-api and openveo-test\n\n\nWhen installing OpenVeo Core we created NPM links for @openveo/api and @openveo/test. We can now refer to this links.\n\n\n# Install dependencies @openveo/api and @openveo/test using NPM links\ncd /WORKSPACE_PATH/openveo-manage\nnpm link @openveo/api\nnpm link @openveo/test\n\n\n\nInstall project's dependencies\n\n\ncd /WORKSPACE_PATH/openveo-manage\nnpm install\n\n\n\nInstall plugin\n\n\nTo be able to install @openveo/manage in @openveo/core we create an NPM link of @openveo/manage and refer to it in the core.\n\n\nCreate an NPM link\n\n\n# Create a link for @openveo/manage\ncd /WORKSPACE_PATH/openveo-manage\nnpm link\n\n\n\nLink project to core\n\n\n# Install dependency @openveo/manage using NPM links\ncd /WORKSPACE_PATH/openveo-core\nnpm link @openveo/manage",
+            "title": "Installation"
+        },
+        {
+            "location": "/developers/installation/#installation",
+            "text": "To install OpenVeo Manage you first need to install OpenVeo Core if not already done.",
+            "title": "Installation"
+        },
+        {
+            "location": "/developers/installation/#openveo-core",
+            "text": "",
+            "title": "OpenVeo Core"
+        },
+        {
+            "location": "/developers/installation/#install-openveocore-package",
+            "text": "# Move to your workspace directory\ncd /WORKSPACE_PATH\n\n# Create directory for OpenVeo core\nmkdir openveo-core\n\n# Install OpenVeo core in this directory\n# See OpenVeo core documentation for more information  Your workspace should look like this:  .\n\u251c\u2500\u2500 openveo-core",
+            "title": "Install @openveo/core package"
+        },
+        {
+            "location": "/developers/installation/#create-npm-links-for-openveo-api-and-openveo-test",
+            "text": "In a classical NPM project @openveo/manage package should be installed in /WORKSPACE_PATH/openveo-core/node_modules/@openveo/manage. For development, the first thing which comes to mind is to create a clone of the OpenVeo Manage project inside this repository. But doing this will prevent npm install from working and will create a complicated development architecture with the risk to erase the repository at any time.  We use  NPM links  to deal with this problem and store OpenVeo Manage inside /WORKSPACE_PATH/openveo-manage. But there is a catch. OpenVeo Manage need both @openveo/api and @openveo/test of the core. As packages @openveo/manage and @openveo/core are installed in two different locations, package @openveo/manage won't find @openveo/api nor @openveo/test in its Node.JS path. That's why we have to create NPM links for both @openveo/api and @openveo/test and refer to it inside @openveo/manage.  # Create a link for @openveo/api\ncd /WORKSPACE_PATH/openveo-core/node_modules/@openveo/api\nnpm link\n\n# Create a link for @openveo/test\ncd /WORKSPACE_PATH/openveo-core/node_modules/@openveo/test\nnpm link",
+            "title": "Create NPM links for openveo-api and openveo-test"
+        },
+        {
+            "location": "/developers/installation/#openveo-manage",
+            "text": "",
+            "title": "OpenVeo Manage"
+        },
+        {
+            "location": "/developers/installation/#clone-project-from-git",
+            "text": "# Clone project into workspace\ncd /WORKSPACE_PATH/\ngit clone git@github.com:veo-labs/openveo-manage.git  Your workspace should look like this:  .\n\u251c\u2500\u2500 openveo-core\n\u251c\u2500\u2500 openveo-manage",
+            "title": "Clone project from git"
+        },
+        {
+            "location": "/developers/installation/#link-openveo-api-and-openveo-test",
+            "text": "When installing OpenVeo Core we created NPM links for @openveo/api and @openveo/test. We can now refer to this links.  # Install dependencies @openveo/api and @openveo/test using NPM links\ncd /WORKSPACE_PATH/openveo-manage\nnpm link @openveo/api\nnpm link @openveo/test",
+            "title": "Link openveo-api and openveo-test"
+        },
+        {
+            "location": "/developers/installation/#install-projects-dependencies",
+            "text": "cd /WORKSPACE_PATH/openveo-manage\nnpm install",
+            "title": "Install project's dependencies"
+        },
+        {
+            "location": "/developers/installation/#install-plugin",
+            "text": "To be able to install @openveo/manage in @openveo/core we create an NPM link of @openveo/manage and refer to it in the core.",
+            "title": "Install plugin"
+        },
+        {
+            "location": "/developers/installation/#create-an-npm-link",
+            "text": "# Create a link for @openveo/manage\ncd /WORKSPACE_PATH/openveo-manage\nnpm link",
+            "title": "Create an NPM link"
+        },
+        {
+            "location": "/developers/installation/#link-project-to-core",
+            "text": "# Install dependency @openveo/manage using NPM links\ncd /WORKSPACE_PATH/openveo-core\nnpm link @openveo/manage",
+            "title": "Link project to core"
+        },
+        {
+            "location": "/developers/back-end/",
+            "text": "Introduction\n\n\nManage back end pages are loaded by \nOpenVeo\n.\n\n\nAs expected by OpenVeo, Manage defines an AngularJS module \nov.manage\n.\n\n\nModules\n\n\nMain module (\nov.manage\n)\n\n\nManage main module defines the following routes:\n\n\n\n\n/manage/\n to display the list of groups and devices\n\n\n/manage/group-detail/:id\n to display the content of a group\n\n\n\n\nNb:\n Available services / filters defined in \nov.manage\n modules are described in the \nAPI\n.",
+            "title": "Back end AngularJS"
+        },
+        {
+            "location": "/developers/back-end/#introduction",
+            "text": "Manage back end pages are loaded by  OpenVeo .  As expected by OpenVeo, Manage defines an AngularJS module  ov.manage .",
+            "title": "Introduction"
+        },
+        {
+            "location": "/developers/back-end/#modules",
+            "text": "",
+            "title": "Modules"
+        },
+        {
+            "location": "/developers/back-end/#main-module-ovmanage",
+            "text": "Manage main module defines the following routes:   /manage/  to display the list of groups and devices  /manage/group-detail/:id  to display the content of a group   Nb:  Available services / filters defined in  ov.manage  modules are described in the  API .",
+            "title": "Main module (ov.manage)"
+        },
+        {
+            "location": "/developers/compilation/",
+            "text": "Introduction\n\n\nOpenVeo back end is written using AngularJS and SASS / Compass. SASS files need to be compiled to generate the CSS and JavaScript files can be minified and aggregated for better performance.\n\n\nOpenVeo does not automatically compile SASS and JavaScript files for his plugins. Thus OpenVeo Manage compiles his own SASS and JavaScript files.\n\n\nCompiling SASS files\n\n\nYou can compile the back end SASS files using the following command:\n\n\ngrunt compass:dist\n\n\n\nOr you can watch SASS files changes using the following command:\n\n\ngrunt\n\n\n\nCompiling JavaScript files\n\n\nYou'll probably want to compile AngularJS files, in production, for better performance. You can do it using:\n\n\ngrunt prod",
+            "title": "CSS / SASS / JS compilation"
+        },
+        {
+            "location": "/developers/compilation/#introduction",
+            "text": "OpenVeo back end is written using AngularJS and SASS / Compass. SASS files need to be compiled to generate the CSS and JavaScript files can be minified and aggregated for better performance.  OpenVeo does not automatically compile SASS and JavaScript files for his plugins. Thus OpenVeo Manage compiles his own SASS and JavaScript files.",
+            "title": "Introduction"
+        },
+        {
+            "location": "/developers/compilation/#compiling-sass-files",
+            "text": "You can compile the back end SASS files using the following command:  grunt compass:dist  Or you can watch SASS files changes using the following command:  grunt",
+            "title": "Compiling SASS files"
+        },
+        {
+            "location": "/developers/compilation/#compiling-javascript-files",
+            "text": "You'll probably want to compile AngularJS files, in production, for better performance. You can do it using:  grunt prod",
+            "title": "Compiling JavaScript files"
+        },
+        {
+            "location": "/developers/unit-tests/",
+            "text": "Node.js unit tests\n\n\nServer side unit tests are performed using \nMocha\n and \nChai\n. You can launch server unit tests with the following command:\n\n\ngrunt mochaTest\n\n\n\nAngularJS unit tests\n\n\nClient side unit tests are performed using \nKarma\n. You can launch client unit tests with the following command:\n\n\ngrunt karma",
+            "title": "Unit tests"
+        },
+        {
+            "location": "/developers/unit-tests/#nodejs-unit-tests",
+            "text": "Server side unit tests are performed using  Mocha  and  Chai . You can launch server unit tests with the following command:  grunt mochaTest",
+            "title": "Node.js unit tests"
+        },
+        {
+            "location": "/developers/unit-tests/#angularjs-unit-tests",
+            "text": "Client side unit tests are performed using  Karma . You can launch client unit tests with the following command:  grunt karma",
+            "title": "AngularJS unit tests"
+        },
+        {
+            "location": "/developers/api/",
+            "text": "Server side API (Node.js)\n\n\nYou can find Manage Plugin API \nhere\n.\n\n\nBackend client side API (AngularJS)\n\n\nOpenVeo Manage \nbackend API\n exposes an API (AngularJS components) to be used by other plugins.",
+            "title": "API"
+        },
+        {
+            "location": "/developers/api/#server-side-api-nodejs",
+            "text": "You can find Manage Plugin API  here .",
+            "title": "Server side API (Node.js)"
+        },
+        {
+            "location": "/developers/api/#backend-client-side-api-angularjs",
+            "text": "OpenVeo Manage  backend API  exposes an API (AngularJS components) to be used by other plugins.",
+            "title": "Backend client side API (AngularJS)"
+        }
+    ]
+}
