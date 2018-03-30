@@ -1,3 +1,9 @@
+# 2.0.0 / YYYY-MM-DD
+
+## BREAKING CHANGES
+
+- OpenVeo Manage now requires OpenVeo Core 5.0.0
+
 # 1.1.0 / 2017-10-18
 
 # NEW FEATURES

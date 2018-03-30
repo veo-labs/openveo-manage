@@ -1,27 +1,30 @@
 'use strict';
 
 /**
- * @module models
+ * @module providers
  */
 
 var util = require('util');
 var shortid = require('shortid');
 var openVeoApi = require('@openveo/api');
+var ResourceFilter = openVeoApi.storages.ResourceFilter;
+var NotFoundError = openVeoApi.errors.NotFoundError;
 
 /**
- * Defines an entity model for entities with an history and a planning.
+ * Defines a ManageableProvider for entities with an history and a planning.
  *
- * @class ManageableModel
- * @extends EntityModel
+ * @class ManageableProvider
+ * @extends EntityProvider
  * @constructor
- * @param {EntityProvider} provider The entity provider associated to the entity model
+ * @param {Database} database The database to interact with
+ * @param {String} location The location of the manageables in the storage
  */
-function ManageableModel(provider) {
-  ManageableModel.super_.call(this, provider);
+function ManageableProvider(database, location) {
+  ManageableProvider.super_.call(this, database, location);
 }
 
-module.exports = ManageableModel;
-util.inherits(ManageableModel, openVeoApi.models.EntityModel);
+module.exports = ManageableProvider;
+util.inherits(ManageableProvider, openVeoApi.providers.EntityProvider);
 
 /**
  * Adds an item to an array in a manageable.
@@ -34,22 +37,20 @@ util.inherits(ManageableModel, openVeoApi.models.EntityModel);
  * @param {Mixed} value The value to add
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
- *   - **Number** The total amount of items updated
+ *   - **Number** 1 if everything went fine
  */
 function addArrayItem(id, property, value, callback) {
   var self = this;
-  this.getOne(id, null, function(error, item) {
-    if (error)
-      return callback(error);
-
-    if (!item)
-      return callback(new Error('Item ' + id + ' not found'));
+  var filter = new ResourceFilter().equal('id', id);
+  this.getOne(filter, null, function(error, item) {
+    if (error) return callback(error);
+    if (!item) return callback(new NotFoundError(id));
 
     item[property].push(value);
 
     var data = {};
     data[property] = item[property];
-    self.update(id, data, callback);
+    self.updateOne(filter, data, callback);
   });
 }
 
@@ -65,16 +66,15 @@ function addArrayItem(id, property, value, callback) {
  * @param {String} value The value of the property to analyze in array objects to find the item to remove
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
- *   - **Number** The total amount of items updated
+ *   - **Number** 1 if everything went fine
  */
 function removeArrayItem(id, property, propertyKey, value, callback) {
   var self = this;
-  this.getOne(id, null, function(error, item) {
-    if (error)
-      return callback(error);
+  var filter = new ResourceFilter().equal('id', id);
 
-    if (!item)
-      return callback(new Error('Item not found'));
+  this.getOne(filter, null, function(error, item) {
+    if (error) return callback(error);
+    if (!item) return callback(new NotFoundError(id));
 
     var index = -1;
     for (var i = 0; i < item[property].length; i++) {
@@ -91,7 +91,7 @@ function removeArrayItem(id, property, propertyKey, value, callback) {
 
     var data = {};
     data[property] = item[property];
-    self.update(id, data, callback);
+    self.updateOne(filter, data, callback);
   });
 }
 
@@ -104,9 +104,9 @@ function removeArrayItem(id, property, propertyKey, value, callback) {
  * @param {Object} historic An historic description object
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
- *   - **Number** The total amount of items updated
+ *   - **Number** 1 if everything went fine
  */
-ManageableModel.prototype.addHistoric = function(id, historic, callback) {
+ManageableProvider.prototype.addHistoric = function(id, historic, callback) {
   addArrayItem.call(this, id, 'history', historic, callback);
 };
 
@@ -119,9 +119,9 @@ ManageableModel.prototype.addHistoric = function(id, historic, callback) {
  * @param {String} historicId The historic id
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
- *   - **Number** The total amount of items updated
+ *   - **Number** 1 if everything went fine
  */
-ManageableModel.prototype.removeHistoric = function(id, historicId, callback) {
+ManageableProvider.prototype.removeHistoric = function(id, historicId, callback) {
   removeArrayItem.call(this, id, 'history', 'id', historicId, callback);
 };
 
@@ -133,10 +133,10 @@ ManageableModel.prototype.removeHistoric = function(id, historicId, callback) {
  * @param {String} id The manageable id
  * @param {Function} callback The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
- *   - **Number** The total amount of items updated
+ *   - **Number** 1 if everything went fine
  */
-ManageableModel.prototype.removeHistory = function(id, callback) {
-  this.update(id, {history: []}, callback);
+ManageableProvider.prototype.removeHistory = function(id, callback) {
+  this.updateOne(new ResourceFilter().equal('id', id), {history: []}, callback);
 };
 
 /**
@@ -150,7 +150,7 @@ ManageableModel.prototype.removeHistory = function(id, callback) {
  *   - **Error** The error if an error occurred, null otherwise
  *   - **Number** The total amount of items updated
  */
-ManageableModel.prototype.addSchedule = function(id, schedule, callback) {
+ManageableProvider.prototype.addSchedule = function(id, schedule, callback) {
   schedule.id = shortid.generate();
   addArrayItem.call(this, id, 'schedules', schedule, callback);
 };
@@ -166,6 +166,6 @@ ManageableModel.prototype.addSchedule = function(id, schedule, callback) {
  *   - **Error** The error if an error occurred, null otherwise
  *   - **Number** The total amount of items updated
  */
-ManageableModel.prototype.removeSchedule = function(id, scheduleId, callback) {
+ManageableProvider.prototype.removeSchedule = function(id, scheduleId, callback) {
   removeArrayItem.call(this, id, 'schedules', 'id', scheduleId, callback);
 };

@@ -8,6 +8,7 @@ var openVeoApi = require('@openveo/api');
 var Manager = process.requireManage('app/server/Manager.js');
 var Device = process.requireManage('app/server/manageables/Device.js');
 var Group = process.requireManage('app/server/manageables/Group.js');
+var ResourceFilter = openVeoApi.storages.ResourceFilter;
 var assert = chai.assert;
 
 chai.should();
@@ -20,8 +21,8 @@ describe('Manager', function() {
   var manager;
   var devicesPilot;
   var browsersPilot;
-  var deviceModel;
-  var groupModel;
+  var deviceProvider;
+  var groupProvider;
   var scheduleManager;
 
   // Mocks
@@ -77,8 +78,8 @@ describe('Manager', function() {
       ERROR: 'error'
     };
 
-    deviceModel = {
-      get: function(filter, callback) {
+    deviceProvider = {
+      getAll: function(filter, fields, sort, callback) {
         callback(null, []);
       },
       STATES: {
@@ -90,13 +91,13 @@ describe('Manager', function() {
 
       }
     };
-    deviceModel.AVAILABLE_STATES = [
-      deviceModel.STATES.ACCEPTED,
-      deviceModel.STATES.PENDING,
-      deviceModel.STATES.REFUSED
+    deviceProvider.AVAILABLE_STATES = [
+      deviceProvider.STATES.ACCEPTED,
+      deviceProvider.STATES.PENDING,
+      deviceProvider.STATES.REFUSED
     ];
-    groupModel = {
-      get: function(filter, callback) {
+    groupProvider = {
+      getAll: function(filter, fields, sort, callback) {
         callback(null, []);
       },
       addHistoric: function() {
@@ -113,7 +114,7 @@ describe('Manager', function() {
   beforeEach(function() {
     devicesPilot = new DevicePilot();
     browsersPilot = new BrowserPilot();
-    manager = new Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager);
+    manager = new Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager);
     manager.start();
   });
 
@@ -127,7 +128,7 @@ describe('Manager', function() {
   describe('properties', function() {
 
     it('should not be editable', function() {
-      var properties = ['browsersPilot', 'devicesPilot', 'cache', 'scheduleManager', 'groupModel', 'deviceModel'];
+      var properties = ['browsersPilot', 'devicesPilot', 'cache', 'scheduleManager', 'groupProvider', 'deviceProvider'];
 
       properties.forEach(function(property) {
         assert.throws(function() {
@@ -163,8 +164,8 @@ describe('Manager', function() {
         var deviceIp = '::ffff:192.168.1.42';
         var expectedDevice = {id: expectedDeviceId};
 
-        deviceModel.add = function(data, callback) {
-          assert.strictEqual(data.id, expectedDeviceId, 'Wrong device id');
+        deviceProvider.add = function(data, callback) {
+          assert.strictEqual(data[0].id, expectedDeviceId, 'Wrong device id');
           callback(null, 1, expectedDevice);
         };
 
@@ -178,7 +179,7 @@ describe('Manager', function() {
         var expectedDeviceId = '42';
         var expectedDeviceIp = '192.168.1.42';
 
-        deviceModel.add = function(data, callback) {
+        deviceProvider.add = function(data, callback) {
           callback(null, 1, data);
         };
 
@@ -193,7 +194,7 @@ describe('Manager', function() {
         var expectedDeviceId = '42';
         var expectedDeviceIp = '2001:0db8:0000:85a3:0000:0000:ac1f:8001';
 
-        deviceModel.add = function(data, callback) {
+        deviceProvider.add = function(data, callback) {
           callback(null, 1, data);
         };
 
@@ -207,7 +208,7 @@ describe('Manager', function() {
       it('should ask for device\'s settings if it has already been accepted', function() {
         var expectedDeviceId = '42';
         var deviceIp = '::ffff:192.168.1.42';
-        var expectedDevice = new Device({id: expectedDeviceId, state: deviceModel.STATES.ACCEPTED});
+        var expectedDevice = new Device({id: expectedDeviceId, state: deviceProvider.STATES.ACCEPTED});
 
         manager.cache.add(expectedDevice);
 
@@ -243,13 +244,13 @@ describe('Manager', function() {
         var expectedDevice = new Device({id: expectedDeviceId});
         manager.cache.add(expectedDevice);
 
-        deviceModel.add = chai.spy(function(data, callback) {
+        deviceProvider.add = chai.spy(function(data, callback) {
 
         });
 
         devicesPilot.emit(devicesPilot.MESSAGES.AUTHENTICATED, deviceIp, expectedDeviceId);
 
-        deviceModel.add.should.have.been.called.exactly(0);
+        deviceProvider.add.should.have.been.called.exactly(0);
       });
 
     });
@@ -263,9 +264,13 @@ describe('Manager', function() {
         var expectedDevice = new Device({id: expectedDeviceId, name: 'old name'});
         manager.cache.add(expectedDevice);
 
-        deviceModel.update = function(id, data, callback) {
-          assert.strictEqual(id, expectedDeviceId, 'Wrong id');
-          assert.strictEqual(data.name, expectedDeviceName, 'Wrong name');
+        deviceProvider.updateOne = function(filter, modifications, callback) {
+          assert.equal(
+            filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+            expectedDeviceId,
+            'Wrong id'
+          );
+          assert.strictEqual(modifications.name, expectedDeviceName, 'Wrong name');
           callback();
         };
 
@@ -280,28 +285,27 @@ describe('Manager', function() {
         var expectedDevice = new Device({id: expectedDeviceId, name: 'name'});
         expectedDevice.group = deviceGroup.id;
         manager.cache.add(expectedDevice);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
-        groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
+        groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
         browsersPilot.update = chai.spy(browsersPilot.update);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
         devicesPilot.emit(devicesPilot.MESSAGES.NAME_UPDATED, expectedDeviceName, expectedDeviceId);
-        deviceModel.addHistoric.should.have.been.called.exactly(1);
-        groupModel.addHistoric.should.have.been.called.exactly(1);
+        deviceProvider.addHistoric.should.have.been.called.exactly(1);
+        groupProvider.addHistoric.should.have.been.called.exactly(1);
         browsersPilot.update.should.have.been.called.exactly(1);
       });
 
       it('should not do anything if device is not found in cache', function() {
         var expectedDeviceName = 'new name';
         var expectedDeviceId = '42';
-        deviceModel.update = chai.spy(deviceModel.update);
+        deviceProvider.updateOne = chai.spy(deviceProvider.updateOne);
 
         devicesPilot.emit(devicesPilot.MESSAGES.NAME_UPDATED, expectedDeviceName, expectedDeviceId);
-        deviceModel.update.should.have.been.called.exactly(0);
-
+        deviceProvider.updateOne.should.have.been.called.exactly(0);
       });
 
       it('should not inform browsers if update failed', function() {
@@ -312,7 +316,7 @@ describe('Manager', function() {
 
         manager.cache.add(expectedDevice);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback(new Error('Message'));
         };
 
@@ -326,15 +330,15 @@ describe('Manager', function() {
         var expectedDevice = new Device({id: expectedDeviceId, name: 'name'});
         manager.cache.add(expectedDevice);
         browsersPilot.update = chai.spy(browsersPilot.update);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
         devicesPilot.emit(devicesPilot.MESSAGES.NAME_UPDATED, expectedDeviceName, expectedDeviceId);
         browsersPilot.update.should.have.been.called.exactly(0);
-        deviceModel.addHistoric.should.have.been.called.exactly(0);
+        deviceProvider.addHistoric.should.have.been.called.exactly(0);
       });
 
       it('should not add historic if this is the first known name of the device', function() {
@@ -342,14 +346,14 @@ describe('Manager', function() {
         var expectedDeviceId = '42';
         var expectedDevice = new Device({id: expectedDeviceId});
         manager.cache.add(expectedDevice);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
         devicesPilot.emit(devicesPilot.MESSAGES.NAME_UPDATED, expectedDeviceName, expectedDeviceId);
-        deviceModel.addHistoric.should.have.been.called.exactly(0);
+        deviceProvider.addHistoric.should.have.been.called.exactly(0);
       });
     });
 
@@ -484,8 +488,8 @@ describe('Manager', function() {
         var message = devicesPilot.MESSAGES.SESSION_STATUS_UPDATED;
         expectedDevice.group = deviceGroup.id;
         manager.cache.add(expectedDevice);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
-        groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
+        groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
         devicesPilot.emit(message, devicesPilot.STATUSES.ERROR, expectedDeviceId);
         devicesPilot.emit(message, devicesPilot.STATUSES.STARTED, expectedDeviceId);
@@ -495,8 +499,8 @@ describe('Manager', function() {
         devicesPilot.emit(message, devicesPilot.STATUSES.DISCONNECTED, expectedDeviceId);
         devicesPilot.emit(message, devicesPilot.STATUSES.UNKNOWN, expectedDeviceId);
 
-        deviceModel.addHistoric.should.have.been.called.exactly(3);
-        groupModel.addHistoric.should.have.been.called.exactly(3);
+        deviceProvider.addHistoric.should.have.been.called.exactly(3);
+        groupProvider.addHistoric.should.have.been.called.exactly(3);
       });
 
       it('should not add an historic if old status was not defined, DISCONNECTED or if the same', function() {
@@ -504,13 +508,13 @@ describe('Manager', function() {
         var expectedDevice = new Device({id: expectedDeviceId});
         var message = devicesPilot.MESSAGES.SESSION_STATUS_UPDATED;
         manager.cache.add(expectedDevice);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
 
         devicesPilot.emit(message, devicesPilot.STATUSES.STARTED, expectedDeviceId);
         devicesPilot.emit(message, devicesPilot.STATUSES.STOPPED, expectedDeviceId);
         devicesPilot.emit(message, devicesPilot.STATUSES.STOPPED, expectedDeviceId);
 
-        deviceModel.addHistoric.should.have.been.called.exactly(1);
+        deviceProvider.addHistoric.should.have.been.called.exactly(1);
       });
 
       it('should ignore UNKNOWN status', function() {
@@ -518,12 +522,12 @@ describe('Manager', function() {
         var expectedDevice = new Device({id: expectedDeviceId, status: devicesPilot.STATUSES.STOPPED});
         var message = devicesPilot.MESSAGES.SESSION_STATUS_UPDATED;
         manager.cache.add(expectedDevice);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
         browsersPilot.update = chai.spy(browsersPilot.update);
 
         devicesPilot.emit(message, devicesPilot.STATUSES.UNKNOWN, expectedDeviceId);
 
-        deviceModel.addHistoric.should.have.been.called.exactly(0);
+        deviceProvider.addHistoric.should.have.been.called.exactly(0);
         browsersPilot.update.should.have.been.called.exactly(0);
 
         assert.strictEqual(manager.cache.get(expectedDeviceId).status, devicesPilot.STATUSES.STOPPED);
@@ -531,12 +535,12 @@ describe('Manager', function() {
 
       it('should not do anything if device is not found', function() {
         var message = devicesPilot.MESSAGES.SESSION_STATUS_UPDATED;
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
         browsersPilot.update = chai.spy(browsersPilot.update);
 
         devicesPilot.emit(message, devicesPilot.STATUSES.UNKNOWN, '42');
 
-        deviceModel.addHistoric.should.have.been.called.exactly(0);
+        deviceProvider.addHistoric.should.have.been.called.exactly(0);
         browsersPilot.update.should.have.been.called.exactly(0);
       });
     });
@@ -567,22 +571,22 @@ describe('Manager', function() {
         var expectedDevice = new Device({id: expectedDeviceId});
         expectedDevice.group = deviceGroup.id;
         manager.cache.add(expectedDevice);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
-        groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
+        groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
         devicesPilot.emit(devicesPilot.MESSAGES.DISCONNECTED, expectedDeviceId);
 
-        deviceModel.addHistoric.should.have.been.called.exactly(1);
-        groupModel.addHistoric.should.have.been.called.exactly(1);
+        deviceProvider.addHistoric.should.have.been.called.exactly(1);
+        groupProvider.addHistoric.should.have.been.called.exactly(1);
       });
 
       it('should not do anything if device is not found', function() {
         browsersPilot.update = chai.spy(browsersPilot.update);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
 
         devicesPilot.emit(devicesPilot.MESSAGES.DISCONNECTED, '42');
 
-        deviceModel.addHistoric.should.have.been.called.exactly(0);
+        deviceProvider.addHistoric.should.have.been.called.exactly(0);
         browsersPilot.update.should.have.been.called.exactly(0);
       });
 
@@ -670,7 +674,7 @@ describe('Manager', function() {
         var expectedType = Device.TYPE;
         var expectedDevice = new Device({id: expectedId});
         manager.cache.add(expectedDevice);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
 
         devicesPilot.askForUpdateName = function(id, name, callback) {
           callback(new Error('message'));
@@ -683,7 +687,7 @@ describe('Manager', function() {
           expectedType,
           function(results) {
             assert.isDefined(results.error, 'Expected an error');
-            deviceModel.addHistoric.should.have.been.called.exactly(1);
+            deviceProvider.addHistoric.should.have.been.called.exactly(1);
             done();
           }
         );
@@ -716,8 +720,12 @@ describe('Manager', function() {
         manager.cache.add(expectedGroup);
         browsersPilot.update = chai.spy(browsersPilot.update);
 
-        groupModel.update = function(id, data, callback) {
-          assert.strictEqual(id, expectedId, 'Wrong id');
+        groupProvider.updateOne = function(filter, data, callback) {
+          assert.equal(
+            filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+            expectedId,
+            'Wrong id'
+          );
           assert.strictEqual(data.name, expectedName, 'Wrong name');
           callback();
         };
@@ -741,9 +749,9 @@ describe('Manager', function() {
         var expectedType = Group.TYPE;
         var expectedGroup = new Group({id: expectedId});
         manager.cache.add(expectedGroup);
-        groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+        groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
-        groupModel.update = function(id, data, callback) {
+        groupProvider.updateOne = function(filter, data, callback) {
           callback(new Error('message'));
         };
 
@@ -754,7 +762,7 @@ describe('Manager', function() {
           expectedType,
           function(results) {
             assert.isDefined(results.error, 'Expected an error');
-            groupModel.addHistoric.should.have.been.called.exactly(1);
+            groupProvider.addHistoric.should.have.been.called.exactly(1);
             done();
           }
         );
@@ -814,8 +822,8 @@ describe('Manager', function() {
         var expectedPresetId = 'preset';
         var group = new Group({id: '42'});
         manager.cache.add(group);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
-        groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
+        groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
         expectedIds.forEach(function(id) {
           var device = new Device({id: id});
@@ -836,8 +844,8 @@ describe('Manager', function() {
           expectedIds,
           expectedPresetId,
           function(results) {
-            deviceModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
-            groupModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            deviceProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            groupProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
             done();
           }
         );
@@ -868,8 +876,8 @@ describe('Manager', function() {
         var expectedPresetId = 'preset';
         var group = new Group({id: '42'});
         manager.cache.add(group);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
-        groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
+        groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
         expectedIds.forEach(function(id) {
           var device = new Device({id: id, name: 'name-' + id});
@@ -899,8 +907,8 @@ describe('Manager', function() {
             for (var i = 0; i < results.errors.length; i++)
               assert.strictEqual(results.errors[i].name, 'name-' + expectedIds[i]);
 
-            deviceModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
-            groupModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            deviceProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            groupProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
             done();
           }
         );
@@ -943,8 +951,8 @@ describe('Manager', function() {
         var expectedIds = ['42', '43'];
         var group = new Group({id: '42'});
         manager.cache.add(group);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
-        groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
+        groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
         expectedIds.forEach(function(id) {
           var device = new Device({id: id});
@@ -964,8 +972,8 @@ describe('Manager', function() {
           browsersPilot.MESSAGES.STOP_DEVICE_SESSION,
           expectedIds,
           function(results) {
-            deviceModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
-            groupModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            deviceProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            groupProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
             done();
           }
         );
@@ -993,8 +1001,8 @@ describe('Manager', function() {
         var expectedIds = ['42', '43'];
         var group = new Group({id: '42'});
         manager.cache.add(group);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
-        groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
+        groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
         expectedIds.forEach(function(id) {
           var device = new Device({id: id, name: 'name-' + id});
@@ -1023,8 +1031,8 @@ describe('Manager', function() {
             for (var i = 0; i < results.errors.length; i++)
               assert.strictEqual(results.errors[i].name, 'name-' + expectedIds[i]);
 
-            deviceModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
-            groupModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            deviceProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            groupProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
             done();
           }
         );
@@ -1067,8 +1075,8 @@ describe('Manager', function() {
         var expectedIds = ['42', '43'];
         var group = new Group({id: '42'});
         manager.cache.add(group);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
-        groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
+        groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
         expectedIds.forEach(function(id) {
           var device = new Device({id: id});
@@ -1088,8 +1096,8 @@ describe('Manager', function() {
           browsersPilot.MESSAGES.INDEX_DEVICE_SESSION,
           expectedIds,
           function(results) {
-            deviceModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
-            groupModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            deviceProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            groupProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
             done();
           }
         );
@@ -1117,8 +1125,8 @@ describe('Manager', function() {
         var expectedIds = ['42', '43'];
         var group = new Group({id: '42'});
         manager.cache.add(group);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
-        groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
+        groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
         expectedIds.forEach(function(id) {
           var device = new Device({id: id, name: 'name-' + id});
@@ -1147,8 +1155,8 @@ describe('Manager', function() {
             for (var i = 0; i < results.errors.length; i++)
               assert.strictEqual(results.errors[i].name, 'name-' + expectedIds[i]);
 
-            deviceModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
-            groupModel.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            deviceProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
+            groupProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
             done();
           }
         );
@@ -1168,12 +1176,16 @@ describe('Manager', function() {
 
       it('should update a device\'s state', function(done) {
         var expectedId = '42';
-        var expectedState = deviceModel.STATES.ACCEPTED;
+        var expectedState = deviceProvider.STATES.ACCEPTED;
         var expectedDevice = new Device({id: expectedId});
         manager.cache.add(expectedDevice);
 
-        deviceModel.update = function(id, data, callback) {
-          assert.strictEqual(id, expectedId, 'Wrong id');
+        deviceProvider.updateOne = function(filter, data, callback) {
+          assert.equal(
+            filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+            expectedId,
+            'Wrong id'
+          );
           assert.strictEqual(data.state, expectedState, 'Wrong state');
           callback();
         };
@@ -1193,12 +1205,12 @@ describe('Manager', function() {
 
       it('should inform browsers about new device\'s state', function(done) {
         var expectedId = '42';
-        var expectedState = deviceModel.STATES.ACCEPTED;
+        var expectedState = deviceProvider.STATES.ACCEPTED;
         var expectedDevice = new Device({id: expectedId});
         manager.cache.add(expectedDevice);
         browsersPilot.updateDeviceState = chai.spy(browsersPilot.updateDeviceState);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
@@ -1218,16 +1230,16 @@ describe('Manager', function() {
         var expectedId = '42';
         var expectedDevice = new Device({id: expectedId});
         manager.cache.add(expectedDevice);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
         browsersPilot.emit(
           browsersPilot.MESSAGES.UPDATE_DEVICE_STATE,
           expectedId,
-          deviceModel.STATES.ACCEPTED,
+          deviceProvider.STATES.ACCEPTED,
           function(results) {
           }
         );
@@ -1235,27 +1247,27 @@ describe('Manager', function() {
         browsersPilot.emit(
           browsersPilot.MESSAGES.UPDATE_DEVICE_STATE,
           expectedId,
-          deviceModel.STATES.REFUSED,
+          deviceProvider.STATES.REFUSED,
           function(results) {
           }
         );
 
-        deviceModel.addHistoric.should.have.been.called.exactly(2);
+        deviceProvider.addHistoric.should.have.been.called.exactly(2);
       });
 
       it('should not do anything if new state is already the device state', function(done) {
         var expectedId = '42';
-        var expectedState = deviceModel.STATES.ACCEPTED;
+        var expectedState = deviceProvider.STATES.ACCEPTED;
         var expectedDevice = new Device({id: expectedId, state: expectedState});
         manager.cache.add(expectedDevice);
-        deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
+        deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
 
         browsersPilot.emit(
           browsersPilot.MESSAGES.UPDATE_DEVICE_STATE,
           expectedId,
-          deviceModel.STATES.ACCEPTED,
+          deviceProvider.STATES.ACCEPTED,
           function(results) {
-            deviceModel.addHistoric.should.have.been.called.exactly(0);
+            deviceProvider.addHistoric.should.have.been.called.exactly(0);
             done();
           }
         );
@@ -1264,7 +1276,7 @@ describe('Manager', function() {
 
       it('should execute callback with an error if state if not valid', function(done) {
         var expectedId = '42';
-        var expectedState = deviceModel.STATES.ACCEPTED;
+        var expectedState = deviceProvider.STATES.ACCEPTED;
         var expectedDevice = new Device({id: expectedId, state: expectedState});
         manager.cache.add(expectedDevice);
 
@@ -1281,11 +1293,11 @@ describe('Manager', function() {
 
       it('should execute callback with an error if changing state failed', function(done) {
         var expectedId = '42';
-        var expectedState = deviceModel.STATES.ACCEPTED;
+        var expectedState = deviceProvider.STATES.ACCEPTED;
         var expectedDevice = new Device({id: expectedId});
         manager.cache.add(expectedDevice);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback(new Error('message'));
         };
 
@@ -1321,8 +1333,12 @@ describe('Manager', function() {
         manager.cache.add(expectedDevice);
         browsersPilot.remove = chai.spy(browsersPilot.remove);
 
-        deviceModel.remove = function(id, callback) {
-          assert.strictEqual(id, expectedId, 'Wrong id');
+        deviceProvider.remove = function(filter, callback) {
+          assert.equal(
+            filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+            expectedId,
+            'Wrong id'
+          );
           callback();
         };
 
@@ -1358,7 +1374,7 @@ describe('Manager', function() {
 
         manager.cache.add(expectedDevice);
 
-        deviceModel.remove = function(id, callback) {
+        deviceProvider.remove = function(filter, callback) {
           callback();
         };
 
@@ -1398,15 +1414,15 @@ describe('Manager', function() {
         manager.cache.add(expectedDevice);
         manager.cache.add(expectedGroup);
 
-        deviceModel.remove = function(id, callback) {
+        deviceProvider.remove = function(filter, callback) {
           callback();
         };
 
-        groupModel.remove = chai.spy(function(id, callback) {
+        groupProvider.remove = chai.spy(function(filter, callback) {
           callback();
         });
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
@@ -1416,7 +1432,7 @@ describe('Manager', function() {
           expectedType,
           function(results) {
             assert.isUndefined(results, 'Unexpected results');
-            groupModel.remove.should.have.been.called.exactly(1);
+            groupProvider.remove.should.have.been.called.exactly(1);
             done();
           }
         );
@@ -1444,11 +1460,11 @@ describe('Manager', function() {
 
         manager.cache.add(expectedDevice);
 
-        deviceModel.remove = function(id, callback) {
+        deviceProvider.remove = function(filter, callback) {
           callback(new Error('message'));
         };
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
@@ -1469,8 +1485,12 @@ describe('Manager', function() {
         var expectedGroup = new Group({id: expectedId});
         manager.cache.add(expectedGroup);
 
-        groupModel.remove = function(id, callback) {
-          assert.strictEqual(id, expectedId, 'Wrong id');
+        groupProvider.remove = function(filter, callback) {
+          assert.equal(
+            filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+            expectedId,
+            'Wrong id'
+          );
           callback();
         };
 
@@ -1505,7 +1525,7 @@ describe('Manager', function() {
 
         manager.cache.add(expectedGroup);
 
-        groupModel.remove = function(id, callback) {
+        groupProvider.remove = function(filter, callback) {
           callback();
         };
 
@@ -1542,12 +1562,16 @@ describe('Manager', function() {
         manager.cache.add(expectedDevice);
         browsersPilot.remove = chai.spy(browsersPilot.remove);
 
-        groupModel.remove = function(id, callback) {
+        groupProvider.remove = function(filter, callback) {
           callback();
         };
 
-        deviceModel.update = function(id, data, callback) {
-          assert.strictEqual(id, expectedDevice.id, 'Wrong id');
+        deviceProvider.updateOne = function(filter, data, callback) {
+          assert.equal(
+            filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+            expectedDevice.id,
+            'Wrong id'
+          );
           assert.isNull(data.group, 'Expected group to be null');
           callback();
         };
@@ -1587,11 +1611,11 @@ describe('Manager', function() {
 
         manager.cache.add(expectedGroup);
 
-        groupModel.remove = function(id, callback) {
+        groupProvider.remove = function(filter, callback) {
           callback(new Error('message'));
         };
 
-        groupModel.update = function(id, data, callback) {
+        groupProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
@@ -1632,7 +1656,7 @@ describe('Manager', function() {
         manager.cache.add(device);
         browsersPilot.removeHistoric = chai.spy(browsersPilot.removeHistoric);
 
-        deviceModel.removeHistoric = function(id, historic, callback) {
+        deviceProvider.removeHistoric = function(id, historic, callback) {
           assert.strictEqual(id, expectedId, 'Wrong id');
           assert.strictEqual(historic, expectedHistoricId, 'Wrong historic id');
           callback();
@@ -1667,7 +1691,7 @@ describe('Manager', function() {
         browsersPilot.removeHistoric = chai.spy(browsersPilot.removeHistoric);
         manager.cache.add(device);
 
-        deviceModel.removeHistoric = function(id, historic, callback) {
+        deviceProvider.removeHistoric = function(id, historic, callback) {
           callback(new Error('message'));
         };
 
@@ -1711,7 +1735,7 @@ describe('Manager', function() {
         manager.cache.add(group);
         browsersPilot.removeHistoric = chai.spy(browsersPilot.removeHistoric);
 
-        groupModel.removeHistoric = function(id, historic, callback) {
+        groupProvider.removeHistoric = function(id, historic, callback) {
           assert.strictEqual(id, expectedId, 'Wrong id');
           assert.strictEqual(historic, expectedHistoricId, 'Wrong historic id');
           callback();
@@ -1746,7 +1770,7 @@ describe('Manager', function() {
         browsersPilot.removeHistoric = chai.spy(browsersPilot.removeHistoric);
         manager.cache.add(group);
 
-        groupModel.removeHistoric = function(id, historic, callback) {
+        groupProvider.removeHistoric = function(id, historic, callback) {
           callback(new Error('message'));
         };
 
@@ -1812,7 +1836,7 @@ describe('Manager', function() {
           assert.isDefined(func, 'Expected a function for the job');
         });
 
-        deviceModel.addSchedule = function(id, schedule, callback) {
+        deviceProvider.addSchedule = function(id, schedule, callback) {
           assert.strictEqual(id, expectedId, 'Wrong id');
           assert.strictEqual(schedule, expectedSchedule, 'Wrong schedule');
           callback();
@@ -1907,7 +1931,7 @@ describe('Manager', function() {
         scheduleManager.addJob = chai.spy(function(beginDate, endDate, recurrent, func) {
         });
 
-        deviceModel.addSchedule = function(id, schedule, callback) {
+        deviceProvider.addSchedule = function(id, schedule, callback) {
           callback(new Error('message'));
         };
 
@@ -1950,7 +1974,7 @@ describe('Manager', function() {
           assert.isDefined(func, 'Expected a function for the job');
         });
 
-        groupModel.addSchedule = function(id, schedule, callback) {
+        groupProvider.addSchedule = function(id, schedule, callback) {
           assert.strictEqual(id, expectedId, 'Wrong id');
           assert.strictEqual(schedule, expectedSchedule, 'Wrong schedule');
           callback();
@@ -2045,7 +2069,7 @@ describe('Manager', function() {
         scheduleManager.addJob = chai.spy(function(beginDate, endDate, recurrent, func) {
         });
 
-        groupModel.addSchedule = function(id, schedule, callback) {
+        groupProvider.addSchedule = function(id, schedule, callback) {
           callback(new Error('message'));
         };
 
@@ -2094,7 +2118,7 @@ describe('Manager', function() {
 
         });
 
-        deviceModel.removeSchedule = function(id, scheduleId, callback) {
+        deviceProvider.removeSchedule = function(id, scheduleId, callback) {
           assert.equal(id, expectedId, 'Wrong id');
           assert.equal(scheduleId, expectedScheduleId, 'Wrong schedule id');
           callback();
@@ -2129,7 +2153,7 @@ describe('Manager', function() {
 
         };
 
-        deviceModel.removeSchedule = function(id, scheduleId, callback) {
+        deviceProvider.removeSchedule = function(id, scheduleId, callback) {
           callback();
         };
 
@@ -2152,7 +2176,7 @@ describe('Manager', function() {
 
         };
 
-        deviceModel.removeSchedule = function(id, scheduleId, callback) {
+        deviceProvider.removeSchedule = function(id, scheduleId, callback) {
           callback();
         };
 
@@ -2187,7 +2211,7 @@ describe('Manager', function() {
 
         };
 
-        deviceModel.removeSchedule = function(id, scheduleId, callback) {
+        deviceProvider.removeSchedule = function(id, scheduleId, callback) {
           callback();
         };
 
@@ -2222,7 +2246,7 @@ describe('Manager', function() {
 
         };
 
-        deviceModel.removeSchedule = function(id, scheduleId, callback) {
+        deviceProvider.removeSchedule = function(id, scheduleId, callback) {
           callback(new Error('message'));
         };
 
@@ -2260,7 +2284,7 @@ describe('Manager', function() {
 
         });
 
-        groupModel.removeSchedule = function(id, scheduleId, callback) {
+        groupProvider.removeSchedule = function(id, scheduleId, callback) {
           assert.equal(id, expectedId, 'Wrong id');
           assert.equal(scheduleId, expectedScheduleId, 'Wrong schedule id');
           callback();
@@ -2295,7 +2319,7 @@ describe('Manager', function() {
 
         };
 
-        groupModel.removeSchedule = function(id, scheduleId, callback) {
+        groupProvider.removeSchedule = function(id, scheduleId, callback) {
           callback();
         };
 
@@ -2318,7 +2342,7 @@ describe('Manager', function() {
 
         };
 
-        groupModel.removeSchedule = function(id, scheduleId, callback) {
+        groupProvider.removeSchedule = function(id, scheduleId, callback) {
           callback();
         };
 
@@ -2353,7 +2377,7 @@ describe('Manager', function() {
 
         };
 
-        groupModel.removeSchedule = function(id, scheduleId, callback) {
+        groupProvider.removeSchedule = function(id, scheduleId, callback) {
           callback();
         };
 
@@ -2388,7 +2412,7 @@ describe('Manager', function() {
 
         };
 
-        groupModel.removeSchedule = function(id, scheduleId, callback) {
+        groupProvider.removeSchedule = function(id, scheduleId, callback) {
           callback(new Error('message'));
         };
 
@@ -2422,7 +2446,7 @@ describe('Manager', function() {
         manager.cache.add(expectedDevice);
         browsersPilot.removeHistory = chai.spy(browsersPilot.removeHistory);
 
-        deviceModel.removeHistory = function(id, callback) {
+        deviceProvider.removeHistory = function(id, callback) {
           assert.strictEqual(id, expectedId, 'Wrong id');
           callback();
         };
@@ -2458,7 +2482,7 @@ describe('Manager', function() {
         var expectedDevice = new Device({id: expectedId, history: [{}]});
         manager.cache.add(expectedDevice);
 
-        deviceModel.removeHistory = function(id, callback) {
+        deviceProvider.removeHistory = function(id, callback) {
           callback(new Error('message'));
         };
 
@@ -2480,7 +2504,7 @@ describe('Manager', function() {
         manager.cache.add(expectedGroup);
         browsersPilot.removeHistory = chai.spy(browsersPilot.removeHistory);
 
-        groupModel.removeHistory = function(id, callback) {
+        groupProvider.removeHistory = function(id, callback) {
           assert.strictEqual(id, expectedId, 'Wrong id');
           callback();
         };
@@ -2516,7 +2540,7 @@ describe('Manager', function() {
         var expectedGroup = new Group({id: expectedId, history: [{}]});
         manager.cache.add(expectedGroup);
 
-        groupModel.removeHistory = function(id, callback) {
+        groupProvider.removeHistory = function(id, callback) {
           callback(new Error('message'));
         };
 
@@ -2561,18 +2585,19 @@ describe('Manager', function() {
       });
 
       it('should be able to create a group', function(done) {
-        var expectedGroup = {id: '42'};
+        var expectedId = '42';
         browsersPilot.createGroup = chai.spy(browsersPilot.createGroup);
 
-        groupModel.add = function(data, callback) {
-          assert.strictEqual(data.history.length, 1, 'Expected an historic');
-          callback(null, 1, expectedGroup);
+        groupProvider.add = function(data, callback) {
+          assert.strictEqual(data[0].history.length, 1, 'Expected an historic');
+          data[0].id = expectedId;
+          callback(null, 1, data);
         };
 
         browsersPilot.emit(
           browsersPilot.MESSAGES.CREATE_GROUP,
           function(results) {
-            var group = manager.cache.get(expectedGroup.id);
+            var group = manager.cache.get(expectedId);
             assert.isDefined(group, 'Expected a group');
             assert.strictEqual(results.group, group, 'Wrong group');
             browsersPilot.createGroup.should.have.been.called.with.exactly(group);
@@ -2582,7 +2607,7 @@ describe('Manager', function() {
       });
 
       it('should execute a callback with an error if group creation failed', function(done) {
-        groupModel.add = function(data, callback) {
+        groupProvider.add = function(data, callback) {
           callback(new Error('message'));
         };
 
@@ -2614,8 +2639,12 @@ describe('Manager', function() {
         manager.cache.add(expectedGroup);
         browsersPilot.addDeviceToGroup = chai.spy(browsersPilot.addDeviceToGroup);
 
-        deviceModel.update = function(id, data, callback) {
-          assert.strictEqual(id, expectedDeviceId, 'Wrong device id');
+        deviceProvider.updateOne = function(filter, data, callback) {
+          assert.equal(
+            filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+            expectedDeviceId,
+            'Wrong device id'
+          );
           assert.strictEqual(data.group, expectedGroupId, 'Wrong group id');
           callback();
         };
@@ -2637,7 +2666,7 @@ describe('Manager', function() {
         var expectedGroup = new Group({id: expectedGroupId});
         manager.cache.add(expectedGroup);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
@@ -2657,7 +2686,7 @@ describe('Manager', function() {
         var expectedDevice = new Device({id: expectedDeviceId});
         manager.cache.add(expectedDevice);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
@@ -2696,7 +2725,7 @@ describe('Manager', function() {
         manager.cache.add(expectedDevice);
         manager.cache.add(expectedGroup);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
@@ -2719,7 +2748,7 @@ describe('Manager', function() {
         manager.cache.add(expectedDevice);
         manager.cache.add(expectedGroup);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback(new Error('message'));
         };
 
@@ -2748,8 +2777,12 @@ describe('Manager', function() {
         manager.cache.add(expectedGroup);
         browsersPilot.removeDeviceFromGroup = chai.spy(browsersPilot.removeDeviceFromGroup);
 
-        deviceModel.update = function(id, data, callback) {
-          assert.strictEqual(id, expectedId, 'Wrong id');
+        deviceProvider.updateOne = function(filter, data, callback) {
+          assert.equal(
+            filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+            expectedId,
+            'Wrong id'
+          );
           assert.isNull(data.group, 'Unexpected group');
           callback();
         };
@@ -2770,7 +2803,7 @@ describe('Manager', function() {
         var expectedGroup = new Group({id: expectedGroupId});
         manager.cache.add(expectedGroup);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
@@ -2789,7 +2822,7 @@ describe('Manager', function() {
         var expectedDevice = new Device({id: expectedId, group: 'unknown'});
         manager.cache.add(expectedDevice);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback();
         };
 
@@ -2811,7 +2844,7 @@ describe('Manager', function() {
         manager.cache.add(expectedDevice);
         manager.cache.add(expectedGroup);
 
-        deviceModel.update = function(id, data, callback) {
+        deviceProvider.updateOne = function(filter, data, callback) {
           callback(new Error('message'));
         };
 
@@ -2839,11 +2872,11 @@ describe('Manager', function() {
           id: expectedId
         }
       ];
-      deviceModel.get = function(filter, callback) {
+      deviceProvider.getAll = function(filter, fields, sort, callback) {
         callback(null, expectedDevices);
       };
 
-      manager = new Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager);
+      manager = new Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager);
       manager.start(function() {
         var device = manager.cache.get(expectedId);
         assert.isDefined(device, 'Expected a device in cache');
@@ -2859,11 +2892,11 @@ describe('Manager', function() {
           id: expectedId
         }
       ];
-      groupModel.get = function(filter, callback) {
+      groupProvider.getAll = function(filter, fields, sort, callback) {
         callback(null, expectedGroups);
       };
 
-      manager = new Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager);
+      manager = new Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager);
       manager.start(function() {
         var group = manager.cache.get(expectedId);
         assert.isDefined(group, 'Expected a group in cache');
@@ -2887,17 +2920,17 @@ describe('Manager', function() {
         }
       ];
 
-      deviceModel.get = function(filter, callback) {
+      deviceProvider.getAll = function(filter, fields, sort, callback) {
         callback(null, expectedDevices);
       };
 
-      deviceModel.removeSchedule = function(id, scheduleId, callback) {
+      deviceProvider.removeSchedule = function(id, scheduleId, callback) {
         assert.strictEqual(id, expectedId, 'Wrong id');
         assert.strictEqual(scheduleId, expectedScheduleId, 'Wrong schedule id');
         callback();
       };
 
-      manager = new Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager);
+      manager = new Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager);
       manager.start(function() {
         var device = manager.cache.get(expectedId);
         assert.strictEqual(device.schedules.length, 0, 'Unexpected schedule');
@@ -2922,11 +2955,11 @@ describe('Manager', function() {
       ];
       scheduleManager.addJob = chai.spy(scheduleManager.addJob);
 
-      deviceModel.get = function(filter, callback) {
+      deviceProvider.getAll = function(filter, fields, sort, callback) {
         callback(null, expectedDevices);
       };
 
-      manager = new Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager);
+      manager = new Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager);
       manager.start(function() {
         scheduleManager.addJob.should.have.been.called.exactly(2);
         done();
@@ -2934,11 +2967,11 @@ describe('Manager', function() {
     });
 
     it('should execute callback with an error if getting devices failed', function(done) {
-      deviceModel.get = function(filter, callback) {
+      deviceProvider.getAll = function(filter, fields, sort, callback) {
         callback(new Error('message'));
       };
 
-      manager = new Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager);
+      manager = new Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager);
       manager.start(function(error) {
         assert.instanceOf(error, Error);
         done();
@@ -2946,11 +2979,11 @@ describe('Manager', function() {
     });
 
     it('should execute callback with an error if getting groups failed', function(done) {
-      groupModel.get = function(filter, callback) {
+      groupProvider.getAll = function(filter, fields, sort, callback) {
         callback(new Error('message'));
       };
 
-      manager = new Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager);
+      manager = new Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager);
       manager.start(function(error) {
         assert.instanceOf(error, Error);
         done();
@@ -2973,15 +3006,15 @@ describe('Manager', function() {
         }
       ];
 
-      deviceModel.get = function(filter, callback) {
+      deviceProvider.getAll = function(filter, fields, sort, callback) {
         callback(null, expectedDevices);
       };
 
-      deviceModel.removeSchedule = function(id, scheduleId, callback) {
+      deviceProvider.removeSchedule = function(id, scheduleId, callback) {
         callback(new Error());
       };
 
-      manager = new Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager);
+      manager = new Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager);
       manager.start(function(error) {
         assert.instanceOf(error, Error);
         done();
@@ -3022,7 +3055,7 @@ describe('Manager', function() {
       var expectedName = 'name';
       var expectedDevice = new Device({id: expectedId});
       manager.cache.add(expectedDevice);
-      deviceModel.addHistoric = chai.spy(deviceModel.addHistoric);
+      deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
 
       devicesPilot.askForUpdateName = function(id, name, callback) {
         callback(new Error('message'));
@@ -3030,7 +3063,7 @@ describe('Manager', function() {
 
       manager.updateDeviceName(expectedId, expectedName, function(error) {
         assert.instanceOf(error, Error);
-        deviceModel.addHistoric.should.have.been.called.exactly(1);
+        deviceProvider.addHistoric.should.have.been.called.exactly(1);
         done();
       });
     });
@@ -3045,17 +3078,21 @@ describe('Manager', function() {
       var expectedName = 'name';
       var expectedGroup = new Group({id: expectedId});
       manager.cache.add(expectedGroup);
-      groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+      groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
-      groupModel.update = function(id, data, callback) {
-        assert.strictEqual(id, expectedId, 'Wrong id');
+      groupProvider.updateOne = function(filter, data, callback) {
+        assert.strictEqual(
+          filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+          expectedId,
+          'Wrong id'
+        );
         assert.strictEqual(data.name, expectedName, 'Wrong name');
         callback();
       };
 
       manager.updateGroupName(expectedId, expectedName, function(error) {
         assert.isUndefined(error, 'Unexpected error');
-        groupModel.addHistoric.should.have.been.called.exactly(1);
+        groupProvider.addHistoric.should.have.been.called.exactly(1);
         done();
       });
     });
@@ -3072,15 +3109,15 @@ describe('Manager', function() {
       var expectedName = 'name';
       var expectedGroup = new Group({id: expectedId});
       manager.cache.add(expectedGroup);
-      groupModel.addHistoric = chai.spy(groupModel.addHistoric);
+      groupProvider.addHistoric = chai.spy(groupProvider.addHistoric);
 
-      groupModel.update = function(id, name, callback) {
+      groupProvider.updateOne = function(filter, name, callback) {
         callback(new Error('message'));
       };
 
       manager.updateGroupName(expectedId, expectedName, function(error) {
         assert.instanceOf(error, Error);
-        groupModel.addHistoric.should.have.been.called.exactly(1);
+        groupProvider.addHistoric.should.have.been.called.exactly(1);
         done();
       });
     });
@@ -3179,8 +3216,12 @@ describe('Manager', function() {
       manager.cache.add(expectedDevice);
       browsersPilot.remove = chai.spy(browsersPilot.remove);
 
-      deviceModel.remove = function(id, callback) {
-        assert.strictEqual(id, expectedId, 'Wrong id');
+      deviceProvider.remove = function(filter, callback) {
+        assert.equal(
+          filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+          expectedId,
+          'Wrong id'
+        );
         callback();
       };
 
@@ -3198,7 +3239,7 @@ describe('Manager', function() {
       manager.cache.add(expectedDevice);
       devicesPilot.disconnect = chai.spy(devicesPilot.disconnect);
 
-      deviceModel.remove = function(id, callback) {
+      deviceProvider.remove = function(filter, callback) {
         callback();
       };
 
@@ -3222,7 +3263,7 @@ describe('Manager', function() {
       manager.cache.add(expectedDevice);
       scheduleManager.removeJob = chai.spy(scheduleManager.removeJob);
 
-      deviceModel.remove = function(id, callback) {
+      deviceProvider.remove = function(filter, callback) {
         callback();
       };
 
@@ -3241,16 +3282,20 @@ describe('Manager', function() {
       manager.cache.add(expectedDevice);
       manager.cache.add(expectedGroup);
 
-      deviceModel.remove = function(id, callback) {
+      deviceProvider.remove = function(filter, callback) {
         callback();
       };
 
-      deviceModel.update = function(id, data, callback) {
+      deviceProvider.updateOne = function(filter, data, callback) {
         callback();
       };
 
-      groupModel.remove = function(id, callback) {
-        assert.strictEqual(id, expectedGroupId, 'Wrong group id');
+      groupProvider.remove = function(filter, callback) {
+        assert.equal(
+          filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+          expectedGroupId,
+          'Wrong group id'
+        );
         callback();
       };
 
@@ -3266,7 +3311,7 @@ describe('Manager', function() {
       var expectedDevice = new Device({id: expectedId});
       manager.cache.add(expectedDevice);
 
-      deviceModel.remove = function(id, callback) {
+      deviceProvider.remove = function(filter, callback) {
         callback(new Error('message'));
       };
 
@@ -3284,15 +3329,15 @@ describe('Manager', function() {
       manager.cache.add(expectedDevice);
       manager.cache.add(expectedGroup);
 
-      deviceModel.remove = function(id, callback) {
+      deviceProvider.remove = function(filter, callback) {
         callback();
       };
 
-      deviceModel.update = function(id, data, callback) {
+      deviceProvider.updateOne = function(filter, data, callback) {
         callback();
       };
 
-      groupModel.remove = function(id, callback) {
+      groupProvider.remove = function(filter, callback) {
         callback(new Error('message'));
       };
 
@@ -3318,8 +3363,12 @@ describe('Manager', function() {
       manager.cache.add(expectedGroup);
       browsersPilot.remove = chai.spy(browsersPilot.remove);
 
-      groupModel.remove = function(id, callback) {
-        assert.strictEqual(id, expectedId, 'Wrong group id');
+      groupProvider.remove = function(filter, callback) {
+        assert.equal(
+          filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+          expectedId,
+          'Wrong group id'
+        );
         callback();
       };
 
@@ -3345,7 +3394,7 @@ describe('Manager', function() {
       manager.cache.add(expectedGroup);
       scheduleManager.removeJob = chai.spy(scheduleManager.removeJob);
 
-      groupModel.remove = function(id, callback) {
+      groupProvider.remove = function(filter, callback) {
         callback();
       };
 
@@ -3364,13 +3413,17 @@ describe('Manager', function() {
       manager.cache.add(expectedGroup);
       manager.cache.add(expectedDevice);
 
-      deviceModel.update = function(id, data, callback) {
-        assert.strictEqual(id, expectedDeviceId, 'Wrong device id');
+      deviceProvider.updateOne = function(filter, data, callback) {
+        assert.equal(
+          filter.getComparisonOperation(ResourceFilter.OPERATORS.EQUAL, 'id').value,
+          expectedDeviceId,
+          'Wrong device id'
+        );
         assert.isNull(data.group, 'Unexpected group');
         callback();
       };
 
-      groupModel.remove = function(id, callback) {
+      groupProvider.remove = function(filter, callback) {
         callback();
       };
 
@@ -3389,11 +3442,11 @@ describe('Manager', function() {
       manager.cache.add(expectedGroup);
       manager.cache.add(expectedDevice);
 
-      deviceModel.update = function(id, data, callback) {
+      deviceProvider.updateOne = function(filter, data, callback) {
         callback(new Error('message'));
       };
 
-      groupModel.remove = function(id, callback) {
+      groupProvider.remove = function(filter, callback) {
         callback();
       };
 
@@ -3408,7 +3461,7 @@ describe('Manager', function() {
       var expectedGroup = new Group({id: expectedId});
       manager.cache.add(expectedGroup);
 
-      groupModel.remove = function(id, callback) {
+      groupProvider.remove = function(filter, callback) {
         callback(new Error('message'));
       };
 

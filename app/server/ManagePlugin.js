@@ -4,8 +4,6 @@ var util = require('util');
 var express = require('express');
 var async = require('async');
 var openVeoApi = require('@openveo/api');
-var DeviceModel = process.requireManage('app/server/models/DeviceModel.js');
-var GroupModel = process.requireManage('app/server/models/GroupModel.js');
 var ScheduleManager = process.requireManage('app/server/ScheduleManager.js');
 var DeviceProvider = process.requireManage('app/server/providers/DeviceProvider.js');
 var GroupProvider = process.requireManage('app/server/providers/GroupProvider.js');
@@ -126,8 +124,8 @@ ManagePlugin.prototype.start = function(callback) {
     var manager = Manager.get(
       devicesPilot,
       browsersPilot,
-      new DeviceModel(deviceProvider),
-      new GroupModel(groupProvider, deviceProvider),
+      deviceProvider,
+      groupProvider,
       new ScheduleManager()
     );
 

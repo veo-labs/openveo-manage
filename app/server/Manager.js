@@ -12,6 +12,7 @@ var Device = process.requireManage('app/server/manageables/Device.js');
 var Group = process.requireManage('app/server/manageables/Group.js');
 var ERRORS = process.requireManage('app/server/errors.js');
 var NotFoundError = openVeoApi.errors.NotFoundError;
+var ResourceFilter = openVeoApi.storages.ResourceFilter;
 
 /**
  * Manager singleton.
@@ -31,11 +32,11 @@ var manager = null;
  * @constructor
  * @param {DevicePilot} devicesPilot Devices' pilot to interact with devices
  * @param {BrowserPilot} browsersPilot Browsers' pilot to interact with browsers
- * @param {DeviceModel} deviceModel Model to manipulate devices
- * @param {groupModel} groupModel Model to manipulate groups
+ * @param {DeviceProvider} deviceProvider Provider to manipulate devices
+ * @param {GroupProvider} groupProvider Provider to manipulate groups
  * @param {ScheduleManager} scheduleManager A schedule manager to add / remove schedule jobs
  */
-function Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager) {
+function Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager) {
   Object.defineProperties(this, {
 
     /**
@@ -75,22 +76,22 @@ function Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleM
     scheduleManager: {value: scheduleManager},
 
     /**
-     * Model to manage groups.
+     * Provider to manage groups.
      *
-     * @property groupModel
-     * @type GroupModel
+     * @property groupProvider
+     * @type GroupProvider
      * @final
      */
-    groupModel: {value: groupModel},
+    groupProvider: {value: groupProvider},
 
     /**
-     * Model to manage devices.
+     * Provider to manage devices.
      *
-     * @property deviceModel
-     * @type DeviceModel
+     * @property deviceProvider
+     * @type DeviceProvider
      * @final
      */
-    deviceModel: {value: deviceModel}
+    deviceProvider: {value: deviceProvider}
 
   });
 
@@ -140,7 +141,7 @@ function addGroupHistoric(group, message, messageParams, callback) {
   var self = this;
   var historic = buildHistoric(message, messageParams);
 
-  self.groupModel.addHistoric(group.id, historic, function(error, updateCount) {
+  self.groupProvider.addHistoric(group.id, historic, function(error, updateCount) {
     if (!error) {
 
       // Add historic to cache and inform browsers
@@ -178,7 +179,7 @@ function addDeviceHistoric(device, message, messageParams, addToGroup, callback)
 
   async.parallel(async.reflectAll([
     function(callback) {
-      self.deviceModel.addHistoric(device.id, historic, function(error, updateCount) {
+      self.deviceProvider.addHistoric(device.id, historic, function(error, updateCount) {
         if (!error) {
 
           // Add historic to cache and inform browsers
@@ -232,11 +233,15 @@ function registerDevice(id, callback) {
   } else {
 
     // Device does not exist, create it
-    self.deviceModel.add({
-      id: id
-    }, function(error, total, createdDevice) {
+    self.deviceProvider.add([
+      {
+        id: id
+      }
+    ], function(error, total, createdDevices) {
+      var createdDevice;
+
       if (!error) {
-        createdDevice = new Device(createdDevice);
+        createdDevice = new Device(createdDevices[0]);
         self.cache.add(createdDevice);
       }
 
@@ -419,10 +424,10 @@ function registerSchedule(manageable, schedule) {
 
       // Remove job if not recurrent or expired
       if (!schedule.recurrent || manageable.isScheduleExpired(schedule)) {
-        var model = (manageable.type === Device.TYPE) ? self.deviceModel : self.groupModel;
+        var provider = (manageable.type === Device.TYPE) ? self.deviceProvider : self.groupProvider;
 
         deregisterSchedule.call(self, manageable, schedule.id);
-        model.removeSchedule(manageable.id, schedule.id, function(error) {
+        provider.removeSchedule(manageable.id, schedule.id, function(error) {
           if (error)
             process.logger.error(error.message, {error: error, method: 'scheduleStop'});
           else {
@@ -478,7 +483,7 @@ function initDevicesListeners() {
 
       // Device is already accepted
       // Asks the device its settings
-      if (device.state === self.deviceModel.STATES.ACCEPTED)
+      if (device.state === self.deviceProvider.STATES.ACCEPTED)
         self.devicesPilot.askForSettings([device.id], handleError);
 
       // Ask the device its name
@@ -504,7 +509,7 @@ function initDevicesListeners() {
     if (device) {
 
       // Update device's name
-      self.deviceModel.update(id, {name: deviceName}, function(error) {
+      self.deviceProvider.updateOne(new ResourceFilter().equal('id', id), {name: deviceName}, function(error) {
         if (error) {
           process.logger.error(error.message, {error: error, event: MESSAGES.NAME_UPDATED});
           return;
@@ -854,7 +859,7 @@ function initBrowsersListeners() {
   this.browsersPilot.on(MESSAGES.UPDATE_DEVICE_STATE, function(id, newState, callback) {
     var device = self.cache.get(id);
 
-    if (self.deviceModel.AVAILABLE_STATES.indexOf(newState) === -1 || !device) {
+    if (self.deviceProvider.AVAILABLE_STATES.indexOf(newState) === -1 || !device) {
       return callback({
         error: ERRORS.UPDATE_DEVICE_STATE_NOT_FOUND_ERROR
       });
@@ -865,7 +870,7 @@ function initBrowsersListeners() {
       return callback();
 
     // Update device state
-    self.deviceModel.update(id, {state: newState}, function(error) {
+    self.deviceProvider.updateOne(new ResourceFilter().equal('id', id), {state: newState}, function(error) {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.UPDATE_DEVICE_STATE});
         return callback({
@@ -876,9 +881,9 @@ function initBrowsersListeners() {
       // Update devices cache with new state
       device.state = newState;
 
-      if (device.state === self.deviceModel.STATES.ACCEPTED)
+      if (device.state === self.deviceProvider.STATES.ACCEPTED)
         addDeviceHistoric.call(self, device, 'MANAGE.HISTORY.DEVICE_ACCEPTED', null, true);
-      else if (device.state === self.deviceModel.STATES.REFUSED)
+      else if (device.state === self.deviceProvider.STATES.REFUSED)
         addDeviceHistoric.call(self, device, 'MANAGE.HISTORY.DEVICE_REFUSED', null, true);
 
       // Inform browsers about the device new state
@@ -924,7 +929,7 @@ function initBrowsersListeners() {
   //   - **String** type The manageable type
   //   - **Function** callback The function to respond to the browser
   this.browsersPilot.on(MESSAGES.REMOVE_HISTORIC, function(id, historicId, type, callback) {
-    var model = (type === Device.TYPE) ? self.deviceModel : self.groupModel;
+    var provider = (type === Device.TYPE) ? self.deviceProvider : self.groupProvider;
     var manageable = self.cache.get(id);
 
     if (!manageable) {
@@ -933,7 +938,7 @@ function initBrowsersListeners() {
       });
     }
 
-    model.removeHistoric(id, historicId, function(error) {
+    provider.removeHistoric(id, historicId, function(error) {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.REMOVE_HISTORIC});
         return callback({
@@ -956,7 +961,7 @@ function initBrowsersListeners() {
   //   - **String** type The manageable type
   //   - **Function** callback The function to respond to the browser
   this.browsersPilot.on(MESSAGES.ADD_SCHEDULE, function(id, schedule, type, callback) {
-    var model = (type === Device.TYPE) ? self.deviceModel : self.groupModel;
+    var provider = (type === Device.TYPE) ? self.deviceProvider : self.groupProvider;
     var manageable = self.cache.get(id);
     var isValidSchedule = false;
 
@@ -982,7 +987,7 @@ function initBrowsersListeners() {
     }
 
     registerSchedule.call(self, manageable, schedule);
-    model.addSchedule(manageable.id, schedule, function(error) {
+    provider.addSchedule(manageable.id, schedule, function(error) {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.ADD_SCHEDULE});
         return callback({
@@ -1005,7 +1010,7 @@ function initBrowsersListeners() {
   //   - **String** type The manageable type
   //   - **Function** The function to respond to the browser
   this.browsersPilot.on(MESSAGES.REMOVE_SCHEDULE, function(id, scheduleId, type, callback) {
-    var model = (type === Device.TYPE) ? self.deviceModel : self.groupModel;
+    var provider = (type === Device.TYPE) ? self.deviceProvider : self.groupProvider;
     var manageable = self.cache.get(id);
     var schedule = manageable && manageable.getSchedule(scheduleId);
 
@@ -1022,7 +1027,7 @@ function initBrowsersListeners() {
     }
 
     deregisterSchedule.call(self, manageable, scheduleId);
-    model.removeSchedule(manageable.id, schedule.id, function(error) {
+    provider.removeSchedule(manageable.id, schedule.id, function(error) {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.REMOVE_SCHEDULE});
         return callback({
@@ -1044,7 +1049,7 @@ function initBrowsersListeners() {
   //   - **String** type The manageable type
   //   - **Function** The function to respond to the browser
   this.browsersPilot.on(MESSAGES.REMOVE_HISTORY, function(id, type, callback) {
-    var model = (type === Device.TYPE) ? self.deviceModel : self.groupModel;
+    var provider = (type === Device.TYPE) ? self.deviceProvider : self.groupProvider;
     var manageable = self.cache.get(id);
 
     if (!manageable) {
@@ -1053,7 +1058,7 @@ function initBrowsersListeners() {
       });
     }
 
-    model.removeHistory(id, function(error) {
+    provider.removeHistory(id, function(error) {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.REMOVE_HISTORY});
         return callback({
@@ -1080,11 +1085,13 @@ function initBrowsersListeners() {
   // Listen for a browser requesting a group to be created
   //   - **Function** callback The function to respond to the browser
   this.browsersPilot.on(MESSAGES.CREATE_GROUP, function(callback) {
-    self.groupModel.add({
-      history: [
-        buildHistoric('MANAGE.HISTORY.CREATE_GROUP')
-      ]
-    }, function(error, addedCount, addedGroup) {
+    self.groupProvider.add([
+      {
+        history: [
+          buildHistoric('MANAGE.HISTORY.CREATE_GROUP')
+        ]
+      }
+    ], function(error, total, addedGroups) {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.CREATE_GROUP});
         return callback({
@@ -1092,7 +1099,7 @@ function initBrowsersListeners() {
         });
       }
 
-      var group = new Group(addedGroup);
+      var group = new Group(addedGroups[0]);
 
       // Add group to cache and inform browsers
       self.cache.add(group);
@@ -1128,7 +1135,7 @@ function initBrowsersListeners() {
     }
 
     // Add group information to the device
-    self.deviceModel.update(device.id, {group: groupId}, function(error) {
+    self.deviceProvider.updateOne(new ResourceFilter().equal('id', device.id), {group: groupId}, function(error) {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.ADD_DEVICE_TO_GROUP});
         return callback({
@@ -1163,7 +1170,7 @@ function initBrowsersListeners() {
       });
     }
 
-    self.deviceModel.update(device.id, {group: null}, function(error) {
+    self.deviceProvider.updateOne(new ResourceFilter().equal('id', device.id), {group: null}, function(error) {
       if (error) {
         process.logger.error(error.message, {error: error, event: MESSAGES.REMOVE_DEVICE_FROM_GROUP});
         return callback({
@@ -1219,11 +1226,11 @@ Manager.prototype.start = function(callback) {
 
     // Devices cache
     function(callback) {
-      self.deviceModel.get(null, function(error, entities) {
+      self.deviceProvider.getAll(null, null, {id: 'desc'}, function(error, devices) {
         if (error)
           return callback(error);
 
-        entities.forEach(function(device) {
+        devices.forEach(function(device) {
           device.status = self.devicesPilot.STATUSES.DISCONNECTED;
           self.cache.add(new Device(device));
         });
@@ -1233,11 +1240,11 @@ Manager.prototype.start = function(callback) {
 
     // Groups cache
     function(callback) {
-      self.groupModel.get(null, function(error, entities) {
+      self.groupProvider.getAll(null, null, {id: 'desc'}, function(error, groups) {
         if (error)
           return callback(error);
 
-        entities.forEach(function(group) {
+        groups.forEach(function(group) {
           self.cache.add(new Group(group));
         });
         callback();
@@ -1250,8 +1257,8 @@ Manager.prototype.start = function(callback) {
     var asyncFunctions = [];
     var createAsyncFunction = function(manageableItem, scheduleId) {
       return function(callback) {
-        var model = (manageableItem.type === Device.TYPE) ? self.deviceModel : self.groupModel;
-        model.removeSchedule(manageableItem.id, scheduleId, function(error) {
+        var provider = (manageableItem.type === Device.TYPE) ? self.deviceProvider : self.groupProvider;
+        provider.removeSchedule(manageableItem.id, scheduleId, function(error) {
           if (error)
             return callback(error);
 
@@ -1330,7 +1337,7 @@ Manager.prototype.updateGroupName = function(id, name, callback) {
   if (!group)
     return callback(new NotFoundError(id));
 
-  this.groupModel.update(group.id, {name: name}, function(error) {
+  this.groupProvider.updateOne(new ResourceFilter().equal('id', group.id), {name: name}, function(error) {
     if (error) {
       addGroupHistoric.call(self, group, 'MANAGE.HISTORY.UPDATE_GROUP_NAME_ERROR');
       return callback(error);
@@ -1415,7 +1422,7 @@ Manager.prototype.removeDevice = function(id, callback) {
 
   // Remove device
   actions.push(function(callback) {
-    self.deviceModel.remove(device.id, callback);
+    self.deviceProvider.remove(new ResourceFilter().equal('id', device.id), callback);
   });
 
   if (device.group) {
@@ -1475,13 +1482,13 @@ Manager.prototype.removeGroup = function(id, callback) {
       // Remove device group from cache
       device.group = null;
 
-      self.deviceModel.update(device.id, {group: null}, callback);
+      self.deviceProvider.updateOne(new ResourceFilter().equal('id', device.id), {group: null}, callback);
     });
   });
 
   // Remove group
   actions.push(function(callback) {
-    self.groupModel.remove(group.id, callback);
+    self.groupProvider.remove(new ResourceFilter().equal('id', group.id), callback);
   });
 
   async.series(actions, function(error, results) {
@@ -1501,14 +1508,14 @@ Manager.prototype.removeGroup = function(id, callback) {
  * @method get
  * @param {DevicePilot} [devicesPilot] Devices' pilot to interact with devices
  * @param {BrowserPilot} [browsersPilot] Browsers' pilot to interact with browsers
- * @param {DeviceModel} [deviceModel] Model to manipulate devices
- * @param {groupModel} [groupModel] Model to manipulate groups
+ * @param {DeviceProvider} [deviceProvider] Provider to manipulate devices
+ * @param {groupProvider} [groupProvider] Provider to manipulate groups
  * @param {ScheduleManager} [scheduleManager] A schedule manager to add / remove schedule jobs
  * @return {Manager} The manager
  */
-Manager.get = function(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager) {
+Manager.get = function(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager) {
   if (!manager && devicesPilot && browsersPilot)
-    manager = new Manager(devicesPilot, browsersPilot, deviceModel, groupModel, scheduleManager);
+    manager = new Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager);
 
   return manager;
 };
