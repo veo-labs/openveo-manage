@@ -99,10 +99,11 @@ DeviceProvider.prototype.add = function(devices, callback) {
  * @method updateOne
  * @async
  * @param {ResourceFilter} [filter] Rules to filter device to update
- * @param {String} [name] The device name
- * @param {String} [state] The device default state
- * @param {Array} [history] The device history messages
- * @param {Array} [schedules] The device schedules
+ * @param {String} [filter.name] The device name
+ * @param {String} [filter.state] The device default state
+ * @param {Array} [filter.history] The device history messages
+ * @param {Array} [filter.schedules] The device schedules
+ * @param {String} [filter.group] The device associated group
  * @param {Function} [callback] The function to call when it's done
  *   - **Error** The error if an error occurred, null otherwise
  *   - **Number** 1 if everything went fine
@@ -113,6 +114,7 @@ DeviceProvider.prototype.updateOne = function(filter, data, callback) {
   if (data.state && this.AVAILABLE_STATES.indexOf(data.state) >= 0) modifications.state = data.state;
   if (data.history) modifications.history = data.history;
   if (data.schedules) modifications.schedules = data.schedules;
+  if (data.hasOwnProperty('group')) modifications.group = data.group;
 
   DeviceProvider.super_.prototype.updateOne.call(this, filter, modifications, callback);
 };
