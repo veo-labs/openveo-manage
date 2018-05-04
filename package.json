@@ -62,7 +62,7 @@
     "@openveo/devices-api": "1.*"
   },
   "scripts": {
-    "prepublish": "grunt prod",
+    "prepack": "grunt prod",
     "postinstall": "bower install",
     "eslint": "grunt eslint",
     "mocha": "grunt mochaTest",
