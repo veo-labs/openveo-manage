@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="en" class="yui-overrride">
+<head>
+    <meta charset="utf-8">
+    <title>Manager - OpenVeo Manage server</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1 class="blue-main-title">OpenVeo Manage server</h1>
+        </div>
+        <div class="yui3-u-1-4 version project-version">
+            API Docs for: 2.0.0
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/BrowserPilot.html">BrowserPilot</a></li>
+                                <li><a href="../classes/BROWSERS_MESSAGES.html">BROWSERS_MESSAGES</a></li>
+                                <li><a href="../classes/BrowserSocketController.html">BrowserSocketController</a></li>
+                                <li><a href="../classes/browsersPilotManager.html">browsersPilotManager</a></li>
+                                <li><a href="../classes/Cache.html">Cache</a></li>
+                                <li><a href="../classes/Device.html">Device</a></li>
+                                <li><a href="../classes/DeviceProvider.html">DeviceProvider</a></li>
+                                <li><a href="../classes/ERRORS.html">ERRORS</a></li>
+                                <li><a href="../classes/Group.html">Group</a></li>
+                                <li><a href="../classes/GroupProvider.html">GroupProvider</a></li>
+                                <li><a href="../classes/Manageable.html">Manageable</a></li>
+                                <li><a href="../classes/ManageableProvider.html">ManageableProvider</a></li>
+                                <li><a href="../classes/ManagePlugin.html">ManagePlugin</a></li>
+                                <li><a href="../classes/Manager.html">Manager</a></li>
+                                <li><a href="../classes/ScheduleManager.html">ScheduleManager</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/controllers.html">controllers</a></li>
+                                <li><a href="../modules/manage.html">manage</a></li>
+                                <li><a href="../modules/manageables.html">manageables</a></li>
+                                <li><a href="../modules/providers.html">providers</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>Manager</h1>
+<div class="meta">
+
+
+        <div class="foundat">
+            Defined in: <a href="../files/app_server_Manager.js.html#l26"><code>app&#x2F;server&#x2F;Manager.js:26</code></a>
+        </div>
+
+            Module: <a href="../modules/manage.html">manage</a>
+
+</div>
+
+
+<h3>Summary</h3>
+<div class="intro">
+    <p>Orchestrates devices and browsers to keep them live-synchronized.</p>
+<p>Use Manager.get() to get an instance of the Manager.</p>
+
+</div>
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+<div id="method_Manager" class="method item">
+  <h3 class="blue-method-name">Manager</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l26"><code>app&#x2F;server&#x2F;Manager.js:26</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>Manager</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>devicesPilot</code>
+                </li>
+                <li class="arg">
+                        <code>browsersPilot</code>
+                </li>
+                <li class="arg">
+                        <code>deviceProvider</code>
+                </li>
+                <li class="arg">
+                        <code>groupProvider</code>
+                </li>
+                <li class="arg">
+                        <code>scheduleManager</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">devicesPilot</code>
+                        <span class="type">DevicePilot</span>
+
+
+                    <div class="param-description">
+                        <p>Devices' pilot to interact with devices</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">browsersPilot</code>
+                        <span class="type"><a href="../classes/BrowserPilot.html" class="crosslink">BrowserPilot</a></span>
+
+
+                    <div class="param-description">
+                        <p>Browsers' pilot to interact with browsers</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">deviceProvider</code>
+                        <span class="type"><a href="../classes/DeviceProvider.html" class="crosslink">DeviceProvider</a></span>
+
+
+                    <div class="param-description">
+                        <p>Provider to manipulate devices</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">groupProvider</code>
+                        <span class="type"><a href="../classes/GroupProvider.html" class="crosslink">GroupProvider</a></span>
+
+
+                    <div class="param-description">
+                        <p>Provider to manipulate groups</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">scheduleManager</code>
+                        <span class="type"><a href="../classes/ScheduleManager.html" class="crosslink">ScheduleManager</a></span>
+
+
+                    <div class="param-description">
+                        <p>A schedule manager to add / remove schedule jobs</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+    </div>
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method private">
+                                <a href="#method_addDeviceHistoric">addDeviceHistoric</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_addGroupHistoric">addGroupHistoric</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_buildHistoric">buildHistoric</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_deregisterSchedule">deregisterSchedule</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_get">get</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getDevices">getDevices</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getGroups">getGroups</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_initBrowsersListeners">initBrowsersListeners</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_initDevicesListeners">initDevicesListeners</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_registerDevice">registerDevice</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_registerSchedule">registerSchedule</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_removeDevice">removeDevice</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_removeFromCache">removeFromCache</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_removeGroup">removeGroup</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_start">start</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_updateDeviceName">updateDeviceName</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_updateGroupName">updateGroupName</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                            <li class="index-item property">
+                                <a href="#property_browsersPilot">browsersPilot</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_cache">cache</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_deviceProvider">deviceProvider</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_devicesPilot">devicesPilot</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_groupProvider">groupProvider</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_manager">manager</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_scheduleManager">scheduleManager</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_addDeviceHistoric" class="method item private">
+  <h3 class="blue-method-name">addDeviceHistoric</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l158"><code>app&#x2F;server&#x2F;Manager.js:158</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>addDeviceHistoric</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>device</code>
+                </li>
+                <li class="arg">
+                        <code>message</code>
+                </li>
+                <li class="arg">
+                        <code>messageParams</code>
+                </li>
+                <li class="arg">
+                        <code>addToGroup</code>
+                </li>
+                <li class="arg">
+                        <code>callback</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+        <span class="flag async">async</span>
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Adds an historic to device's history.</p>
+<p>Use modifier <em>addToGroup</em> to also add the historic into history of device's group.
+Saves the history in database and cache then informs browsers about
+the new historic.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">device</code>
+                        <span class="type"><a href="../classes/Device.html" class="crosslink">Device</a></span>
+
+
+                    <div class="param-description">
+                        <p>The device</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">message</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The historic message</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">messageParams</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                        <p>Message parameters for message translation</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">addToGroup</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+                    <div class="param-description">
+                        <p>true to also add the historic to the history of the device's group</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">callback</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+
+                    <div class="param-description">
+                        <p>Function to call when it's done with :</p>
+<ul>
+<li><strong>Error</strong> An error is something went wrong</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_addGroupHistoric" class="method item private">
+  <h3 class="blue-method-name">addGroupHistoric</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l125"><code>app&#x2F;server&#x2F;Manager.js:125</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>addGroupHistoric</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>group</code>
+                </li>
+                <li class="arg">
+                        <code>message</code>
+                </li>
+                <li class="arg">
+                        <code>messageParams</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[callback]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+        <span class="flag async">async</span>
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Adds an historic to device's history.</p>
+<p>Saves the historic in database and cache then informs browsers about
+the new historic.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">group</code>
+                        <span class="type"><a href="../classes/Group.html" class="crosslink">Group</a></span>
+
+
+                    <div class="param-description">
+                        <p>The group</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">message</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The historic message</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">messageParams</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                        <p>Message parameters for message translation</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[callback]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>Function to call when it's done with :</p>
+<ul>
+<li><strong>Error</strong> An error is something went wrong</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_buildHistoric" class="method item private">
+  <h3 class="blue-method-name">buildHistoric</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l102"><code>app&#x2F;server&#x2F;Manager.js:102</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>buildHistoric</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>message</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[params]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Builds an history message.</p>
+<p>Historic are composed of a date, a message as a translation key
+and parameters for the translation key.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">message</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The historic message</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[params]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>Message parameters</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
+                <div class="blue-return-desc">
+                    <p>The historic object</p>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_deregisterSchedule" class="method item private">
+  <h3 class="blue-method-name">deregisterSchedule</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l254"><code>app&#x2F;server&#x2F;Manager.js:254</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>deregisterSchedule</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>manageable</code>
+                </li>
+                <li class="arg">
+                        <code>scheduleId</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+        <span class="flag async">async</span>
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Deregisters a schedule.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">manageable</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The manageable associated to the schedule</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">scheduleId</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                        <p>The schedule id</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_get" class="method item">
+  <h3 class="blue-method-name">get</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l1505"><code>app&#x2F;server&#x2F;Manager.js:1505</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>get</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code class="optional">[devicesPilot]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[browsersPilot]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[deviceProvider]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[groupProvider]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[scheduleManager]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Manager.html" class="crosslink">Manager</a></span>
+        </span>
+
+
+
+
+
+
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Gets Manager singleton.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name optional">[devicesPilot]</code>
+                        <span class="type">DevicePilot</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>Devices' pilot to interact with devices</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[browsersPilot]</code>
+                        <span class="type"><a href="../classes/BrowserPilot.html" class="crosslink">BrowserPilot</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>Browsers' pilot to interact with browsers</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[deviceProvider]</code>
+                        <span class="type"><a href="../classes/DeviceProvider.html" class="crosslink">DeviceProvider</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>Provider to manipulate devices</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[groupProvider]</code>
+                        <span class="type"><a href="../classes/GroupProvider.html" class="crosslink">GroupProvider</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>Provider to manipulate groups</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[scheduleManager]</code>
+                        <span class="type"><a href="../classes/ScheduleManager.html" class="crosslink">ScheduleManager</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>A schedule manager to add / remove schedule jobs</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                <span class="type"><a href="../classes/Manager.html" class="crosslink">Manager</a></span>:
+                <div class="blue-return-desc">
+                    <p>The manager</p>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getDevices" class="method item">
+  <h3 class="blue-method-name">getDevices</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l1372"><code>app&#x2F;server&#x2F;Manager.js:1372</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>getDevices</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+        </span>
+
+
+
+
+
+
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Gets the list of devices from cache.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>:
+                <div class="blue-return-desc">
+                    <p>The list of devices in cache</p>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getGroups" class="method item">
+  <h3 class="blue-method-name">getGroups</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l1387"><code>app&#x2F;server&#x2F;Manager.js:1387</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>getGroups</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+        </span>
+
+
+
+
+
+
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Gets the list of groups from cache.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>:
+                <div class="blue-return-desc">
+                    <p>The list of groups in cache</p>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_initBrowsersListeners" class="method item private">
+  <h3 class="blue-method-name">initBrowsersListeners</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l648"><code>app&#x2F;server&#x2F;Manager.js:648</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>initBrowsersListeners</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Initializes listeners on browsers' messages.</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_initDevicesListeners" class="method item private">
+  <h3 class="blue-method-name">initDevicesListeners</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l447"><code>app&#x2F;server&#x2F;Manager.js:447</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>initDevicesListeners</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Initializes listeners on devices' messages.</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_registerDevice" class="method item private">
+  <h3 class="blue-method-name">registerDevice</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l213"><code>app&#x2F;server&#x2F;Manager.js:213</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>registerDevice</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>id</code>
+                </li>
+                <li class="arg">
+                        <code>callback</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+        <span class="flag async">async</span>
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Registers a device if not already registered.</p>
+<p>Adds devide to database and cache.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">id</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The id of the device to register</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">callback</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+
+                    <div class="param-description">
+                        <p>Function to call when it's done with :</p>
+<ul>
+<li><strong>Error</strong> An error if something went wrong, null otherwise</li>
+<li><strong>Object</strong> The registered device</li>
+<li><strong>Boolean</strong> true if the device wasn't registered</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_registerSchedule" class="method item private">
+  <h3 class="blue-method-name">registerSchedule</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l273"><code>app&#x2F;server&#x2F;Manager.js:273</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>registerSchedule</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>manageable</code>
+                </li>
+                <li class="arg">
+                        <code>schedule</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+        <span class="flag async">async</span>
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Registers a new schedule.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">manageable</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The manageable associated to the schedule</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">schedule</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                        <p>The schedule description object</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_removeDevice" class="method item">
+  <h3 class="blue-method-name">removeDevice</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l1402"><code>app&#x2F;server&#x2F;Manager.js:1402</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>removeDevice</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>id</code>
+                </li>
+                <li class="arg">
+                        <code>callback</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+        <span class="flag async">async</span>
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Removes a device.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">id</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The device id</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">callback</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+
+                    <div class="param-description">
+                        <p>Function to call when it's done with :</p>
+<ul>
+<li><strong>Error</strong> An error if something went wrong</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_removeFromCache" class="method item">
+  <h3 class="blue-method-name">removeFromCache</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l1359"><code>app&#x2F;server&#x2F;Manager.js:1359</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>removeFromCache</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>id</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Removes an in-memory stored manageable with its id.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">id</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The manageable id</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_removeGroup" class="method item">
+  <h3 class="blue-method-name">removeGroup</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l1456"><code>app&#x2F;server&#x2F;Manager.js:1456</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>removeGroup</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>id</code>
+                </li>
+                <li class="arg">
+                        <code>callback</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+        <span class="flag async">async</span>
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Removes a group.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">id</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The device id</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">callback</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+
+                    <div class="param-description">
+                        <p>Function to call when it's done with :</p>
+<ul>
+<li><strong>Error</strong> An error if something went wrong</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_start" class="method item">
+  <h3 class="blue-method-name">start</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l1202"><code>app&#x2F;server&#x2F;Manager.js:1202</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>start</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>callback</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+        <span class="flag async">async</span>
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Starts manager.</p>
+<p>When started the manager starts receiving events from
+both devices and browsers. It also populates cache with all registered
+devices and groups.</p>
+<p>All expired schedules' jobs of devices and groups are removed. Other schedules
+are registered.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">callback</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+
+                    <div class="param-description">
+                        <p>Function to call when it's done with :</p>
+<ul>
+<li><strong>Error</strong> An error if something went wrong, null otherwise</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_updateDeviceName" class="method item">
+  <h3 class="blue-method-name">updateDeviceName</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l1295"><code>app&#x2F;server&#x2F;Manager.js:1295</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>updateDeviceName</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>id</code>
+                </li>
+                <li class="arg">
+                        <code>name</code>
+                </li>
+                <li class="arg">
+                        <code>callback</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+        <span class="flag async">async</span>
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Asks device to modify its name.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">id</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The id of the device</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">name</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The new device's name</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">callback</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+
+                    <div class="param-description">
+                        <p>Function to call when it's done with :</p>
+<ul>
+<li><strong>Error</strong> An error if something went wrong, null otherwise</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_updateGroupName" class="method item">
+  <h3 class="blue-method-name">updateGroupName</h3>
+
+  <div class="meta method-meta">
+      <p>
+          Defined in
+      <a href="../files/app_server_Manager.js.html#l1323"><code>app&#x2F;server&#x2F;Manager.js:1323</code></a>
+  </p>
+
+
+
+  </div>
+
+  <h3>Syntax</h3>
+  <div class="blue-method-syntax">
+  <h3 class="name"><code>updateGroupName</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>id</code>
+                </li>
+                <li class="arg">
+                        <code>name</code>
+                </li>
+                <li class="arg">
+                        <code>callback</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+        <span class="flag async">async</span>
+
+  </div>
+    <div class="description">
+      <h3>Summary</h3>
+        <p>Updates a group's name.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">id</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The id of the group</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">name</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The new group's name</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">callback</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+
+                    <div class="param-description">
+                        <p>Function to call when it's done with :</p>
+<ul>
+<li><strong>Error</strong> An error if something went wrong, null otherwise</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+            </div>
+
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                    <div id="property_browsersPilot" class="property item">
+                    
+                      <h3 class="blue-method-name">browsersPilot</h3>
+                      <div class="meta method-meta">
+                          <p>
+                              Defined in
+                          <a href="../files/app_server_Manager.js.html#l42"><code>app&#x2F;server&#x2F;Manager.js:42</code></a>
+                      </p>
+                    
+                    
+                      </div>
+                    
+                      <h3>Syntax</h3>
+                      <div class="blue-method-syntax">
+                        <h3 class="name"><code>browsersPilot</code></h3>
+                        <span class="type"><a href="../classes/BrowserPilot.html" class="crosslink">BrowserPilot</a></span>
+                    
+                    
+                    
+                            <span class="flag final">final</span>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                          <h3>Summary</h3>
+                            <p>The browsers' pilot to interact with browsers.</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    
+                    </div>
+                    <div id="property_cache" class="property item">
+                    
+                      <h3 class="blue-method-name">cache</h3>
+                      <div class="meta method-meta">
+                          <p>
+                              Defined in
+                          <a href="../files/app_server_Manager.js.html#l60"><code>app&#x2F;server&#x2F;Manager.js:60</code></a>
+                      </p>
+                    
+                    
+                      </div>
+                    
+                      <h3>Syntax</h3>
+                      <div class="blue-method-syntax">
+                        <h3 class="name"><code>cache</code></h3>
+                        <span class="type"><a href="../classes/Cache.html" class="crosslink">Cache</a></span>
+                    
+                    
+                    
+                            <span class="flag final">final</span>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                          <h3>Summary</h3>
+                            <p>The cache to store devices and groups.</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    
+                    </div>
+                    <div id="property_deviceProvider" class="property item">
+                    
+                      <h3 class="blue-method-name">deviceProvider</h3>
+                      <div class="meta method-meta">
+                          <p>
+                              Defined in
+                          <a href="../files/app_server_Manager.js.html#l87"><code>app&#x2F;server&#x2F;Manager.js:87</code></a>
+                      </p>
+                    
+                    
+                      </div>
+                    
+                      <h3>Syntax</h3>
+                      <div class="blue-method-syntax">
+                        <h3 class="name"><code>deviceProvider</code></h3>
+                        <span class="type"><a href="../classes/DeviceProvider.html" class="crosslink">DeviceProvider</a></span>
+                    
+                    
+                    
+                            <span class="flag final">final</span>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                          <h3>Summary</h3>
+                            <p>Provider to manage devices.</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    
+                    </div>
+                    <div id="property_devicesPilot" class="property item">
+                    
+                      <h3 class="blue-method-name">devicesPilot</h3>
+                      <div class="meta method-meta">
+                          <p>
+                              Defined in
+                          <a href="../files/app_server_Manager.js.html#l51"><code>app&#x2F;server&#x2F;Manager.js:51</code></a>
+                      </p>
+                    
+                    
+                      </div>
+                    
+                      <h3>Syntax</h3>
+                      <div class="blue-method-syntax">
+                        <h3 class="name"><code>devicesPilot</code></h3>
+                        <span class="type">DevicePilot</span>
+                    
+                    
+                    
+                            <span class="flag final">final</span>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                          <h3>Summary</h3>
+                            <p>The devices' pilot to interact with devices.</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    
+                    </div>
+                    <div id="property_groupProvider" class="property item">
+                    
+                      <h3 class="blue-method-name">groupProvider</h3>
+                      <div class="meta method-meta">
+                          <p>
+                              Defined in
+                          <a href="../files/app_server_Manager.js.html#l78"><code>app&#x2F;server&#x2F;Manager.js:78</code></a>
+                      </p>
+                    
+                    
+                      </div>
+                    
+                      <h3>Syntax</h3>
+                      <div class="blue-method-syntax">
+                        <h3 class="name"><code>groupProvider</code></h3>
+                        <span class="type"><a href="../classes/GroupProvider.html" class="crosslink">GroupProvider</a></span>
+                    
+                    
+                    
+                            <span class="flag final">final</span>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                          <h3>Summary</h3>
+                            <p>Provider to manage groups.</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    
+                    </div>
+                    <div id="property_manager" class="property item private">
+                    
+                      <h3 class="blue-method-name">manager</h3>
+                      <div class="meta method-meta">
+                          <p>
+                              Defined in
+                          <a href="../files/app_server_Manager.js.html#l17"><code>app&#x2F;server&#x2F;Manager.js:17</code></a>
+                      </p>
+                    
+                    
+                      </div>
+                    
+                      <h3>Syntax</h3>
+                      <div class="blue-method-syntax">
+                        <h3 class="name"><code>manager</code></h3>
+                        <span class="type"><a href="../classes/Manager.html" class="crosslink">Manager</a></span>
+                    
+                    
+                            <span class="flag private">private</span>
+                    
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                          <h3>Summary</h3>
+                            <p>Manager singleton.</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    
+                    </div>
+                    <div id="property_scheduleManager" class="property item">
+                    
+                      <h3 class="blue-method-name">scheduleManager</h3>
+                      <div class="meta method-meta">
+                          <p>
+                              Defined in
+                          <a href="../files/app_server_Manager.js.html#l69"><code>app&#x2F;server&#x2F;Manager.js:69</code></a>
+                      </p>
+                    
+                    
+                      </div>
+                    
+                      <h3>Syntax</h3>
+                      <div class="blue-method-syntax">
+                        <h3 class="name"><code>scheduleManager</code></h3>
+                        <span class="type"><a href="../classes/ScheduleManager.html" class="crosslink">ScheduleManager</a></span>
+                    
+                    
+                    
+                            <span class="flag final">final</span>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                          <h3>Summary</h3>
+                            <p>The schedule manager.</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    
+                    </div>
+            </div>
+
+
+    </div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
