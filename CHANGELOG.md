@@ -3,6 +3,7 @@
 ## BREAKING CHANGES
 
 - OpenVeo Manage now requires OpenVeo Core 5.0.0
+- Drop support for NodeJS &lt; 8.9.4 and NPM &lt; 5.6.0
 
 # 1.1.0 / 2017-10-18
 
