@@ -21,6 +21,7 @@ var ERRORS = {
    * @property UNKNOWN_ERROR
    * @type Object
    * @final
+   * @default 0
    */
   UNKNOWN_ERROR: {
     code: 0x000,
@@ -33,6 +34,7 @@ var ERRORS = {
    * @property REMOVE_ERROR
    * @type Object
    * @final
+   * @default 1
    */
   REMOVE_ERROR: {
     code: 0x001,
@@ -45,6 +47,7 @@ var ERRORS = {
    * @property REMOVE_GROUP_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 2
    */
   REMOVE_SCHEDULE_ERROR: {
     code: 0x002,
@@ -57,6 +60,7 @@ var ERRORS = {
    * @property UPDATE_DEVICE_NAME_ERROR
    * @type Object
    * @final
+   * @default 3
    */
   UPDATE_DEVICE_NAME_ERROR: {
     code: 0x003,
@@ -69,6 +73,7 @@ var ERRORS = {
    * @property UPDATE_GROUP_NAME_ERROR
    * @type Object
    * @final
+   * @default 4
    */
   UPDATE_GROUP_NAME_ERROR: {
     code: 0x004,
@@ -81,6 +86,7 @@ var ERRORS = {
    * @property UPDATE_DEVICE_NAME_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 5
    */
   UPDATE_DEVICE_NAME_NOT_FOUND_ERROR: {
     code: 0x005,
@@ -93,6 +99,7 @@ var ERRORS = {
    * @property UPDATE_GROUP_NAME_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 6
    */
   UPDATE_GROUP_NAME_NOT_FOUND_ERROR: {
     code: 0x006,
@@ -105,6 +112,7 @@ var ERRORS = {
    * @property START_DEVICE_SESSION_ERROR
    * @type Object
    * @final
+   * @default 7
    */
   START_DEVICE_SESSION_ERROR: {
     code: 0x007,
@@ -117,6 +125,7 @@ var ERRORS = {
    * @property START_DEVICE_SESSION_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 8
    */
   START_DEVICE_SESSION_NOT_FOUND_ERROR: {
     code: 0x008,
@@ -129,6 +138,7 @@ var ERRORS = {
    * @property STOP_DEVICE_SESSION_ERROR
    * @type Object
    * @final
+   * @default 9
    */
   STOP_DEVICE_SESSION_ERROR: {
     code: 0x009,
@@ -141,6 +151,7 @@ var ERRORS = {
    * @property STOP_DEVICE_SESSION_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 10
    */
   STOP_DEVICE_SESSION_NOT_FOUND_ERROR: {
     code: 0x00a,
@@ -153,6 +164,7 @@ var ERRORS = {
    * @property INDEX_DEVICE_SESSION_ERROR
    * @type Object
    * @final
+   * @default 11
    */
   INDEX_DEVICE_SESSION_ERROR: {
     code: 0x00b,
@@ -165,6 +177,7 @@ var ERRORS = {
    * @property INDEX_DEVICE_SESSION_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 12
    */
   INDEX_DEVICE_SESSION_NOT_FOUND_ERROR: {
     code: 0x00c,
@@ -177,6 +190,7 @@ var ERRORS = {
    * @property UPDATE_DEVICE_STATE_ERROR
    * @type Object
    * @final
+   * @default 13
    */
   UPDATE_DEVICE_STATE_ERROR: {
     code: 0x00d,
@@ -189,6 +203,7 @@ var ERRORS = {
    * @property UPDATE_DEVICE_STATE_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 14
    */
   UPDATE_DEVICE_STATE_NOT_FOUND_ERROR: {
     code: 0x00e,
@@ -201,6 +216,7 @@ var ERRORS = {
    * @property REMOVE_HISTORIC_ERROR
    * @type Object
    * @final
+   * @default 15
    */
   REMOVE_HISTORIC_ERROR: {
     code: 0x00f,
@@ -213,6 +229,7 @@ var ERRORS = {
    * @property REMOVE_HISTORIC_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 16
    */
   REMOVE_HISTORIC_NOT_FOUND_ERROR: {
     code: 0x010,
@@ -225,6 +242,7 @@ var ERRORS = {
    * @property REMOVE_HISTORY_ERROR
    * @type Object
    * @final
+   * @default 17
    */
   REMOVE_HISTORY_ERROR: {
     code: 0x011,
@@ -237,6 +255,7 @@ var ERRORS = {
    * @property REMOVE_HISTORY_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 18
    */
   REMOVE_HISTORY_NOT_FOUND_ERROR: {
     code: 0x012,
@@ -249,6 +268,7 @@ var ERRORS = {
    * @property ADD_SCHEDULE_INVALID_ERROR
    * @type Object
    * @final
+   * @default 19
    */
   ADD_SCHEDULE_INVALID_ERROR: {
     code: 0x013,
@@ -261,6 +281,7 @@ var ERRORS = {
    * @property ADD_SCHEDULE_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 20
    */
   ADD_SCHEDULE_NOT_FOUND_ERROR: {
     code: 0x014,
@@ -273,6 +294,7 @@ var ERRORS = {
    * @property ADD_SCHEDULE_ERROR
    * @type Object
    * @final
+   * @default 21
    */
   ADD_SCHEDULE_ERROR: {
     code: 0x015,
@@ -285,6 +307,7 @@ var ERRORS = {
    * @property REMOVE_SCHEDULE_RUNNING_ERROR
    * @type Object
    * @final
+   * @default 22
    */
   REMOVE_SCHEDULE_RUNNING_ERROR: {
     code: 0x016,
@@ -297,6 +320,7 @@ var ERRORS = {
    * @property REMOVE_SCHEDULE_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 23
    */
   REMOVE_SCHEDULE_NOT_FOUND_ERROR: {
     code: 0x017,
@@ -309,6 +333,7 @@ var ERRORS = {
    * @property CREATE_GROUP_ERROR
    * @type Object
    * @final
+   * @default 24
    */
   CREATE_GROUP_ERROR: {
     code: 0x018,
@@ -321,6 +346,7 @@ var ERRORS = {
    * @property ADD_DEVICE_TO_GROUP_ERROR
    * @type Object
    * @final
+   * @default 25
    */
   ADD_DEVICE_TO_GROUP_ERROR: {
     code: 0x019,
@@ -333,6 +359,7 @@ var ERRORS = {
    * @property ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 26
    */
   ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR: {
     code: 0x01a,
@@ -345,6 +372,7 @@ var ERRORS = {
    * @property ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR
    * @type Object
    * @final
+   * @default 27
    */
   ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR: {
     code: 0x01b,
@@ -357,6 +385,7 @@ var ERRORS = {
    * @property REMOVE_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 28
    */
   REMOVE_NOT_FOUND_ERROR: {
     code: 0x01c,
@@ -369,6 +398,7 @@ var ERRORS = {
    * @property REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR
    * @type Object
    * @final
+   * @default 29
    */
   REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR: {
     code: 0x01d,
@@ -381,6 +411,7 @@ var ERRORS = {
    * @property REMOVE_DEVICE_FROM_GROUP_ERROR
    * @type Object
    * @final
+   * @default 30
    */
   REMOVE_DEVICE_FROM_GROUP_ERROR: {
     code: 0x01e,
@@ -395,6 +426,7 @@ var ERRORS = {
    * @property UPDATE_NAME_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 256
    */
   UPDATE_NAME_WRONG_PARAMETERS: {
     code: 0x100,
@@ -407,6 +439,7 @@ var ERRORS = {
    * @property REMOVE_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 257
    */
   REMOVE_WRONG_PARAMETERS: {
     code: 0x101,
@@ -419,6 +452,7 @@ var ERRORS = {
    * @property UPDATE_DEVICE_STATE_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 258
    */
   UPDATE_DEVICE_STATE_WRONG_PARAMETERS: {
     code: 0x102,
@@ -431,6 +465,7 @@ var ERRORS = {
    * @property REMOVE_HISTORIC_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 259
    */
   REMOVE_HISTORIC_WRONG_PARAMETERS: {
     code: 0x103,
@@ -443,6 +478,7 @@ var ERRORS = {
    * @property ADD_SCHEDULE_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 260
    */
   ADD_SCHEDULE_WRONG_PARAMETERS: {
     code: 0x104,
@@ -455,6 +491,7 @@ var ERRORS = {
    * @property START_DEVICE_SESSION_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 261
    */
   START_DEVICE_SESSION_WRONG_PARAMETERS: {
     code: 0x105,
@@ -467,6 +504,7 @@ var ERRORS = {
    * @property STOP_DEVICE_SESSION_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 262
    */
   STOP_DEVICE_SESSION_WRONG_PARAMETERS: {
     code: 0x106,
@@ -479,6 +517,7 @@ var ERRORS = {
    * @property INDEX_DEVICE_SESSION_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 263
    */
   INDEX_DEVICE_SESSION_WRONG_PARAMETERS: {
     code: 0x107,
@@ -491,6 +530,7 @@ var ERRORS = {
    * @property REMOVE_SCHEDULE_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 264
    */
   REMOVE_SCHEDULE_WRONG_PARAMETERS: {
     code: 0x108,
@@ -503,6 +543,7 @@ var ERRORS = {
    * @property REMOVE_HISTORY_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 265
    */
   REMOVE_HISTORY_WRONG_PARAMETERS: {
     code: 0x109,
@@ -515,6 +556,7 @@ var ERRORS = {
    * @property GET_DEVICE_SETTINGS_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 266
    */
   GET_DEVICE_SETTINGS_WRONG_PARAMETERS: {
     code: 0x10a,
@@ -527,6 +569,7 @@ var ERRORS = {
    * @property ADD_DEVICE_TO_GROUP_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 267
    */
   ADD_DEVICE_TO_GROUP_WRONG_PARAMETERS: {
     code: 0x10b,
@@ -539,6 +582,7 @@ var ERRORS = {
    * @property REMOVE_DEVICE_FROM_GROUP_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 268
    */
   REMOVE_DEVICE_FROM_GROUP_WRONG_PARAMETERS: {
     code: 0x10c,
@@ -551,6 +595,7 @@ var ERRORS = {
    * @property REMOVE_GROUP_WRONG_PARAMETERS
    * @type Object
    * @final
+   * @default 269
    */
   REMOVE_GROUP_WRONG_PARAMETERS: {
     code: 0x10d,
