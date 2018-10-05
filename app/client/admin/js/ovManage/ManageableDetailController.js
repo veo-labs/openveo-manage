@@ -50,7 +50,10 @@
      */
     self.popupBegin = {
       opened: false,
-      minDate: today
+      options: {
+        minDate: today,
+        showWeeks: false
+      }
     };
 
     /**
@@ -60,7 +63,10 @@
      * @type Object
      */
     self.popupEnd = {
-      opened: false
+      opened: false,
+      options: {
+        showWeeks: false
+      }
     };
 
     /**
@@ -586,6 +592,12 @@
         self.itemSchedule.schedule.preset = preset;
         self.validatePreset(preset);
       }
+    });
+
+    // Watch for begin date change
+    $scope.$watch('vm.itemSchedule.schedule.beginDate', function() {
+      if (self.itemSchedule && self.itemSchedule.schedule && self.itemSchedule.schedule.beginDate)
+        self.popupEnd.options.minDate = self.itemSchedule.schedule.beginDate;
     });
 
     // Listen to window resize event to update height of elements

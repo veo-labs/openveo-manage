@@ -1,3 +1,11 @@
+# 2.0.1 / YYYY-MM-DD
+
+## BUG FIXES
+
+- Fix time and duration fields when planning a record. Fields weren't displayed anymore since OpenVeo Core 5.1.0
+- Fix begin date picker when planning a record. It was possible to select a past date since OpenVeo Core 5.1.0
+- Fix end date picker when planning a record. It was possible to select a date anterior to begin date since OpenVeo Core 5.1.0
+
 # 2.0.0 / 2018-05-04
 
 ## BREAKING CHANGES
