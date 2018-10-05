@@ -258,13 +258,11 @@
           }
           .begin-block, .end-block {
             .datepicker {
-              //float: left;
               background-color: transparent;
               border: none;
               width: 35px;
               height: 32px;
               font-size: 26px;
-              //margin-left: -3px;
 
               @include tablet() {
                 padding-left: 7px;

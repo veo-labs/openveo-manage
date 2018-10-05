@@ -44,26 +44,6 @@ $mq-show-breakpoints: () !default;
     }
 }
 
-// Media Query mixin
-// Usage:
-// .element {
-//     @include mq($from: mobile) {
-//         color: red;
-//     }
-//     @include mq($until: tablet) {
-//         color: blue;
-//     }
-//     @include mq(mobile, tablet) {
-//         color: green;
-//     }
-//     @include mq($from: tablet, $and: '(orientation: landscape)') {
-//         color: teal;
-//     }
-//     @include mq(950px) {
-//         color: hotpink;
-//     }
-// }
-
 @mixin mq($from: false, $until: false, $and: false, $to: null) {
 
     // Deprecate use of $to for $until, because $until implies the exclusive
