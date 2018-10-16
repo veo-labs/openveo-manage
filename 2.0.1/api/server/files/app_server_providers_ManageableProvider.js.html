@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" class="yui-overrride">
+<head>
+    <meta charset="utf-8">
+    <title>app/server/providers/ManageableProvider.js - OpenVeo Manage server</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1 class="blue-main-title">OpenVeo Manage server</h1>
+        </div>
+        <div class="yui3-u-1-4 version project-version">
+            API Docs for: 2.0.1
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/BrowserPilot.html">BrowserPilot</a></li>
+                                <li><a href="../classes/BROWSERS_MESSAGES.html">BROWSERS_MESSAGES</a></li>
+                                <li><a href="../classes/BrowserSocketController.html">BrowserSocketController</a></li>
+                                <li><a href="../classes/browsersPilotManager.html">browsersPilotManager</a></li>
+                                <li><a href="../classes/Cache.html">Cache</a></li>
+                                <li><a href="../classes/Device.html">Device</a></li>
+                                <li><a href="../classes/DeviceProvider.html">DeviceProvider</a></li>
+                                <li><a href="../classes/ERRORS.html">ERRORS</a></li>
+                                <li><a href="../classes/Group.html">Group</a></li>
+                                <li><a href="../classes/GroupProvider.html">GroupProvider</a></li>
+                                <li><a href="../classes/Manageable.html">Manageable</a></li>
+                                <li><a href="../classes/ManageableProvider.html">ManageableProvider</a></li>
+                                <li><a href="../classes/ManagePlugin.html">ManagePlugin</a></li>
+                                <li><a href="../classes/Manager.html">Manager</a></li>
+                                <li><a href="../classes/ScheduleManager.html">ScheduleManager</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/controllers.html">controllers</a></li>
+                                <li><a href="../modules/manage.html">manage</a></li>
+                                <li><a href="../modules/manageables.html">manageables</a></li>
+                                <li><a href="../modules/providers.html">providers</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: app/server/providers/ManageableProvider.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x27;use strict&#x27;;
+
+/**
+ * @module providers
+ */
+
+var util = require(&#x27;util&#x27;);
+var shortid = require(&#x27;shortid&#x27;);
+var openVeoApi = require(&#x27;@openveo/api&#x27;);
+var ResourceFilter = openVeoApi.storages.ResourceFilter;
+var NotFoundError = openVeoApi.errors.NotFoundError;
+
+/**
+ * Defines a ManageableProvider for entities with an history and a planning.
+ *
+ * @class ManageableProvider
+ * @extends EntityProvider
+ * @constructor
+ * @param {Database} database The database to interact with
+ * @param {String} location The location of the manageables in the storage
+ */
+function ManageableProvider(database, location) {
+  ManageableProvider.super_.call(this, database, location);
+}
+
+module.exports = ManageableProvider;
+util.inherits(ManageableProvider, openVeoApi.providers.EntityProvider);
+
+/**
+ * Adds an item to an array in a manageable.
+ *
+ * @method addArrayItem
+ * @private
+ * @async
+ * @param {String} id The manageable id
+ * @param {String} property The property containing an array
+ * @param {Mixed} value The value to add
+ * @param {Function} callback The function to call when it&#x27;s done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** 1 if everything went fine
+ */
+function addArrayItem(id, property, value, callback) {
+  var self = this;
+  var filter = new ResourceFilter().equal(&#x27;id&#x27;, id);
+  this.getOne(filter, null, function(error, item) {
+    if (error) return callback(error);
+    if (!item) return callback(new NotFoundError(id));
+
+    item[property].push(value);
+
+    var data = {};
+    data[property] = item[property];
+    self.updateOne(filter, data, callback);
+  });
+}
+
+/**
+ * Removes an item from an array of objects in a manageable.
+ *
+ * @method removeArrayItem
+ * @private
+ * @async
+ * @param {String} id The manageable id
+ * @param {String} property The property containing an array
+ * @param {String} propertyKey The property to analyze in array objects to find the item to remove
+ * @param {String} value The value of the property to analyze in array objects to find the item to remove
+ * @param {Function} callback The function to call when it&#x27;s done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** 1 if everything went fine
+ */
+function removeArrayItem(id, property, propertyKey, value, callback) {
+  var self = this;
+  var filter = new ResourceFilter().equal(&#x27;id&#x27;, id);
+
+  this.getOne(filter, null, function(error, item) {
+    if (error) return callback(error);
+    if (!item) return callback(new NotFoundError(id));
+
+    var index = -1;
+    for (var i = 0; i &lt; item[property].length; i++) {
+      if (item[property][i][propertyKey] === value) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index === -1)
+      return callback(new Error(&#x27;No matching property&#x27;));
+
+    item[property].splice(index, 1);
+
+    var data = {};
+    data[property] = item[property];
+    self.updateOne(filter, data, callback);
+  });
+}
+
+/**
+ * Adds a new historic to manageable&#x27;s history.
+ *
+ * @method addHistoric
+ * @async
+ * @param {String} id The manageable item id
+ * @param {Object} historic An historic description object
+ * @param {Function} callback The function to call when it&#x27;s done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** 1 if everything went fine
+ */
+ManageableProvider.prototype.addHistoric = function(id, historic, callback) {
+  addArrayItem.call(this, id, &#x27;history&#x27;, historic, callback);
+};
+
+/**
+ * Removes an entry from a manageable&#x27;s history.
+ *
+ * @method removeHistoric
+ * @async
+ * @param {String} id The manageable id
+ * @param {String} historicId The historic id
+ * @param {Function} callback The function to call when it&#x27;s done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** 1 if everything went fine
+ */
+ManageableProvider.prototype.removeHistoric = function(id, historicId, callback) {
+  removeArrayItem.call(this, id, &#x27;history&#x27;, &#x27;id&#x27;, historicId, callback);
+};
+
+/**
+ * Removes an entry from a manageable&#x27;s history.
+ *
+ * @method removeHistory
+ * @async
+ * @param {String} id The manageable id
+ * @param {Function} callback The function to call when it&#x27;s done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** 1 if everything went fine
+ */
+ManageableProvider.prototype.removeHistory = function(id, callback) {
+  this.updateOne(new ResourceFilter().equal(&#x27;id&#x27;, id), {history: []}, callback);
+};
+
+/**
+ * Adds a new schedule to manageable.
+ *
+ * @method addSchedule
+ * @async
+ * @param {String} id The manageable id
+ * @param {Object} schedule A schedule description object
+ * @param {Function} callback The function to call when it&#x27;s done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** The total amount of items updated
+ */
+ManageableProvider.prototype.addSchedule = function(id, schedule, callback) {
+  schedule.id = shortid.generate();
+  addArrayItem.call(this, id, &#x27;schedules&#x27;, schedule, callback);
+};
+
+/**
+ * Removes a manageable&#x27;s schedule.
+ *
+ * @method removeSchedule
+ * @async
+ * @param {String} id The manageable id
+ * @param {String} scheduleId The schedule id
+ * @param {Function} callback The function to call when it&#x27;s done
+ *   - **Error** The error if an error occurred, null otherwise
+ *   - **Number** The total amount of items updated
+ */
+ManageableProvider.prototype.removeSchedule = function(id, scheduleId, callback) {
+  removeArrayItem.call(this, id, &#x27;schedules&#x27;, &#x27;id&#x27;, scheduleId, callback);
+};
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

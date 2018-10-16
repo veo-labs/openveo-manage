@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" class="yui-overrride">
+<head>
+    <meta charset="utf-8">
+    <title>app/server/manageables/Device.js - OpenVeo Manage server</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1 class="blue-main-title">OpenVeo Manage server</h1>
+        </div>
+        <div class="yui3-u-1-4 version project-version">
+            API Docs for: 2.0.1
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/BrowserPilot.html">BrowserPilot</a></li>
+                                <li><a href="../classes/BROWSERS_MESSAGES.html">BROWSERS_MESSAGES</a></li>
+                                <li><a href="../classes/BrowserSocketController.html">BrowserSocketController</a></li>
+                                <li><a href="../classes/browsersPilotManager.html">browsersPilotManager</a></li>
+                                <li><a href="../classes/Cache.html">Cache</a></li>
+                                <li><a href="../classes/Device.html">Device</a></li>
+                                <li><a href="../classes/DeviceProvider.html">DeviceProvider</a></li>
+                                <li><a href="../classes/ERRORS.html">ERRORS</a></li>
+                                <li><a href="../classes/Group.html">Group</a></li>
+                                <li><a href="../classes/GroupProvider.html">GroupProvider</a></li>
+                                <li><a href="../classes/Manageable.html">Manageable</a></li>
+                                <li><a href="../classes/ManageableProvider.html">ManageableProvider</a></li>
+                                <li><a href="../classes/ManagePlugin.html">ManagePlugin</a></li>
+                                <li><a href="../classes/Manager.html">Manager</a></li>
+                                <li><a href="../classes/ScheduleManager.html">ScheduleManager</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/controllers.html">controllers</a></li>
+                                <li><a href="../modules/manage.html">manage</a></li>
+                                <li><a href="../modules/manageables.html">manageables</a></li>
+                                <li><a href="../modules/providers.html">providers</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: app/server/manageables/Device.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x27;use strict&#x27;;
+
+/**
+ * @module manageables
+ */
+
+var util = require(&#x27;util&#x27;);
+var Manageable = process.requireManage(&#x27;app/server/manageables/Manageable.js&#x27;);
+
+/**
+ * Defines a Device.
+ *
+ * A Device is a Manageable structure holding information about a device.
+ *
+ * @class Device
+ * @extends Manageable
+ * @constructor
+ * @param {Object} device A device description object
+ * @param {String} device.id The device id
+ * @param {String} [device.name] The device name
+ * @param {String} [device.state] The device state
+ * @param {Array} [device.history] The list of history events related to the device
+ * @param {Array} [device.schedules] The list of device&#x27;s schedules
+ * @param {Object} [device.storage] The device&#x27;s storage information
+ * @param {Object} [device.inputs] The device&#x27;s inputs information
+ * @param {Array} [device.presets] The list of device&#x27;s presets
+ * @param {String} [device.group] The device&#x27;s group
+ * @param {String} [device.ip] The device&#x27;s ip
+ * @param {String} [device.url] The device&#x27;s web interface url
+ */
+function Device(device) {
+  Device.super_.call(this, device);
+
+  Object.defineProperties(this, {
+
+    /**
+     * The device&#x27;s type.
+     *
+     * @property type
+     * @type String
+     * @final
+     */
+    type: {value: Device.TYPE, enumerable: true},
+
+    /**
+     * The device&#x27;s state.
+     *
+     * @property state
+     * @type String
+     */
+    state: {value: device.state, writable: true, enumerable: true},
+
+    /**
+     * The device&#x27;s storage information.
+     *
+     * @property storage
+     * @type Object
+     */
+    storage: {value: device.storage, writable: true, enumerable: true},
+
+    /**
+     * The device&#x27;s inputs information.
+     *
+     * @property inputs
+     * @type Object
+     */
+    inputs: {value: device.inputs, writable: true, enumerable: true},
+
+    /**
+     * The device&#x27;s presets.
+     *
+     * @property presets
+     * @type Array
+     */
+    presets: {value: device.presets, writable: true, enumerable: true},
+
+    /**
+     * The device&#x27;s group.
+     *
+     * @property group
+     * @type String
+     */
+    group: {value: device.group, writable: true, enumerable: true},
+
+    /**
+     * The device&#x27;s ip address.
+     *
+     * @property ip
+     * @type String
+     */
+    ip: {value: device.ip, writable: true, enumerable: true},
+
+    /**
+     * The device&#x27;s web interface url.
+     *
+     * @property url
+     * @type String
+     */
+    url: {value: device.url, writable: true, enumerable: true},
+
+    /**
+     * The device&#x27;s status.
+     *
+     * @property status
+     * @type String
+     */
+    status: {value: device.status, writable: true, enumerable: true}
+
+  });
+
+  this.setInputs();
+  this.setPresets();
+}
+
+module.exports = Device;
+util.inherits(Device, Manageable);
+
+/**
+ * Device type.
+ *
+ * @property TYPE
+ * @type String
+ * @private
+ * @final
+ * @default &#x27;device&#x27;
+ */
+Object.defineProperty(Device, &#x27;TYPE&#x27;, {value: &#x27;device&#x27;});
+
+/**
+ * Sets device&#x27;s storage information.
+ *
+ * @method setStorage
+ * @param {Number} free Number of free Bytes
+ * @param {Number} used Number of used Bytes
+ */
+Device.prototype.setStorage = function(free, used) {
+  free = parseInt(free);
+  used = parseInt(used);
+
+  if (free || used) {
+    var bytesToGbytes = Math.pow(1024, 3);
+    this.storage = {
+      free: free / bytesToGbytes,
+      used: used / bytesToGbytes,
+      total: (free + used) / bytesToGbytes,
+      percent: (used / (free + used)) * 100
+    };
+  }
+};
+
+/**
+ * Sets device&#x27;s inputs information.
+ *
+ * @method setInputs
+ * @param {Object} [camera Information] about the video camera connected to the device
+ * @param {Object} [camera.timings] Information about video camera&#x27;s configuration
+ * @param {Boolean} [camera.timings.supported] true if the connected video camera is supported, false otherwise
+ * @param {Object} [slides Information] about the slides connected to the device
+ * @param {Object} [slides.timings] Information about the slides&#x27; input configuration
+ * @param {Boolean} [slides.timings.supported] true if the connected slides&#x27; input is supported, false otherwise
+ */
+Device.prototype.setInputs = function(camera, slides) {
+  this.inputs = {
+    camera: &#x27;disconnected&#x27;,
+    desktop: &#x27;disconnected&#x27;
+  };
+
+  if (camera &amp;&amp; camera.timings)
+    this.inputs.camera = (!camera.timings.supported) ? &#x27;ko&#x27; : &#x27;ok&#x27;;
+
+  if (slides &amp;&amp; slides.timings)
+    this.inputs.desktop = (!slides.timings.supported) ? &#x27;ko&#x27; : &#x27;ok&#x27;;
+};
+
+/**
+ * Sets device&#x27;s presets.
+ *
+ * @method setPresets
+ * @param {Object} [presets] The list of presets referenced by ids
+ */
+Device.prototype.setPresets = function(presets) {
+  this.presets = [];
+
+  for (var id in presets) {
+    presets[id].id = id;
+    this.presets.push(presets[id]);
+  }
+};
+
+/**
+ * Disconnects the device which removes all volatile information.
+ *
+ * @method disconnect
+ */
+Device.prototype.disconnect = function() {
+  this.presets = null;
+  this.inputs = null;
+  this.storage = null;
+};
+
+/**
+ * Checks if a schedule is not in collision with schedules of a group.
+ *
+ * Device schedule should not be in collision with group&#x27;s schedules.
+ *
+ * @method isValidSchedule
+ * @param {Object} schedule The schedule description object
+ * @param {Object} [group] The group to test the schedule with
+ * @return {Boolean} true if the schedule is not in collision with other schedules
+ * false otherwise
+ */
+Device.prototype.isValidSchedule = function(schedule, group) {
+  if (!Device.super_.prototype.isValidSchedule.call(this, schedule))
+    return false;
+
+  if (group) {
+
+    // Validates that the schedule is not in conflict with one of the
+    // schedules in device&#x27;s group
+    for (var i = 0; i &lt; group.schedules.length; i++) {
+      if (this.checkSchedulesConflict(group.schedules[i], schedule))
+        return false;
+    }
+
+  }
+
+  return true;
+};
+
+/**
+ * Checks if there are collisions between device&#x27;s schedules and group&#x27;s schedules.
+ *
+ * @method isGroupSchedulesCollision
+ * @param {Object} group The group
+ * @return {Boolean} true if there is at least one collision, false otherwise
+ */
+Device.prototype.isGroupSchedulesCollision = function(group) {
+  if (group) {
+    for (var i = 0; i &lt; this.schedules.length; i++) {
+      var schedule = this.schedules[i];
+
+      // Validate that the schedule is not in conflict with one of the schedules in the group
+      for (var j = 0; j &lt; group.schedules.length; j++) {
+        if (this.checkSchedulesConflict(group.schedules[j], schedule))
+          return true;
+      }
+
+    }
+  }
+
+  return false;
+};
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
