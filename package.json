@@ -66,7 +66,8 @@
     "postinstall": "bower install",
     "eslint": "grunt eslint",
     "mocha": "grunt mochaTest",
-    "karma": "grunt karma"
+    "karma": "grunt karma",
+    "postpublish": "grunt deploy-doc"
   },
   "precommit": [
     "eslint",
