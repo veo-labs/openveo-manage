@@ -1,3 +1,9 @@
+# 2.0.2 / YYYY-MM-DD
+
+## BUG FIXES
+
+- Fix "grunt remove:doc"
+
 # 2.0.1 / 2018-10-16
 
 ## BUG FIXES
