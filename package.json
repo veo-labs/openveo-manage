@@ -19,11 +19,13 @@
     "url": "https://github.com/veo-labs/openveo-manage.git"
   },
   "dependencies": {
-    "cookie": "0.3.1",
-    "node-schedule": "1.2.0",
-    "shortid": "2.2.6",
     "async": "2.1.4",
-    "express": "4.14.0"
+    "cookie": "0.3.1",
+    "express": "4.14.0",
+    "interact.js": "1.2.6",
+    "node-schedule": "1.2.0",
+    "perfect-scrollbar": "0.6.12",
+    "shortid": "2.2.6"
   },
   "devDependencies": {
     "chai": "4.0.2",
@@ -58,12 +60,11 @@
     "flightplan": "0.6.17"
   },
   "peerDependencies": {
-    "@openveo/core": "5.*",
+    "@openveo/core": "8.*",
     "@openveo/devices-api": "1.*"
   },
   "scripts": {
     "prepack": "grunt prod",
-    "postinstall": "bower install",
     "eslint": "grunt eslint",
     "mocha": "grunt mochaTest",
     "karma": "grunt karma",

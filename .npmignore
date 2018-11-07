@@ -20,9 +20,6 @@ ehthumbs.db
 # Project npm dependencies
 /node_modules
 
-# Bower libraries
-/assets/lib
-
 # IDE
 /nbproject
 .idea/

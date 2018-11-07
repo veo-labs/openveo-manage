@@ -1,4 +1,12 @@
-# 2.0.2 / YYYY-MM-DD
+# 3.0.0 / YYYY-MM-DD
+
+## BREAKING CHANGES
+
+- OpenVeo Manage now requires OpenVeo Core >=8.0.0
+
+## NEW FEATURES
+
+- OpenVeo Manage does not use Bower anymore, it now uses NPM for both client and server dependencies
 
 ## BUG FIXES
 

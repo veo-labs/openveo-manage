@@ -66,33 +66,39 @@ module.exports = {
       }
     ],
     scriptLibFiles: {
-      base: [
-        '/manage/lib/interact.js/dist/interact.min.js',
-        '/manage/lib/perfect-scrollbar/js/perfect-scrollbar.min.js'
-      ],
       dev: [],
       prod: []
     },
     scriptFiles: {
-      base: [],
       dev: [
-        '/manage/ovManage/App.js',
-        '/manage/ovManage/MainController.js',
-        '/manage/ovManage/ManageFactory.js',
-        '/manage/ovManage/ManageableFactory.js',
-        '/manage/ovManage/DeviceFactory.js',
-        '/manage/ovManage/GroupFactory.js',
-        '/manage/ovManage/ManageableController.js',
-        '/manage/ovManage/ManageableDetailController.js',
-        '/manage/ovManage/SortTableDirective.js'
+        'ovManage/App.js',
+        'ovManage/MainController.js',
+        'ovManage/ManageFactory.js',
+        'ovManage/ManageableFactory.js',
+        'ovManage/DeviceFactory.js',
+        'ovManage/GroupFactory.js',
+        'ovManage/ManageableController.js',
+        'ovManage/ManageableDetailController.js',
+        'ovManage/SortTableDirective.js'
       ],
       prod: [
-        '/manage/be/js/openveoManage.js'
+        'be/js/openveoManage.js'
       ]
     },
     cssFiles: [
-      '/manage/be/css/manage.css',
-      '/manage/lib/perfect-scrollbar/css/perfect-scrollbar.min.css'
+      'be/css/manage.css'
     ]
-  }
+  },
+  libraries: [
+    {
+      name: 'interact.js',
+      mountPath: 'interact.js',
+      files: ['dist/interact.min.js']
+    },
+    {
+      name: 'perfect-scrollbar',
+      mountPath: 'perfect-scrollbar',
+      files: ['dist/js/perfect-scrollbar.min.js', 'dist/css/perfect-scrollbar.min.css']
+    }
+  ]
 };
