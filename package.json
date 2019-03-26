@@ -1,6 +1,6 @@
 {
   "name": "@openveo/manage",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Manage plugin for OpenVeo",
   "keywords": [
     "openveo",
@@ -60,8 +60,8 @@
     "flightplan": "0.6.17"
   },
   "peerDependencies": {
-    "@openveo/core": "8.*",
-    "@openveo/devices-api": "1.*"
+    "@openveo/core": ">=8.*",
+    "@openveo/devices-api": ">=1.*"
   },
   "scripts": {
     "prepack": "grunt prod",
