@@ -26,6 +26,7 @@
 - **grunt-extends-config** has been upgraded from 0.9.5 to **0.9.7**
 - **grunt-gh-pages** has been upgraded from 2.0.0 to **3.1.0**
 - **grunt-karma** has been upgraded from 2.0.0 to **3.0.2**
+- **grunt-mkdocs** has been upgraded from 0.2.0 to **1.0.1**
 
 # 3.0.0 / 2019-03-26
 
