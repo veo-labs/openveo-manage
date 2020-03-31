@@ -47,7 +47,7 @@
     "grunt-mocha-test": "^0.13.3",
     "grunt-spritesmith": "^6.8.0",
     "karma": "^4.4.1",
-    "karma-chai": "0.1.0",
+    "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "2.0.0",
     "karma-firefox-launcher": "1.0.0",
     "karma-ie-launcher": "1.0.0",
