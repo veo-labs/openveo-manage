@@ -239,12 +239,13 @@
       var isCollision = DeviceFactory.isGroupSchedulesCollision(device.id, group);
 
       if (isCollision) {
-        $scope.$emit('setAlert',
-                     'danger',
-                     $filter('translate')('MANAGE.GROUP.ADD_DEVICE_SCHEDULES_COLLISION_ERROR', null, {
-                       deviceName: $filter('translate')(device.name),
-                       groupName: $filter('translate')(group.name)
-                     })
+        $scope.$emit(
+          'setAlert',
+          'danger',
+          $filter('translate')('MANAGE.GROUP.ADD_DEVICE_SCHEDULES_COLLISION_ERROR', null, {
+            deviceName: $filter('translate')(device.name),
+            groupName: $filter('translate')(group.name)
+          })
         );
         p.reject();
       } else {

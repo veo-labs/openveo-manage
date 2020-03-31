@@ -18,17 +18,18 @@
    * @class ManageDeviceFactory
    * @static
    */
-  function DeviceFactory($q,
-                          $rootScope,
-                          $filter,
-                          $timeout,
-                          DEVICE_STATES,
-                          DEVICE_STATUS,
-                          MANAGEABLE_TYPES,
-                          TEMPLATES,
-                          ManageFactory,
-                          ManageableFactory
-                         ) {
+  function DeviceFactory(
+    $q,
+    $rootScope,
+    $filter,
+    $timeout,
+    DEVICE_STATES,
+    DEVICE_STATUS,
+    MANAGEABLE_TYPES,
+    TEMPLATES,
+    ManageFactory,
+    ManageableFactory
+  ) {
     var devices = {};
     devices[DEVICE_STATES.INCOMING] = [];
 

@@ -415,8 +415,12 @@
 
       } else {
         ManageFactory.removeSchedule(self.selectedManageable.id, scheduleId, type).then(function() {
-          $scope.$emit('setAlert', 'success',
-                       $filter('translate')('MANAGE.MANAGEABLE.REMOVE_SCHEDULE_SUCCESS'), 4000);
+          $scope.$emit(
+            'setAlert',
+            'success',
+            $filter('translate')('MANAGE.MANAGEABLE.REMOVE_SCHEDULE_SUCCESS'),
+            4000
+          );
         }, function(error) {
           $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.MANAGEABLE.REMOVE_SCHEDULE_ERROR', null, {
             code: error.code

@@ -486,7 +486,7 @@ BrowserSocketController.prototype.addDeviceToGroupAction = function(data, socket
 BrowserSocketController.prototype.removeDeviceFromGroupAction = function(data, socket, callback) {
   process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.REMOVE_DEVICE_FROM_GROUP, {data: data});
 
-   // Validate data
+  // Validate data
   try {
     data = openVeoApi.util.shallowValidateObject(data, {
       id: {type: 'string', required: true}

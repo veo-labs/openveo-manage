@@ -12,16 +12,17 @@
    * @class ManageGroupFactory
    * @static
    */
-  function GroupFactory($q,
-                         $rootScope,
-                         $timeout,
-                         $filter,
-                         DEVICE_STATUS,
-                         MANAGEABLE_TYPES,
-                         DeviceFactory,
-                         ManageFactory,
-                         ManageableFactory
-                        ) {
+  function GroupFactory(
+    $q,
+    $rootScope,
+    $timeout,
+    $filter,
+    DEVICE_STATUS,
+    MANAGEABLE_TYPES,
+    DeviceFactory,
+    ManageFactory,
+    ManageableFactory
+  ) {
     var TOTAL_PRESETS = 5;
     var groups = null;
     var presets = [];

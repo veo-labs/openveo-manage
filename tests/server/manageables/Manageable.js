@@ -999,8 +999,11 @@ describe('Manageable', function() {
       var manageable = new Manageable({});
       var expectedHistoric = {id: 42};
       manageable.addHistoric(expectedHistoric);
-      assert.strictEqual(manageable.removeHistoric(expectedHistoric.id), expectedHistoric,
-                        'Expected return value to be the historic');
+      assert.strictEqual(
+        manageable.removeHistoric(expectedHistoric.id),
+        expectedHistoric,
+        'Expected return value to be the historic'
+      );
       assert.equal(manageable.history.length, 0, 'Expected history to be empty');
     });
 
@@ -1044,8 +1047,11 @@ describe('Manageable', function() {
 
       manageable.addSchedule(expectedSchedule);
 
-      assert.strictEqual(manageable.removeSchedule(expectedSchedule.id), expectedSchedule,
-                         'Expected return value to be the schedule');
+      assert.strictEqual(
+        manageable.removeSchedule(expectedSchedule.id),
+        expectedSchedule,
+        'Expected return value to be the schedule'
+      );
       assert.equal(manageable.schedules.length, 0, 'Expected schedules to be empty');
     });
 

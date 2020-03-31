@@ -114,7 +114,7 @@ DeviceProvider.prototype.updateOne = function(filter, data, callback) {
   if (data.state && this.AVAILABLE_STATES.indexOf(data.state) >= 0) modifications.state = data.state;
   if (data.history) modifications.history = data.history;
   if (data.schedules) modifications.schedules = data.schedules;
-  if (data.hasOwnProperty('group')) modifications.group = data.group;
+  if (Object.prototype.hasOwnProperty.call(data, 'group')) modifications.group = data.group;
 
   DeviceProvider.super_.prototype.updateOne.call(this, filter, modifications, callback);
 };
