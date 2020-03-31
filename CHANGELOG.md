@@ -10,6 +10,7 @@
 - **cookie** has been upgraded from 0.3.1 to **0.4.0**
 - **express** has been upgraded from 4.14.0 to **4.17.1**
 - **interact.js** has been renamed into interactjs and upgrade from 1.2.6 to **1.9.7**
+- **node-schedule** has been upgraded from 1.2.0 to **1.3.2**
 
 # 3.0.0 / 2019-03-26
 
