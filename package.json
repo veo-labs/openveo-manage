@@ -36,7 +36,7 @@
     "grunt-contrib-compass": "^1.1.1",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-uglify": "^4.0.1",
-    "grunt-contrib-watch": "1.0.0",
+    "grunt-contrib-watch": "^1.1.0",
     "grunt-contrib-yuidoc": "1.0.0",
     "grunt-eslint": "19.0.0",
     "grunt-extend-config": "0.9.5",

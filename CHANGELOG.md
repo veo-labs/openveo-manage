@@ -20,6 +20,7 @@
 - **grunt-cli** has been upgraded from 1.2.0 to **1.3.2**
 - **grunt-contrib-compass** sub dependencies have been upgraded
 - **grunt-contrib-uglify** has been upgraded from 2.0.0 to **4.0.1**
+- **grunt-contrib-watch** has been upgraded from 1.0.0 to **1.1.0**
 
 # 3.0.0 / 2019-03-26
 
