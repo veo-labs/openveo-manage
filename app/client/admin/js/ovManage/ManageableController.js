@@ -1,6 +1,6 @@
 'use strict';
 
-/* global interact, Ps */
+/* global interact, PerfectScrollbar */
 (function(app) {
 
   /**
@@ -41,12 +41,28 @@
     self.currentlyDragging = false;
 
     /**
-     * Double clicks promise.
+     * The action tab perfect scrollbar.
      *
-     * @property doubleClickPromise
-     * @type Promise
+     * @property actionScrollbar
+     * @type PerfectScrollbar
      */
-    self.doubleClickPromise = null;
+    self.actionScrollbar = null;
+
+    /**
+     * The detail tab perfect scrollbar.
+     *
+     * @property detailScrollbar
+     * @type PerfectScrollbar
+     */
+    self.detailScrollbar = null;
+
+    /**
+     * The history tab perfect scrollbar.
+     *
+     * @property actionScrollbar
+     * @type PerfectScrollbar
+     */
+    self.historyScrollbar = null;
 
     /**
      * Defines an ui-state for a manageable.
@@ -332,9 +348,9 @@
       detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
       historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
 
-      Ps.initialize(actionEl);
-      Ps.initialize(detailEl);
-      Ps.initialize(historyEl);
+      self.actionScrollbar = new PerfectScrollbar(actionEl);
+      self.detailScrollbar = new PerfectScrollbar(detailEl);
+      self.historyScrollbar = new PerfectScrollbar(historyEl);
     }
 
     /**
@@ -348,9 +364,9 @@
       detailEl.scrollTop = 0;
       historyEl.scrollTop = 0;
 
-      Ps.update(actionEl);
-      Ps.update(detailEl);
-      Ps.update(historyEl);
+      self.actionScrollbar.update();
+      self.detailScrollbar.update();
+      self.historyScrollbar.update();
     }
 
     /**
@@ -360,9 +376,12 @@
      * @private
      */
     function destroyScrollbar() {
-      Ps.destroy(actionEl);
-      Ps.destroy(detailEl);
-      Ps.destroy(historyEl);
+      self.actionScrollbar.destroy();
+      self.detailScrollbar.destroy();
+      self.historyScrollbar.destroy();
+      self.actionScrollbar = null;
+      self.detailScrollbar = null;
+      self.historyScrollbar = null;
     }
 
     /**
