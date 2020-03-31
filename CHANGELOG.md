@@ -24,6 +24,7 @@
 - **grunt-contrib-yuidoc** sub dependencies have been upgraded
 - **grunt-eslint** has been upgraded from 19.0.0 to **22.0.0**
 - **grunt-extends-config** has been upgraded from 0.9.5 to **0.9.7**
+- **grunt-gh-pages** has been upgraded from 2.0.0 to **3.1.0**
 
 # 3.0.0 / 2019-03-26
 
