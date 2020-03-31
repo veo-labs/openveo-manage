@@ -28,8 +28,9 @@
     "shortid": "^2.2.15"
   },
   "devDependencies": {
-    "chai": "4.0.2",
+    "chai": "^4.2.0",
     "chai-spies": "0.7.1",
+    "flightplan": "0.6.17",
     "grunt": "1.0.1",
     "grunt-cli": "1.2.0",
     "grunt-contrib-compass": "1.1.1",
@@ -56,8 +57,7 @@
     "mock-require": "3.0.1",
     "pre-commit": "1.2.2",
     "sinon": "2.1.0",
-    "yuidoc-theme-blue": "0.1.9",
-    "flightplan": "0.6.17"
+    "yuidoc-theme-blue": "0.1.9"
   },
   "peerDependencies": {
     "@openveo/core": ">=8.*",

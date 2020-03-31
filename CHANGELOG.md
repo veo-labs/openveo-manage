@@ -13,6 +13,7 @@
 - **node-schedule** has been upgraded from 1.2.0 to **1.3.2**
 - **perfect-scrollbar** has been upgraded from 0.6.12 to **1.5.0**
 - **shortid** has been upgraded from 2.2.6 to **2.2.15**
+- **chai** has been upgraded from 4.0.2 to **4.2.0**
 
 # 3.0.0 / 2019-03-26
 
