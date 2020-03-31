@@ -37,6 +37,7 @@
 - **mocha** has been upgraded from 3.2.0 to **7.1.1**
 - **mock-require** has been upgraded from 3.0.1 to **3.0.3**
 - **pre-commit** sub dependencies have been upgraded
+- **sinon** has been upgraded from 2.1.0 to **9.0.1**
 
 # 3.0.0 / 2019-03-26
 
