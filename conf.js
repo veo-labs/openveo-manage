@@ -91,8 +91,8 @@ module.exports = {
   },
   libraries: [
     {
-      name: 'interact.js',
-      mountPath: 'interact.js',
+      name: 'interactjs',
+      mountPath: 'interactjs',
       files: ['dist/interact.min.js']
     },
     {

@@ -22,7 +22,7 @@
     "async": "^3.2.0",
     "cookie": "^0.4.0",
     "express": "^4.17.1",
-    "interact.js": "1.2.6",
+    "interactjs": "^1.9.7",
     "node-schedule": "1.2.0",
     "perfect-scrollbar": "0.6.12",
     "shortid": "2.2.6"
