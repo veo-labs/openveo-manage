@@ -15,6 +15,7 @@
 - **shortid** has been upgraded from 2.2.6 to **2.2.15**
 - **chai** has been upgraded from 4.0.2 to **4.2.0**
 - **chai-spies** has been upgraded from 0.7.1 to **1.0.0**
+- **flightplan** has been upgraded from 0.6.17 to **0.6.20**
 
 # 3.0.0 / 2019-03-26
 
