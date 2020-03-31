@@ -30,6 +30,7 @@
 - **grunt-mocha-test** has been upgraded from 0.13.2 to **0.13.3**
 - **grunt-spritesmith** has been upgraded from 6.3.1 to **6.8.0**
 - **karma** has been upgraded from 1.3.0 to **4.4.1**
+- **karma-chrome-launcher** has been upgraded from 2.0.0 to **3.1.0**
 
 # 3.0.0 / 2019-03-26
 
