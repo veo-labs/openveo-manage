@@ -19,7 +19,7 @@
     "url": "https://github.com/veo-labs/openveo-manage.git"
   },
   "dependencies": {
-    "async": "2.1.4",
+    "async": "^3.2.0",
     "cookie": "0.3.1",
     "express": "4.14.0",
     "interact.js": "1.2.6",
