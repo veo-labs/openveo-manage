@@ -98,7 +98,7 @@ module.exports = {
     {
       name: 'perfect-scrollbar',
       mountPath: 'perfect-scrollbar',
-      files: ['dist/js/perfect-scrollbar.min.js', 'dist/css/perfect-scrollbar.min.css']
+      files: ['dist/perfect-scrollbar.min.js', 'css/perfect-scrollbar.css']
     }
   ]
 };

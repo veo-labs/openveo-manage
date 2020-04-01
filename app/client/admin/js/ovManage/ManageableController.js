@@ -1,6 +1,6 @@
 'use strict';
 
-/* global interact, PerfectScrollbar */
+/* global interact */
 (function(app) {
 
   /**
@@ -27,10 +27,7 @@
     entityService,
     MANAGE_NAME,
     MANAGE_DEVICE_STATES) {
-    var self = this,
-      actionEl = document.querySelector('.item-detail .action-page'),
-      detailEl = document.querySelector('.item-detail .detail-page'),
-      historyEl = document.querySelector('.item-detail .history-page');
+    var self = this;
 
     /**
      * Indicates if a drag & drop is on the move.
@@ -39,30 +36,6 @@
      * @type Boolean
      */
     self.currentlyDragging = false;
-
-    /**
-     * The action tab perfect scrollbar.
-     *
-     * @property actionScrollbar
-     * @type PerfectScrollbar
-     */
-    self.actionScrollbar = null;
-
-    /**
-     * The detail tab perfect scrollbar.
-     *
-     * @property detailScrollbar
-     * @type PerfectScrollbar
-     */
-    self.detailScrollbar = null;
-
-    /**
-     * The history tab perfect scrollbar.
-     *
-     * @property actionScrollbar
-     * @type PerfectScrollbar
-     */
-    self.historyScrollbar = null;
 
     /**
      * Defines an ui-state for a manageable.
@@ -333,59 +306,6 @@
     }
 
     /**
-     * Initializes the scrollBars for device detail window.
-     *
-     * @method initScrollbar
-     * @private
-     */
-    function initScrollbar() {
-
-      // Recreate elements to avoid errors
-      actionEl = document.querySelector('.item-detail .action-page');
-      detailEl = document.querySelector('.item-detail .detail-page');
-      historyEl = document.querySelector('.item-detail .history-page');
-
-      actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
-      detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
-      historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
-
-      self.actionScrollbar = new PerfectScrollbar(actionEl);
-      self.detailScrollbar = new PerfectScrollbar(detailEl);
-      self.historyScrollbar = new PerfectScrollbar(historyEl);
-    }
-
-    /**
-     * Updates the scrollbars on device detail change.
-     *
-     * @method updateScrollbar
-     * @private
-     */
-    function updateScrollbar() {
-      actionEl.scrollTop = 0;
-      detailEl.scrollTop = 0;
-      historyEl.scrollTop = 0;
-
-      self.actionScrollbar.update();
-      self.detailScrollbar.update();
-      self.historyScrollbar.update();
-    }
-
-    /**
-     * Destroys scrollbars when device detail is closed.
-     *
-     * @method destroyScrollbar
-     * @private
-     */
-    function destroyScrollbar() {
-      self.actionScrollbar.destroy();
-      self.detailScrollbar.destroy();
-      self.historyScrollbar.destroy();
-      self.actionScrollbar = null;
-      self.detailScrollbar = null;
-      self.historyScrollbar = null;
-    }
-
-    /**
      * Toggles the detail panel corresponding to the given manageable.
      *
      * @method toggleDetails
@@ -405,7 +325,6 @@
         $scope.manage.showDetail = true;
         $scope.organizeLayout($scope.manage.showDetail);
 
-        initScrollbar();
       } else if ($scope.manage.openedItem == id) {
 
         // Manageable to load in the panel is the one already loaded
@@ -424,7 +343,7 @@
 
         $rootScope.$broadcast('manageable.load', id, isGroup);
         $scope.manage.showDetail = true;
-        updateScrollbar();
+
       }
     }
 
@@ -440,7 +359,6 @@
       $scope.manage.showDetail = false;
       $location.path('manage/group-detail/' + id);
       $scope.manage.absUrl = $location.absUrl();
-      destroyScrollbar();
     }
 
     /**

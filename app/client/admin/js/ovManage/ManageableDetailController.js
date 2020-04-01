@@ -1,6 +1,6 @@
 'use strict';
 
-/* global Ps */
+/* global PerfectScrollbar */
 (function(app) {
 
   /**
@@ -70,6 +70,31 @@
     };
 
     /**
+     * The action tab perfect scrollbar.
+     *
+     * @property actionScrollbar
+     * @type PerfectScrollbar
+     */
+    self.actionScrollbar = null;
+
+    /**
+     * The detail tab perfect scrollbar.
+     *
+     * @property detailScrollbar
+     * @type PerfectScrollbar
+     */
+    self.detailScrollbar = null;
+
+    /**
+     * The history tab perfect scrollbar.
+     *
+     * @property actionScrollbar
+     * @type PerfectScrollbar
+     */
+    self.historyScrollbar = null;
+
+
+    /**
      * Minimum schedule duration allowed.
      *
      * @property minDuration
@@ -137,6 +162,46 @@
     }
 
     /**
+     * Initializes the tabs scrollBars.
+     *
+     * @method initScrollbar
+     * @private
+     */
+    function initScrollbar() {
+
+      // Recreate elements to avoid errors
+      actionEl = document.querySelector('.item-detail .action-page');
+      detailEl = document.querySelector('.item-detail .detail-page');
+      historyEl = document.querySelector('.item-detail .history-page');
+
+      actionEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
+      detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
+      historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
+
+      self.actionScrollbar = new PerfectScrollbar(actionEl);
+      self.detailScrollbar = new PerfectScrollbar(detailEl);
+      self.historyScrollbar = new PerfectScrollbar(historyEl);
+    }
+
+    /**
+     * Resets tabs scrollbars.
+     *
+     * @method resetScrollbar
+     * @private
+     */
+    function resetScrollbar() {
+      actionEl.scrollTop = 0;
+      detailEl.scrollTop = 0;
+      historyEl.scrollTop = 0;
+
+      if (self.actionScrollbar) {
+        self.actionScrollbar.update();
+        self.detailScrollbar.update();
+        self.historyScrollbar.update();
+      }
+    }
+
+    /**
      * Closes the details panel.
      *
      * @method closeDetail
@@ -153,9 +218,14 @@
       }, 350);
 
       // Destroy scrollbars
-      Ps.destroy(actionEl);
-      Ps.destroy(detailEl);
-      Ps.destroy(historyEl);
+      if (self.actionScrollbar) {
+        self.actionScrollbar.destroy();
+        self.detailScrollbar.destroy();
+        self.historyScrollbar.destroy();
+        self.actionScrollbar = null;
+        self.detailScrollbar = null;
+        self.historyScrollbar = null;
+      }
     };
 
     /**
@@ -547,9 +617,11 @@
 
     // Listen event to load the selected manageable details
     $scope.$on('manageable.load', function(event, itemId, isGroup) {
+      var shouldResetScrollbar = self.selectedManageable ? true : false;
+
       if (self.selectedManageable && self.selectedManageable.id === itemId) {
         self.selectedManageable.isSelected = true;
-        return;
+        return resetScrollbar();
       }
 
       // Get the new selected manageable
@@ -565,6 +637,8 @@
       // Reset action form
       self.resetActionForm();
 
+      if (shouldResetScrollbar) resetScrollbar();
+      else initScrollbar();
     });
 
     // Listen event to close manageable details window
