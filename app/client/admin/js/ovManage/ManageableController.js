@@ -425,6 +425,16 @@
       });
     };
 
+    /**
+     * Destroys controller.
+     *
+     * AngularJS hook.
+     */
+    self.$onDestroy = function() {
+      interact('.draggable').unset();
+      interact('.dropzone').unset();
+    };
+
     // Manage drag and drop events
     if ($element.hasClass('devices')) {
       draggable();
