@@ -9,7 +9,7 @@
 - **async** has been upgraded from 2.1.4 to **3.2.0**
 - **cookie** has been removed as it wasn't used for a long time
 - **express** has been upgraded from 4.14.0 to **4.17.1**
-- **interact.js** has been renamed into interactjs and upgrade from 1.2.6 to **1.9.7**
+- **interact.js** has been renamed into interactjs and upgraded from 1.2.6 to **1.9.7**
 - **node-schedule** has been upgraded from 1.2.0 to **1.3.2**
 - **perfect-scrollbar** has been upgraded from 0.6.12 to **1.5.0**
 - **shortid** has been upgraded from 2.2.6 to **2.2.15**
