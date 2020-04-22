@@ -32,7 +32,6 @@
     DEVICE_STATES,
     DEVICE_STATUS,
     MANAGEABLE_TYPES) {
-
     var devicesIds = [],
       activePage = 0,
       group = GroupFactory.getGroup($route.current.params.id);
@@ -64,174 +63,245 @@
     $scope.incomingDevices = DeviceFactory.getDevicesByState(DEVICE_STATES.INCOMING); // The new incoming devices
 
     // Initialize socket.io connection
-    if (!$scope.socket) {
-      $scope.socket = SocketFactory.initSocket();
+    $scope.socket = SocketFactory.initSocket();
 
-      // Listen for the server informing about a new connected device with :
-      //   - **Object** device The new connected device information
-      $scope.socket.on('device.connected', function(device) {
-        if (device) {
-          DeviceFactory.addDevice(device, DEVICE_STATES.INCOMING);
-          $scope.$apply();
-        }
-      });
-
-      // Listen for the server requesting a manageable to be removed with :
-      //   - **Object** date Data from server with :
-      //     - **String** id The manageable id
-      //     - **String** type The manageable type
-      $scope.socket.on('removed', function(data) {
-        if (data.type === MANAGEABLE_TYPES.DEVICE) {
-          var device = DeviceFactory.getDevice(data.id);
-
-          // Remove device from its group
-          if (device && device.group) {
-            var group = GroupFactory.getGroup(device.group);
-            GroupFactory.removeDeviceFromGroup(device, device.group);
-
-            if (!group.devices.length)
-              GroupFactory.removeGroup(device.group);
-          }
-
-          DeviceFactory.remove(data.id);
-          $scope.$broadcast('manageable.closeDetails');
-        } else if (data.type === MANAGEABLE_TYPES.GROUP) {
-          GroupFactory.removeGroup(data.id);
-
-          // Navigate back if we are in a group page
-          if ($route.current.params.id)
-            $scope.$broadcast('back');
-          else
-            $scope.$broadcast('manageable.closeDetails');
-        }
-      });
-
-      // Listen for server requesting a modification on a manageable :
-      //   - **Object** data Data from server with :
-      //     - **String** id The manageable id
-      //     - **String** key The property to update
-      //     - **Mixed** value The property value
-      //     - **String** type The manageable type
-      $scope.socket.on('updated', function(data) {
-        if (data.type === MANAGEABLE_TYPES.DEVICE) {
-          var device = DeviceFactory.getDevice(data.id);
-          DeviceFactory.setProperty(data.id, data.key, data.value);
-          GroupFactory.updateStatus(device.group);
-        } else
-          GroupFactory.setProperty(data.id, data.key, data.value);
-
+    /**
+     * Handles messages from the server informing about a new connected device.
+     *
+     * @method handleDeviceConnected
+     * @private
+     * @param {Object} device The new connected device information
+     */
+    function handleDeviceConnected(device) {
+      if (device) {
+        DeviceFactory.addDevice(device, DEVICE_STATES.INCOMING);
         $scope.$apply();
-      });
+      }
+    }
 
-      // Listen for server requesting an historic to be added to the history of a manageable with :
-      //   - **Object** data Data from server with :
-      //     - **String** id The manageable id
-      //     - **Object** historic The historic to add to history
-      //     - **String** type The manageable type
-      $scope.socket.on('newHistoric', function(data) {
-        var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
-        factory.addHistoric(data.id, data.historic);
-        $scope.$apply();
-      });
-
-      // Listen for server requesting an historic to be removed from the history of a manageable with :
-      //   - **Object** data Data from server with :
-      //     - **String** id The manageable id
-      //     - **Object** historicId The historic id
-      //     - **String** type The manageable type
-      $scope.socket.on('removedHistoric', function(data) {
-        var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
-        factory.removeHistoric(data.id, data.historicId);
-        $scope.$apply();
-      });
-
-      // Listen for server requesting a manageable's history to be removed with :
-      //   - **Object** data Data from server with :
-      //     - **String** id The manageable id
-      //     - **String** type The manageable type
-      $scope.socket.on('removedHistory', function(data) {
-        var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
-        factory.removeHistory(data.id);
-        $scope.$apply();
-      });
-
-      // Listen for server requesting a schedule to be added to a manageable with :
-      //   - **Object** data Data from server with :
-      //     - **String** id The manageable id
-      //     - **Object** schedule The schedule
-      //     - **String** type The manageable type
-      $scope.socket.on('newSchedule', function(data) {
-        var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
-        factory.addSchedule(data.id, data.schedule);
-        $scope.$apply();
-      });
-
-      // Listen for server requesting a schedule to be removed from a manageable with :
-      //   - **Object** data Data from server with :
-      //     - **String** id The manageable id
-      //     - **Object** scheduleId The schedule id
-      //     - **String** type The manageable type
-      $scope.socket.on('removedSchedule', function(data) {
-        var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
-        factory.removeSchedule(data.id, data.scheduleId);
-        $scope.$apply();
-      });
-
-      // Listen for server requesting state modification on a device :
-      //   - **Object** data Data from server with :
-      //     - **String** id The device id
-      //     - **String** state The device new state
-      $scope.socket.on('device.updatedState', function(data) {
-        DeviceFactory.updateDeviceState(data.id, data.state);
-        $scope.$apply();
-      });
-
-      // Listen for server requesting a group to be created :
-      //   - **Object** data Data from server with :
-      //     - **Object** group The group to add
-      $scope.socket.on('group.created', function(data) {
-        if (data.group)
-          GroupFactory.addGroup(data.group);
-      });
-
-      // Listen for server requesting a device to be added to a group :
-      //   - **Object** data Data from server with :
-      //     - **String** deviceId The device id
-      //     - **String** groupId The group id
-      $scope.socket.on('group.newDevice', function(data) {
-        if (data.deviceId && data.groupId) {
-          GroupFactory.addDeviceToGroup(DeviceFactory.getDevice(data.deviceId), data.groupId);
-
-          // Send an event to close the device detail window
-          $timeout(function() {
-            $rootScope.$broadcast('manageable.closeDetails');
-          }, 250);
-
-        }
-      });
-
-      // Listen for server requesting a device to be removed from a group :
-      //   - **Object** data Data from server with :
-      //     - **String** id The device id
-      $scope.socket.on('group.removedDevice', function(data) {
+    /**
+     * Handles messages from the server requesting a manageable to be removed.
+     *
+     * @method handleRemoved
+     * @private
+     * @param {Object} data Data from server
+     * @param {String} data.id The manageable id
+     * @param {String} data.type The manageable type
+     */
+    function handleRemoved(data) {
+      if (data.type === MANAGEABLE_TYPES.DEVICE) {
         var device = DeviceFactory.getDevice(data.id);
 
-        if (device) {
+        // Remove device from its group
+        if (device && device.group) {
           var group = GroupFactory.getGroup(device.group);
+          GroupFactory.removeDeviceFromGroup(device, device.group);
 
-          if (group) {
+          if (!group.devices.length)
+            GroupFactory.removeGroup(device.group);
+        }
 
-            GroupFactory.removeDeviceFromGroup(device, device.group);
+        DeviceFactory.remove(data.id);
+        $scope.$broadcast('manageable.closeDetails');
+      } else if (data.type === MANAGEABLE_TYPES.GROUP) {
+        GroupFactory.removeGroup(data.id);
 
-            // Send an event to close the device detail window
-            $rootScope.$broadcast('manageable.closeDetails');
+        // Navigate back if we are in a group page
+        if ($route.current.params.id)
+          $scope.$broadcast('back');
+        else
+          $scope.$broadcast('manageable.closeDetails');
+      }
+    }
 
-          }
+    /**
+     * Handles messages from the server requesting a modification on a manageable.
+     *
+     * @method handleUpdated
+     * @private
+     * @param {Object} data Data from server
+     * @param {String} data.id The manageable id
+     * @param {String} data.key The property to update
+     * @param {Mixed} data.value The property value
+     * @param {String} data.type The manageable type
+     */
+    function handleUpdated(data) {
+      if (data.type === MANAGEABLE_TYPES.DEVICE) {
+        var device = DeviceFactory.getDevice(data.id);
+        DeviceFactory.setProperty(data.id, data.key, data.value);
+        GroupFactory.updateStatus(device.group);
+      } else
+        GroupFactory.setProperty(data.id, data.key, data.value);
+
+      $scope.$apply();
+    }
+
+    /**
+     * Handles messages from the server requesting an historic to be added to the history of a manageable.
+     *
+     * @method handleNewHistoric
+     * @private
+     * @param {Object} data Data from server
+     * @param {String} data.id The manageable id
+     * @param {Object} data.historic The historic to add to history
+     * @param {String} data.type The manageable type
+     */
+    function handleNewHistoric(data) {
+      var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
+      factory.addHistoric(data.id, data.historic);
+      $scope.$apply();
+    }
+
+    /**
+     * Handles messages from the server requesting an historic to be removed from the history of a manageable.
+     *
+     * @method handleRemovedHistoric
+     * @private
+     * @param {Object} data Data from server
+     * @param {String} data.id The manageable id
+     * @param {Object} data.historicId The historic id
+     * @param {String} data.type The manageable type
+     */
+    function handleRemovedHistoric(data) {
+      var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
+      factory.removeHistoric(data.id, data.historicId);
+      $scope.$apply();
+    }
+
+    /**
+     * Handles messages from the server requesting a manageable's history to be removed.
+     *
+     * @method handleRemovedHistory
+     * @private
+     * @param {Object} data Data from server
+     * @param {String} data.id The manageable id
+     * @param {String} data.type The manageable type
+     */
+    function handleRemovedHistory(data) {
+      var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
+      factory.removeHistory(data.id);
+      $scope.$apply();
+    }
+
+    /**
+     * Handles messages from the server requesting a schedule to be added to a manageable.
+     *
+     * @method handleNewSchedule
+     * @private
+     * @param {Object} data Data from server
+     * @param {String} data.id The manageable id
+     * @param {Object} data.schedule The schedule
+     * @param {String} data.type The manageable type
+     */
+    function handleNewSchedule(data) {
+      var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
+      factory.addSchedule(data.id, data.schedule);
+      $scope.$apply();
+    }
+
+    /**
+     * Handles messages from the server requesting a schedule to be removed from a manageable.
+     *
+     * @method handleRemovedSchedule
+     * @private
+     * @param {Object} data Data from server
+     * @param {String} data.id The manageable id
+     * @param {Object} data.scheduleId The schedule id
+     * @param {String} data.type The manageable type
+     */
+    function handleRemovedSchedule(data) {
+      var factory = (data.type === MANAGEABLE_TYPES.DEVICE) ? DeviceFactory : GroupFactory;
+      factory.removeSchedule(data.id, data.scheduleId);
+      $scope.$apply();
+    }
+
+    /**
+     * Handles messages from the server requesting state modification on a device.
+     *
+     * @method handleDeviceUpdatedState
+     * @private
+     * @param {Object} data Data from server
+     * @param {String} data.id The device id
+     * @param {String} data.state The device new state
+     */
+    function handleDeviceUpdatedState(data) {
+      DeviceFactory.updateDeviceState(data.id, data.state);
+      $scope.$apply();
+    }
+
+    /**
+     * Handles messages from the server requesting a group to be created.
+     *
+     * @method handleGroupCreated
+     * @private
+     * @param {Object} data Data from server
+     * @param {Object} data.group The group to add
+     */
+    function handleGroupCreated(data) {
+      if (data.group)
+        GroupFactory.addGroup(data.group);
+    }
+
+    /**
+     * Handles messages from the server requesting a device to be added to a group.
+     *
+     * @method handleGroupNewDevice
+     * @private
+     * @param {Object} data Data from server
+     * @param {String} data.deviceId The device id
+     * @param {String} data.groupId The group id
+     */
+    function handleGroupNewDevice(data) {
+      if (data.deviceId && data.groupId) {
+        GroupFactory.addDeviceToGroup(DeviceFactory.getDevice(data.deviceId), data.groupId);
+
+        // Send an event to close the device detail window
+        $timeout(function() {
+          $rootScope.$broadcast('manageable.closeDetails');
+        }, 250);
+
+      }
+    }
+
+    /**
+     * Handles messages from the server requesting a device to be removed from a group.
+     *
+     * @method handleGroupRemovedDevice
+     * @private
+     * @param {Object} data Data from server
+     * @param {String} data.id The device id
+     */
+    function handleGroupRemovedDevice(data) {
+      var device = DeviceFactory.getDevice(data.id);
+
+      if (device) {
+        var group = GroupFactory.getGroup(device.group);
+
+        if (group) {
+
+          GroupFactory.removeDeviceFromGroup(device, device.group);
+
+          // Send an event to close the device detail window
+          $rootScope.$broadcast('manageable.closeDetails');
 
         }
 
-      });
+      }
+
     }
+
+    $scope.socket.on('device.connected', handleDeviceConnected);
+    $scope.socket.on('removed', handleRemoved);
+    $scope.socket.on('updated', handleUpdated);
+    $scope.socket.on('newHistoric', handleNewHistoric);
+    $scope.socket.on('removedHistoric', handleRemovedHistoric);
+    $scope.socket.on('removedHistory', handleRemovedHistory);
+    $scope.socket.on('newSchedule', handleNewSchedule);
+    $scope.socket.on('removedSchedule', handleRemovedSchedule);
+    $scope.socket.on('device.updatedState', handleDeviceUpdatedState);
+    $scope.socket.on('group.created', handleGroupCreated);
+    $scope.socket.on('group.newDevice', handleGroupNewDevice);
+    $scope.socket.on('group.removedDevice', handleGroupRemovedDevice);
 
     /**
      * Defines the active page index.
@@ -341,6 +411,21 @@
       if (devicesIds.length)
         ManageFactory.askForDevicesSettings(devicesIds);
     }
+
+    $scope.$on('$destroy', function() {
+      $scope.socket.off('device.connected', handleDeviceConnected);
+      $scope.socket.off('removed', handleRemoved);
+      $scope.socket.off('updated', handleUpdated);
+      $scope.socket.off('newHistoric', handleNewHistoric);
+      $scope.socket.off('removedHistoric', handleRemovedHistoric);
+      $scope.socket.off('removedHistory', handleRemovedHistory);
+      $scope.socket.off('newSchedule', handleNewSchedule);
+      $scope.socket.off('removedSchedule', handleRemovedSchedule);
+      $scope.socket.off('device.updatedState', handleDeviceUpdatedState);
+      $scope.socket.off('group.created', handleGroupCreated);
+      $scope.socket.off('group.newDevice', handleGroupNewDevice);
+      $scope.socket.off('group.removedDevice', handleGroupRemovedDevice);
+    });
   }
 
   app.controller('ManageMainController', MainController);
