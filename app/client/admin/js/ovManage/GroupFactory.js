@@ -396,7 +396,7 @@
         group.devices.forEach(function(device) {
           DeviceFactory.validatePreset(device.id, presetId);
 
-          if (device.inputs.error)
+          if (device.inputs && device.inputs.error)
             devicesInError.push($filter('translate')(device.name));
         });
 

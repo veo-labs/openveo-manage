@@ -4,6 +4,10 @@
 
 - Drop support for NodeJS &lt; 12.4.0 and NPM &lt; 6.9.0
 
+## BUG FIXES
+
+- Fix JavaScript error when clicking on a group after disconnecting all its devices
+
 ## DEPENDENCIES
 
 - **async** has been upgraded from 2.1.4 to **3.2.0**
