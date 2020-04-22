@@ -7,6 +7,7 @@
 ## BUG FIXES
 
 - Fix JavaScript error when clicking on a group after disconnecting all its devices
+- Fix group detail which wasn't updated when removing one of its devices
 
 ## DEPENDENCIES
 

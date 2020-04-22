@@ -374,6 +374,7 @@
           group.devices.splice(deviceIndex, 1);
 
         delete device.group;
+        updateStatus(group.id);
       }
     }
 
