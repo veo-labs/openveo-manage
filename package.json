@@ -1,6 +1,6 @@
 {
   "name": "@openveo/manage",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Manage plugin for OpenVeo",
   "keywords": [
     "openveo",
@@ -58,8 +58,8 @@
     "yuidoc-theme-blue": "^0.1.9"
   },
   "peerDependencies": {
-    "@openveo/core": ">=8.*",
-    "@openveo/devices-api": ">=1.*"
+    "@openveo/core": ">=9.*",
+    "@openveo/devices-api": ">=3.*"
   },
   "scripts": {
     "prepack": "grunt prod",
