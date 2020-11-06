@@ -178,9 +178,10 @@
       detailEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
       historyEl.setAttribute('style', 'height:' + parseInt(window.innerHeight - 100) + 'px');
 
-      self.actionScrollbar = new PerfectScrollbar(actionEl);
-      self.detailScrollbar = new PerfectScrollbar(detailEl);
-      self.historyScrollbar = new PerfectScrollbar(historyEl);
+      var options = {suppressScrollX: true};
+      self.actionScrollbar = new PerfectScrollbar(actionEl, options);
+      self.detailScrollbar = new PerfectScrollbar(detailEl, options);
+      self.historyScrollbar = new PerfectScrollbar(historyEl, options);
     }
 
     /**
