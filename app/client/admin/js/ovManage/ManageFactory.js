@@ -331,15 +331,17 @@
      * @method startRecord
      * @param {Array} ids The list of devices' ids
      * @param {String} presetId The record session preset id
+     * @param {String} [name] The record name
      * @return {Promise} Promise resolving when a start request has been sent to devices
      */
-    function startRecord(ids, presetId) {
+    function startRecord(ids, presetId, name) {
       var p = $q.defer();
       var socket = SocketFactory.initSocket(socketNamespace);
 
       socket.emit('device.startSession', {
         ids: ids,
-        presetId: presetId
+        presetId: presetId,
+        name: name
       }, function(response) {
         if (response && response.errors)
           p.reject(response.errors);

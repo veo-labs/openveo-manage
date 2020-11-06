@@ -283,6 +283,7 @@
       self.itemSchedule.schedule.beginDate.setMinutes(self.itemSchedule.schedule.beginTime.getMinutes());
 
       var schedule = {
+        name: self.itemSchedule.schedule.name,
         beginDate: self.itemSchedule.schedule.beginDate,
         endDate: self.itemSchedule.schedule.endDate,
         duration: duration,
@@ -336,8 +337,11 @@
         ids.push(self.selectedManageable.id);
 
       // Start record
-      var preset = (self.itemSchedule.schedule.preset) ? self.itemSchedule.schedule.preset : null;
-      ManageFactory.startRecord(ids, preset).catch(function(errors) {
+      ManageFactory.startRecord(
+        ids,
+        self.itemSchedule.schedule.preset,
+        self.itemSchedule.schedule.name
+      ).catch(function(errors) {
         displayErrors(errors, 'MANAGE.DEVICE.START_RECORD_ERROR');
       });
     };
@@ -428,6 +432,7 @@
       durationDate.setSeconds(0);
       self.itemSchedule = {
         schedule: {
+          name: '',
           beginTime: beginTimeDate,
           durationDate: durationDate
         }

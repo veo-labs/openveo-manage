@@ -220,6 +220,9 @@
           &.disabled {
             opacity: .6;
           }
+          .form-group label {
+            font-size: 12px;
+          }
           .selected-preset {
             float: right;
             font-weight: bold;
@@ -300,22 +303,35 @@
             margin: 15px auto 20px auto;
             display: block;
           }
-          .periodic {
-            position: relative;
-            text-align: center;
 
-            .date.right {
-              text-align: right;
+          // Planning table
+          .table tbody {
+
+            // Planning table cells
+            th {
+              position: relative;
+              vertical-align: middle;
+
+              // Begin / End labels
+              .planning-label {
+                font-weight: bold;
+              }
+
+              i {
+                margin: auto;
+                position: absolute;
+                top: 0;
+                right: 4px;
+                bottom: 0;
+                height: 12px;
+                font-weight: bold;
+                color: $blue;
+              }
             }
-            i {
-              margin: auto;
-              position: absolute;
-              top: 0;
-              left: 0;
-              bottom: 0;
-              height: 12px;
-              font-weight: bold;
-              color: $blue;
+
+            // Duration and preset
+            th:nth-child(3), th:nth-child(4) {
+              text-align: center;
             }
           }
         }

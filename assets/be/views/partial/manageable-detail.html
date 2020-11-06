@@ -22,35 +22,55 @@
             <div class="action-page page" ng-class="{'active': isActivePage(0)}">
                 <form name="actionForm" ng-submit="vm.addSchedule()" novalidate>
 
-                  <!-- Preset selector -->
-                  <div class="form-group preset"
-                  ng-if="vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED">
-                  <div ng-class="['form-group', {'disabled': !vm.selectedManageable.presets, 'has-error': vm.selectedManageable.inputs.error}]">
-                    <label class="title" ng-bind="'MANAGE.DETAIL.ACTION.PRESET' | translate"></label >
-                      <select class="form-control" ng-model="vm.itemSchedule.schedule.preset"
-                      ng-options="preset.id as (preset.name) for preset in vm.selectedManageable.presets |orderBy:'profile'"
-                      ng-disabled="!vm.selectedManageable.presets"
-                      ng-if="vm.selectedManageable.presets.length > 1"
-                      ng-change="vm.validatePreset(vm.itemSchedule.schedule.preset);">
-                      <option value="" selected hidden />
-                    </select>
-                    <label class="selected-preset" ng-if="vm.selectedManageable.presets.length === 1" ng-bind="vm.selectedManageable.presets[0].name"></label>
-                  </div>
-                  <div class="form-group" ng-if="vm.selectedManageable.inputs.error">
-                    <div ng-bind="vm.selectedManageable.inputs.error | translate" class="text-danger actionError">
-                  </div>
-                </div>
-              </div>
+                    <!-- Presets -->
+                    <div
+                      class="form-group preset"
+                      ng-if="vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED"
+                    >
+                        <label class="title" ng-bind="'MANAGE.DETAIL.ACTION.PRESET' | translate"></label>
+
+                        <!-- Record name -->
+                        <div class="form-group record-name-block">
+                            <label for="recordName" ng-bind="('MANAGE.DETAIL.ACTION.RECORD_NAME' | translate) + ' :'"></label>
+                            <input name="recordName"
+                                   id="recordName"
+                                   class="form-control"
+                                   type="text"
+                                   placeholder="{{'MANAGE.DETAIL.ACTION.RECORD_NAME_PLACEHOLDER' | translate}}"
+                                   ng-model="vm.itemSchedule.schedule.name"/>
+                        </div>
+
+                        <!-- Encoder preset -->
+                        <div class="form-group encoder-preset-block" ng-class="['form-group', {'disabled': !vm.selectedManageable.presets, 'has-error': vm.selectedManageable.inputs.error}]">
+                            <label for="encoderPreset" ng-bind="('MANAGE.DETAIL.ACTION.ENCODER_PRESET' | translate) + ' :'"></label>
+                            <select class="form-control"
+                                    name="encoderPreset"
+                                    id="encoderPreset"
+                                    ng-model="vm.itemSchedule.schedule.preset"
+                                    ng-options="preset.id as (preset.name) for preset in vm.selectedManageable.presets |orderBy:'profile'"
+                                    ng-disabled="!vm.selectedManageable.presets"
+                                    ng-if="vm.selectedManageable.presets.length > 1"
+                                    ng-change="vm.validatePreset(vm.itemSchedule.schedule.preset);">
+                              <option value="" selected hidden />
+                            </select>
+                            <label class="selected-preset" ng-if="vm.selectedManageable.presets.length === 1" ng-bind="vm.selectedManageable.presets[0].name"></label>
+                            <div ng-bind="vm.selectedManageable.inputs.error | translate" class="text-danger actionError"></div>
+                        </div>
+                    </div>
 
                     <!-- Record actions -->
                     <div class="form-group action" ng-if="vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED">
                         <label class="title" ng-bind="'MANAGE.DETAIL.ACTION.ACTION_TITLE' | translate"></label>
+
+                        <!-- Start button -->
                         <button class="start btn btn-primary"
                                 type="button"
                                 ng-click="vm.startRecord()"
                                 ng-if="vm.selectedManageable.status === DEVICE_STATUS.STOPPED || vm.selectedManageable.status === DEVICE_STATUS.STARTING || vm.selectedManageable.status === DEVICE_STATUS.ERROR"
                                 ng-disabled="vm.selectedManageable.status === DEVICE_STATUS.STARTING || vm.selectedManageable.status === DEVICE_STATUS.STOPPING || vm.selectedManageable.inputs.error"
                                 ng-bind="'MANAGE.DETAIL.ACTION.START' | translate"></button>
+
+                        <!-- Stop and tag buttons -->
                         <div class="recording">
                             <button class="stop btn"
                                     type="button"
@@ -71,82 +91,87 @@
                     <div class="form-group planning" ng-if="vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED">
                         <label class="title" ng-bind="'MANAGE.DETAIL.ACTION.PLANNING_TITLE' | translate"></label>
                         <div class="row">
-                        <div class="col-xs-6 form-group begin-block" ng-class="{'has-error': actionForm.beginDate.$invalid && actionForm.beginDate.$touched}">
-                          <label ng-bind="('MANAGE.DETAIL.ACTION.BEGIN' | translate) + ' :'"></label>
-                            <span class="input-group date-container">
-                              <input name="beginDate"
-                              class="form-control date"
-                              type="text"
-                              uib-datepicker-popup="dd/MM/yyyy"
-                              datepicker-options="vm.popupBegin.options"
-                              ng-click="vm.popupBegin.opened = !vm.popupBegin.opened"
-                              ng-model="vm.itemSchedule.schedule.beginDate"
-                              is-open="vm.popupBegin.opened"
-                              show-button-bar="false"
-                              ng-required="true"
-                              ng-change="vm.validateEndDate()"
-                              ng-model-options="{allowInvalid : true}"
-                              required/>
-                              <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="vm.popupBegin.opened = !vm.popupBegin.opened"><i class="glyphicon glyphicon-calendar"></i></button>
-                              </span>
-                            </span>
-                          </div>
 
-                        <div class="col-xs-6 form-group time-block">
-                          <label class="duration" for="duration" ng-bind="('MANAGE.DETAIL.ACTION.TIME' | translate) + ' :'"></label>
-                          <div uib-timepicker
-                               class="time"
-                               name="beginTime"
-                               ng-model="vm.itemSchedule.schedule.beginTime"
-                               ng-model-options="{allowInvalid : true}"
-                               show-spinners="false"
-                               show-meridian="false"
-                               mousewheel="false"
-                               required>
-                          </div>
-                        </div>
+                            <!-- Start date -->
+                            <div class="col-xs-6 form-group begin-block" ng-class="{'has-error': actionForm.beginDate.$invalid && actionForm.beginDate.$touched}">
+                                <label ng-bind="('MANAGE.DETAIL.ACTION.BEGIN' | translate) + ' :'" for="beginDate"></label>
+                                <span class="input-group date-container">
+                                    <input name="beginDate"
+                                           id="beginDate"
+                                           class="form-control date"
+                                           type="text"
+                                           uib-datepicker-popup="dd/MM/yyyy"
+                                           datepicker-options="vm.popupBegin.options"
+                                           ng-click="vm.popupBegin.opened = !vm.popupBegin.opened"
+                                           ng-model="vm.itemSchedule.schedule.beginDate"
+                                           is-open="vm.popupBegin.opened"
+                                           show-button-bar="false"
+                                           ng-required="true"
+                                           ng-change="vm.validateEndDate()"
+                                           ng-model-options="{allowInvalid : true}"
+                                           required/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="vm.popupBegin.opened = !vm.popupBegin.opened"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </span>
+                            </div>
+
+                            <!-- Start time -->
+                            <div class="col-xs-6 form-group time-block">
+                                <label ng-bind="('MANAGE.DETAIL.ACTION.TIME' | translate) + ' :'"></label>
+                                <div uib-timepicker
+                                     class="time"
+                                     name="beginTime"
+                                     ng-model="vm.itemSchedule.schedule.beginTime"
+                                     ng-model-options="{allowInvalid : true}"
+                                     show-spinners="false"
+                                     show-meridian="false"
+                                     mousewheel="false"
+                                     required>
+                                </div>
+                            </div>
                         </div>
 
+                        <!-- Duration -->
                         <div class="form-group duration-block">
-                          <label class="duration" for="duration" ng-bind="('MANAGE.DETAIL.ACTION.DURATION' | translate) + ' :'"></label>
-                          <div uib-timepicker
-                               ng-model="vm.itemSchedule.schedule.durationDate"
-                               show-spinners="false"
-                               show-meridian="false"
-                               min="vm.minDuration"
-                               mousewheel="false"
-                               name="durationDate"
-                               required>
-                          </div>
+                            <label ng-bind="('MANAGE.DETAIL.ACTION.DURATION' | translate) + ' :'"></label>
+                            <div uib-timepicker
+                                 ng-model="vm.itemSchedule.schedule.durationDate"
+                                 show-spinners="false"
+                                 show-meridian="false"
+                                 min="vm.minDuration"
+                                 mousewheel="false"
+                                 name="durationDate"
+                                 required>
+                            </div>
                         </div>
 
-                         <div class="form-group recurrent-block">
-                          <div class="checkbox">
-                            <input id="recurrent-schedule" type="checkbox" ng-model="vm.itemSchedule.schedule.recurrent">
-                            <label for="recurrent-schedule" ng-bind="'MANAGE.DETAIL.ACTION.RECURRENT' | translate"></label>
-                          </div>
-                          </div>
+                        <div class="form-group recurrent-block">
+                           <div class="checkbox">
+                               <input id="recurrent-schedule" type="checkbox" ng-model="vm.itemSchedule.schedule.recurrent">
+                               <label for="recurrent-schedule" ng-bind="'MANAGE.DETAIL.ACTION.RECURRENT' | translate"></label>
+                           </div>
+                        </div>
 
-
+                        <!-- End date -->
                         <div class="form-group end-block" ng-show="vm.itemSchedule.schedule.recurrent"  ng-class="{'has-error': actionForm.endDate.$invalid && actionForm.endDate.$touched}">
-                          <label class="end" ng-bind="('MANAGE.DETAIL.ACTION.END' | translate) + ' :'"></label>
-                          <div class="input-group date-container">
-                            <input name="endDate"
-                            class="form-control date"
-                            type="text"
-                            uib-datepicker-popup="dd/MM/yyyy"
-                            datepicker-options="vm.popupEnd.options"
-                            ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"
-                            ng-model="vm.itemSchedule.schedule.endDate"
-                            is-open="vm.popupEnd.opened"
-                            show-button-bar="false"
-                            ng-required="vm.itemSchedule.schedule.recurrent"
-                            required/>
-                            <span class="input-group-btn">
-                              <button  type="button" class="btn btn-default" ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"><i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                          </div>
+                            <label class="end" ng-bind="('MANAGE.DETAIL.ACTION.END' | translate) + ' :'"></label>
+                            <div class="input-group date-container">
+                                <input name="endDate"
+                                       class="form-control date"
+                                       type="text"
+                                       uib-datepicker-popup="dd/MM/yyyy"
+                                       datepicker-options="vm.popupEnd.options"
+                                       ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"
+                                       ng-model="vm.itemSchedule.schedule.endDate"
+                                       is-open="vm.popupEnd.opened"
+                                       show-button-bar="false"
+                                       ng-required="vm.itemSchedule.schedule.recurrent"
+                                       required/>
+                                <span class="input-group-btn">
+                                    <button  type="button" class="btn btn-default" ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </div>
                         </div>
 
                         <button type="submit" class="record btn btn-primary" ng-disabled="actionForm.$invalid || vm.selectedManageable.inputs.error" ng-bind="'MANAGE.DETAIL.ACTION.RECORD' | translate"></button>
@@ -154,40 +179,56 @@
                         <table class="table" border="0">
                             <thead>
                             <tr>
-                                <th ov-manage-sort-table order="'beginDate'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.ACTION.PLANNING_TABLE.BEGIN' | translate }}</th>
+                                <th ov-manage-sort-table order="'name'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.ACTION.PLANNING_TABLE.NAME' | translate }}</th>
+                                <th ov-manage-sort-table order="'beginDate'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.ACTION.PLANNING_TABLE.PLANNING' | translate }}</th>
                                 <th ov-manage-sort-table order="'duration'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.ACTION.PLANNING_TABLE.DURATION' | translate }}</th>
-                                <th ov-manage-sort-table order="'endDate'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.ACTION.PLANNING_TABLE.END' | translate }}</th>
                                 <th ov-manage-sort-table order="'preset'" by="order" reverse="reverse">{{ 'MANAGE.DETAIL.ACTION.PLANNING_TABLE.PRESET' | translate }}</th>
                                 <th class="trash"><i class="glyphicon glyphicon-trash"></i></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="schedule in vm.selectedManageable.schedules | orderBy:order:reverse track by schedule.id">
-                                <th>
-                                    <div class="periodic">
-                                        <i class="glyphicon glyphicon-repeat" ng-if="schedule.recurrent"></i>
-                                        <div ng-bind="schedule.beginDate | date:'HH:mm'"></div>
-                                        <div ng-class="{'right': schedule.recurrent}" class="date" ng-bind="schedule.beginDate | date:'dd/MM/yyyy'"></div>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="periodic">
-                                        <div ng-bind="(vm.zeroTimeDate + schedule.duration) | date:'HH:mm'"></div>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="periodic" ng-if="schedule.recurrent">
-                                        <div ng-bind="schedule.endDate | date:'HH:mm'"></div>
-                                        <div ng-bind="schedule.endDate | date:'dd/MM/yyyy'"></div>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="periodic">
-                                        <div ng-bind="vm.getPresetName(schedule.preset)"></div>
-                                    </div>
-                                </th>
-                                <th class="cross" ng-click="vm.openRemoveModal(schedule.id, 'REMOVE_SCHEDULE')"></th>
-                            </tr>
+                                <tr ng-repeat="schedule in vm.selectedManageable.schedules | orderBy:order:reverse track by schedule.id">
+                                    <th>
+                                        <div>
+                                            <div ng-bind="schedule.name"></div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <i class="glyphicon glyphicon-repeat" title="{{'MANAGE.DETAIL.ACTION.PLANNING_TABLE.DAILY' | translate}}" ng-if="schedule.recurrent"></i>
+
+                                            <!-- Begin -->
+                                            <div>
+                                                <div ng-bind="'MANAGE.DETAIL.ACTION.PLANNING_TABLE.BEGIN' | translate"
+                                                     ng-if="schedule.recurrent"
+                                                     class="planning-label"></div>
+                                                <div class="date" ng-bind="schedule.beginDate | date:'dd/MM/yyyy'"></div>
+                                                <div ng-bind="schedule.beginDate | date:'HH:mm'"></div>
+                                            </div>
+
+                                            <!-- End -->
+                                            <div ng-if="schedule.recurrent">
+                                                </br>
+                                                <div ng-bind="'MANAGE.DETAIL.ACTION.PLANNING_TABLE.END' | translate"
+                                                     class="planning-label"></div>
+                                                <div ng-bind="schedule.endDate | date:'dd/MM/yyyy'"></div>
+                                                <div ng-bind="schedule.endDate | date:'HH:mm'"></div>
+                                            </div>
+
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <div ng-bind="(vm.zeroTimeDate + schedule.duration) | date:'HH:mm'"></div>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <div ng-bind="vm.getPresetName(schedule.preset)"></div>
+                                        </div>
+                                    </th>
+                                    <th class="cross" ng-click="vm.openRemoveModal(schedule.id, 'REMOVE_SCHEDULE')"></th>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

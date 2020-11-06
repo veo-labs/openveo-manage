@@ -575,11 +575,23 @@ describe('BrowserSocketController', function() {
   describe('startDeviceSessionAction', function() {
 
     it('should emit a START_DEVICE_SESSION event', function() {
-      var expectedData = {ids: ['42'], presetId: 'preset'};
-      controller.emitter.on(BROWSERS_MESSAGES.START_DEVICE_SESSION, function(eventName, ids, presetId, callback) {
+      var expectedData = {ids: ['42'], presetId: 'preset', name: 'Record name'};
+      controller.emitter.on(BROWSERS_MESSAGES.START_DEVICE_SESSION, function(eventName, ids, presetId, name, callback) {
         assert.strictEqual(eventName, BROWSERS_MESSAGES.START_DEVICE_SESSION, 'Wrong event name');
         assert.deepEqual(ids, expectedData.ids, 'Wrong ids');
         assert.strictEqual(presetId, expectedData.presetId, 'Wrong presetId');
+        assert.strictEqual(name, expectedData.name, 'Wrong record name');
+      });
+
+      controller.startDeviceSessionAction(expectedData, {}, function() {
+        assert.ok(false, 'Unexpected execution of the callback');
+      });
+    });
+
+    it('should emit a START_DEVICE_SESSION event even if record name is not specified', function(done) {
+      var expectedData = {ids: ['42'], presetId: 'preset'};
+      controller.emitter.on(BROWSERS_MESSAGES.START_DEVICE_SESSION, function(eventName, ids, presetId, name, callback) {
+        done();
       });
 
       controller.startDeviceSessionAction(expectedData, {}, function() {
@@ -588,11 +600,25 @@ describe('BrowserSocketController', function() {
     });
 
     it('should execute callback with an error if ids is not valid', function() {
+      var expectedData = {presetId: 'preset', name: 'Record name'};
+
       controller.emitter.on(BROWSERS_MESSAGES.START_DEVICE_SESSION, function() {
         assert.ok(false, 'Unexpected event');
       });
 
-      controller.startDeviceSessionAction({}, {}, function(error) {
+      controller.startDeviceSessionAction(expectedData, {}, function(error) {
+        assert.strictEqual(error.error, ERRORS.START_DEVICE_SESSION_WRONG_PARAMETERS, 'Wrong error');
+      });
+    });
+
+    it('should execute callback with an error if presetId is not valid', function() {
+      var expectedData = {ids: 'wrong value', name: 'Record name'};
+
+      controller.emitter.on(BROWSERS_MESSAGES.START_DEVICE_SESSION, function() {
+        assert.ok(false, 'Unexpected event');
+      });
+
+      controller.startDeviceSessionAction(expectedData, {}, function(error) {
         assert.strictEqual(error.error, ERRORS.START_DEVICE_SESSION_WRONG_PARAMETERS, 'Wrong error');
       });
     });

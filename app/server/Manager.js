@@ -351,7 +351,7 @@ function registerSchedule(manageable, schedule) {
       }
 
       if (!abort) {
-        self.devicesPilot.askForStartRecord(ids, schedule.preset, function(error, results) {
+        self.devicesPilot.askForStartRecord(ids, schedule.preset, schedule.name, function(error, results) {
           results.forEach(function(result) {
             var device;
             if (result.error) {
@@ -713,8 +713,9 @@ function initBrowsersListeners() {
   // With :
   //   - **Array** ids The list of devices ids on which a new recording session must be started
   //   - **String** presetId The id of the preset for the recording session
+  //   - **String** name The name of the recording session
   //   - **Function** callback The function to respond to the browser
-  this.browsersPilot.on(MESSAGES.START_DEVICE_SESSION, function(ids, presetId, callback) {
+  this.browsersPilot.on(MESSAGES.START_DEVICE_SESSION, function(ids, presetId, name, callback) {
     var errors = [];
 
     for (var i = 0; i < ids.length; i++) {
@@ -731,7 +732,7 @@ function initBrowsersListeners() {
     if (errors.length)
       return callback({errors: errors});
 
-    self.devicesPilot.askForStartRecord(ids, presetId, function(error, results) {
+    self.devicesPilot.askForStartRecord(ids, presetId, name, function(error, results) {
       results.forEach(function(result) {
         var device;
         if (result.error) {

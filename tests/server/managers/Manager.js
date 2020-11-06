@@ -790,15 +790,17 @@ describe('Manager', function() {
       it('should ask devices to start a recording session', function(done) {
         var expectedIds = ['42', '43'];
         var expectedPresetId = 'preset';
+        var expectedName = 'Record name';
 
         expectedIds.forEach(function(id) {
           manager.cache.add(new Device({id: id}));
         });
 
-        devicesPilot.askForStartRecord = function(ids, presetId, callback) {
+        devicesPilot.askForStartRecord = function(ids, presetId, name, callback) {
           var results = [];
           assert.deepEqual(ids, expectedIds, 'Wrong ids');
           assert.strictEqual(presetId, expectedPresetId, 'Wrong preset id');
+          assert.strictEqual(name, expectedName, 'Wrong record name');
 
           expectedIds.forEach(function(id) {
             results.push({value: id});
@@ -810,6 +812,7 @@ describe('Manager', function() {
           browsersPilot.MESSAGES.START_DEVICE_SESSION,
           expectedIds,
           expectedPresetId,
+          expectedName,
           function(results) {
             assert.strictEqual(results.errors.length, 0, 'Unexpected errors');
             done();
@@ -820,6 +823,7 @@ describe('Manager', function() {
       it('should add an historic for each starting devices', function(done) {
         var expectedIds = ['42', '43'];
         var expectedPresetId = 'preset';
+        var expectedName = 'Record name';
         var group = new Group({id: '42'});
         manager.cache.add(group);
         deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
@@ -831,7 +835,7 @@ describe('Manager', function() {
           manager.cache.add(device);
         });
 
-        devicesPilot.askForStartRecord = function(ids, presetId, callback) {
+        devicesPilot.askForStartRecord = function(ids, presetId, name, callback) {
           var results = [];
           expectedIds.forEach(function(id) {
             results.push({value: id});
@@ -843,6 +847,7 @@ describe('Manager', function() {
           browsersPilot.MESSAGES.START_DEVICE_SESSION,
           expectedIds,
           expectedPresetId,
+          expectedName,
           function(results) {
             deviceProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
             groupProvider.addHistoric.should.have.been.called.exactly(expectedIds.length);
@@ -855,11 +860,13 @@ describe('Manager', function() {
       it('should execute callback with one error by device not found', function(done) {
         var expectedIds = ['42', '43'];
         var expectedPresetId = 'preset';
+        var expectedName = 'Record name';
 
         browsersPilot.emit(
           browsersPilot.MESSAGES.START_DEVICE_SESSION,
           expectedIds,
           expectedPresetId,
+          expectedName,
           function(results) {
             assert.strictEqual(results.errors.length, expectedIds.length);
 
@@ -874,6 +881,7 @@ describe('Manager', function() {
       it('should execute callback with one error and add historic by device unable to start', function(done) {
         var expectedIds = ['42', '43'];
         var expectedPresetId = 'preset';
+        var expectedName = 'Record name';
         var group = new Group({id: '42'});
         manager.cache.add(group);
         deviceProvider.addHistoric = chai.spy(deviceProvider.addHistoric);
@@ -885,7 +893,7 @@ describe('Manager', function() {
           manager.cache.add(device);
         });
 
-        devicesPilot.askForStartRecord = function(ids, presetId, callback) {
+        devicesPilot.askForStartRecord = function(ids, presetId, name, callback) {
           var results = [];
 
           expectedIds.forEach(function(id) {
@@ -903,6 +911,7 @@ describe('Manager', function() {
           browsersPilot.MESSAGES.START_DEVICE_SESSION,
           expectedIds,
           expectedPresetId,
+          expectedName,
           function(results) {
             for (var i = 0; i < results.errors.length; i++)
               assert.strictEqual(results.errors[i].name, 'name-' + expectedIds[i]);
@@ -1813,6 +1822,7 @@ describe('Manager', function() {
         var jobs = [];
         var expectedId = '42';
         var expectedSchedule = {
+          name: 'Record name',
           beginDate: new Date(new Date().getTime() + 86400000),
           duration: 7200000,
           recurrent: true,
@@ -1872,6 +1882,7 @@ describe('Manager', function() {
           browsersPilot.MESSAGES.ADD_SCHEDULE,
           '42',
           {
+            name: 'Record name',
             beginDate: new Date(new Date().getTime() + 86400000),
             duration: 7200000,
             recurrent: true,
@@ -1888,6 +1899,7 @@ describe('Manager', function() {
       it('should execute callback with an error if the schedule is not valid', function(done) {
         var expectedId = '42';
         var expectedSchedule = {
+          name: 'Record name',
           beginDate: new Date(new Date().getTime() + 86400000),
           duration: 7200000,
           recurrent: true,
@@ -1916,6 +1928,7 @@ describe('Manager', function() {
       it('should execute callback with an error if adding schedule failed', function(done) {
         var expectedId = '42';
         var expectedSchedule = {
+          name: 'Record name',
           beginDate: new Date(new Date().getTime() + 86400000),
           duration: 7200000,
           recurrent: true,
@@ -1951,6 +1964,7 @@ describe('Manager', function() {
         var jobs = [];
         var expectedId = '42';
         var expectedSchedule = {
+          name: 'Record name',
           beginDate: new Date(new Date().getTime() + 86400000),
           duration: 7200000,
           recurrent: true,
@@ -2010,6 +2024,7 @@ describe('Manager', function() {
           browsersPilot.MESSAGES.ADD_SCHEDULE,
           '42',
           {
+            name: 'Record name',
             beginDate: new Date(new Date().getTime() + 86400000),
             duration: 7200000,
             recurrent: true,
@@ -2026,6 +2041,7 @@ describe('Manager', function() {
       it('should execute callback with an error if the schedule is not valid', function(done) {
         var expectedId = '42';
         var expectedSchedule = {
+          name: 'Record name',
           beginDate: new Date(new Date().getTime() + 86400000),
           duration: 7200000,
           recurrent: true,
@@ -2054,6 +2070,7 @@ describe('Manager', function() {
       it('should execute callback with an error if adding schedule failed', function(done) {
         var expectedId = '42';
         var expectedSchedule = {
+          name: 'Record name',
           beginDate: new Date(new Date().getTime() + 86400000),
           duration: 7200000,
           recurrent: true,

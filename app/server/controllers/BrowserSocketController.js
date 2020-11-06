@@ -142,6 +142,7 @@ BrowserSocketController.prototype.removeHistoricAction = function(data, socket, 
  * @param {Object} data Message's datas
  * @param {String} data.id The manageable id
  * @param {Object} data.schedule The schedule
+ * @param {String} data.schedule.name The name of the record
  * @param {Date|String} data.schedule.beginDate The begin date, can be either a date or a date literal
  * @param {Number} data.schedule.duration The duration of the record (in ms)
  * @param {String} data.schedule.preset The id of the record
@@ -164,6 +165,7 @@ BrowserSocketController.prototype.addScheduleAction = function(data, socket, cal
 
     // duration should be lesser than 24 hours
     data.schedule = openVeoApi.util.shallowValidateObject(data.schedule, {
+      name: {type: 'string'},
       beginDate: {type: 'date', required: true, gt: new Date()},
       duration: {type: 'number', required: true, lt: 86400000},
       preset: {type: 'string', required: true},
@@ -339,6 +341,7 @@ BrowserSocketController.prototype.updateDeviceStateAction = function(data, socke
  * @param {Object} data Message's datas
  * @param {Array} data.ids The list of devices ids on which a new recording session must be started
  * @param {String} [data.presetId] The id of the preset for the recording session
+ * @param {String} [data.name] The name of the recording session
  * @param {Socket} socket The opened socket
  * @param {Function} callback The callback to respond to the browser
  */
@@ -349,7 +352,8 @@ BrowserSocketController.prototype.startDeviceSessionAction = function(data, sock
   try {
     data = openVeoApi.util.shallowValidateObject(data, {
       ids: {type: 'array<string>', required: true},
-      presetId: {type: 'string'}
+      presetId: {type: 'string', required: true},
+      name: {type: 'string'}
     });
   } catch (error) {
     process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.START_DEVICE_SESSION});
@@ -359,7 +363,7 @@ BrowserSocketController.prototype.startDeviceSessionAction = function(data, sock
   }
 
   this.emitter.emitEvent(
-    new AdvancedEvent(BROWSERS_MESSAGES.START_DEVICE_SESSION, data.ids, data.presetId, callback)
+    new AdvancedEvent(BROWSERS_MESSAGES.START_DEVICE_SESSION, data.ids, data.presetId, data.name, callback)
   );
 };
 

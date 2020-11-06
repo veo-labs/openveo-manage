@@ -1,3 +1,13 @@
+# 5.0.0 / YYYY-MM-DD
+
+## BREAKING CHANGES
+
+- OpenVeo Manage now requires OpenVeo Devices API >= 3.1.0
+
+## NEW FEATURES
+
+- Add the possibility to add a name to a record
+
 # 4.0.0 / 2020-05-04
 
 ## BREAKING CHANGES

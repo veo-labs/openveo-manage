@@ -114,6 +114,7 @@ var pilot = null;
  * @param {Array} ids The list of devices ids on which a new recording session must be started
  * @param {String} [recordId] The id of the recording session to start
  * @param {String} [presetId] The id of the preset for the recording session
+ * @param {String} [name] The name of the recording session
  * @param {Function} callback The function to respond to the browser
  */
 
