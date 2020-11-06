@@ -203,8 +203,8 @@
                                                 <div ng-bind="'MANAGE.DETAIL.ACTION.PLANNING_TABLE.BEGIN' | translate"
                                                      ng-if="schedule.recurrent"
                                                      class="planning-label"></div>
-                                                <div class="date" ng-bind="schedule.beginDate | date:'dd/MM/yyyy'"></div>
-                                                <div ng-bind="schedule.beginDate | date:'HH:mm'"></div>
+                                                <div class="date" ng-bind="schedule.beginDate | date:'shortDate'"></div>
+                                                <div ng-bind="schedule.beginDate | date:'shortTime'"></div>
                                             </div>
 
                                             <!-- End -->
@@ -212,8 +212,8 @@
                                                 </br>
                                                 <div ng-bind="'MANAGE.DETAIL.ACTION.PLANNING_TABLE.END' | translate"
                                                      class="planning-label"></div>
-                                                <div ng-bind="schedule.endDate | date:'dd/MM/yyyy'"></div>
-                                                <div ng-bind="schedule.endDate | date:'HH:mm'"></div>
+                                                <div ng-bind="schedule.endDate | date:'shortDate'"></div>
+                                                <div ng-bind="schedule.endDate | date:'shortTime'"></div>
                                             </div>
 
                                         </div>

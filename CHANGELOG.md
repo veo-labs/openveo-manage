@@ -14,6 +14,7 @@
 - Remove focus outline on buttons and links of the panel
 - Remove horizontal scrollbar sometimes appearing on the panel
 - Disable start button when no encoder preset has been found, the encoder can't start without a preset
+- Use localized date and time for scheduled record begin / end date time
 
 # 4.0.0 / 2020-05-04
 
