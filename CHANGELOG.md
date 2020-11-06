@@ -8,6 +8,10 @@
 
 - Add the possibility to add a name to a record
 
+## BUG FIXES
+
+- Fix sort arrows on planning and history tables which were overlapping headers
+
 # 4.0.0 / 2020-05-04
 
 ## BREAKING CHANGES
