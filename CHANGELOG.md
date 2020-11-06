@@ -13,6 +13,7 @@
 - Fix sort arrows on planning and history tables which were overlapping headers
 - Remove focus outline on buttons and links of the panel
 - Remove horizontal scrollbar sometimes appearing on the panel
+- Disable start button when no encoder preset has been found, the encoder can't start without a preset
 
 # 4.0.0 / 2020-05-04
 

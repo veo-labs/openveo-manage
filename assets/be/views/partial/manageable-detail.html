@@ -67,7 +67,7 @@
                                 type="button"
                                 ng-click="vm.startRecord()"
                                 ng-if="vm.selectedManageable.status === DEVICE_STATUS.STOPPED || vm.selectedManageable.status === DEVICE_STATUS.STARTING || vm.selectedManageable.status === DEVICE_STATUS.ERROR"
-                                ng-disabled="vm.selectedManageable.status === DEVICE_STATUS.STARTING || vm.selectedManageable.status === DEVICE_STATUS.STOPPING || vm.selectedManageable.inputs.error"
+                                ng-disabled="vm.selectedManageable.status === DEVICE_STATUS.STARTING || vm.selectedManageable.status === DEVICE_STATUS.STOPPING || vm.selectedManageable.inputs.error || !vm.selectedManageable.presets || !vm.selectedManageable.presets.length"
                                 ng-bind="'MANAGE.DETAIL.ACTION.START' | translate"></button>
 
                         <!-- Stop and tag buttons -->
@@ -174,7 +174,8 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="record btn btn-primary" ng-disabled="actionForm.$invalid || vm.selectedManageable.inputs.error" ng-bind="'MANAGE.DETAIL.ACTION.RECORD' | translate"></button>
+                        <button type="submit" class="record btn btn-primary" ng-disabled="actionForm.$invalid ||
+                          vm.selectedManageable.inputs.error || !vm.selectedManageable.presets || !vm.selectedManageable.presets.length" ng-bind="'MANAGE.DETAIL.ACTION.RECORD' | translate"></button>
 
                         <table class="table" border="0">
                             <thead>
