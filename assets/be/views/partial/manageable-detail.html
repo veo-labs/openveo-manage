@@ -250,7 +250,8 @@
                         ng-bind="(vm.selectedManageable.name || 'MANAGE.DEVICE.DEFAULT_NAME') | translate"
                         ng-show="!vm.selectedManageable.displayInputName"
                     ></span>
-                    <i class="pencil glyphicon glyphicon-pencil" ng-show="!vm.selectedManageable.displayInputName && ((vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED) || vm.selectedManageable.type === MANAGEABLE_TYPES.GROUP)" ng-click="vm.displayNameForm()"></i>
+                    <i class="pencil glyphicon glyphicon-pencil" ng-show="!vm.selectedManageable.displayInputName &&
+                      ((vm.selectedManageable.status !== DEVICE_STATUS.DISCONNECTED) || vm.selectedManageable.type === MANAGEABLE_TYPES.GROUP)" ng-click="vm.displayNameForm()" tabIndex="0"></i>
                     <form  name="vm.deviceNameForm" novalidate ng-show="vm.selectedManageable.displayInputName">
                         <div class="form-group">
                           <input type="text" class="form-control input-name" ng-model="vm.selectedManageableName" required>
