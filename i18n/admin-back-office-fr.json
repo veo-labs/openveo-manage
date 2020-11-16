@@ -18,7 +18,8 @@
     "ACTION": {
       "TAB_TITLE": "Action",
       "ACTION_TITLE": "Action",
-      "RECURRENT": "Enregistrement journalier",
+      "DAILY_RECORD": "Enregistrement journalier",
+      "WEEKLY_RECORD": "Enregistrement hebdomadaire",
       "PRESET": "Préréglages",
       "RECORD_NAME": "Nom de l'enregistrement",
       "RECORD_NAME_PLACEHOLDER": "Entrer le nom de l'enregistrement",
@@ -33,6 +34,7 @@
         "BEGIN": "Début",
         "PLANNING": "Planning",
         "DAILY": "Quotidien",
+        "WEEKLY": "Hebdomadaire",
         "DURATION": "Durée",
         "END": "Fin",
         "PRESET": "Préréglage"

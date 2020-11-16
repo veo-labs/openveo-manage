@@ -18,7 +18,8 @@
     "ACTION": {
       "TAB_TITLE": "Action",
       "ACTION_TITLE": "Action",
-      "RECURRENT": "Daily record",
+      "DAILY_RECORD": "Daily record",
+      "WEEKLY_RECORD": "Weekly record",
       "PRESET": "Presets",
       "RECORD_NAME": "Record name",
       "RECORD_NAME_PLACEHOLDER": "Enter record name",
@@ -33,6 +34,7 @@
         "BEGIN": "Begin",
         "PLANNING": "Planning",
         "DAILY": "Daily",
+        "WEEKLY": "Weekly",
         "DURATION": "Duration",
         "END": "End",
         "PRESET": "Preset"

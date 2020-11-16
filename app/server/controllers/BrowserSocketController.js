@@ -170,7 +170,7 @@ BrowserSocketController.prototype.addScheduleAction = function(data, socket, cal
       duration: {type: 'number', required: true, lt: 86400000},
       preset: {type: 'string', required: true},
       endDate: {type: 'date', gt: new Date(data.schedule.beginDate)},
-      recurrent: {type: 'boolean', default: false}
+      recurrent: {type: 'string'}
     });
   } catch (error) {
     process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.ADD_SCHEDULE});

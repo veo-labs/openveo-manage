@@ -146,15 +146,38 @@
                             </div>
                         </div>
 
-                        <div class="form-group recurrent-block">
-                           <div class="checkbox">
-                               <input id="recurrent-schedule" type="checkbox" ng-model="vm.itemSchedule.schedule.recurrent">
-                               <label for="recurrent-schedule" ng-bind="'MANAGE.DETAIL.ACTION.RECURRENT' | translate"></label>
-                           </div>
+                        <div class="row">
+
+                            <!-- Daily -->
+                            <div class="col-xs-6 form-group recurrent-block">
+                                <div class="checkbox">
+                                    <input id="recurrent-daily-schedule"
+                                           type="checkbox"
+                                           ng-model="vm.itemSchedule.schedule.recurrent"
+                                           ng-true-value="'daily'"
+                                           ng-false-value='null'
+                                    >
+                                    <label for="recurrent-daily-schedule" ng-bind="'MANAGE.DETAIL.ACTION.DAILY_RECORD' | translate"></label>
+                                </div>
+                            </div>
+
+                            <!-- Weekly -->
+                            <div class="col-xs-6 form-group recurrent-block">
+                                <div class="checkbox">
+                                    <input id="recurrent-weekly-schedule"
+                                            type="checkbox"
+                                            ng-model="vm.itemSchedule.schedule.recurrent"
+                                            ng-true-value="'weekly'"
+                                            ng-false-value='null'
+                                    >
+                                    <label for="recurrent-weekly-schedule" ng-bind="'MANAGE.DETAIL.ACTION.WEEKLY_RECORD' | translate"></label>
+                                </div>
+                            </div>
+
                         </div>
 
                         <!-- End date -->
-                        <div class="form-group end-block" ng-show="vm.itemSchedule.schedule.recurrent"  ng-class="{'has-error': actionForm.endDate.$invalid && actionForm.endDate.$touched}">
+                        <div class="form-group end-block" ng-show="vm.itemSchedule.schedule.recurrent" ng-class="{'has-error': actionForm.endDate.$invalid && actionForm.endDate.$touched}">
                             <label class="end" ng-bind="('MANAGE.DETAIL.ACTION.END' | translate) + ' :'"></label>
                             <div class="input-group date-container">
                                 <input name="endDate"
@@ -164,6 +187,7 @@
                                        datepicker-options="vm.popupEnd.options"
                                        ng-click="vm.popupEnd.opened = !vm.popupEnd.opened"
                                        ng-model="vm.itemSchedule.schedule.endDate"
+                                       ng-change="vm.validateEndDate()"
                                        is-open="vm.popupEnd.opened"
                                        show-button-bar="false"
                                        ng-required="vm.itemSchedule.schedule.recurrent"
@@ -196,7 +220,8 @@
                                     </th>
                                     <th>
                                         <div>
-                                            <i class="glyphicon glyphicon-repeat" title="{{'MANAGE.DETAIL.ACTION.PLANNING_TABLE.DAILY' | translate}}" ng-if="schedule.recurrent"></i>
+                                            <i class="glyphicon glyphicon-repeat" title="{{'MANAGE.DETAIL.ACTION.PLANNING_TABLE.DAILY' | translate}}" ng-if="schedule.recurrent === 'daily'"></i>
+                                            <i class="glyphicon glyphicon-repeat" title="{{'MANAGE.DETAIL.ACTION.PLANNING_TABLE.WEEKLY' | translate}}" ng-if="schedule.recurrent === 'weekly'"></i>
 
                                             <!-- Begin -->
                                             <div>

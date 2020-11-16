@@ -7,6 +7,7 @@
 ## NEW FEATURES
 
 - Add the possibility to add a name to a record
+- Add support for weekly schedules in addition to daily schedules
 
 ## BUG FIXES
 
@@ -15,6 +16,7 @@
 - Remove horizontal scrollbar sometimes appearing on the panel
 - Disable start button when no encoder preset has been found, the encoder can't start without a preset
 - Use localized date and time for scheduled record begin / end date time
+- Fix undetected collision on daily records dates if the record was starting on a day and terminate the next day
 
 # 4.0.0 / 2020-05-04
 

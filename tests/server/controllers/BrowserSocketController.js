@@ -171,7 +171,7 @@ describe('BrowserSocketController', function() {
           beginDate: new Date(new Date().getTime() + 86400000),
           duration: 3600000,
           preset: 'preset',
-          recurrent: false
+          recurrent: 'daily'
         }
       };
       var expectedBeginDate = new Date(expectedData.schedule.beginDate.getTime());
@@ -249,7 +249,7 @@ describe('BrowserSocketController', function() {
           beginDate: new Date(new Date().getTime() + 86400000),
           duration: 3600000,
           preset: 'preset',
-          recurrent: true,
+          recurrent: 'daily',
           endDate: new Date(new Date().getTime() + 86400000 + 3600000)
         }
       };

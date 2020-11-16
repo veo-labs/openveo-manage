@@ -469,22 +469,23 @@
         }
       }
 
-      var beginDate = new Date(schedule.beginDate);
-      var endDate = new Date(beginDate.getTime() + schedule.duration);
-      var beginTime = beginDate.getHours() + ':' + beginDate.getMinutes();
-      var endTime = endDate.getHours() + ':' + endDate.getMinutes();
-      var now = new Date();
-      var nowTime = now.getHours() + ':' + now.getMinutes();
       var type = null;
+      var beginDate = new Date(schedule.beginDate);
+      var endDate = new Date(schedule.endDate);
+      beginDate.setSeconds(0);
+      endDate.setSeconds(0);
 
       if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP)
         type = MANAGEABLE_TYPES.GROUP;
       else
         type = MANAGEABLE_TYPES.DEVICE;
 
-      if ((beginDate <= now && endDate >= now) ||
-         (schedule.recurrent && beginTime <= nowTime && endTime >= nowTime && beginDate <= now)
-      ) {
+      if (ManageableFactory.isScheduleRunning({
+        beginDate: beginDate,
+        endDate: endDate,
+        duration: schedule.duration,
+        recurrent: schedule.recurrent
+      })) {
 
         // Schedule in progress
         $scope.$emit('setAlert', 'danger', $filter('translate')('MANAGE.MANAGEABLE.SCHEDULE_IN_PROGRESS_ERROR'), 4000);

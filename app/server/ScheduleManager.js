@@ -60,16 +60,16 @@ ScheduleManager.prototype.removeJob = function(id) {
  * @method addJob
  * @param {Date} date The date to execute the job
  * @param {Date} [endDate] End date for daily jobs
- * @param {Boolean} [isDaily] true if the job must be daily, false otherwise
+ * @param {String} [recurrent] Either "daily" or "weekly"
  * @param {Function} functionToExecute The function to execute at the specified date
  * @return {String} The job id
  */
-ScheduleManager.prototype.addJob = function(date, endDate, isDaily, functionToExecute) {
+ScheduleManager.prototype.addJob = function(date, endDate, recurrent, functionToExecute) {
   if (date && functionToExecute) {
     var job;
     var id = shortid.generate();
 
-    if (isDaily) {
+    if (recurrent) {
 
       // node-schedule restriction :
       // The recurrent time must always be greater than the start time even if the start date is in the future
@@ -80,6 +80,11 @@ ScheduleManager.prototype.addJob = function(date, endDate, isDaily, functionToEx
       rule.hour = startDate.getHours();
       rule.minute = startDate.getMinutes();
       rule.second = startDate.getSeconds();
+
+      if (recurrent === 'weekly') {
+        rule.dayOfWeek = startDate.getDay();
+      }
+
       job = schedule.scheduleJob(id, {start: date, end: endDate, rule: rule}, functionToExecute);
 
     } else {

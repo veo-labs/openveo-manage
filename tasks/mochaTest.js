@@ -15,7 +15,8 @@ module.exports = {
       'tests/server/manageables/*.js',
       'tests/server/providers/*.js',
       'tests/server/pilot/*.js',
-      'tests/server/managers/*.js'
+      'tests/server/managers/*.js',
+      'tests/server/migrations/*.js'
     ]
   }
 
