@@ -17,6 +17,7 @@
 - Disable start button when no encoder preset has been found, the encoder can't start without a preset
 - Use localized date and time for scheduled record begin / end date time
 - Fix undetected collision on daily records dates if the record was starting on a day and terminate the next day
+- Remove group when one of the two remaining devices is removed
 
 # 4.0.0 / 2020-05-04
 

@@ -556,6 +556,18 @@
      * @param {String} id The id of the device to remove
      */
     function removeDevice(id) {
+      var device = DeviceFactory.getDevice(id);
+      var group = GroupFactory.getGroup(device.group);
+
+      // If there is only 2 devices the group is removed
+      if (group && group.devices.length === 2) {
+
+        // Remove group
+        $scope.removeGroup(group.id);
+        $rootScope.$broadcast('manageable.closeDetails');
+
+      }
+
       ManageFactory.remove(id, MANAGEABLE_TYPES.DEVICE).then(function() {
         $scope.$emit('setAlert', 'success', $filter('translate')('MANAGE.DEVICE.REMOVE_SUCCESS'), 4000);
         $rootScope.$broadcast('manageable.closeDetails');
