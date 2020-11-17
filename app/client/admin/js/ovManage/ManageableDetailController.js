@@ -288,9 +288,12 @@
         beginDate: self.itemSchedule.schedule.beginDate,
         endDate: self.itemSchedule.schedule.endDate,
         duration: duration,
-        recurrent: self.itemSchedule.schedule.recurrent,
         preset: self.itemSchedule.schedule.preset
       };
+
+      if (self.itemSchedule.schedule.recurrent) {
+        schedule.recurrent = self.itemSchedule.schedule.recurrent;
+      }
 
       if (validateSchedule(schedule)) {
         ManageFactory.addSchedule(self.selectedManageable.id, schedule, type).then(function() {
