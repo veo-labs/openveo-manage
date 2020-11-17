@@ -333,6 +333,12 @@
               }
             }
 
+            // Name
+            th:nth-child(1) {
+              max-width: 80px;
+              overflow-wrap: break-word;
+            }
+
             // Duration and preset
             th:nth-child(3), th:nth-child(4) {
               text-align: center;
