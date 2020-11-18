@@ -241,32 +241,6 @@ describe('BrowserSocketController', function() {
       });
     });
 
-    it('should add 1 second to daily end if it is in collision with a running schedule', function() {
-      var expectedData = {
-        id: '42',
-        type: 'type',
-        schedule: {
-          beginDate: new Date(new Date().getTime() + 86400000),
-          duration: 3600000,
-          preset: 'preset',
-          recurrent: 'daily',
-          endDate: new Date(new Date().getTime() + 86400000 + 3600000)
-        }
-      };
-
-      expectedData.schedule.beginDate.setSeconds(0);
-      expectedData.schedule.endDate.setSeconds(0);
-
-      controller.emitter.on(BROWSERS_MESSAGES.ADD_SCHEDULE, function(eventName, id, schedule, type, callback) {
-        var expectedTime = expectedData.schedule.beginDate.getTime() + expectedData.schedule.duration + 1000;
-        assert.equal(schedule.endDate.getTime(), expectedTime, 'Expected end date to be one second later');
-      });
-
-      controller.addScheduleAction(expectedData, {}, function(error) {
-        assert.ok(false, 'Unexpected execution of the callback');
-      });
-    });
-
     it('should execute callback with an error if the begin date is in the past', function() {
       var expectedData = {
         id: '42',

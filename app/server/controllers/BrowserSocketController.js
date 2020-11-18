@@ -188,14 +188,6 @@ BrowserSocketController.prototype.addScheduleAction = function(data, socket, cal
   data.schedule.beginDate = new Date(data.schedule.beginDate);
   data.schedule.beginDate.setSeconds(0);
 
-  // If daily end time occurs when scheduling is running, set the daily end time to one second later
-  if (data.schedule.recurrent && data.schedule.endDate) {
-    var beginDateEndTime = new Date(data.schedule.beginDate.getTime() + data.schedule.duration);
-
-    if (beginDateEndTime >= data.schedule.endDate)
-      data.schedule.endDate = new Date(beginDateEndTime.getTime() + 1000);
-  }
-
   this.emitter.emitEvent(
     new AdvancedEvent(BROWSERS_MESSAGES.ADD_SCHEDULE, data.id, data.schedule, data.type, callback)
   );

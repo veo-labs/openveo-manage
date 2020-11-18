@@ -969,6 +969,22 @@ describe('Manageable', function() {
           'schedule1: ------------------------| [6 days] |--------------##########|####-------------------- \n'
       );
 
+      assert.ok(manageable.checkSchedulesConflict(
+        {
+          beginDate: new Date('2017-01-01T22:00:00'),
+          recurrent: 'weekly',
+          duration: 14400000,
+          endDate: new Date('2017-01-09T02:00:00')
+        },
+        {
+          beginDate: new Date('2017-01-09T00:00:00'),
+          duration: 7200000
+        }
+      ), '\n' +
+          'schedule1: ----------------------##| [6 days] |----------------------##|##---------------------- \n' +
+          'schedule1: ------------------------| [6 days] |------------------------|##---------------------- \n'
+      );
+
       // With one schedule in weekly recurrence in reverse order
 
       assert.ok(manageable.checkSchedulesConflict(
@@ -2378,6 +2394,165 @@ describe('Manageable', function() {
     });
   });
 
+  // getLastScheduleOccurence method
+  describe('getLastScheduleOccurence', function() {
+
+    it('should be able to get the last occurence of a recurrent schedule', function() {
+      var schedule;
+      var manageable = new Manageable({});
+
+      // Schedule 1
+      // Daily with start and end on the same day
+      schedule = manageable.getLastScheduleOccurence({
+        beginDate: new Date('2017-01-01T08:00:00'),
+        endDate: new Date('2017-01-01T10:00:00'),
+        duration: 7200000,
+        recurrent: 'daily'
+      });
+
+      assert.equal(
+        schedule.beginDate.getTime(),
+        new Date('2017-01-01T08:00:00').getTime(),
+        'Wrong schedule 1 begin date'
+      );
+      assert.equal(schedule.endDate.getTime(), new Date('2017-01-01T10:00:00').getTime(), 'Wrong schedule 1 end date');
+      assert.equal(schedule.duration, 7200000, 'Wrong schedule 1 duration');
+
+      // Schedule 2
+      // Daily with start and end on different days
+      schedule = manageable.getLastScheduleOccurence({
+        beginDate: new Date('2017-01-01T23:00:00'),
+        endDate: new Date('2017-01-01T00:00:00'),
+        duration: 7200000,
+        recurrent: 'daily'
+      });
+
+      assert.equal(
+        schedule.beginDate.getTime(),
+        new Date('2017-01-01T23:00:00').getTime(),
+        'Wrong schedule 2 begin date'
+      );
+      assert.equal(schedule.endDate.getTime(), new Date('2017-01-02T01:00:00').getTime(), 'Wrong schedule 2 end date');
+      assert.equal(schedule.duration, 7200000, 'Wrong schedule 2 duration');
+
+      // Schedule 3
+      // Weekly with a duration of 22 hours starting the same day it ends
+      schedule = manageable.getLastScheduleOccurence({
+        beginDate: new Date('2017-01-01T06:00:00'),
+        endDate: new Date('2017-01-15T00:00:00'),
+        duration: 597600000,
+        recurrent: 'weekly'
+      });
+
+      assert.equal(
+        schedule.beginDate.getTime(),
+        new Date('2017-01-15T06:00:00').getTime(),
+        'Wrong schedule 3 begin date'
+      );
+      assert.equal(schedule.endDate.getTime(), new Date('2017-01-22T04:00:00').getTime(), 'Wrong schedule 3 end date');
+      assert.equal(schedule.duration, 597600000, 'Wrong schedule 3 duration');
+
+      // Schedule 4
+      // Weekly with an end day after the weekly day (01-01-2017 is sunday)
+      schedule = manageable.getLastScheduleOccurence({
+        beginDate: new Date('2017-01-01T06:00:00'),
+        endDate: new Date('2017-01-12T00:00:00'),
+        duration: 7200000,
+        recurrent: 'weekly'
+      });
+
+      assert.equal(
+        schedule.beginDate.getTime(),
+        new Date('2017-01-08T06:00:00').getTime(),
+        'Wrong schedule 4 begin date'
+      );
+      assert.equal(schedule.endDate.getTime(), new Date('2017-01-08T08:00:00').getTime(), 'Wrong schedule 4 end date');
+      assert.equal(schedule.duration, 7200000, 'Wrong schedule 4 duration');
+
+      // Schedule 5
+      // Weekly with an end day before the weekly day (01-06-2017 is friday, 01-15-2017 is sunday)
+      schedule = manageable.getLastScheduleOccurence({
+        beginDate: new Date('2017-01-06T06:00:00'),
+        endDate: new Date('2017-01-15T00:00:00'),
+        duration: 7200000,
+        recurrent: 'weekly'
+      });
+
+      assert.equal(
+        schedule.beginDate.getTime(),
+        new Date('2017-01-13T06:00:00').getTime(),
+        'Wrong schedule 5 begin date'
+      );
+      assert.equal(schedule.endDate.getTime(), new Date('2017-01-13T08:00:00').getTime(), 'Wrong schedule 5 end date');
+      assert.equal(schedule.duration, 7200000, 'Wrong schedule 5 duration');
+
+      // Schedule 6
+      // Weekly with an end day the same day as the start day
+      schedule = manageable.getLastScheduleOccurence({
+        beginDate: new Date('2017-01-01T06:00:00'),
+        endDate: new Date('2017-01-15T00:00:00'),
+        duration: 7200000,
+        recurrent: 'weekly'
+      });
+
+      assert.equal(
+        schedule.beginDate.getTime(),
+        new Date('2017-01-15T06:00:00').getTime(),
+        'Wrong schedule 6 begin date'
+      );
+      assert.equal(schedule.endDate.getTime(), new Date('2017-01-15T08:00:00').getTime(), 'Wrong schedule 6 end date');
+      assert.equal(schedule.duration, 7200000, 'Wrong schedule 6 duration');
+
+      // Schedule 7
+      // Weekly with start and end on different days
+      schedule = manageable.getLastScheduleOccurence({
+        beginDate: new Date('2017-01-01T23:00:00'),
+        endDate: new Date('2017-01-15T00:00:00'),
+        duration: 7200000,
+        recurrent: 'weekly'
+      });
+
+      assert.equal(
+        schedule.beginDate.getTime(),
+        new Date('2017-01-15T23:00:00').getTime(),
+        'Wrong schedule 7 begin date'
+      );
+      assert.equal(schedule.endDate.getTime(), new Date('2017-01-16T01:00:00').getTime(), 'Wrong schedule 7 end date');
+      assert.equal(schedule.duration, 7200000, 'Wrong schedule 7 duration');
+
+      // Schedule 8
+      // Without recurrence on same day
+      schedule = manageable.getLastScheduleOccurence({
+        beginDate: new Date('2017-01-01T06:00:00'),
+        duration: 7200000
+      });
+
+      assert.equal(
+        schedule.beginDate.getTime(),
+        new Date('2017-01-01T06:00:00').getTime(),
+        'Wrong schedule 8 begin date'
+      );
+      assert.equal(schedule.endDate.getTime(), new Date('2017-01-01T08:00:00').getTime(), 'Wrong schedule 8 end date');
+      assert.equal(schedule.duration, 7200000, 'Wrong schedule 8 duration');
+
+      // Schedule 9
+      // Without recurrence and start day different from end day
+      schedule = manageable.getLastScheduleOccurence({
+        beginDate: new Date('2017-01-01T23:00:00'),
+        duration: 7200000
+      });
+
+      assert.equal(
+        schedule.beginDate.getTime(),
+        new Date('2017-01-01T23:00:00').getTime(),
+        'Wrong schedule 9 begin date'
+      );
+      assert.equal(schedule.endDate.getTime(), new Date('2017-01-02T01:00:00').getTime(), 'Wrong schedule 9 end date');
+      assert.equal(schedule.duration, 7200000, 'Wrong schedule 9 duration');
+    });
+
+  });
+
   // isScheduleExpired method
   describe('isScheduleExpired', function() {
 
@@ -2406,6 +2581,25 @@ describe('Manageable', function() {
         recurrent: 'daily',
         endDate: new Date(new Date().getTime() - 86400000 - 7200000)
       }), 'Expected schedule 3 to be expired');
+
+      // Schedule 4
+      // 1 week ago minus 2 hours for 1 hour until next week minus 1 day
+      assert.ok(manageable.isScheduleExpired({
+        beginDate: new Date(new Date().getTime() - 86400000 * 7 - 7200000),
+        duration: 3600000,
+        recurrent: 'weekly',
+        endDate: new Date(new Date().getTime() + 86400000 * 6)
+      }), 'Expected schedule 4 to be expired');
+
+      // Schedule 5
+      // 2 weeks ago minus 2 days for 1 hour until tomorrow
+      assert.ok(manageable.isScheduleExpired({
+        beginDate: new Date(new Date().getTime() - 86400000 * 8),
+        duration: 3600000,
+        recurrent: 'weekly',
+        endDate: new Date(new Date().getTime() + 86400000)
+      }), 'Expected schedule 5 to be expired');
+
     });
 
     it('should return false if a schedule has not expired yet', function() {
@@ -2433,6 +2627,34 @@ describe('Manageable', function() {
         recurrent: 'daily',
         endDate: new Date(new Date().getTime() + 86400000)
       }), 'Expected schedule 3 not to be expired');
+
+      // Schedule 4
+      // 8 days ago for 1 hour until today minus 1 second
+      assert.notOk(manageable.isScheduleExpired({
+        beginDate: new Date(new Date().getTime() - 86400000 * 8),
+        duration: 3600000,
+        recurrent: 'daily',
+        endDate: new Date(new Date().getTime() - 1000)
+      }), 'Expected schedule 4 not to be expired');
+
+      // Schedule 5
+      // 2 weeks ago for 1 hour until today minus 1 second
+      assert.notOk(manageable.isScheduleExpired({
+        beginDate: new Date(new Date().getTime() - 86400000 * 14),
+        duration: 3600000,
+        recurrent: 'weekly',
+        endDate: new Date(new Date().getTime() - 1000)
+      }), 'Expected schedule 5 not to be expired');
+
+      // Schedule 6
+      // From 2 weeks ago for 1 hour until tomorrow
+      assert.notOk(manageable.isScheduleExpired({
+        beginDate: new Date(new Date().getTime() - 86400000 * 14),
+        duration: 3600000,
+        recurrent: 'weekly',
+        endDate: new Date(new Date().getTime() + 86400000)
+      }), 'Expected schedule 6 not to be expired');
+
     });
   });
 });

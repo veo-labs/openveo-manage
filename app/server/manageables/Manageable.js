@@ -433,10 +433,10 @@ Manageable.prototype.getScheduleOccupiedTimePerDay = function(schedule) {
 Manageable.prototype.checkSchedulesConflict = function(schedule1, schedule2) {
   var schedule1DateTimeBegin = new Date(schedule1.beginDate);
   var schedule1DateTimeEnd = new Date(schedule1DateTimeBegin.getTime() + schedule1.duration);
-  var schedule1DateRecurrenceEnd = new Date(schedule1.recurrent ? schedule1.endDate : schedule1DateTimeEnd);
+  var schedule1DateRecurrenceEnd = this.getLastScheduleOccurence(schedule1).endDate;
   var schedule2DateTimeBegin = new Date(schedule2.beginDate);
   var schedule2DateTimeEnd = new Date(schedule2DateTimeBegin.getTime() + schedule2.duration);
-  var schedule2DateRecurrenceEnd = new Date(schedule2.recurrent ? schedule2.endDate : schedule2DateTimeEnd);
+  var schedule2DateRecurrenceEnd = this.getLastScheduleOccurence(schedule2).endDate;
 
   if (
 
@@ -682,35 +682,95 @@ Manageable.prototype.isScheduleRunning = function(schedule) {
 };
 
 /**
+ * Gets the last occurence of the given schedule.
+ *
+ * If schedule is daily the last occurence will start on schedule end day.
+ * If schedule is not recurrent the last occurence will start on schedule begin day.
+ * If schedule is weekly the last occurence will start on last same day it starts before schedule end day.
+ *
+ * @param {Object} schedule The schedule to get last occurence from
+ * @param {Date|String} [schedule.beginDate] The schedule first occurence begin date
+ * @param {Date|String} [schedule.endDate] The schedule expected end date if recurrent is specified
+ * @param {String} [schedule.recurrent] Either "daily" or "weekly"
+ * @param {Number} [schedule.duration] Occurences duration
+ * @return {Object} The last occurence schedule with:
+ *   - {Date} beginDate The starting date and time of the last occurence
+ *   - {Date} endDate The ending date and time of the last occurence
+ *   - {Number} duration The schedule duration
+ */
+Manageable.prototype.getLastScheduleOccurence = function(schedule) {
+  var lastOccurenceBeginDate;
+  var scheduleDateTimeBegin = new Date(schedule.beginDate);
+  var scheduleDateTimeEnd = new Date(schedule.endDate);
+
+  if (schedule.recurrent === 'daily') {
+
+    // For a daily schedule the last occurence starts on the end date
+
+    lastOccurenceBeginDate = new Date(scheduleDateTimeEnd);
+
+  } else if (schedule.recurrent === 'weekly') {
+
+    // For a weekly schedule the last occurence depends on the day of the week
+    // Begin day can be specified on thuesday and end date on sunday, in this case the last occurence starts last
+    // thuesday.
+    // Also begin day can be specified on thuesday and end date also on thuesday thus the last occurence will be
+    // started on end date.
+
+    if (scheduleDateTimeBegin.getDay() === scheduleDateTimeEnd.getDay()) {
+
+      // Schedule end date is on the same day as the start date which means the end date will go for another occurence
+
+      lastOccurenceBeginDate = new Date(scheduleDateTimeEnd);
+
+    } else {
+
+      // Schedule end date is on another day than begin date day
+      // Last occurence starts last same day as the begin date day
+
+      // Find past date of the last same day as the begin date day
+      var daysDifference = scheduleDateTimeEnd.getDay() - schedule.beginDate.getDay();
+      lastOccurenceBeginDate = new Date(
+        scheduleDateTimeEnd.getTime() - (
+          daysDifference < 0 ? 7 + daysDifference : daysDifference
+        ) * 86400000
+      );
+
+    }
+  } else {
+
+    // Schedule is not recurrent
+
+    lastOccurenceBeginDate = new Date(schedule.beginDate);
+
+  }
+
+  lastOccurenceBeginDate.setHours(scheduleDateTimeBegin.getHours());
+  lastOccurenceBeginDate.setMinutes(scheduleDateTimeBegin.getMinutes());
+  lastOccurenceBeginDate.setSeconds(scheduleDateTimeBegin.getSeconds());
+
+  return {
+    beginDate: lastOccurenceBeginDate,
+    endDate: new Date(lastOccurenceBeginDate.getTime() + schedule.duration),
+    duration: schedule.duration
+  };
+};
+
+/**
  * Checks if a schedule has expired.
  *
- * Schedule is considered expired if one of the following condition is filled :
- *   - Schedule is not recurrent and schedule has finished
- *   - Schedule is recurrent and this is the end date and day schedule has finished
+ * Schedule is considered expired if schedule last occurence end date and time has passed.
  *
  * @method isScheduleExpired
  * @param {Object} schedule The schedule description object
  * @param {Date} schedule.beginDate The begin date of the schedule
  * @param {Number} schedule.duration The schedule duration (in ms)
- * @param {Boolean} [schedule.recurrent=false] true if this is a daily schedule, false otherwise
- * @param {Date} [schedule.endDate] The end date of the daily schedule (required if recurrent is set to true)
+ * @param {String} [schedule.recurrent] Either "daily" or "weekly"
+ * @param {Date} [schedule.endDate] The end date of the recurrent schedule (required if recurrent is specified)
  * @return {Boolean} true if the schedule has expired, false otherwise
  */
 Manageable.prototype.isScheduleExpired = function(schedule) {
-  var beginDate = new Date(schedule.beginDate);
-  var endDate = new Date(schedule.beginDate.getTime() + schedule.duration);
   var now = new Date();
-
-  return (
-    (
-      beginDate < now &&
-      endDate < now &&
-      !schedule.recurrent
-    ) ||
-    (
-      schedule.recurrent &&
-      schedule.endDate &&
-      schedule.endDate < now
-    )
-  );
+  var lastOccurence = this.getLastScheduleOccurence(schedule);
+  return lastOccurence.endDate < now;
 };

@@ -282,23 +282,6 @@ function deregisterSchedule(manageable, scheduleId) {
 function registerSchedule(manageable, schedule) {
   var self = this;
 
-  // Start is made at the start date
-  // If start is recurrent, job will end at the specified date at midnight
-  if (schedule.recurrent) {
-    if (!schedule.endDate) {
-
-      // Recurrent without end date
-      // Set end date to begin date (only one occurence)
-      schedule.endDate = new Date(schedule.beginDate.getTime());
-
-    }
-
-    // Set end date time to midnight (almost)
-    schedule.endDate.setHours(23);
-    schedule.endDate.setMinutes(59);
-    schedule.endDate.setSeconds(59);
-  }
-
   // Start schedule job
   schedule.startJobId = this.scheduleManager.addJob(
     schedule.beginDate,
@@ -376,10 +359,9 @@ function registerSchedule(manageable, schedule) {
   // Stop schedule job
   // Stop is made at the start date plus duration
   var stopBeginDate = new Date(schedule.beginDate.getTime() + schedule.duration);
-  var stopEndDate = schedule.endDate ? (new Date(schedule.endDate.getTime() + schedule.duration)) : null;
   schedule.stopJobId = this.scheduleManager.addJob(
     stopBeginDate,
-    stopEndDate,
+    schedule.endDate,
     schedule.recurrent,
     function() {
       var ids = [];
@@ -970,6 +952,18 @@ function initBrowsersListeners() {
       return callback({
         error: ERRORS.ADD_SCHEDULE_NOT_FOUND_ERROR
       });
+    }
+
+    if (schedule.recurrent) {
+      if (!schedule.endDate) {
+
+        // Recurrent without end date
+        // Set end date to begin date (only one occurence)
+        schedule.endDate = new Date(schedule.beginDate.getTime());
+
+      }
+
+      schedule.endDate = manageable.getLastScheduleOccurence(schedule).endDate;
     }
 
     // Validate that schedule is not in collision with other schedules
