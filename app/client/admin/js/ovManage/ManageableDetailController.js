@@ -286,13 +286,13 @@
       var schedule = {
         name: self.itemSchedule.schedule.name,
         beginDate: self.itemSchedule.schedule.beginDate,
-        endDate: self.itemSchedule.schedule.endDate,
         duration: duration,
         preset: self.itemSchedule.schedule.preset
       };
 
       if (self.itemSchedule.schedule.recurrent) {
         schedule.recurrent = self.itemSchedule.schedule.recurrent;
+        schedule.endDate = self.itemSchedule.schedule.endDate;
       }
 
       if (validateSchedule(schedule)) {
