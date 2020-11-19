@@ -26,2110 +26,1016 @@ describe('Manageable', function() {
   // checkSchedulesConflict method
   describe('checkSchedulesConflict', function() {
 
-    it('should return true if two schedules are in collision', function() {
+    function testSchedulesConflict(schedule1, schedule2) {
       var manageable = new Manageable({});
+
+      assert.ok(
+        manageable.checkSchedulesConflict(schedule1, schedule2),
+        '\n' + schedule1.schema + ' \n' +
+        schedule2.schema + ' \n'
+      );
+
+      assert.ok(
+        manageable.checkSchedulesConflict(schedule2, schedule1),
+        '\n' + schedule2.schema + ' \n' +
+        schedule1.schema + ' \n'
+      );
+    }
+
+    function testNoSchedulesConflict(schedule1, schedule2) {
+      var manageable = new Manageable({});
+
+      assert.notOk(
+        manageable.checkSchedulesConflict(schedule1, schedule2),
+        '\n' + schedule1.schema + ' \n' +
+        schedule2.schema + ' \n'
+      );
+
+      assert.notOk(
+        manageable.checkSchedulesConflict(schedule2, schedule1),
+        '\n' + schedule2.schema + ' \n' +
+        schedule1.schema + ' \n'
+      );
+    }
+
+    it('should return true if two schedules are in collision', function() {
 
       // Without recurrence
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule1: ##----------------------'
         }, {
           beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ##----------------------'
         }
-      ), '\n' +
-          'schedule1: ##---------------------- \n' +
-          'schedule2: ##---------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 21600000
+          duration: 21600000,
+          schema: 'schedule1: ######------------------'
         }, {
           beginDate: new Date('2017-01-01T06:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ------##----------------'
         }
-      ), '\n' +
-          'schedule1: ######------------------ \n' +
-          'schedule2: ------##---------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T05:00:00'),
-          duration: 21600000
+          duration: 21600000,
+          schema: 'schedule1: -----######-------------'
         }, {
           beginDate: new Date('2017-01-01T10:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ----------##------------'
         }
-      ), '\n' +
-          'schedule1: -----######------------- \n' +
-          'schedule2: ----------##------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 21600000
+          duration: 21600000,
+          schema: 'schedule1: ######------------------'
         }, {
           beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ##----------------------'
         }
-      ), '\n' +
-          'schedule1: ######------------------ \n' +
-          'schedule2: ##---------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T05:00:00'),
-          duration: 21600000
+          duration: 21600000,
+          schema: 'schedule1: -----######-------------'
         }, {
           beginDate: new Date('2017-01-01T07:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: -------##---------------'
         }
-      ), '\n' +
-          'schedule1: -----######------------- \n' +
-          'schedule2: -------##--------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T05:00:00'),
-          duration: 21600000
+          duration: 21600000,
+          schema: 'schedule1: -----######-------------'
         }, {
           beginDate: new Date('2017-01-01T07:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: -------##---------------'
         }
-      ), '\n' +
-          'schedule1: -----######------------- \n' +
-          'schedule2: -------##--------------- \n'
-      );
-
-      // Without recurrence (reverse order)
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T11:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T05:00:00'),
-          duration: 21600000
-        }
-      ), '\n' +
-          'schedule1: -----------##----------- \n' +
-          'schedule2: -----######------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T10:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T05:00:00'),
-          duration: 21600000
-        }
-      ), '\n' +
-          'schedule1: ----------##------------ \n' +
-          'schedule2: -----######------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 21600000
-        }
-      ), '\n' +
-          'schedule1: ##---------------------- \n' +
-          'schedule2: ######------------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T07:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T05:00:00'),
-          duration: 21600000
-        }
-      ), '\n' +
-          'schedule1: -------##--------------- \n' +
-          'schedule2: -----######------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T04:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T03:00:00'),
-          duration: 7200000
-        }
-      ), '\n' +
-          'schedule1: ----##------------------ \n' +
-          'schedule2: ---##------------------- \n'
       );
 
       // With one schedule in daily recurrence
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T02:00:00')
+          endDate: new Date('2017-01-02T02:00:00'),
+          schema: 'schedule1: ##----------------------|##----------------------'
         }, {
           beginDate: new Date('2017-01-02T00:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ------------------------|##----------------------'
         }
-      ), '\n' +
-          'schedule1: ##----------------------|##---------------------- \n' +
-          'schedule2: ------------------------|##---------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T02:00:00')
+          endDate: new Date('2017-01-02T02:00:00'),
+          schema: 'schedule1: ##----------------------|##----------------------'
         }, {
           beginDate: new Date('2017-01-02T02:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ------------------------|--##--------------------'
         }
-      ), '\n' +
-          'schedule1: ##----------------------|##---------------------- \n' +
-          'schedule2: ------------------------|--##-------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T02:00:00')
+          endDate: new Date('2017-01-02T02:00:00'),
+          schema: 'schedule1: ##----------------------|##----------------------'
         }, {
           beginDate: new Date('2017-01-01T23:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: -----------------------#|#-----------------------'
         }
-      ), '\n' +
-          'schedule1: ##----------------------|##---------------------- \n' +
-          'schedule2: -----------------------#|#----------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           recurrent: 'daily',
           duration: 7200000,
-          endDate: new Date('2017-01-02T02:00:00')
+          endDate: new Date('2017-01-02T02:00:00'),
+          schema: 'schedule1: ##----------------------|##----------------------'
         }, {
           beginDate: new Date('2017-01-01T22:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ----------------------##|------------------------'
         }
-      ), '\n' +
-          'schedule1: ##----------------------|##---------------------- \n' +
-          'schedule2: ----------------------##|------------------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           recurrent: 'daily',
           duration: 18000000,
-          endDate: new Date('2017-01-02T06:00:00')
+          endDate: new Date('2017-01-02T06:00:00'),
+          schema: 'schedule1: ######------------------|######------------------'
         }, {
           beginDate: new Date('2017-01-02T02:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ------------------------|--##--------------------'
         }
-      ), '\n' +
-          'schedule1: ######------------------|######------------------ \n' +
-          'schedule2: ------------------------|--##-------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T17:00:00'),
           recurrent: 'daily',
           duration: 7200000,
-          endDate: new Date('2017-01-03T19:00:00')
+          endDate: new Date('2017-01-03T19:00:00'),
+          schema: 'schedule1: -----------------##-----|-----------------##-----|-----------------##-----'
         },
         {
           beginDate: new Date('2017-01-02T14:00:00'),
-          duration: 50400000
+          duration: 50400000,
+          schema: 'schedule2: ------------------------|--------------##########|####--------------------'
         }
-      ), '\n' +
-          'schedule1: -----------------##-----|-----------------##-----|-----------------##----- \n' +
-          'schedule2: ------------------------|--------------##########|####-------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T03:00:00'),
           recurrent: 'daily',
           duration: 7200000,
-          endDate: new Date('2017-01-03T05:00:00')
+          endDate: new Date('2017-01-03T05:00:00'),
+          schema: 'schedule1: ---##-------------------|---##-------------------|---##-------------------'
         },
         {
           beginDate: new Date('2017-01-02T22:00:00'),
-          duration: 36000000
+          duration: 36000000,
+          schema: 'schedule2: ------------------------|----------------------##|########----------------'
         }
-      ), '\n' +
-          'schedule1: ---##-------------------|---##-------------------|---##------------------- \n' +
-          'schedule2: ------------------------|----------------------##|########---------------- \n'
-      );
-
-      // With one schedule in daily recurrence (reverse order)
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T00:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T02:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|##---------------------- \n' +
-          'schedule2: ##----------------------|##---------------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T02:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T02:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|--##-------------------- \n' +
-          'schedule2: ##----------------------|##---------------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T23:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T02:00:00')
-        }
-      ), '\n' +
-          'schedule1: -----------------------#|#----------------------- \n' +
-          'schedule2: ##----------------------|##---------------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T22:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          recurrent: 'daily',
-          duration: 7200000,
-          endDate: new Date('2017-01-02T02:00:00')
-        }
-      ), '\n' +
-          'schedule1: ----------------------##|------------------------ \n' +
-          'schedule2: ##----------------------|##---------------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T02:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          recurrent: 'daily',
-          duration: 21600000,
-          endDate: new Date('2017-01-02T06:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|--##-------------------- \n' +
-          'schedule2: ######------------------|######------------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T15:00:00'),
-          duration: 468000000
-        },
-        {
-          beginDate: new Date('2017-01-01T17:00:00'),
-          recurrent: 'daily',
-          duration: 7200000,
-          endDate: new Date('2017-01-03T19:00:00')
-        }
-      ), '\n' +
-          'schedule2: ------------------------|--------------##########|####-------------------- \n' +
-          'schedule1: -----------------##-----|-----------------##-----|-----------------##----- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T22:00:00'),
-          duration: 36000000
-        },
-        {
-          beginDate: new Date('2017-01-01T03:00:00'),
-          recurrent: 'daily',
-          duration: 7200000,
-          endDate: new Date('2017-01-03T05:00:00')
-        }
-      ), '\n' +
-          'schedule2: ------------------------|----------------------##|########---------------- \n' +
-          'schedule1: ---##-------------------|---##-------------------|---##------------------- \n'
       );
 
       // With both schedules in daily recurrence
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
+          endDate: new Date('2017-01-02T10:00:00'),
+          schema: 'schedule1: --------##--------------|--------##--------------|------------------------'
         }, {
           beginDate: new Date('2017-01-02T10:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T12:00:00')
+          endDate: new Date('2017-01-03T12:00:00'),
+          schema: 'schedule2: ------------------------|----------##------------|----------##------------'
         }
-      ), '\n' +
-          'schedule1: --------##--------------|--------##--------------|------------------------ \n' +
-          'schedule2: ------------------------|----------##------------|----------##------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
+          endDate: new Date('2017-01-02T10:00:00'),
+          schema: 'schedule1: --------##--------------|--------##--------------|------------------------'
         }, {
           beginDate: new Date('2017-01-02T09:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-03-03T11:00:00')
+          endDate: new Date('2017-03-03T11:00:00'),
+          schema: 'schedule2: ------------------------|---------##-------------|---------##-------------'
         }
-      ), '\n' +
-          'schedule1: --------##--------------|--------##--------------|------------------------ \n' +
-          'schedule2: ------------------------|---------##-------------|---------##------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T08:00:00'),
           duration: 21600000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T14:00:00')
+          endDate: new Date('2017-01-02T14:00:00'),
+          schema: 'schedule1: --------######----------|--------######----------|------------------------'
         }, {
           beginDate: new Date('2017-01-02T10:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T12:00:00')
+          endDate: new Date('2017-01-03T12:00:00'),
+          schema: 'schedule2: ------------------------|----------##------------|----------##------------'
         }
-      ), '\n' +
-          'schedule1: --------######----------|--------######----------|------------------------ \n' +
-          'schedule2: ------------------------|----------##------------|----------##------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
+          endDate: new Date('2017-01-02T10:00:00'),
+          schema: 'schedule1: --------##--------------|--------##--------------|------------------------'
         }, {
           beginDate: new Date('2017-01-02T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:00')
+          endDate: new Date('2017-01-03T10:00:00'),
+          schema: 'schedule2: ------------------------|--------##--------------|--------##--------------'
         }
-      ), '\n' +
-          'schedule1: --------##--------------|--------##--------------|------------------------ \n' +
-          'schedule2: ------------------------|--------##--------------|--------##-------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
+          endDate: new Date('2017-01-02T10:00:00'),
+          schema: 'schedule1: --------##--------------|--------##--------------|------------------------'
         }, {
           beginDate: new Date('2017-01-02T07:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T09:00:00')
+          endDate: new Date('2017-01-03T09:00:00'),
+          schema: 'schedule2: ------------------------|-------##---------------|-------##---------------'
         }
-      ), '\n' +
-          'schedule1: --------##--------------|--------##--------------|------------------------ \n' +
-          'schedule2: ------------------------|-------##---------------|-------##--------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
+          endDate: new Date('2017-01-02T10:00:00'),
+          schema: 'schedule1: --------##--------------|--------##--------------|------------------------'
         }, {
           beginDate: new Date('2017-01-02T06:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T08:00:00')
+          endDate: new Date('2017-01-03T08:00:00'),
+          schema: 'schedule2: ------------------------|------##----------------|------##----------------'
         }
-      ), '\n' +
-          'schedule1: --------##--------------|--------##--------------|------------------------ \n' +
-          'schedule2: ------------------------|------##----------------|------##---------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-02T10:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T12:00:00')
+          endDate: new Date('2017-01-03T12:00:00'),
+          schema: 'schedule1: ------------------------|----------##------------|----------##------------'
         }, {
           beginDate: new Date('2017-01-01T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
+          endDate: new Date('2017-01-02T10:00:00'),
+          schema: 'schedule2: --------##--------------|--------##--------------|------------------------'
         }
-      ), '\n' +
-          'schedule1: ------------------------|----------##------------|----------##------------ \n' +
-          'schedule2: --------##--------------|--------##--------------|------------------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-02T10:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T12:00:00')
+          endDate: new Date('2017-01-03T12:00:00'),
+          schema: 'schedule1: ------------------------|----------##------------|----------##------------'
         }, {
           beginDate: new Date('2017-01-01T09:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-03-02T11:00:00')
+          endDate: new Date('2017-03-02T11:00:00'),
+          schema: 'schedule2: ---------##-------------|---------##-------------|------------------------'
         }
-      ), '\n' +
-          'schedule1: ------------------------|----------##------------|----------##------------ \n' +
-          'schedule2: ---------##-------------|---------##-------------|------------------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-02T08:00:00'),
           duration: 21600000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T14:00:00')
+          endDate: new Date('2017-01-03T14:00:00'),
+          schema: 'schedule1: ------------------------|--------######----------|--------######----------'
         }, {
           beginDate: new Date('2017-01-01T10:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T12:00:00')
+          endDate: new Date('2017-01-02T12:00:00'),
+          schema: 'schedule2: ----------##------------|----------##------------|------------------------'
         }
-      ), '\n' +
-          'schedule1: ------------------------|--------######----------|--------######---------- \n' +
-          'schedule2: ----------##------------|----------##------------|------------------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-02T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:00')
+          endDate: new Date('2017-01-03T10:00:00'),
+          schema: 'schedule1: ------------------------|--------##--------------|--------##--------------'
         }, {
           beginDate: new Date('2017-01-01T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
+          endDate: new Date('2017-01-02T10:00:00'),
+          schema: 'schedule2: --------##--------------|--------##--------------|------------------------'
         }
-      ), '\n' +
-          'schedule1: ------------------------|--------##--------------|--------##-------------- \n' +
-          'schedule2: --------##--------------|--------##--------------|------------------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-02T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:00')
+          endDate: new Date('2017-01-03T10:00:00'),
+          schema: 'schedule1: ------------------------|--------##--------------|--------##--------------'
         }, {
           beginDate: new Date('2017-01-01T09:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T11:00:00')
+          endDate: new Date('2017-01-02T11:00:00'),
+          schema: 'schedule2: ---------##-------------|---------##-------------|------------------------'
         }
-      ), '\n' +
-          'schedule1: ------------------------|--------##--------------|--------##-------------- \n' +
-          'schedule2: ---------##-------------|---------##-------------|------------------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-02T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:00')
+          endDate: new Date('2017-01-03T10:00:00'),
+          schema: 'schedule1: ------------------------|--------##--------------|--------##--------------'
         }, {
           beginDate: new Date('2017-01-01T10:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T12:00:00')
+          endDate: new Date('2017-01-02T12:00:00'),
+          schema: 'schedule2: ----------##------------|----------##------------|------------------------'
         }
-      ), '\n' +
-          'schedule1: ------------------------|--------##--------------|--------##-------------- \n' +
-          'schedule2: ----------##------------|----------##------------|------------------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T19:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T21:00:00')
+          endDate: new Date('2017-01-03T21:00:00'),
+          schema: 'schedule1: -------------------##---|-------------------##---|-------------------##---'
         }, {
           beginDate: new Date('2017-01-02T17:00:00'),
           duration: 36000000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-04T03:00:00')
+          endDate: new Date('2017-01-04T03:00:00'),
+          schema: 'schedule2: ------------------------|-----------------#######|###--------------#######'
         }
-      ), '\n' +
-          'schedule1: -------------------##---|-------------------##---|-------------------##--- \n' +
-          'schedule2: ------------------------|-----------------#######|###--------------####### \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T02:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T04:00:00')
+          endDate: new Date('2017-01-03T04:00:00'),
+          schema: 'schedule1: --##--------------------|--##--------------------|--##--------------------'
         }, {
           beginDate: new Date('2017-01-02T22:00:00'),
           duration: 25200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-04T05:00:00')
+          endDate: new Date('2017-01-04T05:00:00'),
+          schema: 'schedule2: ------------------------|----------------------##|#####-----------------##'
         }
-      ), '\n' +
-          'schedule1: --##--------------------|--##--------------------|--##-------------------- \n' +
-          'schedule2: ------------------------|----------------------##|#####-----------------## \n'
-      );
-
-      // With both schedules in daily recurrence (reverse order)
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T10:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T12:00:00')
-        }, {
-          beginDate: new Date('2017-01-01T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|----------##------------|----------##------------ \n' +
-          'schedule2: --------##--------------|--------##--------------|------------------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T09:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-03-03T11:00:00')
-        }, {
-          beginDate: new Date('2017-01-01T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|---------##-------------|---------##------------- \n' +
-          'schedule2: --------##--------------|--------##--------------|------------------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T10:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T12:00:00')
-        }, {
-          beginDate: new Date('2017-01-01T08:00:00'),
-          duration: 21600000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T14:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|----------##------------|----------##------------ \n' +
-          'schedule2: --------######----------|--------######----------|------------------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:00')
-        }, {
-          beginDate: new Date('2017-01-01T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|--------##--------------|--------##-------------- \n' +
-          'schedule2: --------##--------------|--------##--------------|------------------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T07:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T09:00:00')
-        }, {
-          beginDate: new Date('2017-01-01T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|-------##---------------|-------##--------------- \n' +
-          'schedule2: --------##--------------|--------##--------------|------------------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T06:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T08:00:00')
-        }, {
-          beginDate: new Date('2017-01-01T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|------##----------------|------##---------------- \n' +
-          'schedule2: --------##--------------|--------##--------------|------------------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
-        }, {
-          beginDate: new Date('2017-01-02T10:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T12:00:00')
-        }
-      ), '\n' +
-          'schedule1: --------##--------------|--------##--------------|------------------------ \n' +
-          'schedule2: ------------------------|----------##------------|----------##------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T09:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-03-02T11:00:00')
-        }, {
-          beginDate: new Date('2017-01-02T10:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T12:00:00')
-        }
-      ), '\n' +
-          'schedule1: ---------##-------------|---------##-------------|------------------------ \n' +
-          'schedule2: ------------------------|----------##------------|----------##------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T10:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T12:00:00')
-        }, {
-          beginDate: new Date('2017-01-02T08:00:00'),
-          duration: 21600000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T14:00:00')
-        }
-      ), '\n' +
-          'schedule1: ----------##------------|----------##------------|------------------------ \n' +
-          'schedule2: ------------------------|--------######----------|--------######---------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
-        }, {
-          beginDate: new Date('2017-01-02T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:00')
-        }
-      ), '\n' +
-          'schedule1: --------##--------------|--------##--------------|------------------------ \n' +
-          'schedule2: ------------------------|--------##--------------|--------##-------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T09:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T11:00:00')
-        }, {
-          beginDate: new Date('2017-01-02T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:00')
-        }
-      ), '\n' +
-          'schedule1: ---------##-------------|---------##-------------|------------------------ \n' +
-          'schedule2: ------------------------|--------##--------------|--------##-------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T10:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T12:00:00')
-        }, {
-          beginDate: new Date('2017-01-02T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:00')
-        }
-      ), '\n' +
-          'schedule1: ----------##------------|----------##------------|------------------------ \n' +
-          'schedule2: ------------------------|--------##--------------|--------##-------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T17:00:00'),
-          duration: 36000000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-04T03:00:00')
-        },
-        {
-          beginDate: new Date('2017-01-01T19:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T21:00:00')
-        }
-      ), '\n' +
-          'schedule2: ------------------------|-----------------#######|###--------------####### \n' +
-          'schedule1: -------------------##---|-------------------##---|-------------------##--- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T22:00:00'),
-          duration: 25200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-04T05:00:00')
-        },
-        {
-          beginDate: new Date('2017-01-01T02:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T04:00:00')
-        }
-      ), '\n' +
-          'schedule2: ------------------------|----------------------##|#####-----------------## \n' +
-          'schedule1: --##--------------------|--##--------------------|--##-------------------- \n'
       );
 
       // With one schedule in weekly recurrence
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T08:00:00'),
           duration: 7200000,
           recurrent: 'weekly',
-          endDate: new Date('2017-01-08T10:00:00')
+          endDate: new Date('2017-01-08T10:00:00'),
+          schema: 'schedule1: --------##--------------| [6 days] |----------##------------'
         }, {
           beginDate: new Date('2017-01-08T08:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ------------------------| [6 days] |----------##------------'
         }
-      ), '\n' +
-          'schedule1: --------##--------------| [6 days] |----------##------------ \n' +
-          'schedule2: ------------------------| [6 days] |----------##------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           duration: 7200000,
           recurrent: 'weekly',
-          endDate: new Date('2017-01-08T02:00:00')
+          endDate: new Date('2017-01-08T02:00:00'),
+          schema: 'schedule1: ##----------------------| [6 days] |##----------------------'
         }, {
           beginDate: new Date('2017-01-08T02:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ------------------------| [6 days] |--##--------------------'
         }
-      ), '\n' +
-          'schedule1: ##----------------------| [6 days] |##---------------------- \n' +
-          'schedule2: ------------------------| [6 days] |--##-------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           duration: 7200000,
           recurrent: 'weekly',
-          endDate: new Date('2017-01-08T02:00:00')
+          endDate: new Date('2017-01-08T02:00:00'),
+          schema: 'schedule1: ##----------------------| [5 days] |------------------------|##----------------------'
         }, {
           beginDate: new Date('2017-01-07T23:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule1: ------------------------| [5 days] |-----------------------#|#-----------------------'
         }
-      ), '\n' +
-          'schedule1: ##----------------------| [5 days] |------------------------|##---------------------- \n' +
-          'schedule1: ------------------------| [5 days] |-----------------------#|#----------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           recurrent: 'weekly',
           duration: 7200000,
-          endDate: new Date('2017-01-08T02:00:00')
+          endDate: new Date('2017-01-08T02:00:00'),
+          schema: 'schedule1: ##----------------------| [5 days] |------------------------|##----------------------'
         }, {
           beginDate: new Date('2017-01-07T22:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule1: ------------------------| [5 days] |----------------------##|------------------------'
         }
-      ), '\n' +
-          'schedule1: ##----------------------| [5 days] |------------------------|##---------------------- \n' +
-          'schedule1: ------------------------| [5 days] |----------------------##|------------------------ \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           recurrent: 'weekly',
           duration: 18000000,
-          endDate: new Date('2017-01-08T06:00:00')
+          endDate: new Date('2017-01-08T06:00:00'),
+          schema: 'schedule1: ######------------------| [6 days] |#######-----------------'
         }, {
           beginDate: new Date('2017-01-08T02:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule1: ------------------------| [6 days] |--##--------------------'
         }
-      ), '\n' +
-          'schedule1: ######------------------| [6 days] |#######----------------- \n' +
-          'schedule1: ------------------------| [6 days] |--##-------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T17:00:00'),
           recurrent: 'weekly',
           duration: 7200000,
-          endDate: new Date('2017-01-08T19:00:00')
+          endDate: new Date('2017-01-08T19:00:00'),
+          schema: 'schedule1: -----------------##-----| [6 days] |-----------------##-----|------------------------'
         },
         {
           beginDate: new Date('2017-01-08T14:00:00'),
-          duration: 50400000
+          duration: 50400000,
+          schema: 'schedule1: ------------------------| [6 days] |--------------##########|####--------------------'
         }
-      ), '\n' +
-          'schedule1: -----------------##-----| [6 days] |-----------------##-----|------------------------ \n' +
-          'schedule1: ------------------------| [6 days] |--------------##########|####-------------------- \n'
       );
 
-      assert.ok(manageable.checkSchedulesConflict(
+      testSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T22:00:00'),
           recurrent: 'weekly',
           duration: 14400000,
-          endDate: new Date('2017-01-09T02:00:00')
+          endDate: new Date('2017-01-09T02:00:00'),
+          schema: 'schedule1: ----------------------##| [6 days] |----------------------##|##----------------------'
         },
         {
           beginDate: new Date('2017-01-09T00:00:00'),
-          duration: 7200000
-        }
-      ), '\n' +
-          'schedule1: ----------------------##| [6 days] |----------------------##|##---------------------- \n' +
-          'schedule1: ------------------------| [6 days] |------------------------|##---------------------- \n'
-      );
-
-      // With one schedule in weekly recurrence in reverse order
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-08T08:00:00'),
-          duration: 7200000
-        },
-        {
-          beginDate: new Date('2017-01-01T08:00:00'),
           duration: 7200000,
-          recurrent: 'weekly',
-          endDate: new Date('2017-01-08T10:00:00')
+          schema: 'schedule1: ------------------------| [6 days] |------------------------|##----------------------'
         }
-      ), '\n' +
-          'schedule2: ------------------------| [6 days] |----------##------------ \n' +
-          'schedule1: --------##--------------| [6 days] |----------##------------ \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-08T02:00:00'),
-          duration: 7200000
-        },
-        {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000,
-          recurrent: 'weekly',
-          endDate: new Date('2017-01-08T02:00:00')
-        }
-      ), '\n' +
-          'schedule2: ------------------------| [6 days] |--##-------------------- \n' +
-          'schedule1: ##----------------------| [6 days] |##---------------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-07T23:00:00'),
-          duration: 7200000
-        },
-        {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000,
-          recurrent: 'weekly',
-          endDate: new Date('2017-01-08T02:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------| [5 days] |-----------------------#|#----------------------- \n' +
-          'schedule1: ##----------------------| [5 days] |------------------------|##---------------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-07T22:00:00'),
-          duration: 7200000
-        },
-        {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          recurrent: 'weekly',
-          duration: 7200000,
-          endDate: new Date('2017-01-08T02:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------| [5 days] |----------------------##|------------------------ \n' +
-          'schedule1: ##----------------------| [5 days] |------------------------|##---------------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-08T02:00:00'),
-          duration: 7200000
-        },
-        {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          recurrent: 'weekly',
-          duration: 18000000,
-          endDate: new Date('2017-01-08T06:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------| [6 days] |--##-------------------- \n' +
-          'schedule1: ######------------------| [6 days] |#######----------------- \n'
-      );
-
-      assert.ok(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-08T14:00:00'),
-          duration: 50400000
-        },
-        {
-          beginDate: new Date('2017-01-01T17:00:00'),
-          recurrent: 'weekly',
-          duration: 7200000,
-          endDate: new Date('2017-01-08T19:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------| [6 days] |--------------##########|####-------------------- \n' +
-          'schedule1: -----------------##-----| [6 days] |-----------------##-----|------------------------ \n'
       );
 
       ['daily', 'weekly'].forEach(function(recurrence) {
 
         // With one schedule in weekly recurrence and one schedule in either daily or weekly reccurence
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-01T08:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
+            endDate: new Date('2017-01-08T10:00:00'),
+            schema: 'schedule1: --------##--------------| [6 days] |----------##------------'
           }, {
             beginDate: new Date('2017-01-08T10:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-15T12:00:00')
+            endDate: new Date('2017-01-15T12:00:00'),
+            schema: 'schedule2: ------------------------| [6 days] |------------##----------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: --------##--------------| [6 days] |----------##------------ \n' +
-            'schedule2: ------------------------| [6 days] |------------##---------- \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-01T08:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
+            endDate: new Date('2017-01-08T10:00:00'),
+            schema: 'schedule1: --------##--------------| [6 days] |----------##------------'
           }, {
             beginDate: new Date('2017-01-08T09:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-15T11:00:00')
+            endDate: new Date('2017-01-15T11:00:00'),
+            schema: 'schedule2: ------------------------| [6 days] |-----------##-----------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: --------##--------------| [6 days] |----------##------------ \n' +
-            'schedule2: ------------------------| [6 days] |-----------##----------- \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-01T07:00:00'),
             duration: 32400000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-08T16:00:00')
+            endDate: new Date('2017-01-08T16:00:00'),
+            schema: 'schedule1: -------#########--------| [6 days] |-------#########--------'
           }, {
             beginDate: new Date('2017-01-08T10:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-15T12:00:00')
+            endDate: new Date('2017-01-15T12:00:00'),
+            schema: 'schedule2: ------------------------| [6 days] |----------##------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: -------#########--------| [6 days] |-------#########-------- \n' +
-            'schedule2: ------------------------| [6 days] |----------##------------ \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-01T08:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
+            endDate: new Date('2017-01-08T10:00:00'),
+            schema: 'schedule1: --------##--------------| [6 days] |--------##--------------'
           }, {
             beginDate: new Date('2017-01-08T08:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-15T10:00:00')
+            endDate: new Date('2017-01-15T10:00:00'),
+            schema: 'schedule2: ------------------------| [6 days] |--------##--------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: --------##--------------| [6 days] |--------##-------------- \n' +
-            'schedule2: ------------------------| [6 days] |--------##-------------- \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-01T08:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
+            endDate: new Date('2017-01-08T10:00:00'),
+            schema: 'schedule1: --------##--------------| [6 days] |--------##--------------'
           }, {
             beginDate: new Date('2017-01-08T07:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-15T09:00:00')
+            endDate: new Date('2017-01-15T09:00:00'),
+            schema: 'schedule2: ------------------------| [6 days] |-------##---------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: --------##--------------| [6 days] |--------##-------------- \n' +
-            'schedule2: ------------------------| [6 days] |-------##--------------- \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-01T08:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
+            endDate: new Date('2017-01-08T10:00:00'),
+            schema: 'schedule1: --------##--------------| [6 days] |--------##--------------'
           }, {
             beginDate: new Date('2017-01-08T06:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-15T08:00:00')
+            endDate: new Date('2017-01-15T08:00:00'),
+            schema: 'schedule2: ------------------------| [6 days] |------##----------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: --------##--------------| [6 days] |--------##-------------- \n' +
-            'schedule2: ------------------------| [6 days] |------##---------------- \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-08T10:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-15T12:00:00')
+            endDate: new Date('2017-01-15T12:00:00'),
+            schema: 'schedule1: ------------------------| [6 days] |----------##------------'
           }, {
             beginDate: new Date('2017-01-01T08:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-08T10:00:00')
+            endDate: new Date('2017-01-08T10:00:00'),
+            schema: 'schedule2: --------##--------------| [6 days] |--------##--------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: ------------------------| [6 days] |----------##------------ \n' +
-            'schedule2: --------##--------------| [6 days] |--------##-------------- \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-08T10:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-15T12:00:00')
+            endDate: new Date('2017-01-15T12:00:00'),
+            schema: 'schedule1: ------------------------| [6 days] |----------##------------'
           }, {
             beginDate: new Date('2017-01-01T09:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-03-08T11:00:00')
+            endDate: new Date('2017-03-08T11:00:00'),
+            schema: 'schedule2: ---------##-------------| [6 days] |---------##-------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: ------------------------| [6 days] |----------##------------ \n' +
-            'schedule2: ---------##-------------| [6 days] |---------##------------- \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-08T08:00:00'),
             duration: 21600000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-15T14:00:00')
+            endDate: new Date('2017-01-15T14:00:00'),
+            schema: 'schedule1: ------------------------| [6 days] |--------######----------'
           }, {
             beginDate: new Date('2017-01-01T10:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-08T12:00:00')
+            endDate: new Date('2017-01-08T12:00:00'),
+            schema: 'schedule2: ----------##------------| [6 days] |----------##------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: ------------------------| [6 days] |--------######---------- \n' +
-            'schedule2: ----------##------------| [6 days] |----------##------------ \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-08T08:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-15T10:00:00')
+            endDate: new Date('2017-01-15T10:00:00'),
+            schema: 'schedule1: ------------------------| [6 days] |--------##--------------'
           }, {
             beginDate: new Date('2017-01-01T08:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-08T10:00:00')
+            endDate: new Date('2017-01-08T10:00:00'),
+            schema: 'schedule2: --------##--------------| [6 days] |--------##--------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: ------------------------| [6 days] |--------##-------------- \n' +
-            'schedule2: --------##--------------| [6 days] |--------##-------------- \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-08T08:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-15T10:00:00')
+            endDate: new Date('2017-01-15T10:00:00'),
+            schema: 'schedule1: ------------------------| [6 days] |--------##--------------'
           }, {
             beginDate: new Date('2017-01-01T09:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-08T11:00:00')
+            endDate: new Date('2017-01-08T11:00:00'),
+            schema: 'schedule2: ---------##-------------| [6 days] |---------##-------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: ------------------------| [6 days] |--------##-------------- \n' +
-            'schedule2: ---------##-------------| [6 days] |---------##------------- \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-08T08:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-15T10:00:00')
+            endDate: new Date('2017-01-15T10:00:00'),
+            schema: 'schedule1: ------------------------| [6 days] |--------##--------------'
           }, {
             beginDate: new Date('2017-01-01T10:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-08T12:00:00')
+            endDate: new Date('2017-01-08T12:00:00'),
+            schema: 'schedule2: ----------##------------| [6 days] |----------##------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: ------------------------| [6 days] |--------##-------------- \n' +
-            'schedule2: ----------##------------| [6 days] |----------##------------ \n'
         );
 
-        assert.ok(manageable.checkSchedulesConflict(
+        testSchedulesConflict(
           {
             beginDate: new Date('2017-01-01T19:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-08T21:00:00')
+            endDate: new Date('2017-01-08T21:00:00'),
+            schema: 'schedule1: -------------------##---| [6 days] |-------------------##---|------------------------'
           }, {
             beginDate: new Date('2017-01-08T17:00:00'),
             duration: 36000000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-16T03:00:00')
+            endDate: new Date('2017-01-16T03:00:00'),
+            schema: 'schedule2: ------------------------| [6 days] |-----------------#######|###---------------------'
           }
-        ), '\n' +
-            'With first schedule in "' + recurrence + '" \n' +
-            'schedule1: -------------------##---| [6 days] |-------------------##---|------------------------ \n' +
-            'schedule2: ------------------------| [6 days] |-----------------#######|###--------------------- \n'
         );
 
-        // With one schedule in weekly recurrence and one schedule in either daily or weekly reccurence (reverse order)
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-08T10:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-15T12:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-01T08:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ------------------------| [6 days] |------------##---------- \n' +
-            'schedule1: --------##--------------| [6 days] |----------##------------ \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-08T09:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-15T11:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-01T08:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ------------------------| [6 days] |-----------##----------- \n' +
-            'schedule1: --------##--------------| [6 days] |----------##------------ \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-08T10:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-15T12:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-01T07:00:00'),
-            duration: 32400000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-08T16:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ------------------------| [6 days] |----------##------------ \n' +
-            'schedule1: -------#########--------| [6 days] |-------#########-------- \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-08T08:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-15T10:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-01T08:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ------------------------| [6 days] |--------##-------------- \n' +
-            'schedule1: --------##--------------| [6 days] |--------##-------------- \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-08T07:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-15T09:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-01T08:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ------------------------| [6 days] |-------##--------------- \n' +
-            'schedule1: --------##--------------| [6 days] |--------##-------------- \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-08T06:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-15T08:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-01T08:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ------------------------| [6 days] |------##---------------- \n' +
-            'schedule1: --------##--------------| [6 days] |--------##-------------- \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-01T08:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-08T10:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-08T10:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-15T12:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: --------##--------------| [6 days] |--------##-------------- \n' +
-            'schedule1: ------------------------| [6 days] |----------##------------ \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-01T09:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-03-08T11:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-08T10:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-15T12:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ---------##-------------| [6 days] |---------##------------- \n' +
-            'schedule1: ------------------------| [6 days] |----------##------------ \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-01T10:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-08T12:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-08T08:00:00'),
-            duration: 21600000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-15T14:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ----------##------------| [6 days] |----------##------------ \n' +
-            'schedule1: ------------------------| [6 days] |--------######---------- \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-01T08:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-08T10:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-08T08:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-15T10:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: --------##--------------| [6 days] |--------##-------------- \n' +
-            'schedule1: ------------------------| [6 days] |--------##-------------- \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-01T09:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-08T11:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-08T08:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-15T10:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ---------##-------------| [6 days] |---------##------------- \n' +
-            'schedule1: ------------------------| [6 days] |--------##-------------- \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-01T10:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-08T12:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-08T08:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-15T10:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ----------##------------| [6 days] |----------##------------ \n' +
-            'schedule1: ------------------------| [6 days] |--------##-------------- \n'
-        );
-
-        assert.ok(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-08T17:00:00'),
-            duration: 36000000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-16T03:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-01T19:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-08T21:00:00')
-          }
-        ), '\n' +
-            'With second schedule in "' + recurrence + '" \n' +
-            'schedule2: ------------------------| [6 days] |-----------------#######|###--------------------- \n' +
-            'schedule1: -------------------##---| [6 days] |-------------------##---|------------------------ \n'
-        );
       });
 
     });
 
     it('should return false if there is no collision', function() {
-      var manageable = new Manageable({});
 
       // Without recurrence
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule1: ##-----------------------'
         }, {
           beginDate: new Date('2017-01-01T02:00:01'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: --##---------------------'
         }
-      ), '\n' +
-          'schedule1: ##----------------------- \n' +
-          'schedule2: --##--------------------- \n'
-      );
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T02:00:01'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000
-        }
-      ), '\n' +
-          'schedule1: --##----------------------- \n' +
-          'schedule2: ##------------------------- \n'
       );
 
       // With one schedule in daily recurrence
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T02:00:00')
+          endDate: new Date('2017-01-02T02:00:00'),
+          schema: 'schedule1: ##----------------------|##----------------------'
         }, {
           beginDate: new Date('2017-01-02T02:00:01'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ------------------------|--##--------------------'
         }
-      ), '\n' +
-          'schedule1: ##----------------------|##---------------------- \n' +
-          'schedule2: ------------------------|--##-------------------- \n'
       );
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T02:00:01'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T04:01:00')
+          endDate: new Date('2017-01-02T04:01:00'),
+          schema: 'schedule1: --##--------------------|--##--------------------'
         }, {
           beginDate: new Date('2017-01-02T00:00:00'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ------------------------|##----------------------'
         }
-      ), '\n' +
-          'schedule1: --##--------------------|--##-------------------- \n' +
-          'schedule2: ------------------------|##---------------------- \n'
       );
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T02:00:01'),
           duration: 7199000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T04:00:00')
+          endDate: new Date('2017-01-02T04:00:00'),
+          schema: 'schedule1: --##--------------------|--##--------------------'
         }, {
           beginDate: new Date('2017-01-01T04:00:01'),
-          duration: 79199000
+          duration: 79199000,
+          schema: 'schedule2: ----####################|##----------------------'
         }
-      ), '\n' +
-          'schedule1: --##--------------------|--##-------------------- \n' +
-          'schedule2: ----####################|##---------------------- \n'
-      );
-
-      // With one schedule in daily recurrence (reverse order)
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T02:00:01'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T00:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T02:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|--##-------------------- \n' +
-          'schedule2: ##----------------------|##---------------------- \n'
-      );
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T00:00:00'),
-          duration: 7200000
-        }, {
-          beginDate: new Date('2017-01-01T02:00:01'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T04:01:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|##---------------------- \n' +
-          'schedule2: --##--------------------|--##-------------------- \n'
-      );
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T04:00:01'),
-          duration: 79199000
-        },
-        {
-          beginDate: new Date('2017-01-01T02:00:01'),
-          duration: 7199000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T04:00:00')
-        }
-      ), '\n' +
-          'schedule2: ----####################|##---------------------- \n' +
-          'schedule1: --##--------------------|--##-------------------- \n'
       );
 
       // With both schedules in daily recurrence
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
+          endDate: new Date('2017-01-02T10:00:00'),
+          schema: 'schedule1: --------##--------------|--------##--------------|------------------------'
         }, {
           beginDate: new Date('2017-01-02T10:00:01'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T12:00:01')
+          endDate: new Date('2017-01-03T12:00:01'),
+          schema: 'schedule2: ------------------------|----------##------------|----------##------------'
         }
-      ), '\n' +
-          'schedule1: --------##--------------|--------##--------------|------------------------ \n' +
-          'schedule2: ------------------------|----------##------------|----------##------------ \n'
       );
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T08:00:01'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:01')
+          endDate: new Date('2017-01-02T10:00:01'),
+          schema: 'schedule1: --------##--------------|--------##--------------|------------------------'
         }, {
           beginDate: new Date('2017-01-02T06:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T08:00:00')
+          endDate: new Date('2017-01-03T08:00:00'),
+          schema: 'schedule2: ------------------------|------##----------------|------##----------------'
         }
-      ), '\n' +
-          'schedule1: --------##--------------|--------##--------------|------------------------ \n' +
-          'schedule2: ------------------------|------##----------------|------##---------------- \n'
       );
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-02T08:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:00')
+          endDate: new Date('2017-01-03T10:00:00'),
+          schema: 'schedule1: ------------------------|--------##--------------|--------##--------------'
         }, {
           beginDate: new Date('2017-01-01T10:00:01'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T12:00:01')
+          endDate: new Date('2017-01-02T12:00:01'),
+          schema: 'schedule2: ----------##------------|----------##------------|------------------------'
         }
-      ), '\n' +
-          'schedule1: ------------------------|--------##--------------|--------##-------------- \n' +
-          'schedule2: ----------##------------|----------##------------|------------------------ \n'
       );
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-02T08:00:01'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:01')
+          endDate: new Date('2017-01-03T10:00:01'),
+          schema: 'schedule1: ------------------------|--------##--------------|--------##--------------'
         }, {
           beginDate: new Date('2017-01-01T06:00:00'),
           duration: 7200000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-02T08:00:00')
+          endDate: new Date('2017-01-02T08:00:00'),
+          schema: 'schedule2: ------##----------------|------##----------------|------------------------'
         }
-      ), '\n' +
-          'schedule1: ------------------------|--------##--------------|--------##-------------- \n' +
-          'schedule2: ------##----------------|------##----------------|------------------------ \n'
       );
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T08:00:01'),
           duration: 79199000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-04T06:00:00')
+          endDate: new Date('2017-01-04T06:00:00'),
+          schema: 'schedule1: --------################|######--################|######--################'
         }, {
           beginDate: new Date('2017-01-01T06:00:01'),
           duration: 7199000,
           recurrent: 'daily',
-          endDate: new Date('2017-01-03T08:00:00')
+          endDate: new Date('2017-01-03T08:00:00'),
+          schema: 'schedule2: ------##----------------|------##----------------|------##----------------'
         }
-      ), '\n' +
-          'schedule1: --------################|######--################|######--################ \n' +
-          'schedule2: ------##----------------|------##----------------|------##---------------- \n'
-      );
-
-      // With both schedules in daily recurrence (reverse order)
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T10:00:01'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T12:00:01')
-        }, {
-          beginDate: new Date('2017-01-01T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:00')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|----------##------------|----------##------------ \n' +
-          'schedule2: --------##--------------|--------##--------------|------------------------ \n'
-      );
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-02T06:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T08:00:00')
-        }, {
-          beginDate: new Date('2017-01-01T08:00:01'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T10:00:01')
-        }
-      ), '\n' +
-          'schedule1: ------------------------|------##----------------|------##---------------- \n' +
-          'schedule2: --------##--------------|--------##--------------|------------------------ \n'
-      );
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T10:00:01'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T12:00:01')
-        }, {
-          beginDate: new Date('2017-01-02T08:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:00')
-        }
-      ), '\n' +
-          'schedule1: ----------##------------|----------##------------|------------------------ \n' +
-          'schedule2: ------------------------|--------##--------------|--------##-------------- \n'
-      );
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T06:00:00'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-02T08:00:00')
-        }, {
-          beginDate: new Date('2017-01-02T08:00:01'),
-          duration: 7200000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T10:00:01')
-        }
-      ), '\n' +
-          'schedule1: ------##----------------|------##----------------|------------------------ \n' +
-          'schedule2: ------------------------|--------##--------------|--------##-------------- \n'
-      );
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-01T06:00:01'),
-          duration: 7199000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-03T08:00:00')
-        },
-        {
-          beginDate: new Date('2017-01-01T08:00:01'),
-          duration: 79199000,
-          recurrent: 'daily',
-          endDate: new Date('2017-01-04T06:00:00')
-        }
-      ), '\n' +
-          'schedule2: ------##----------------|------##----------------|------##---------------- \n' +
-          'schedule1: --------################|######--################|######--################ \n'
       );
 
       // With one schedule in weekly recurrence
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T00:00:00'),
           duration: 7200000,
           recurrent: 'weekly',
-          endDate: new Date('2017-01-08T02:00:00')
+          endDate: new Date('2017-01-08T02:00:00'),
+          schema: 'schedule1: ##----------------------| [6 days] |##----------------------'
         }, {
           beginDate: new Date('2017-01-08T02:00:01'),
-          duration: 7200000
+          duration: 7200000,
+          schema: 'schedule2: ------------------------| [6 days] |--##--------------------'
         }
-      ), '\n' +
-          'schedule1: ##----------------------| [6 days] |##---------------------- \n' +
-          'schedule2: ------------------------| [6 days] |--##-------------------- \n'
       );
 
-      assert.notOk(manageable.checkSchedulesConflict(
+      testNoSchedulesConflict(
         {
           beginDate: new Date('2017-01-01T02:00:01'),
           duration: 7200000,
           recurrent: 'weekly',
-          endDate: new Date('2017-01-02T04:01:00')
+          endDate: new Date('2017-01-02T04:01:00'),
+          schema: 'schedule1: --##--------------------| [6 days] |--##--------------------'
         }, {
           beginDate: new Date('2017-01-08T00:00:00'),
-          duration: 7200000
-        }
-      ), '\n' +
-          'schedule1: --##--------------------| [6 days] |--##-------------------- \n' +
-          'schedule2: ------------------------| [6 days] |##---------------------- \n'
-      );
-
-      // With one schedule in weekly recurrence (reverse order)
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-08T02:00:01'),
-          duration: 7200000
-        },
-        {
-          beginDate: new Date('2017-01-01T00:00:00'),
           duration: 7200000,
-          recurrent: 'weekly',
-          endDate: new Date('2017-01-08T02:00:00')
+          schema: 'schedule2: ------------------------| [6 days] |##----------------------'
         }
-      ), '\n' +
-          'schedule2: ------------------------| [6 days] |--##-------------------- \n' +
-          'schedule1: ##----------------------| [6 days] |##---------------------- \n'
-      );
-
-      assert.notOk(manageable.checkSchedulesConflict(
-        {
-          beginDate: new Date('2017-01-08T00:00:00'),
-          duration: 7200000
-        },
-        {
-          beginDate: new Date('2017-01-01T02:00:01'),
-          duration: 7200000,
-          recurrent: 'weekly',
-          endDate: new Date('2017-01-02T04:01:00')
-        }
-      ), '\n' +
-          'schedule2: ------------------------| [6 days] |##---------------------- \n' +
-          'schedule1: --##--------------------| [6 days] |--##-------------------- \n'
       );
 
       ['daily', 'weekly'].forEach(function(recurrence) {
 
         // With both schedules in daily recurrence
 
-        assert.notOk(manageable.checkSchedulesConflict(
+        testNoSchedulesConflict(
           {
             beginDate: new Date('2017-01-01T08:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
+            endDate: new Date('2017-01-08T10:00:00'),
+            schema: 'schedule1: --------##--------------| [6 Days] |--------##--------------'
           }, {
             beginDate: new Date('2017-01-08T10:00:01'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-15T12:00:01')
+            endDate: new Date('2017-01-15T12:00:01'),
+            schema: 'schedule2: ------------------------| [6 Days] |----------##------------'
           }
-        ), '\n' +
-            'With first schedule in ' + recurrence + ' recurrence \n' +
-            'schedule1: --------##--------------| [6 Days] |--------##-------------- \n' +
-            'schedule2: ------------------------| [6 Days] |----------##------------ \n'
         );
 
-        assert.notOk(manageable.checkSchedulesConflict(
+        testNoSchedulesConflict(
           {
             beginDate: new Date('2017-01-01T08:00:01'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:01')
+            endDate: new Date('2017-01-08T10:00:01'),
+            schema: 'schedule1: --------##--------------| [6 Days] |--------##--------------'
           }, {
             beginDate: new Date('2017-01-08T06:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-15T08:00:00')
+            endDate: new Date('2017-01-15T08:00:00'),
+            schema: 'schedule2: ------------------------| [6 Days] |------##----------------'
           }
-        ), '\n' +
-            'With first schedule in ' + recurrence + ' recurrence \n' +
-            'schedule1: --------##--------------| [6 Days] |--------##-------------- \n' +
-            'schedule2: ------------------------| [6 Days] |------##---------------- \n'
         );
 
-        assert.notOk(manageable.checkSchedulesConflict(
+        testNoSchedulesConflict(
           {
             beginDate: new Date('2017-01-08T08:00:00'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-15T10:00:00')
+            endDate: new Date('2017-01-15T10:00:00'),
+            schema: 'schedule1: ------------------------| [6 Days] |--------##--------------'
           }, {
             beginDate: new Date('2017-01-01T10:00:01'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-08T12:00:01')
+            endDate: new Date('2017-01-08T12:00:01'),
+            schema: 'schedule2: --------##--------------| [6 Days] |----------##------------'
           }
-        ), '\n' +
-            'With first schedule in ' + recurrence + ' recurrence \n' +
-            'schedule1: ------------------------| [6 Days] |--------##-------------- \n' +
-            'schedule2: --------##--------------| [6 Days] |----------##------------ \n'
         );
 
-        assert.notOk(manageable.checkSchedulesConflict(
+        testNoSchedulesConflict(
           {
             beginDate: new Date('2017-01-08T08:00:01'),
             duration: 7200000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-15T10:00:01')
+            endDate: new Date('2017-01-15T10:00:01'),
+            schema: 'schedule1: ------------------------| [6 Days] |--------##--------------'
           }, {
             beginDate: new Date('2017-01-01T06:00:00'),
             duration: 7200000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-08T08:00:00')
+            endDate: new Date('2017-01-08T08:00:00'),
+            schema: 'schedule2: ------##----------------| [6 Days] |------##----------------'
           }
-        ), '\n' +
-            'With first schedule in ' + recurrence + ' recurrence \n' +
-            'schedule1: ------------------------| [6 Days] |--------##-------------- \n' +
-            'schedule2: ------##----------------| [6 Days] |------##---------------- \n'
         );
 
-        assert.notOk(manageable.checkSchedulesConflict(
+        testNoSchedulesConflict(
           {
             beginDate: new Date('2017-01-01T08:00:01'),
             duration: recurrence === 'daily' ? 79199000 : 597599000,
             recurrent: recurrence,
-            endDate: new Date('2017-01-08T06:00:00')
+            endDate: new Date('2017-01-08T06:00:00'),
+            schema: 'schedule1: --------################| [6 Days] |######--################'
           }, {
             beginDate: new Date('2017-01-01T06:00:01'),
             duration: 7199000,
             recurrent: 'weekly',
-            endDate: new Date('2017-01-15T08:00:00')
+            endDate: new Date('2017-01-15T08:00:00'),
+            schema: 'schedule2: ------##----------------| [6 Days] |------##----------------'
           }
-        ), '\n' +
-            'With first schedule in ' + recurrence + ' recurrence \n' +
-            'schedule1: --------################| [6 Days] |######--################ \n' +
-            'schedule2: ------##----------------| [6 Days] |------##---------------- \n'
         );
 
-        // With both schedules in daily recurrence (reverse order)
-
-        assert.notOk(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-08T10:00:01'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-15T12:00:01')
-          },
-          {
-            beginDate: new Date('2017-01-01T08:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:00')
-          }
-        ), '\n' +
-            'With second schedule in ' + recurrence + ' recurrence \n' +
-            'schedule2: ------------------------| [6 Days] |----------##------------ \n' +
-            'schedule1: --------##--------------| [6 Days] |--------##-------------- \n'
-        );
-
-        assert.notOk(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-08T06:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-15T08:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-01T08:00:01'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-08T10:00:01')
-          }
-        ), '\n' +
-            'With second schedule in ' + recurrence + ' recurrence \n' +
-            'schedule2: ------------------------| [6 Days] |------##---------------- \n' +
-            'schedule1: --------##--------------| [6 Days] |--------##-------------- \n'
-        );
-
-        assert.notOk(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-01T10:00:01'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-08T12:00:01')
-          },
-          {
-            beginDate: new Date('2017-01-08T08:00:00'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-15T10:00:00')
-          }
-        ), '\n' +
-            'With second schedule in ' + recurrence + ' recurrence \n' +
-            'schedule2: --------##--------------| [6 Days] |----------##------------ \n' +
-            'schedule1: ------------------------| [6 Days] |--------##-------------- \n'
-        );
-
-        assert.notOk(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-01T06:00:00'),
-            duration: 7200000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-08T08:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-08T08:00:01'),
-            duration: 7200000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-15T10:00:01')
-          }
-        ), '\n' +
-            'With second schedule in ' + recurrence + ' recurrence \n' +
-            'schedule2: ------##----------------| [6 Days] |------##---------------- \n' +
-            'schedule1: ------------------------| [6 Days] |--------##-------------- \n'
-        );
-
-        assert.notOk(manageable.checkSchedulesConflict(
-          {
-            beginDate: new Date('2017-01-01T06:00:01'),
-            duration: 7199000,
-            recurrent: 'weekly',
-            endDate: new Date('2017-01-15T08:00:00')
-          },
-          {
-            beginDate: new Date('2017-01-01T08:00:01'),
-            duration: recurrence === 'daily' ? 79199000 : 597599000,
-            recurrent: recurrence,
-            endDate: new Date('2017-01-08T06:00:00')
-          }
-        ), '\n' +
-            'With second schedule in ' + recurrence + ' recurrence \n' +
-            'schedule2: ------##----------------| [6 Days] |------##---------------- \n' +
-            'schedule1: --------################| [6 Days] |######--################ \n'
-        );
       });
 
     });
