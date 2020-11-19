@@ -1,4 +1,4 @@
-# 5.0.0 / YYYY-MM-DD
+# 5.0.0 / 2020-11-19
 
 ## BREAKING CHANGES
 
