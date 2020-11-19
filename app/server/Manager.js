@@ -954,17 +954,7 @@ function initBrowsersListeners() {
       });
     }
 
-    if (schedule.recurrent) {
-      if (!schedule.endDate) {
-
-        // Recurrent without end date
-        // Set end date to begin date (only one occurence)
-        schedule.endDate = new Date(schedule.beginDate.getTime());
-
-      }
-
-      schedule.endDate = manageable.getLastScheduleOccurence(schedule).endDate;
-    }
+    schedule.endDate = manageable.getLastScheduleOccurence(schedule).endDate;
 
     // Validate that schedule is not in collision with other schedules
     if (type === Group.TYPE) {

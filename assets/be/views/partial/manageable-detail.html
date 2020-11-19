@@ -226,14 +226,13 @@
                                             <!-- Begin -->
                                             <div>
                                                 <div ng-bind="'MANAGE.DETAIL.ACTION.PLANNING_TABLE.BEGIN' | translate"
-                                                     ng-if="schedule.recurrent"
                                                      class="planning-label"></div>
                                                 <div class="date" ng-bind="schedule.beginDate | date:'shortDate'"></div>
                                                 <div ng-bind="schedule.beginDate | date:'shortTime'"></div>
                                             </div>
 
                                             <!-- End -->
-                                            <div ng-if="schedule.recurrent">
+                                            <div>
                                                 </br>
                                                 <div ng-bind="'MANAGE.DETAIL.ACTION.PLANNING_TABLE.END' | translate"
                                                      class="planning-label"></div>
