@@ -1,3 +1,9 @@
+# 5.0.1 / YYYY-MM-DD
+
+## BUG FIXES
+
+- Fix recurrent (daily or weekly) schedules which weren't stopping on last occurrence
+
 # 5.0.0 / 2020-11-19
 
 ## BREAKING CHANGES
