@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en" class="yui-overrride">
+<head>
+    <meta charset="utf-8">
+    <title>app/client/admin/js/ovManage/ManageableDetailController.js - OpenVeo Manage AngularJS back end</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1 class="blue-main-title">OpenVeo Manage AngularJS back end</h1>
+        </div>
+        <div class="yui3-u-1-4 version project-version">
+            API Docs for: 5.0.1
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/ManageDeviceFactory.html">ManageDeviceFactory</a></li>
+                                <li><a href="../classes/ManageFactory.html">ManageFactory</a></li>
+                                <li><a href="../classes/ManageGroupFactory.html">ManageGroupFactory</a></li>
+                                <li><a href="../classes/ManageMainController.html">ManageMainController</a></li>
+                                <li><a href="../classes/ManageManageableController.html">ManageManageableController</a></li>
+                                <li><a href="../classes/ManageManageableDetailController.html">ManageManageableDetailController</a></li>
+                                <li><a href="../classes/ManageManageableFactory.html">ManageManageableFactory</a></li>
+                                <li><a href="../classes/ovManageSortTable.html">ovManageSortTable</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/ov.manage.html">ov.manage</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: app/client/admin/js/ovManage/ManageableDetailController.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x27;use strict&#x27;;
+
+/* global PerfectScrollbar */
+(function(app) {
+
+  /**
+   * @module ov.manage
+   */
+
+  /**
+   * Defines the manageable detail controller to manage view displaying details about a manageable.
+   *
+   * @class ManageManageableDetailController
+   * @static
+   */
+  function ManageableDetailController(
+    $scope,
+    $filter,
+    $uibModal,
+    $timeout,
+    $rootScope,
+    ManageFactory,
+    GroupFactory,
+    DeviceFactory,
+    ManageableFactory,
+    entityService,
+    MANAGE_NAME,
+    DEVICE_STATUS,
+    MANAGEABLE_TYPES
+  ) {
+    var self = this,
+      today = new Date(),
+      actionEl = document.querySelector(&#x27;.item-detail .action-page&#x27;),
+      detailEl = document.querySelector(&#x27;.item-detail .detail-page&#x27;),
+      historyEl = document.querySelector(&#x27;.item-detail .history-page&#x27;);
+
+    /**
+     * The actually selected manageable.
+     *
+     * @property selectedManageable
+     * @type Object
+     */
+    self.selectedManageable = null;
+
+    /**
+     * Begin datepicker options.
+     *
+     * @property popupBegin
+     * @type Object
+     */
+    self.popupBegin = {
+      opened: false,
+      options: {
+        minDate: today,
+        showWeeks: false
+      }
+    };
+
+    /**
+     * End datepicker options.
+     *
+     * @property popupEnd
+     * @type Object
+     */
+    self.popupEnd = {
+      opened: false,
+      options: {
+        showWeeks: false
+      }
+    };
+
+    /**
+     * The action tab perfect scrollbar.
+     *
+     * @property actionScrollbar
+     * @type PerfectScrollbar
+     */
+    self.actionScrollbar = null;
+
+    /**
+     * The detail tab perfect scrollbar.
+     *
+     * @property detailScrollbar
+     * @type PerfectScrollbar
+     */
+    self.detailScrollbar = null;
+
+    /**
+     * The history tab perfect scrollbar.
+     *
+     * @property actionScrollbar
+     * @type PerfectScrollbar
+     */
+    self.historyScrollbar = null;
+
+
+    /**
+     * Minimum schedule duration allowed.
+     *
+     * @property minDuration
+     * @type Date
+     */
+    self.minDuration = new Date();
+    self.minDuration.setHours(0);
+    self.minDuration.setMinutes(0);
+    self.minDuration.setSeconds(0);
+
+    self.zeroTimeDate = new Date().setHours(0, 0, 0, 0);
+
+    /**
+     * Validates that begin and end dates of the new scheduled job are not in conflicts with the other scheduled jobs.
+     *
+     * @method validateSchedule
+     * @private
+     * @param {Object} schedule Schedule object with :
+     * @param {Date} schedule.beginDate The begin date of the schedule
+     * @param {Number} schedule.duration The schedule duration in milliseconds
+     * @param {Boolean} [schedule.recurrent] true is this is a daily schedule, false otherwise
+     * @param {Date} [schedule.endDate] The end date of the schedule
+     * @return {Boolean} true if valid, false otherwise
+     */
+    function validateSchedule(schedule) {
+      var validationError = null;
+
+      var handleError = function(message) {
+        $scope.$emit(&#x27;setAlert&#x27;, &#x27;danger&#x27;, message, 4000);
+      };
+
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP) {
+        validationError = GroupFactory.isValidSchedule(self.selectedManageable.id, schedule);
+        if (validationError) {
+          handleError(validationError.message);
+          return false;
+        }
+      } else if (self.selectedManageable.type === MANAGEABLE_TYPES.DEVICE) {
+        var group = (self.selectedManageable.group) ? GroupFactory.getGroup(self.selectedManageable.group) : null;
+        validationError = DeviceFactory.isValidSchedule(self.selectedManageable.id, schedule, group);
+        if (validationError) {
+          handleError(validationError.message);
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    /**
+     * Displays an error message for each given errors.
+     *
+     * @method displayErrors
+     * @private
+     * @param {Array} errors The list of errors
+     * @param {String} message The message to display for each error
+     */
+    function displayErrors(errors, message) {
+      errors.forEach(function(error) {
+        $scope.$emit(&#x27;setAlert&#x27;, &#x27;danger&#x27;, $filter(&#x27;translate&#x27;)(message, null, {
+          code: error.code,
+          name: $filter(&#x27;translate&#x27;)(error.name)
+        }), 4000);
+      });
+    }
+
+    /**
+     * Initializes the tabs scrollBars.
+     *
+     * @method initScrollbar
+     * @private
+     */
+    function initScrollbar() {
+
+      // Recreate elements to avoid errors
+      actionEl = document.querySelector(&#x27;.item-detail .action-page&#x27;);
+      detailEl = document.querySelector(&#x27;.item-detail .detail-page&#x27;);
+      historyEl = document.querySelector(&#x27;.item-detail .history-page&#x27;);
+
+      actionEl.setAttribute(&#x27;style&#x27;, &#x27;height:&#x27; + parseInt(window.innerHeight - 100) + &#x27;px&#x27;);
+      detailEl.setAttribute(&#x27;style&#x27;, &#x27;height:&#x27; + parseInt(window.innerHeight - 100) + &#x27;px&#x27;);
+      historyEl.setAttribute(&#x27;style&#x27;, &#x27;height:&#x27; + parseInt(window.innerHeight - 100) + &#x27;px&#x27;);
+
+      var options = {suppressScrollX: true};
+      self.actionScrollbar = new PerfectScrollbar(actionEl, options);
+      self.detailScrollbar = new PerfectScrollbar(detailEl, options);
+      self.historyScrollbar = new PerfectScrollbar(historyEl, options);
+    }
+
+    /**
+     * Resets tabs scrollbars.
+     *
+     * @method resetScrollbar
+     * @private
+     */
+    function resetScrollbar() {
+      actionEl.scrollTop = 0;
+      detailEl.scrollTop = 0;
+      historyEl.scrollTop = 0;
+
+      if (self.actionScrollbar) {
+        self.actionScrollbar.update();
+        self.detailScrollbar.update();
+        self.historyScrollbar.update();
+      }
+    }
+
+    /**
+     * Closes the details panel.
+     *
+     * @method closeDetail
+     */
+    self.closeDetail = function() {
+      $scope.manage.showDetail = false;
+      $scope.manage.openedItem = null;
+      $scope.organizeLayout(false);
+      GroupFactory.setGroupsProperty(&#x27;isSelected&#x27;, false);
+      DeviceFactory.setDevicesProperty(&#x27;isSelected&#x27;, false);
+
+      $timeout(function() {
+        $scope.setActivePage(0);
+      }, 350);
+
+      // Destroy scrollbars
+      if (self.actionScrollbar) {
+        self.actionScrollbar.destroy();
+        self.detailScrollbar.destroy();
+        self.historyScrollbar.destroy();
+        self.actionScrollbar = null;
+        self.detailScrollbar = null;
+        self.historyScrollbar = null;
+      }
+    };
+
+    /**
+     * Displays the input to update the manageable&#x27;s name.
+     *
+     * @method displayNameForm
+     */
+    self.displayNameForm = function() {
+      self.selectedManageableName = $filter(&#x27;translate&#x27;)(self.selectedManageable.name);
+      self.selectedManageable.displayInputName = !self.selectedManageable.displayInputName;
+    };
+
+    /**
+     * Updates manageable&#x27;s name.
+     *
+     * @method updateName
+     * @param {String} name The new manageable name
+     */
+    self.updateName = function(name) {
+      var type = null;
+
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.DEVICE)
+        type = MANAGEABLE_TYPES.DEVICE;
+      else
+        type = MANAGEABLE_TYPES.GROUP;
+
+      ManageFactory.updateName(self.selectedManageable.id, name, type).then(function() {
+        self.selectedManageable.name = name;
+        self.selectedManageable.displayInputName = !self.selectedManageable.displayInputName;
+      }, function(error) {
+        $scope.$emit(&#x27;setAlert&#x27;, &#x27;danger&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.MANAGEABLE.UPDATE_NAME_ERROR&#x27;, null, {
+          code: error.code
+        }), 4000);
+        self.selectedManageable.displayInputName = !self.selectedManageable.displayInputName;
+      });
+    };
+
+    /**
+     * Adds a new schedule.
+     *
+     * @method addSchedule
+     */
+    self.addSchedule = function() {
+      var durationDate = self.itemSchedule.schedule.durationDate;
+      var duration = ((durationDate.getHours() * 60) + durationDate.getMinutes()) * 60 * 1000;
+      var type = null;
+
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP)
+        type = MANAGEABLE_TYPES.GROUP;
+      else
+        type = MANAGEABLE_TYPES.DEVICE;
+
+      // Add begin time to begin date
+      self.itemSchedule.schedule.beginDate.setHours(self.itemSchedule.schedule.beginTime.getHours());
+      self.itemSchedule.schedule.beginDate.setMinutes(self.itemSchedule.schedule.beginTime.getMinutes());
+
+      var schedule = {
+        name: self.itemSchedule.schedule.name,
+        beginDate: self.itemSchedule.schedule.beginDate,
+        duration: duration,
+        preset: self.itemSchedule.schedule.preset
+      };
+
+      if (self.itemSchedule.schedule.recurrent) {
+        schedule.recurrent = self.itemSchedule.schedule.recurrent;
+        schedule.endDate = self.itemSchedule.schedule.endDate;
+      }
+
+      if (validateSchedule(schedule)) {
+        ManageFactory.addSchedule(self.selectedManageable.id, schedule, type).then(function() {
+          $scope.$emit(&#x27;setAlert&#x27;, &#x27;success&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.MANAGEABLE.ADD_SCHEDULE_SUCCESS&#x27;), 4000);
+          self.resetActionForm();
+        }, function(error) {
+          $scope.$emit(&#x27;setAlert&#x27;, &#x27;danger&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.MANAGEABLE.ADD_SCHEDULE_ERROR&#x27;, null, {
+            code: error.code
+          }), 4000);
+        });
+      }
+    };
+
+    /**
+     * Validates the end date regarding the begin date.
+     * End date should not be inferior to begin date.
+     *
+     * @method validateEndDate
+     */
+    self.validateEndDate = function() {
+      if (self.itemSchedule.schedule.beginDate &gt; self.itemSchedule.schedule.endDate)
+        self.itemSchedule.schedule.endDate = new Date(self.itemSchedule.schedule.beginDate.getTime());
+    };
+
+    /**
+     * Starts a new recording session on the selected manageable.
+     *
+     * @method startRecord
+     */
+    self.startRecord = function() {
+      var ids = [];
+
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP) {
+
+        // Manageable is a group
+        // Start recording on its available devices
+        self.selectedManageable.devices.forEach(function(device) {
+          if (device.status !== DEVICE_STATUS.STARTING &amp;&amp;
+              device.status !== DEVICE_STATUS.STOPPING &amp;&amp;
+              !device.inputs.error)
+            ids.push(device.id);
+        });
+
+      } else
+        ids.push(self.selectedManageable.id);
+
+      // Start record
+      ManageFactory.startRecord(
+        ids,
+        self.itemSchedule.schedule.preset,
+        self.itemSchedule.schedule.name
+      ).catch(function(errors) {
+        displayErrors(errors, &#x27;MANAGE.DEVICE.START_RECORD_ERROR&#x27;);
+      });
+    };
+
+    /**
+     * Stops recording session on the selected manageable.
+     *
+     * @method startRecord
+     */
+    self.stopRecord = function() {
+      var ids = [];
+
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP) {
+
+        // Item is a group
+        // Stop recording its started devices
+        self.selectedManageable.devices.forEach(function(device) {
+          if (device.status === DEVICE_STATUS.STARTED)
+            ids.push(device.id);
+        });
+
+      } else
+        ids.push(self.selectedManageable.id);
+
+      // Stop record
+      ManageFactory.stopRecord(ids).catch(function(errors) {
+        displayErrors(errors, &#x27;MANAGE.DEVICE.STOP_RECORD_ERROR&#x27;);
+      });
+    };
+
+    /**
+     * Creates a new tag on the recording session of the selected manageable.
+     *
+     * @method startRecord
+     */
+    self.tagRecord = function() {
+      var ids = [];
+
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP) {
+
+        // Item is a group
+        // Stop recording its started devices
+        self.selectedManageable.devices.forEach(function(device) {
+          if (device.status === DEVICE_STATUS.STARTED)
+            ids.push(device.id);
+        });
+
+      } else
+        ids.push(self.selectedManageable.id);
+
+      // Tag record
+      ManageFactory.tagRecord(ids).catch(function(errors) {
+        displayErrors(errors, &#x27;MANAGE.DEVICE.INDEX_RECORD_ERROR&#x27;);
+      });
+    };
+
+    /**
+     * Gets selected manageable&#x27;s preset&#x27;s name.
+     *
+     * @method getPresetName
+     * @param {String} id The preset id
+     * @return {String|Null} The preset name or null if not found
+     */
+    self.getPresetName = function(id) {
+      if (id) {
+        var preset = ManageableFactory.getPreset(self.selectedManageable, id);
+
+        if (preset)
+          return preset.name;
+      }
+
+      return null;
+    };
+
+    /**
+     * Resets the action form.
+     *
+     * @method resetActionForm
+     */
+    self.resetActionForm = function() {
+      var beginTimeDate = new Date();
+      var durationDate = new Date();
+      beginTimeDate.setHours(0);
+      beginTimeDate.setMinutes(0);
+      beginTimeDate.setSeconds(0);
+      durationDate.setHours(0);
+      durationDate.setMinutes(1);
+      durationDate.setSeconds(0);
+      self.itemSchedule = {
+        schedule: {
+          name: &#x27;&#x27;,
+          beginTime: beginTimeDate,
+          durationDate: durationDate
+        }
+      };
+
+      if ($scope.actionForm) {
+        $scope.actionForm.$setPristine();
+        $scope.actionForm.$setUntouched();
+      }
+
+      if (self.selectedManageable &amp;&amp; self.selectedManageable.presets &amp;&amp; self.selectedManageable.presets[0]) {
+        var preset = self.selectedManageable.presets[0].id;
+        self.itemSchedule.schedule.preset = preset;
+        self.validatePreset(preset);
+      }
+    };
+
+    /**
+     * Removes a schedule from selected manageable.
+     *
+     * @method removeSchedule
+     * @private
+     * @param {String} scheduleId The schedule id
+     */
+    function removeSchedule(scheduleId) {
+      var schedule = null;
+
+      // Find schedule
+      for (var i = 0; i &lt; self.selectedManageable.schedules.length; i++) {
+        if (self.selectedManageable.schedules[i].id === scheduleId) {
+          schedule = self.selectedManageable.schedules[i];
+          break;
+        }
+      }
+
+      var type = null;
+      var beginDate = new Date(schedule.beginDate);
+      var endDate = new Date(schedule.endDate);
+      beginDate.setSeconds(0);
+      endDate.setSeconds(0);
+
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP)
+        type = MANAGEABLE_TYPES.GROUP;
+      else
+        type = MANAGEABLE_TYPES.DEVICE;
+
+      if (ManageableFactory.isScheduleRunning({
+        beginDate: beginDate,
+        endDate: endDate,
+        duration: schedule.duration,
+        recurrent: schedule.recurrent
+      })) {
+
+        // Schedule in progress
+        $scope.$emit(&#x27;setAlert&#x27;, &#x27;danger&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.MANAGEABLE.SCHEDULE_IN_PROGRESS_ERROR&#x27;), 4000);
+
+      } else {
+        ManageFactory.removeSchedule(self.selectedManageable.id, scheduleId, type).then(function() {
+          $scope.$emit(
+            &#x27;setAlert&#x27;,
+            &#x27;success&#x27;,
+            $filter(&#x27;translate&#x27;)(&#x27;MANAGE.MANAGEABLE.REMOVE_SCHEDULE_SUCCESS&#x27;),
+            4000
+          );
+        }, function(error) {
+          $scope.$emit(&#x27;setAlert&#x27;, &#x27;danger&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.MANAGEABLE.REMOVE_SCHEDULE_ERROR&#x27;, null, {
+            code: error.code
+          }), 4000);
+        });
+      }
+    }
+
+    /**
+     * Removes an historic from selected manageable.
+     *
+     * @method removeHistoric
+     * @private
+     * @param {String} historicId The historic id
+     */
+    function removeHistoric(historicId) {
+      var type = null;
+      if (self.selectedManageable.type === MANAGEABLE_TYPES.GROUP)
+        type = MANAGEABLE_TYPES.GROUP;
+      else
+        type = MANAGEABLE_TYPES.DEVICE;
+
+      ManageFactory.removeHistoric(self.selectedManageable.id, historicId, type).then(function() {
+        $scope.$emit(&#x27;setAlert&#x27;, &#x27;success&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.MANAGEABLE.REMOVE_HISTORIC_SUCCESS&#x27;), 4000);
+      }, function(error) {
+        $scope.$emit(&#x27;setAlert&#x27;, &#x27;danger&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.MANAGEABLE.REMOVE_HISTORIC_ERROR&#x27;, null, {
+          code: error.code
+        }), 4000);
+      });
+    }
+
+    /**
+     * Removes the whole history.
+     *
+     * @method removeHistory
+     * @private
+     */
+    function removeHistory() {
+      ManageFactory.removeHistory(self.selectedManageable.id, self.selectedManageable.type).then(function() {
+        $scope.$emit(&#x27;setAlert&#x27;, &#x27;success&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.MANAGEABLE.REMOVE_HISTORY_SUCCESS&#x27;), 4000);
+      }, function(error) {
+        $scope.$emit(&#x27;setAlert&#x27;, &#x27;danger&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.MANAGEABLE.REMOVE_HISTORY_ERROR&#x27;, null, {
+          code: error.code
+        }), 4000);
+      });
+    }
+
+    /**
+     * Removes a device.
+     *
+     * @method removeDevice
+     * @private
+     * @param {String} id The id of the device to remove
+     */
+    function removeDevice(id) {
+      var device = DeviceFactory.getDevice(id);
+      var group = GroupFactory.getGroup(device.group);
+
+      // If there is only 2 devices the group is removed
+      if (group &amp;&amp; group.devices.length === 2) {
+
+        // Remove group
+        $scope.removeGroup(group.id);
+        $rootScope.$broadcast(&#x27;manageable.closeDetails&#x27;);
+
+      }
+
+      ManageFactory.remove(id, MANAGEABLE_TYPES.DEVICE).then(function() {
+        $scope.$emit(&#x27;setAlert&#x27;, &#x27;success&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.DEVICE.REMOVE_SUCCESS&#x27;), 4000);
+        $rootScope.$broadcast(&#x27;manageable.closeDetails&#x27;);
+      }, function(error) {
+        $scope.$emit(&#x27;setAlert&#x27;, &#x27;danger&#x27;, $filter(&#x27;translate&#x27;)(&#x27;MANAGE.DEVICE.REMOVE_ERROR&#x27;, null, {
+          code: error.code
+        }), 4000);
+      });
+    }
+
+    /**
+     * Opens a modal to remove something.
+     *
+     * @method openRemoveModal
+     * @param {String} id The id of the object to remove
+     * @param {String} action The type of action to perform
+     */
+    self.openRemoveModal = function(id, action) {
+      var modalInstance = $uibModal.open({
+        templateUrl: &#x27;removeModal.html&#x27;,
+        controller: [&#x27;$scope&#x27;, &#x27;$uibModalInstance&#x27;, function($scope, $uibModalInstance) {
+          $scope.ok = function() {
+            $uibModalInstance.close(true);
+          };
+
+          $scope.cancel = function() {
+            $uibModalInstance.dismiss(&#x27;cancel&#x27;);
+          };
+        }]
+      });
+
+      modalInstance.result.then(function() {
+        switch (action) {
+          case &#x27;REMOVE_DEVICE&#x27;:
+            removeDevice(id);
+            break;
+          case &#x27;REMOVE_SCHEDULE&#x27;:
+            removeSchedule(id);
+            break;
+          case &#x27;REMOVE_HISTORY&#x27;:
+            removeHistoric(id);
+            break;
+          case &#x27;PURGE_HISTORY&#x27;:
+            removeHistory();
+            break;
+          default:
+            break;
+        }
+      }, function() {
+        // Do nothing
+      });
+    };
+
+    /**
+     * Validates the selected manageable&#x27;s inputs regarding the given preset id.
+     *
+     * It is not possible to start a recording session if the inputs of the
+     * selected manageable does not correspond to the preset configuration.
+     * e.g. It is not possible to start a recording session with slides extraction
+     * without a desktop input.
+     *
+     * @method validatePreset
+     * @param {String} presetId The id of the preset
+     */
+    self.validatePreset = function(presetId) {
+      var model = self.selectedManageable.type === MANAGEABLE_TYPES.DEVICE ? DeviceFactory : GroupFactory;
+      model.validatePreset(self.selectedManageable.id, presetId);
+    };
+
+    // Listen event to load the selected manageable details
+    $scope.$on(&#x27;manageable.load&#x27;, function(event, itemId, isGroup) {
+      var shouldResetScrollbar = self.selectedManageable ? true : false;
+
+      if (self.selectedManageable &amp;&amp; self.selectedManageable.id === itemId) {
+        self.selectedManageable.isSelected = true;
+        return resetScrollbar();
+      }
+
+      // Get the new selected manageable
+      self.selectedManageable = isGroup ? GroupFactory.getGroup(itemId) : DeviceFactory.getDevice(itemId);
+
+      // Unselect all manageables
+      GroupFactory.setGroupsProperty(&#x27;isSelected&#x27;, false);
+      DeviceFactory.setDevicesProperty(&#x27;isSelected&#x27;, false);
+
+      // Select the new manageable
+      self.selectedManageable.isSelected = true;
+
+      // Reset action form
+      self.resetActionForm();
+
+      if (shouldResetScrollbar) resetScrollbar();
+      else initScrollbar();
+    });
+
+    // Listen event to close manageable details window
+    $scope.$on(&#x27;manageable.closeDetails&#x27;, function(event) {
+      self.closeDetail();
+    });
+
+    // Listen event to go to the previous page
+    $scope.$on(&#x27;back&#x27;, function(event) {
+      $scope.back();
+    });
+
+    // Watch for devices&#x27; changes
+    $scope.$watch(&#x27;vm.selectedManageable.devices&#x27;, function() {
+      if (self.selectedManageable &amp;&amp; self.selectedManageable.devices)
+        self.validatePreset(self.itemSchedule.schedule.preset);
+    }, true);
+
+    // Watch for device inputs changes
+    $scope.$watch(&#x27;vm.selectedManageable.inputs&#x27;, function() {
+      if (self.selectedManageable &amp;&amp; self.selectedManageable.inputs)
+        self.validatePreset(self.itemSchedule.schedule.preset);
+    });
+
+    // Watch for preset changes
+    $scope.$watch(&#x27;vm.selectedManageable.presets&#x27;, function() {
+      if (self.selectedManageable &amp;&amp; self.selectedManageable.presets &amp;&amp; self.selectedManageable.presets[0]) {
+        var preset = self.selectedManageable.presets[0].id;
+        self.itemSchedule.schedule.preset = preset;
+        self.validatePreset(preset);
+      }
+    });
+
+    // Watch for begin date change
+    $scope.$watch(&#x27;vm.itemSchedule.schedule.beginDate&#x27;, function() {
+      if (self.itemSchedule &amp;&amp; self.itemSchedule.schedule &amp;&amp; self.itemSchedule.schedule.beginDate)
+        self.popupEnd.options.minDate = self.itemSchedule.schedule.beginDate;
+    });
+
+    // Listen to window resize event to update height of elements
+    window.addEventListener(&#x27;resize&#x27;, function() {
+      actionEl.setAttribute(&#x27;style&#x27;, &#x27;height:&#x27; + parseInt(window.innerHeight - 100) + &#x27;px&#x27;);
+      detailEl.setAttribute(&#x27;style&#x27;, &#x27;height:&#x27; + parseInt(window.innerHeight - 100) + &#x27;px&#x27;);
+      historyEl.setAttribute(&#x27;style&#x27;, &#x27;height:&#x27; + parseInt(window.innerHeight - 100) + &#x27;px&#x27;);
+    });
+
+    self.resetActionForm();
+  }
+
+  app.controller(&#x27;ManageManageableDetailController&#x27;, ManageableDetailController);
+  ManageableDetailController.$inject = [
+    &#x27;$scope&#x27;,
+    &#x27;$filter&#x27;,
+    &#x27;$uibModal&#x27;,
+    &#x27;$timeout&#x27;,
+    &#x27;$rootScope&#x27;,
+    &#x27;ManageFactory&#x27;,
+    &#x27;ManageGroupFactory&#x27;,
+    &#x27;ManageDeviceFactory&#x27;,
+    &#x27;ManageManageableFactory&#x27;,
+    &#x27;entityService&#x27;,
+    &#x27;MANAGE_NAME&#x27;,
+    &#x27;MANAGE_DEVICE_STATUS&#x27;,
+    &#x27;MANAGE_MANAGEABLE_TYPES&#x27;
+  ];
+
+})(angular.module(&#x27;ov.manage&#x27;));
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
