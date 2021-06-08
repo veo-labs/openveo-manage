@@ -8,14 +8,14 @@ OpenVeo does not automatically compile SASS and JavaScript files for his plugins
 
 You can compile the back end SASS files using the following command:
 
-    grunt compass:dist
+    npm run build:scss
 
 Or you can watch SASS files changes using the following command:
 
-    grunt
+    npm run watch
 
-# Compiling JavaScript files
+# Compiling the plugin
 
-You'll probably want to compile AngularJS files, in production, for better performance. You can do it using:
+You can compile the plugin using:
 
-    grunt prod
+    npm run build

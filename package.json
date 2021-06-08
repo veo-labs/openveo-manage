@@ -51,14 +51,17 @@
     "yuidoc-theme-blue": "^0.1.9"
   },
   "scripts": {
-    "prepack": "grunt prod",
-    "eslint": "grunt eslint",
-    "mocha": "grunt mochaTest",
-    "postpublish": "grunt deploy-doc"
+    "build": "npx grunt prod",
+    "build:scss": "npx grunt compass:dist",
+    "lint": "npx grunt eslint",
+    "postpublish": "npx grunt deploy-doc",
+    "prepack": "npm run build",
+    "test": "npx grunt mochaTest",
+    "watch": "npx grunt"
   },
   "precommit": [
-    "eslint",
-    "mocha"
+    "lint",
+    "test"
   ],
   "engines": {
     "node": ">=16.3.0",
