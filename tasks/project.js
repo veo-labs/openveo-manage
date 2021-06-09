@@ -13,5 +13,6 @@ module.exports = {
   beAssets: '<%= project.basePath %>/assets/be',
   beCSSAssets: '<%= project.beAssets %>/css',
   beJSAssets: '<%= project.beAssets %>/js',
+  beViewsAssets: '<%= project.beAssets %>/views',
   uglify: '<%= project.basePath %>/build/uglify'
 };

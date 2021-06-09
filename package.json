@@ -58,7 +58,7 @@
     "postpublish": "npx grunt deploy-doc",
     "prepack": "npm run build",
     "test": "npx grunt mochaTest",
-    "watch": "npx grunt"
+    "watch": "npx grunt watch"
   },
   "precommit": [
     "lint",

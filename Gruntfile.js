@@ -37,6 +37,9 @@ module.exports = function(grunt) {
     env: process.env
   };
 
+  // Set "withSourceMaps" property which will be used by grunt tasks to set appropriate configuration
+  process.withSourceMaps = (process.argv.length > 3 && process.argv[3] === '--with-source-maps') ? true : false;
+
   grunt.initConfig(config);
   grunt.config.merge(loadConfig('./tasks'));
 
@@ -54,9 +57,6 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('rename', openVeoApi.grunt.renameTask(grunt));
   grunt.registerMultiTask('remove', openVeoApi.grunt.removeTask(grunt));
 
-  // Listen to changes on SCSS files and generate CSS files
-  grunt.registerTask('default', ['sprite', 'compass:dev', 'watch']);
-
   // Generate documentation
   grunt.registerTask('doc', ['remove:doc', 'mkdocs', 'yuidoc', 'rename:doc']);
 
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
   // Build the back office
   grunt.registerTask('build-back-office-client', [
     'sprite',
-    'compass:dist',
+    'compass:admin',
     'uglify',
     'concat:js'
   ]);

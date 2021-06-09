@@ -10,9 +10,16 @@ module.exports = {
     tasks: ['sprite']
   },
 
-  // Launch compass compilation on each SCSS files modification
-  compass: {
-    files: '**/*.scss',
-    tasks: ['compass:dev']
+  // Automatically rebuild back office when a file is modified
+  admin: {
+    files: [
+      '<%= project.be %>/**/*',
+      '<%= project.beViewsAssets %>/**/*',
+      '<%= project.root %>/conf.js'
+    ],
+    tasks: [
+      'build-back-office-client'
+    ]
   }
+
 };
