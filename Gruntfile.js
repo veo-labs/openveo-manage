@@ -68,7 +68,7 @@ module.exports = function(grunt) {
     'sprite',
     'compass:admin',
     'uglify',
-    'concat:js'
+    'concat:admin-js'
   ]);
 
 };

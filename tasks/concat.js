@@ -19,7 +19,7 @@ function getMinifiedJSFiles(files) {
 }
 
 module.exports = {
-  js: {
+  'admin-js': {
 
     // Concatenate all back office JavaScript files
     src: getMinifiedJSFiles(applicationConf['backOffice']['scriptFiles']['dev']),
