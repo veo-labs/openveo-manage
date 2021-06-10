@@ -5,7 +5,7 @@
 module.exports = {
 
   // Obfuscate client manage's JavaScript files
-  manage: {
+  'back-office': {
     files: [
       {
 

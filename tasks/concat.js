@@ -19,13 +19,11 @@ function getMinifiedJSFiles(files) {
 }
 
 module.exports = {
-  'admin-js': {
 
-    // Concatenate all back office JavaScript files
+  // Concatenate all back office JavaScript files
+  'back-office-js': {
     src: getMinifiedJSFiles(applicationConf['backOffice']['scriptFiles']['dev']),
-
-    // Concatenate all files into openveoManage.js
     dest: '<%= project.beJSAssets %>/openveoManage.js'
-
   }
+
 };
