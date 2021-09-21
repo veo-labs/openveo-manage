@@ -7,6 +7,7 @@
 ## DEPENDENCIES
 
 - **interactjs** has been upgraded from 1.9.7 to **1.10.11**
+- **perfect-scrollbar** has been upgraded from 1.5.0 to **1.5.2**
 - **shortid** has been replaced by nanoid
 
 # 5.0.1 / 2020-12-11
