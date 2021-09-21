@@ -4,7 +4,7 @@
  * @module manage
  */
 
-var shortid = require('shortid');
+var nanoid = require('nanoid').nanoid;
 var async = require('async');
 var openVeoApi = require('@openveo/api');
 var Cache = process.requireManage('app/server/manageables/Cache.js');
@@ -113,7 +113,7 @@ module.exports = Manager;
  */
 function buildHistoric(message, params) {
   return {
-    id: shortid.generate(),
+    id: nanoid(),
     date: new Date(),
     message: {
       data: message,

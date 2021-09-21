@@ -5,7 +5,7 @@
  */
 
 var schedule = require('node-schedule');
-var shortid = require('shortid');
+var nanoid = require('nanoid').nanoid;
 
 /**
  * Manages process dependent scheduled jobs, for session recording, using
@@ -67,7 +67,7 @@ ScheduleManager.prototype.removeJob = function(id) {
 ScheduleManager.prototype.addJob = function(date, endDate, recurrent, functionToExecute) {
   if (date && functionToExecute) {
     var job;
-    var id = shortid.generate();
+    var id = nanoid();
 
     if (recurrent) {
 

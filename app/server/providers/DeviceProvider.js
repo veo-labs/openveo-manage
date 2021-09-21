@@ -5,7 +5,7 @@
  */
 
 var util = require('util');
-var shortid = require('shortid');
+var nanoid = require('nanoid').nanoid;
 var ManageableProvider = process.requireManage('app/server/providers/ManageableProvider.js');
 
 var STATES = {
@@ -82,7 +82,7 @@ DeviceProvider.prototype.add = function(devices, callback) {
       return this.executeCallback(callback, new Error('Invalid device state ' + device.state));
 
     devicesToAdd.push({
-      id: device.id || shortid.generate(),
+      id: device.id || nanoid(),
       name: '',
       state: device.state,
       history: [],

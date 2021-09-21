@@ -5,7 +5,7 @@
  */
 
 var util = require('util');
-var shortid = require('shortid');
+var nanoid = require('nanoid').nanoid;
 var openVeoApi = require('@openveo/api');
 var ResourceFilter = openVeoApi.storages.ResourceFilter;
 var NotFoundError = openVeoApi.errors.NotFoundError;
@@ -151,7 +151,7 @@ ManageableProvider.prototype.removeHistory = function(id, callback) {
  *   - **Number** The total amount of items updated
  */
 ManageableProvider.prototype.addSchedule = function(id, schedule, callback) {
-  schedule.id = shortid.generate();
+  schedule.id = nanoid();
   addArrayItem.call(this, id, 'schedules', schedule, callback);
 };
 

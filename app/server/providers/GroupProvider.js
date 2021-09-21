@@ -5,7 +5,7 @@
  */
 
 var util = require('util');
-var shortid = require('shortid');
+var nanoid = require('nanoid').nanoid;
 var ManageableProvider = process.requireManage('app/server/providers/ManageableProvider.js');
 
 /**
@@ -44,7 +44,7 @@ GroupProvider.prototype.add = function(groups, callback) {
     var group = groups[i];
 
     groupsToAdd.push({
-      id: group.id || shortid.generate(),
+      id: group.id || nanoid(),
       name: group.name || 'MANAGE.GROUP.DEFAULT_NAME',
       schedules: [],
       history: group.history || []
