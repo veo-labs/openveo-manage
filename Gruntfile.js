@@ -48,7 +48,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
-  grunt.loadNpmTasks('grunt-spritesmith');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-mkdocs');
@@ -62,7 +61,6 @@ module.exports = function(grunt) {
 
   // Build the back office
   grunt.registerTask('build-back-office-client', [
-    'sprite',
     'compass:back-office',
     'uglify:back-office',
     'concat:back-office-js'

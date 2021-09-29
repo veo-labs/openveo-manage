@@ -43,7 +43,6 @@
     "grunt-init": "^0.3.2",
     "grunt-mkdocs": "^1.0.1",
     "grunt-mocha-test": "^0.13.3",
-    "grunt-spritesmith": "^6.8.0",
     "mocha": "^7.1.1",
     "mock-require": "^3.0.3",
     "pre-commit": "^1.2.2",
@@ -51,7 +50,7 @@
     "yuidoc-theme-blue": "^0.1.9"
   },
   "scripts": {
-    "build": "npx grunt build-back-office-client",
+    "build": "./scripts/build.js && npx grunt build-back-office-client",
     "build:scss": "npx grunt compass:dist",
     "doc": "npx grunt doc",
     "lint": "npx grunt eslint",

@@ -1,0 +1,23 @@
+$screen-ok: (0px, 0px, 30px, 24px, 'screen-ok');
+$screen-ko: (-30px, 0px, 30px, 24px, 'screen-ko');
+$screen-disconnected: (-60px, 0px, 30px, 24px, 'screen-disconnected');
+$device-ko: (-90px, 0px, 71px, 24px, 'device-ko');
+$camera-ok: (0px, -24px, 27px, 20px, 'camera-ok', );
+$camera-ko: (-27px, -24px, 27px, 20px, 'camera-ko');
+$camera-disconnected: (-54px, -24px, 27px, 20px, 'camera-disconnected');
+$device-starting: (0px, -44px, 71px, 19px, 'device-starting');
+$device-ok: (-71px, -44px, 72px, 19px, 'device-ok');
+$device-disconnected: (-143px, -44px, 71px, 19px, 'device-disconnected');
+$mini-device: (0px, -63px, 21px, 5px, 'mini-device');
+
+@mixin sprite($sprite) {
+  $sprite-offset-x: nth($sprite, 1);
+  $sprite-offset-y: nth($sprite, 2);
+  $sprite-width: nth($sprite, 3);
+  $sprite-height: nth($sprite, 4);
+
+  background-image: url('../images/sprite.png');
+  background-position: $sprite-offset-x $sprite-offset-y;
+  width: $sprite-width;
+  height: $sprite-height;
+}

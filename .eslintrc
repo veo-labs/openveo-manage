@@ -7,8 +7,8 @@
     // Add node.js environment globals
     "node": true,
 
-    // Enable ECMAScript 6 features
-    "es6": true
+    // Enable ECMAScript 2017 features
+    "es2017": true
 
   },
   "rules": {

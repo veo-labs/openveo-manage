@@ -32,7 +32,6 @@ nbproject/
 
 # Sass
 .sass-cache
-/app/client/admin/compass/sass/modules/_sprite.scss
 
 # Documentation
 /site
