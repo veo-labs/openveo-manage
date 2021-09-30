@@ -38,7 +38,6 @@
     "grunt-gh-pages": "^3.1.0",
     "grunt-init": "^0.3.2",
     "grunt-mkdocs": "^1.0.1",
-    "grunt-mocha-test": "^0.13.3",
     "mocha": "^7.1.1",
     "mock-require": "^3.0.3",
     "pre-commit": "^1.2.2",
@@ -55,7 +54,7 @@
     "lint": "npx grunt eslint",
     "postpublish": "npm run doc && npx grunt gh-pages:doc",
     "prepack": "npm run build",
-    "test": "npx grunt mochaTest",
+    "test": "npx mocha --config tests/server/.mocharc.json",
     "watch": "npm run build ; npx ovWatch -d ./app/client/admin -d ./assets/be/views -c build:development"
   },
   "precommit": [

@@ -10,6 +10,7 @@
 - **grunt-contrib-concat** has been removed
 - **grunt-contrib-uglify** has been removed
 - **grunt-contrib-watch** has been removed
+- **grunt-mocha-test** has been removed
 - **grunt-spritesmith** has been removed
 - **interactjs** has been upgraded from 1.9.7 to **1.10.11**
 - **node-schedule** has been upgraded from 1.3.2 to **2.0.0**
