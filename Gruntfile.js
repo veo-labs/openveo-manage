@@ -47,9 +47,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mkdocs');
 
   grunt.registerMultiTask('rename', openVeoApi.grunt.renameTask(grunt));
-  grunt.registerMultiTask('remove', openVeoApi.grunt.removeTask(grunt));
 
   // Generate documentation
-  grunt.registerTask('doc', ['remove:doc', 'mkdocs', 'yuidoc', 'rename:doc']);
+  grunt.registerTask('doc', ['mkdocs', 'yuidoc', 'rename:doc']);
 
 };
