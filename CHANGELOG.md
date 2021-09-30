@@ -15,6 +15,7 @@
 - **grunt-contrib-uglify** has been removed
 - **grunt-contrib-watch** has been removed
 - **grunt-eslint** has been removed
+- **grunt-gh-pages** has been removed
 - **grunt-mocha-test** has been removed
 - **grunt-spritesmith** has been removed
 - **interactjs** has been upgraded from 1.9.7 to **1.10.11**
