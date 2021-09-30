@@ -7,6 +7,7 @@
 
 ## DEPENDENCIES
 
+- **chai** has been upgraded from 4.2.0 to **4.3.4**
 - **eslint** has been upgraded from 22.0.0 to **23.0.0**
 - **flightplan** has been removed
 - **grunt-contrib-compass** has been removed
