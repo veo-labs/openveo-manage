@@ -3,7 +3,6 @@
 /* eslint node/no-sync: 0 */
 var path = require('path');
 var fs = require('fs');
-var openVeoApi = require('@openveo/api');
 
 process.rootManage = __dirname;
 process.requireManage = function(filePath) {
@@ -42,12 +41,5 @@ module.exports = function(grunt) {
 
   grunt.initConfig(config);
   grunt.config.merge(loadConfig('./tasks'));
-
-  grunt.loadNpmTasks('grunt-mkdocs');
-
-  grunt.registerMultiTask('rename', openVeoApi.grunt.renameTask(grunt));
-
-  // Generate documentation
-  grunt.registerTask('doc', ['mkdocs', 'rename:doc']);
 
 };
