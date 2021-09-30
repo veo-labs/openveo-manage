@@ -7,6 +7,7 @@
 ## DEPENDENCIES
 
 - **eslint** has been upgraded from 22.0.0 to **23.0.0**
+- **flightplan** has been removed
 - **grunt-contrib-compass** has been removed
 - **grunt-contrib-concat** has been removed
 - **grunt-contrib-uglify** has been removed
