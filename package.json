@@ -32,7 +32,6 @@
     "flightplan": "^0.6.20",
     "grunt": "^1.1.0",
     "grunt-cli": "^1.3.2",
-    "grunt-contrib-compass": "^1.1.1",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-uglify": "^4.0.1",
     "grunt-contrib-watch": "^1.1.0",
@@ -50,8 +49,10 @@
     "yuidoc-theme-blue": "^0.1.9"
   },
   "scripts": {
-    "build": "./scripts/build.js && npx grunt build-back-office-client",
-    "build:scss": "npx grunt compass:dist",
+    "build": "./scripts/build.js production && npx grunt build-back-office-client",
+    "build:development": "./scripts/build.js",
+    "build:scss": "compass compile -c ./compass.rb -e production -s compressed --force --no-sourcemap",
+    "build:scss-development": "compass compile -c ./compass.rb --force",
     "doc": "npx grunt doc",
     "lint": "npx grunt eslint",
     "postpublish": "npm run doc && npx grunt gh-pages:doc",

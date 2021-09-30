@@ -43,7 +43,6 @@ module.exports = function(grunt) {
   grunt.initConfig(config);
   grunt.config.merge(loadConfig('./tasks'));
 
-  grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
@@ -61,7 +60,6 @@ module.exports = function(grunt) {
 
   // Build the back office
   grunt.registerTask('build-back-office-client', [
-    'compass:back-office',
     'uglify:back-office',
     'concat:back-office-js'
   ]);

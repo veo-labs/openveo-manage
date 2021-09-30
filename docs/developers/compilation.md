@@ -4,18 +4,20 @@ OpenVeo back end is written using AngularJS and SASS / Compass. SASS files need 
 
 OpenVeo does not automatically compile SASS and JavaScript files for his plugins. Thus OpenVeo Manage compiles his own SASS and JavaScript files.
 
-# Compiling SASS files
+# Compiling for development
 
-You can compile the back end SASS files using the following command:
+You can compile the plugin for development using:
 
-    npm run build:scss
+    npm run build:development
 
-Or you can watch SASS files changes using the following command:
+You compile automatically the plugin when a file has changed using:
 
     npm run watch
 
-# Compiling the plugin
+# Compiling for production
 
-You can compile the plugin using:
+You can compile the plugin for production using:
 
     npm run build
+
+You'll find compiled CSS files in **assets/be/css** and compiled JavaScript files in **assets/be/js**.

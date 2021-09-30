@@ -7,16 +7,28 @@
  *
  * Usage:
  *
+ * # Build only back office client SCSS files with source maps
+ * # Same as `build development`
  * $ build
+ * $ build development
+ *
+ * # Build back office client SCSS and JavaScript files for production
+ * $ build production
  */
 
 'use strict';
 
+const {exec} = require('child_process');
 const os = require('os');
 const path = require('path');
 const util = require('util');
-const nanoid = require('nanoid').nanoid;
+
 const {imageProcessor} = require('@openveo/api');
+const nanoid = require('nanoid').nanoid;
+
+require('../processRequire.js');
+
+const environment = process.argv[2];
 
 /**
  * Logs given message to stdout with a prefix.
@@ -40,6 +52,23 @@ function compileIconsSprite(iconsFilesPaths, outputFilePath) {
     90,
     path.join(os.tmpdir(), nanoid())
   );
+}
+
+/**
+ * Compiles back office client SCSS files.
+ *
+ * @return {Promise} Promise resolving when SCSS files have been compiled
+ */
+async function compileScssFiles() {
+  return new Promise((resolve, reject) => {
+    const command = `npm run build:scss${environment !== 'production' ? '-development' : ''}`;
+    log(`${process.cwd()} > Compile SCSS files`);
+    exec(command, {cwd: process.cwd()}, (error, stdout, stderr) => {
+      if (error) return reject(error);
+      console.log(stdout);
+      return resolve();
+    });
+  });
 }
 
 /**
@@ -74,6 +103,7 @@ async function main() {
     'screen-ok.png'
   ];
 
+  await compileScssFiles();
   await compileIconsSprite(
     resolveFilesPaths(iconsFilesPaths, path.join(backOfficeClientPath, 'compass/sass/sprites')),
     path.join(imagesDirectoryPath, 'sprite.png')
