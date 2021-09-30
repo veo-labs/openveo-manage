@@ -45,11 +45,6 @@ ehthumbs.db
 /DOC-*.md
 /jsdoc*.js
 
-# Grunt files
-/Gruntfile.js
-/tasks
-/.grunt
-
 # Git
 .gitignore
 .gitattributes

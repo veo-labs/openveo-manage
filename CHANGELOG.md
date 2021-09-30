@@ -14,13 +14,17 @@
 - **chai** has been upgraded from 4.2.0 to **4.3.4**
 - **eslint** has been upgraded from 22.0.0 to **23.0.0**
 - **flightplan** has been removed
+- **grunt** has been removed
+- **grunt-cli** has been removed
 - **grunt-contrib-compass** has been removed
 - **grunt-contrib-concat** has been removed
 - **grunt-contrib-uglify** has been removed
 - **grunt-contrib-watch** has been removed
 - **grunt-contrib-yuidoc** has been removed
 - **grunt-eslint** has been removed
+- **grunt-extend-config** has been removed
 - **grunt-gh-pages** has been removed
+- **grunt-init** has been removed
 - **grunt-mkdocs** has been removed
 - **grunt-mocha-test** has been removed
 - **grunt-spritesmith** has been removed
