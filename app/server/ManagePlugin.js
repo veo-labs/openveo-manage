@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @module manage/ManagePlugin
+ */
+
 var util = require('util');
 var express = require('express');
 var async = require('async');
@@ -13,53 +17,57 @@ var Manager = process.requireManage('app/server/Manager.js');
 /**
  * OpenVeo Manage Plugin.
  *
- * @module manage
- * @main manage
  * @class ManagePlugin
  * @constructor
  * @extends Plugin
+ * @see {@link https://github.com/veo-labs/openveo-api|OpenVeo API documentation} for more information about Plugin and Router
  */
 function ManagePlugin() {
   ManagePlugin.super_.call(this);
 
-  Object.defineProperties(this, {
+  Object.defineProperties(this,
 
-    /**
-     * Manage public router.
-     *
-     * It will be automatically mounted on /manage/ by the core.
-     *
-     * @property router
-     * @type Router
-     * @final
-     */
-    router: {value: express.Router()},
+    /** @lends module:manage/ManagePlugin~ManagePlugin */
+    {
 
-    /**
-     * Manage private router.
-     *
-     * All routes associated to the private router require a back end authentication.
-     * It will be automatically mounted on /be/manage/ by the core.
-     *
-     * @property privateRouter
-     * @type Router
-     * @final
-     */
-    privateRouter: {value: express.Router()},
+      /**
+       * Manage public router.
+       *
+       * It will be automatically mounted on /manage/ by the core.
+       *
+       * @type {Router}
+       * @instance
+       * @readonly
+       */
+      router: {value: express.Router()},
 
-    /**
-     * Manage web service router.
-     *
-     * All routes associated to the Web Service router will require a Web Service authentication.
-     * It will be automatically mounted on /manage/ by the core (but on another server).
-     *
-     * @property webServiceRouter
-     * @type Router
-     * @final
-     */
-    webServiceRouter: {value: express.Router()}
+      /**
+       * Manage private router.
+       *
+       * All routes associated to the private router require a back end authentication.
+       * It will be automatically mounted on /be/manage/ by the core.
+       *
+       * @type {Router}
+       * @instance
+       * @readonly
+       */
+      privateRouter: {value: express.Router()},
 
-  });
+      /**
+       * Manage web service router.
+       *
+       * All routes associated to the Web Service router will require a Web Service authentication.
+       * It will be automatically mounted on /manage/ by the core (but on another server).
+       *
+       * @type {Router}
+       * @instance
+       * @readonly
+       */
+      webServiceRouter: {value: express.Router()}
+
+    }
+
+  );
 
 }
 
@@ -72,10 +80,7 @@ util.inherits(ManagePlugin, openVeoApi.plugin.Plugin);
  * Optional "init" method automatically called by core application
  * after plugin is loaded and before it is started.
  *
- * @method init
- * @async
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error if something went wrong, null otherwise
+ * @param {callback} callback Function to call when it's done
  */
 ManagePlugin.prototype.init = function(callback) {
   var database = process.api.getCoreApi().getDatabase();
@@ -106,10 +111,7 @@ ManagePlugin.prototype.init = function(callback) {
  * Optional "start" method automatically called by core application
  * after plugin is loaded and initialized.
  *
- * @method start
- * @async
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error if something went wrong, null otherwise
+ * @param {callback} callback Function to call when it's done
  */
 ManagePlugin.prototype.start = function(callback) {
   if (!process.isWebService) {

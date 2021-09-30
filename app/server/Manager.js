@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @module manage
+ * @module manage/Manager
  */
 
 var nanoid = require('nanoid').nanoid;
@@ -17,9 +17,10 @@ var ResourceFilter = openVeoApi.storages.ResourceFilter;
 /**
  * Manager singleton.
  *
- * @property manager
- * @type Manager
+ * @memberof module:manage/Manager~Manager
+ * @member {module:manage/Manager~Manager}
  * @private
+ * @static
  */
 var manager = null;
 
@@ -31,69 +32,76 @@ var manager = null;
  * @class Manager
  * @constructor
  * @param {DevicePilot} devicesPilot Devices' pilot to interact with devices
- * @param {BrowserPilot} browsersPilot Browsers' pilot to interact with browsers
- * @param {DeviceProvider} deviceProvider Provider to manipulate devices
- * @param {GroupProvider} groupProvider Provider to manipulate groups
- * @param {ScheduleManager} scheduleManager A schedule manager to add / remove schedule jobs
+ * @param {module:manage/BrowserPilot~BrowserPilot} browsersPilot Browsers' pilot to interact with browsers
+ * @param {module:manage/providers/DeviceProvider~DeviceProvider} deviceProvider Provider to manipulate devices
+ * @param {module:manage/providers/GroupProvider~GroupProvider} groupProvider Provider to manipulate groups
+ * @param {module:manage/ScheduleManager~ScheduleManager} scheduleManager A schedule manager to add / remove schedule
+ * jobs
+ * @see {@link https://github.com/veo-labs/openveo-api|OpenVeo API documentation} for more information about DevicePilot
  */
 function Manager(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager) {
-  Object.defineProperties(this, {
+  Object.defineProperties(this,
 
-    /**
-     * The browsers' pilot to interact with browsers.
-     *
-     * @property browsersPilot
-     * @type BrowserPilot
-     * @final
-     */
-    browsersPilot: {value: browsersPilot},
+    /** @lends module:manage/Manager~Manager */
+    {
 
-    /**
-     * The devices' pilot to interact with devices.
-     *
-     * @property devicesPilot
-     * @type DevicePilot
-     * @final
-     */
-    devicesPilot: {value: devicesPilot},
+      /**
+       * The browsers' pilot to interact with browsers.
+       *
+       * @type {module:manage/BrowserPilot~BrowserPilot}
+       * @instance
+       * @readonly
+       */
+      browsersPilot: {value: browsersPilot},
 
-    /**
-     * The cache to store devices and groups.
-     *
-     * @property cache
-     * @type Cache
-     * @final
-     */
-    cache: {value: new Cache()},
+      /**
+       * The devices' pilot to interact with devices.
+       *
+       * @type {DevicePilot}
+       * @instance
+       * @readonly
+       */
+      devicesPilot: {value: devicesPilot},
 
-    /**
-     * The schedule manager.
-     *
-     * @property scheduleManager
-     * @type ScheduleManager
-     * @final
-     */
-    scheduleManager: {value: scheduleManager},
+      /**
+       * The cache to store devices and groups.
+       *
+       * @type {module:manage/manageables/Cache~Cache}
+       * @instance
+       * @readonly
+       */
+      cache: {value: new Cache()},
 
-    /**
-     * Provider to manage groups.
-     *
-     * @property groupProvider
-     * @type GroupProvider
-     * @final
-     */
-    groupProvider: {value: groupProvider},
+      /**
+       * The schedule manager.
+       *
+       * @type {module:manage/ScheduleManager~ScheduleManager}
+       * @instance
+       * @readonly
+       */
+      scheduleManager: {value: scheduleManager},
 
-    /**
-     * Provider to manage devices.
-     *
-     * @property deviceProvider
-     * @type DeviceProvider
-     * @final
-     */
-    deviceProvider: {value: deviceProvider}
+      /**
+       * Provider to manage groups.
+       *
+       * @type {module:manage/providers/GroupProvider~GroupProvider}
+       * @instance
+       * @readonly
+       */
+      groupProvider: {value: groupProvider},
 
-  });
+      /**
+       * Provider to manage devices.
+       *
+       * @type {module:manage/providers/DeviceProvider~DeviceProvider}
+       * @instance
+       * @readonly
+       */
+      deviceProvider: {value: deviceProvider}
+
+    }
+
+  );
 
 }
 
@@ -105,7 +113,7 @@ module.exports = Manager;
  * Historic are composed of a date, a message as a translation key
  * and parameters for the translation key.
  *
- * @method buildHistoric
+ * @memberof module:manage/Manager~Manager
  * @private
  * @param {String} message The historic message
  * @param {Object} [params] Message parameters
@@ -128,14 +136,13 @@ function buildHistoric(message, params) {
  * Saves the historic in database and cache then informs browsers about
  * the new historic.
  *
- * @method addGroupHistoric
+ * @memberof module:manage/Manager~Manager
+ * @this module:manage/Manager~Manager
  * @private
- * @async
- * @param {Group} group The group
+ * @param {module:manage/manageables/Group~Group} group The group
  * @param {String} message The historic message
  * @param {Object} messageParams Message parameters for message translation
- * @param {Function} [callback] Function to call when it's done with :
- *  - **Error** An error is something went wrong
+ * @param {callback} [callback] Function to call when it's done
  */
 function addGroupHistoric(group, message, messageParams, callback) {
   var self = this;
@@ -162,15 +169,14 @@ function addGroupHistoric(group, message, messageParams, callback) {
  * Saves the history in database and cache then informs browsers about
  * the new historic.
  *
- * @method addDeviceHistoric
+ * @memberof module:manage/Manager~Manager
+ * @this module:manage/Manager~Manager
  * @private
- * @async
  * @param {Device} device The device
  * @param {String} message The historic message
  * @param {Object} messageParams Message parameters for message translation
  * @param {Boolean} addToGroup true to also add the historic to the history of the device's group
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error is something went wrong
+ * @param {callback} callback Function to call when it's done
  */
 function addDeviceHistoric(device, message, messageParams, addToGroup, callback) {
   var self = this;
@@ -215,14 +221,11 @@ function addDeviceHistoric(device, message, messageParams, addToGroup, callback)
  *
  * Adds devide to database and cache.
  *
- * @method registerDevice
+ * @memberof module:manage/Manager~Manager
+ * @this module:manage/Manager~Manager
  * @private
- * @async
  * @param {String} id The id of the device to register
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error if something went wrong, null otherwise
- *  - **Object** The registered device
- *  - **Boolean** true if the device wasn't registered
+ * @param {module:manage/Manager~Manager~registerDeviceCallback} callback Function to call when it's done
  */
 function registerDevice(id, callback) {
   var self = this;
@@ -254,9 +257,9 @@ function registerDevice(id, callback) {
 /**
  * Deregisters a schedule.
  *
- * @method deregisterSchedule
+ * @memberof module:manage/Manager~Manager
+ * @this module:manage/Manager~Manager
  * @private
- * @async
  * @param {String} manageable The manageable associated to the schedule
  * @param {Object} scheduleId The schedule id
  */
@@ -273,9 +276,9 @@ function deregisterSchedule(manageable, scheduleId) {
 /**
  * Registers a new schedule.
  *
- * @method registerSchedule
+ * @memberof module:manage/Manager~Manager
+ * @this module:manage/Manager~Manager
  * @private
- * @async
  * @param {String} manageable The manageable associated to the schedule
  * @param {Object} schedule The schedule description object
  */
@@ -429,7 +432,8 @@ function registerSchedule(manageable, schedule) {
 /**
  * Initializes listeners on devices' messages.
  *
- * @method initDevicesListeners
+ * @memberof module:manage/Manager~Manager
+ * @this module:manage/Manager~Manager
  * @private
  */
 function initDevicesListeners() {
@@ -630,7 +634,8 @@ function initDevicesListeners() {
 /**
  * Initializes listeners on browsers' messages.
  *
- * @method initBrowsersListeners
+ * @memberof module:manage/Manager~Manager
+ * @this module:manage/Manager~Manager
  * @private
  */
 function initBrowsersListeners() {
@@ -1194,10 +1199,7 @@ function initBrowsersListeners() {
  * All expired schedules' jobs of devices and groups are removed. Other schedules
  * are registered.
  *
- * @method start
- * @async
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error if something went wrong, null otherwise
+ * @param {callback} callback Function to call when it's done
  */
 Manager.prototype.start = function(callback) {
   var self = this;
@@ -1280,12 +1282,9 @@ Manager.prototype.start = function(callback) {
 /**
  * Asks device to modify its name.
  *
- * @method updateDeviceName
- * @async
  * @param {String} id The id of the device
  * @param {String} name The new device's name
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error if something went wrong, null otherwise
+ * @param {callback} callback Function to call when it's done
  */
 Manager.prototype.updateDeviceName = function(id, name, callback) {
   var self = this;
@@ -1308,12 +1307,9 @@ Manager.prototype.updateDeviceName = function(id, name, callback) {
 /**
  * Updates a group's name.
  *
- * @method updateGroupName
- * @async
  * @param {String} id The id of the group
  * @param {String} name The new group's name
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error if something went wrong, null otherwise
+ * @param {Function} callback Function to call when it's done
  */
 Manager.prototype.updateGroupName = function(id, name, callback) {
   var self = this;
@@ -1344,7 +1340,6 @@ Manager.prototype.updateGroupName = function(id, name, callback) {
 /**
  * Removes an in-memory stored manageable with its id.
  *
- * @method removeFromCache
  * @param {String} id The manageable id
  */
 Manager.prototype.removeFromCache = function(id) {
@@ -1357,7 +1352,6 @@ Manager.prototype.removeFromCache = function(id) {
 /**
  * Gets the list of devices from cache.
  *
- * @method getDevices
  * @return {Array} The list of devices in cache
  */
 Manager.prototype.getDevices = function() {
@@ -1372,7 +1366,6 @@ Manager.prototype.getDevices = function() {
 /**
  * Gets the list of groups from cache.
  *
- * @method getGroups
  * @return {Array} The list of groups in cache
  */
 Manager.prototype.getGroups = function() {
@@ -1387,11 +1380,8 @@ Manager.prototype.getGroups = function() {
 /**
  * Removes a device.
  *
- * @method removeDevice
- * @async
  * @param {String} id The device id
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error if something went wrong
+ * @param {callback} callback Function to call when it's done with :
  */
 Manager.prototype.removeDevice = function(id, callback) {
   var self = this;
@@ -1441,11 +1431,8 @@ Manager.prototype.removeDevice = function(id, callback) {
 /**
  * Removes a group.
  *
- * @method removeGroup
- * @async
  * @param {String} id The device id
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error if something went wrong
+ * @param {callback} callback Function to call when it's done with :
  */
 Manager.prototype.removeGroup = function(id, callback) {
   var self = this;
@@ -1490,13 +1477,13 @@ Manager.prototype.removeGroup = function(id, callback) {
 /**
  * Gets Manager singleton.
  *
- * @method get
  * @param {DevicePilot} [devicesPilot] Devices' pilot to interact with devices
- * @param {BrowserPilot} [browsersPilot] Browsers' pilot to interact with browsers
- * @param {DeviceProvider} [deviceProvider] Provider to manipulate devices
- * @param {groupProvider} [groupProvider] Provider to manipulate groups
- * @param {ScheduleManager} [scheduleManager] A schedule manager to add / remove schedule jobs
- * @return {Manager} The manager
+ * @param {module:manage/BrowserPilot~BrowserPilot} [browsersPilot] Browsers' pilot to interact with browsers
+ * @param {module:manage/providers/DeviceProvider~DeviceProvider} [deviceProvider] Provider to manipulate devices
+ * @param {module:manage/providers/GroupProvider~GroupProvider} [groupProvider] Provider to manipulate groups
+ * @param {module:manage/ScheduleManager~ScheduleManager} [scheduleManager] A schedule manager to add / remove
+ * schedule jobs
+ * @return {module:manage/Manager~Manager} The manager
  */
 Manager.get = function(devicesPilot, browsersPilot, deviceProvider, groupProvider, scheduleManager) {
   if (!manager && devicesPilot && browsersPilot)
@@ -1504,3 +1491,10 @@ Manager.get = function(devicesPilot, browsersPilot, deviceProvider, groupProvide
 
   return manager;
 };
+
+/**
+ * @callback module:manage/Manager~Manager~registerDeviceCallback
+ * @param {(Error|null)} error The error if an error occurred, null otherwise
+ * @param {Object} device The registered device
+ * @param {Boolean} wasRegistered true if the device wasn't registered
+ */

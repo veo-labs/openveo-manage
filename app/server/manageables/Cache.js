@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @module manageables
+ * @module manage/manageables/Cache
  */
 
 var Manageable = process.requireManage('app/server/manageables/Manageable.js');
@@ -13,18 +13,23 @@ var Manageable = process.requireManage('app/server/manageables/Manageable.js');
  * @constructor
  */
 function Cache() {
-  Object.defineProperties(this, {
+  Object.defineProperties(this,
 
-    /**
-     * The list of manageables in the cache.
-     *
-     * @property manageables
-     * @type Array
-     * @final
-     */
-    manageables: {value: []}
+    /** @lends module:manage/manageables/Cache~Cache */
+    {
 
-  });
+      /**
+       * The list of manageables in the cache.
+       *
+       * @type {Array}
+       * @instance
+       * @readonly
+       */
+      manageables: {value: []}
+
+    }
+
+  );
 }
 
 module.exports = Cache;
@@ -32,10 +37,11 @@ module.exports = Cache;
 /**
  * Gets a manageable index, in the list of manageables, by a property.
  *
- * @method getManageableIndexByProperty
+ * @memberof module:manage/manageables/Cache~Cache
+ * @this module:manage/manageables/Cache~Cache
  * @private
  * @param {String} property The item property to look for
- * @param {Mixed} value The expected property value
+ * @param {*} value The expected property value
  * @return {Number} The index of the manageable in the list of manageables, -1 if not found
  */
 function getManageableIndexByProperty(property, value) {
@@ -47,10 +53,9 @@ function getManageableIndexByProperty(property, value) {
 /**
  * Gets a manageable by a property.
  *
- * @method getManageableByProperty
  * @param {String} property The manageable property to look for
- * @param {Mixed} value The expected property value
- * @return {Manageable|Undefined} The manageable or undefined if not found
+ * @param {*} value The expected property value
+ * @return {(module:manage/manageables/Manageable~Manageable|Undefined)} The manageable or undefined if not found
  */
 Cache.prototype.getManageableByProperty = function(property, value) {
   return this.manageables.find(function(item) {
@@ -61,9 +66,8 @@ Cache.prototype.getManageableByProperty = function(property, value) {
 /**
  * Gets a list of manageables by a property.
  *
- * @method getManageablesByProperty
  * @param {String} property The item property to look for
- * @param {Mixed} value The expected property value
+ * @param {*} value The expected property value
  * @return {Array} The list of found manageables
  */
 Cache.prototype.getManageablesByProperty = function(property, value) {
@@ -80,9 +84,8 @@ Cache.prototype.getManageablesByProperty = function(property, value) {
 /**
  * Gets a manageable by its id.
  *
- * @method get
  * @param {String} id The manageable id
- * @return {Manageable|Undefined} The manageable or undefined if not found
+ * @return {(module:manage/manageables/Manageable~Manageable|Undefined)} The manageable or undefined if not found
  */
 Cache.prototype.get = function(id) {
   return this.getManageableByProperty('id', id);
@@ -91,8 +94,7 @@ Cache.prototype.get = function(id) {
 /**
  * Stores a new manageable in cache.
  *
- * @method add
- * @param {Manageable} newManageable The new manageable
+ * @param {module:manage/manageables/Manageable~Manageable} newManageable The new manageable
  */
 Cache.prototype.add = function(newManageable) {
   if (!(newManageable instanceof Manageable))
@@ -111,9 +113,9 @@ Cache.prototype.add = function(newManageable) {
 /**
  * Removes a manageable from cache.
  *
- * @method remove
- * @param {Manageable|String} manageable Either the manageable or the manageable id
- * @return {Manageable|Null} The manageable or null if not found
+ * @param {(module:manage/manageables/Manageable~Manageable|String)} manageable Either the manageable or the manageable
+ * id
+ * @return {(module:manage/manageables/Manageable~Manageable|Null)} The manageable or null if not found
  */
 Cache.prototype.remove = function(manageable) {
   if (typeof manageable === 'object')

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @module manageables
+ * @module manage/manageables/Device
  */
 
 var util = require('util');
@@ -13,7 +13,7 @@ var Manageable = process.requireManage('app/server/manageables/Manageable.js');
  * A Device is a Manageable structure holding information about a device.
  *
  * @class Device
- * @extends Manageable
+ * @extends module:manage/manageables/Manageable~Manageable
  * @constructor
  * @param {Object} device A device description object
  * @param {String} device.id The device id
@@ -31,82 +31,88 @@ var Manageable = process.requireManage('app/server/manageables/Manageable.js');
 function Device(device) {
   Device.super_.call(this, device);
 
-  Object.defineProperties(this, {
+  Object.defineProperties(this,
 
-    /**
-     * The device's type.
-     *
-     * @property type
-     * @type String
-     * @final
-     */
-    type: {value: Device.TYPE, enumerable: true},
+    /** @lends module:manage/manageables/Device~Device */
+    {
 
-    /**
-     * The device's state.
-     *
-     * @property state
-     * @type String
-     */
-    state: {value: device.state, writable: true, enumerable: true},
+      /**
+       * The device's type.
+       *
+       * @type {String}
+       * @default Device.TYPE
+       * @instance
+       * @readonly
+       */
+      type: {value: Device.TYPE, enumerable: true},
 
-    /**
-     * The device's storage information.
-     *
-     * @property storage
-     * @type Object
-     */
-    storage: {value: device.storage, writable: true, enumerable: true},
+      /**
+       * The device's state.
+       *
+       * @type {String}
+       * @instance
+       */
+      state: {value: device.state, writable: true, enumerable: true},
 
-    /**
-     * The device's inputs information.
-     *
-     * @property inputs
-     * @type Object
-     */
-    inputs: {value: device.inputs, writable: true, enumerable: true},
+      /**
+       * The device's storage information.
+       *
+       * @type {Object}
+       * @instance
+       */
+      storage: {value: device.storage, writable: true, enumerable: true},
 
-    /**
-     * The device's presets.
-     *
-     * @property presets
-     * @type Array
-     */
-    presets: {value: device.presets, writable: true, enumerable: true},
+      /**
+       * The device's inputs information.
+       *
+       * @type {Object}
+       * @instance
+       */
+      inputs: {value: device.inputs, writable: true, enumerable: true},
 
-    /**
-     * The device's group.
-     *
-     * @property group
-     * @type String
-     */
-    group: {value: device.group, writable: true, enumerable: true},
+      /**
+       * The device's presets.
+       *
+       * @type {Array}
+       * @instance
+       */
+      presets: {value: device.presets, writable: true, enumerable: true},
 
-    /**
-     * The device's ip address.
-     *
-     * @property ip
-     * @type String
-     */
-    ip: {value: device.ip, writable: true, enumerable: true},
+      /**
+       * The device's group.
+       *
+       * @type {String}
+       * @instance
+       */
+      group: {value: device.group, writable: true, enumerable: true},
 
-    /**
-     * The device's web interface url.
-     *
-     * @property url
-     * @type String
-     */
-    url: {value: device.url, writable: true, enumerable: true},
+      /**
+       * The device's ip address.
+       *
+       * @type {String}
+       * @instance
+       */
+      ip: {value: device.ip, writable: true, enumerable: true},
 
-    /**
-     * The device's status.
-     *
-     * @property status
-     * @type String
-     */
-    status: {value: device.status, writable: true, enumerable: true}
+      /**
+       * The device's web interface url.
+       *
+       * @type {String}
+       * @instance
+       */
+      url: {value: device.url, writable: true, enumerable: true},
 
-  });
+      /**
+       * The device's status.
+       *
+       * @type {String}
+       * @instance
+       */
+      status: {value: device.status, writable: true, enumerable: true}
+
+    }
+
+  );
 
   this.setInputs();
   this.setPresets();
@@ -118,10 +124,10 @@ util.inherits(Device, Manageable);
 /**
  * Device type.
  *
- * @property TYPE
- * @type String
+ * @memberof module:manage/manageables/Device~Device
+ * @member {String} TYPE
  * @private
- * @final
+ * @const
  * @default 'device'
  */
 Object.defineProperty(Device, 'TYPE', {value: 'device'});
@@ -129,7 +135,6 @@ Object.defineProperty(Device, 'TYPE', {value: 'device'});
 /**
  * Sets device's storage information.
  *
- * @method setStorage
  * @param {Number} free Number of free Bytes
  * @param {Number} used Number of used Bytes
  */
@@ -151,7 +156,6 @@ Device.prototype.setStorage = function(free, used) {
 /**
  * Sets device's inputs information.
  *
- * @method setInputs
  * @param {Object} [camera Information] about the video camera connected to the device
  * @param {Object} [camera.timings] Information about video camera's configuration
  * @param {Boolean} [camera.timings.supported] true if the connected video camera is supported, false otherwise
@@ -175,7 +179,6 @@ Device.prototype.setInputs = function(camera, slides) {
 /**
  * Sets device's presets.
  *
- * @method setPresets
  * @param {Object} [presets] The list of presets referenced by ids
  */
 Device.prototype.setPresets = function(presets) {
@@ -189,8 +192,6 @@ Device.prototype.setPresets = function(presets) {
 
 /**
  * Disconnects the device which removes all volatile information.
- *
- * @method disconnect
  */
 Device.prototype.disconnect = function() {
   this.presets = null;
@@ -203,7 +204,6 @@ Device.prototype.disconnect = function() {
  *
  * Device schedule should not be in collision with group's schedules.
  *
- * @method isValidSchedule
  * @param {Object} schedule The schedule description object
  * @param {Object} [group] The group to test the schedule with
  * @return {Boolean} true if the schedule is not in collision with other schedules
@@ -230,7 +230,6 @@ Device.prototype.isValidSchedule = function(schedule, group) {
 /**
  * Checks if there are collisions between device's schedules and group's schedules.
  *
- * @method isGroupSchedulesCollision
  * @param {Object} group The group
  * @return {Boolean} true if there is at least one collision, false otherwise
  */

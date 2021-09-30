@@ -3,14 +3,11 @@
 (function(app) {
 
   /**
-   * @module ov.manage
-   */
-
-  /**
    * Defines a factory to manage communications with the server.
    *
    * @class ManageFactory
-   * @static
+   * @memberof module:ov.manage
+   * @inner
    */
   function ManageFactory($http, $q, entityService, SocketFactory, MANAGE_NAME) {
     var socketNamespace = '/manage/browser';
@@ -18,7 +15,8 @@
     /**
      * Gets all groups from server.
      *
-     * @method getGroups
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @return {Promise} A promise resolving with the list of groups
      */
     function getGroups() {
@@ -38,7 +36,8 @@
     /**
      * Gets all devices from server.
      *
-     * @method getDevices
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @return {Promise} A promise resolving with the list of devices categorized
      * by state (either "pending", "accepted" or "refused")
      */
@@ -59,7 +58,8 @@
     /**
      * Creates a new group.
      *
-     * @method createGroup
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @return {Promise} Promise resolving with the new created group
      */
     function createGroup() {
@@ -79,7 +79,8 @@
     /**
      * Adds a device to a group.
      *
-     * @method addDeviceToGroup
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {String} deviceId The id of the device to add to the group
      * @param {String} groupId The id of group
      * @return {Promise} Promise resolving when device has been added
@@ -105,7 +106,8 @@
     /**
      * Removes a device from its group.
      *
-     * @method removeDeviceFromGroup
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {String} id The id of the device to remove from its group
      * @return {Promise} Promise resolving when device has been removed from its group
      */
@@ -129,7 +131,8 @@
     /**
      * Updates the state of a device.
      *
-     * @method updateDeviceState
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {String} id The device id
      * @param {String} state The new device state
      * @return {Promise} Promise resolving when state has been changed
@@ -155,7 +158,8 @@
     /**
      * Asks server for devices' settings.
      *
-     * @method askForDevicesSettings
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {Array} ids The devices' ids
      * @return {Promise} Promise resolving when request to devices have been sent
      */
@@ -178,7 +182,8 @@
     /**
      * Updates a manageable's name.
      *
-     * @method updateName
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {String} id The manageable id
      * @param {String} name The manageable name
      * @param {String} type The manageable type
@@ -209,7 +214,8 @@
     /**
      * Adds a manageable's schedule.
      *
-     * @method addSchedule
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {String} id The manageable id
      * @param {Object} schedule The schedule to add
      * @param {String} type The manageable type
@@ -240,7 +246,8 @@
     /**
      * Removes a manageable's schedule.
      *
-     * @method removeSchedule
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {String} id The manageable id
      * @param {String} scheduleId The schedule id
      * @param {String} type The manageable type
@@ -271,7 +278,8 @@
     /**
      * Removes a manageable's historic.
      *
-     * @method removeHistoric
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {String} id The manageable id
      * @param {String} historicId The historic id
      * @param {String} type The manageable type
@@ -302,7 +310,8 @@
     /**
      * Removes the whole manageable's history.
      *
-     * @method removeHistory
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {String} id The manageable id
      * @param {String} type The manageable type
      * @return {Promise} Promise resolving when history has been removed
@@ -328,7 +337,8 @@
     /**
      * Starts a new record session on devices.
      *
-     * @method startRecord
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {Array} ids The list of devices' ids
      * @param {String} presetId The record session preset id
      * @param {String} [name] The record name
@@ -355,7 +365,8 @@
     /**
      * Stops a recording session on devices.
      *
-     * @method stopRecord
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {Array} ids The list of devices' ids
      * @return {Promise} Promise resolving when a stop request has been sent to devices
      */
@@ -378,7 +389,8 @@
     /**
      * Tags recording sessions on devices.
      *
-     * @method tagRecord
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {Array} ids The list of devices' ids
      * @return {Promise} Promise resolving when a tag request has been sent to devices
      */
@@ -401,7 +413,8 @@
     /**
      * Removes a manageable.
      *
-     * @method remove
+     * @memberof module:ov.manage~ManageFactory
+     * @instance
      * @param {String} id The manageable id
      * @param {String} type The manageable type
      * @return {Promise} Promise resolving when the manageable has been removed

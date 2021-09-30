@@ -4,14 +4,12 @@
 (function(app) {
 
   /**
-   * @module ov.manage
-   */
-
-  /**
    * Controls the view responsible of a list of manageables.
    *
    * @class ManageManageableController
-   * @static
+   * @memberof module:ov.manage
+   * @inner
+   * @ignore
    */
   function ManageableController(
     $q,
@@ -32,15 +30,16 @@
     /**
      * Indicates if a drag & drop is on the move.
      *
-     * @property currentlyDragging
-     * @type Boolean
+     * @memberof module:ov.manage~ManageManageableController
+     * @member {Boolean}
      */
     self.currentlyDragging = false;
 
     /**
      * Defines an ui-state for a manageable.
      *
-     * @method addUiState
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @private
      * @param {HTMLElement} target The target manageable
      * @param {String} uiState The ui-state to set for the manageable
@@ -59,7 +58,8 @@
     /**
      * Removes an ui-state for a manageable.
      *
-     * @method removeUiState
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @private
      * @param {HTMLElement} target The target manageable
      * @param {String} uiState The ui-state to remove for the manageable
@@ -76,7 +76,8 @@
     /**
      * Handles drag move event on manageables.
      *
-     * @method dragMoveListener
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @private
      * @param {Event} event The drag event
      */
@@ -99,7 +100,8 @@
     /**
      * Resets the manageable element to its initial position.
      *
-     * @method resetPosition
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @private
      * @param {HTMLElement} target the element to reset
      */
@@ -125,7 +127,8 @@
     /**
      * Sets position of the target element to the dropzone element.
      *
-     * @method mergePosition
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @private
      * @param {HTMLElement} target the dropzone element
      * @param {Object} relatedTarget target the dragged element to move
@@ -154,7 +157,8 @@
     /**
      * Sets items as draggable.
      *
-     * @method draggable
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @private
      */
     function draggable() {
@@ -199,7 +203,8 @@
     /**
      * Adds a device to a group.
      *
-     * @method addDeviceToGroup
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @private
      * @param {String} deviceId The id of the device to add to the group
      * @param {String} groupId The id of group
@@ -240,7 +245,8 @@
     /**
      * Sets drag drop zones.
      *
-     * @method dragDropDevice
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @private
      */
     function dragDropDevice() {
@@ -308,7 +314,8 @@
     /**
      * Toggles the detail panel corresponding to the given manageable.
      *
-     * @method toggleDetails
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @param {String} id The manageable id
      * @param {Boolean} isGroup true if the manageable is a group, false if it is a device
      * @private
@@ -350,7 +357,8 @@
     /**
      * Opens the detail view corresponding to the given group.
      *
-     * @method openGroup
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @param {String} id The group id
      * @private
      */
@@ -364,7 +372,8 @@
     /**
      * Handles clicks and double clicks on manageable items to toggle details or open groups.
      *
-     * @method handleManageableClick
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @param {Event} The click event
      */
     self.handleManageableClick = function(event) {
@@ -396,7 +405,8 @@
     /**
      * Adds pending/refused device to the accepted list of devices.
      *
-     * @method addToAcceptedDevices
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @param {Object} device The device to accept
      * @param {String} device.id The device's id
      */
@@ -413,7 +423,8 @@
     /**
      * Adds the new device to the refused list of devices.
      *
-     * @method addToRefusedDevices
+     * @memberof module:ov.manage~ManageManageableController
+     * @instance
      * @param {Object} device The device object
      * @param {String} device.id The device's id
      */

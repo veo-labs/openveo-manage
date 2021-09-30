@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @module controllers
+ * @module manage/controllers/BrowserSocketController
  */
 
 var util = require('util');
@@ -19,22 +19,28 @@ var AdvancedEvent = openVeoApi.emitters.AdvancedEvent;
  * @extends SocketController
  * @constructor
  * @param {SocketNamespace} namespace The browser's namespace
+ * @see {@link https://github.com/veo-labs/openveo-api|OpenVeo API documentation} for more information about SocketNamespace
  */
 function BrowserSocketController(namespace) {
   BrowserSocketController.super_.call(this, namespace);
 
-  Object.defineProperties(this, {
+  Object.defineProperties(this,
 
-    /**
-     * The browsers' pilot.
-     *
-     * @property pilot
-     * @type BrowserPilot
-     * @final
-     */
-    pilot: {value: BrowserPilot.get(this.emitter, this.namespace)}
+    /** @lends module:manage/controllers/BrowserSocketController~BrowserSocketController */
+    {
 
-  });
+      /**
+       * The browsers' pilot.
+       *
+       * @type {module:manage/BrowserPilot~BrowserPilot}
+       * @instance
+       * @readonly
+       */
+      pilot: {value: BrowserPilot.get(this.emitter, this.namespace)}
+
+    }
+
+  );
 }
 
 module.exports = BrowserSocketController;
@@ -43,7 +49,6 @@ util.inherits(BrowserSocketController, SocketController);
 /**
  * Handles message informing about a browser requesting a device's name update.
  *
- * @method updateNameAction
  * @param {Object} data Message's datas
  * @param {String} data.id The manageable id
  * @param {String} data.name The new manageable's name
@@ -76,7 +81,6 @@ BrowserSocketController.prototype.updateNameAction = function(data, socket, call
 /**
  * Handles message informing about a browser requesting a manageable's to be removed.
  *
- * @method removeAction
  * @param {Object} data Message's datas
  * @param {String} data.id The manageable id
  * @param {String} data.type The manageable's type
@@ -105,7 +109,6 @@ BrowserSocketController.prototype.removeAction = function(data, socket, callback
 /**
  * Handles message informing about a browser requesting a manageable's historic to be removed.
  *
- * @method removeHistoricAction
  * @param {Object} data Message's datas
  * @param {String} data.id The manageable id
  * @param {String} data.historicId The historic id
@@ -138,15 +141,14 @@ BrowserSocketController.prototype.removeHistoricAction = function(data, socket, 
 /**
  * Handles message informing about a browser requesting a schedule to be added to a manageable.
  *
- * @method addScheduleAction
  * @param {Object} data Message's datas
  * @param {String} data.id The manageable id
  * @param {Object} data.schedule The schedule
  * @param {String} data.schedule.name The name of the record
- * @param {Date|String} data.schedule.beginDate The begin date, can be either a date or a date literal
+ * @param {(Date|String)} data.schedule.beginDate The begin date, can be either a date or a date literal
  * @param {Number} data.schedule.duration The duration of the record (in ms)
  * @param {String} data.schedule.preset The id of the record
- * @param {Date|String} [data.schedule.endDate] The end date, can be either a date or a date literal
+ * @param {(Date|String)} [data.schedule.endDate] The end date, can be either a date or a date literal
  * @param {Boolean} [data.schedule.recurrent=false] true to execute the schedule every day
  * @param {Object} data.type The manageable's type
  * @param {Socket} socket The opened socket
@@ -196,7 +198,6 @@ BrowserSocketController.prototype.addScheduleAction = function(data, socket, cal
 /**
  * Handles message informing about a browser requesting a schedule to be removed from a manageable.
  *
- * @method removeScheduleAction
  * @param {Object} data Message's datas
  * @param {String} data.id The manageable id
  * @param {String} data.scheduleId The schedule id
@@ -229,7 +230,6 @@ BrowserSocketController.prototype.removeScheduleAction = function(data, socket, 
 /**
  * Handles message informing about a browser requesting manageable's history to be purged.
  *
- * @method removeHistoryAction
  * @param {Object} data Message's datas
  * @param {String} data.id The manageable id
  * @param {String} data.type The manageable's type
@@ -258,7 +258,6 @@ BrowserSocketController.prototype.removeHistoryAction = function(data, socket, c
 /**
  * Handles message informing about a browser requesting the list of devices.
  *
- * @method getDevicesAction
  * @param {Null} data Nothing
  * @param {Socket} socket The opened socket
  * @param {Function} callback The callback to respond to the browser
@@ -271,7 +270,6 @@ BrowserSocketController.prototype.getDevicesAction = function(data, socket, call
 /**
  * Handles message informing about a browser requesting one or several devices' settings.
  *
- * @method getDeviceSettingsAction
  * @param {Object} data Message's datas
  * @param {Array} data.ids The list of devices ids which need settings information
  * @param {Socket} socket The opened socket
@@ -298,7 +296,6 @@ BrowserSocketController.prototype.getDeviceSettingsAction = function(data, socke
 /**
  * Handles message informing about a browser requesting a device state update.
  *
- * @method updateDeviceStateAction
  * @param {Object} data Message's datas
  * @param {String} data.id The device id
  * @param {String} data.state The new device state
@@ -329,7 +326,6 @@ BrowserSocketController.prototype.updateDeviceStateAction = function(data, socke
 /**
  * Handles message informing about a browser requesting one or several devices to start a new recording session.
  *
- * @method startDeviceSessionAction
  * @param {Object} data Message's datas
  * @param {Array} data.ids The list of devices ids on which a new recording session must be started
  * @param {String} [data.presetId] The id of the preset for the recording session
@@ -362,7 +358,6 @@ BrowserSocketController.prototype.startDeviceSessionAction = function(data, sock
 /**
  * Handles message informing about a browser requesting one or several devices to stop a recording session.
  *
- * @method stopDeviceSessionAction
  * @param {Object} data Message's datas
  * @param {Array} data.ids The list of devices ids on which a new recording session must be stopped
  * @param {Socket} socket The opened socket
@@ -389,7 +384,6 @@ BrowserSocketController.prototype.stopDeviceSessionAction = function(data, socke
 /**
  * Handles message informing about a browser requesting one or several devices to tag their current recording sessions.
  *
- * @method indexDeviceSessionAction
  * @param {Object} data Message's datas
  * @param {Array} data.ids The list of devices ids on which a current recording session must be tagged
  * @param {Socket} socket The opened socket
@@ -416,7 +410,6 @@ BrowserSocketController.prototype.indexDeviceSessionAction = function(data, sock
 /**
  * Handles message informing about a browser requesting the list of groups.
  *
- * @method getGroupsAction
  * @param {Null} data Nothing
  * @param {Socket} socket The opened socket
  * @param {Function} callback The callback to respond to the browser
@@ -429,7 +422,6 @@ BrowserSocketController.prototype.getGroupsAction = function(data, socket, callb
 /**
  * Handles message informing about a browser requesting the creation of a new group.
  *
- * @method createGroupAction
  * @param {Null} data Nothing
  * @param {Socket} socket The opened socket
  * @param {Function} callback The callback to respond to the browser
@@ -442,7 +434,6 @@ BrowserSocketController.prototype.createGroupAction = function(data, socket, cal
 /**
  * Handles message informing about a browser requesting a device to be added to a group.
  *
- * @method addDeviceToGroupAction
  * @param {Object} data Message's datas
  * @param {String} data.deviceId The device id
  * @param {String} data.groupId The group id
@@ -473,7 +464,6 @@ BrowserSocketController.prototype.addDeviceToGroupAction = function(data, socket
 /**
  * Handles message informing about a browser requesting a device to be removed from its group.
  *
- * @method removeDeviceFromGroupAction
  * @param {Object} data Message's datas
  * @param {String} data.id The id of the device
  * @param {Socket} socket The opened socket
@@ -502,7 +492,6 @@ BrowserSocketController.prototype.removeDeviceFromGroupAction = function(data, s
  *
  * Socket's connection has been established with a browser.
  *
- * @method connectAction
  * @param {Socket} socket The socket
  */
 BrowserSocketController.prototype.connectAction = function(socket) {
@@ -515,7 +504,6 @@ BrowserSocketController.prototype.connectAction = function(socket) {
  *
  * Connection with a browser has been lost.
  *
- * @method disconnectAction
  * @param {Socket} socket The socket
  */
 BrowserSocketController.prototype.disconnectAction = function(socket) {
@@ -528,7 +516,6 @@ BrowserSocketController.prototype.disconnectAction = function(socket) {
  *
  * An error occurred on socket's communication.
  *
- * @method errorAction
  * @param {Error} error The error
  * @param {Socket} socket The socket
  */

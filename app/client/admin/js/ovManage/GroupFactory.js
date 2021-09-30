@@ -3,14 +3,11 @@
 (function(app) {
 
   /**
-   * @module ov.manage
-   */
-
-  /**
    * Defines a factory to manage groups.
    *
    * @class ManageGroupFactory
-   * @static
+   * @memberof module:ov.manage
+   * @inner
    */
   function GroupFactory(
     $q,
@@ -38,9 +35,10 @@
      * It implies that the list of groups has been retrieved
      * from server using GroupFactory.getGroups().
      *
-     * @method getGroup
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} id The group id
-     * @return {Object|Null} The group or null if not found
+     * @return {(Object|Null)} The group or null if not found
      */
     function getGroup(id) {
       for (var i = 0; i < groups.length; i++)
@@ -52,7 +50,8 @@
     /**
      * Updates status of a group regarding the status of its devices.
      *
-     * @method updateStatus
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} groupId The group id
      */
     function updateStatus(groupId) {
@@ -108,7 +107,8 @@
     /**
      * Adds a group's historic.
      *
-     * @method addHistoric
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} id The group id
      * @param {Object} historic The historic
      */
@@ -120,7 +120,8 @@
     /**
      * Adds a group's schedule.
      *
-     * @method addSchedule
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} id The group id
      * @param {Object} schedule The schedule
      */
@@ -132,7 +133,8 @@
     /**
      * Removes a group's historic.
      *
-     * @method removeHistoric
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} id The group id
      * @param {String} historicId The historic id
      */
@@ -144,7 +146,8 @@
     /**
      * Removes a device's history.
      *
-     * @method removeHistory
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} id The device id
      */
     function removeHistory(id) {
@@ -155,7 +158,8 @@
     /**
      * Removes a group's schedule.
      *
-     * @method removeSchedule
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} groupId The group id
      * @param {String} scheduleId The schedule id
      */
@@ -167,10 +171,11 @@
     /**
      * Gets a device from a group.
      *
-     * @method getDeviceFromGroup
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} deviceId The id of the device
      * @param {String} groupId The id of the group
-     * @return {Object|Null} The device or null if not found
+     * @return {(Object|Null)} The device or null if not found
      */
     function getDeviceFromGroup(deviceId, groupId) {
       var group = getGroup(groupId);
@@ -186,7 +191,8 @@
     /**
      * Adds a device to a group.
      *
-     * @method addDeviceToGroup
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {Object} device The device to add to the group
      * @param {String} groupId The id of the group
      */
@@ -211,7 +217,8 @@
     /**
      * Adds a new group.
      *
-     * @method addGroup
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {Object} group The new group description object
      * @param {String} group.id Group's id
      * @param {Array} [group.history] Group's history
@@ -237,7 +244,8 @@
     /**
      * Gets all groups from server.
      *
-     * @method getGroups
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @return {Promise} A promise resolving with the list of groups
      */
     function getGroups() {
@@ -266,7 +274,8 @@
      *
      * It uses the group property of each device.
      *
-     * @method addDevices
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {Array} devices The list of devices
      */
     function addDevices(devices) {
@@ -295,9 +304,10 @@
     /**
      * Sets a property on all groups.
      *
-     * @method setGroupsProperty
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} property The name of the property to set
-     * @param {Mixed} value The value for the property
+     * @param {*} value The value for the property
      */
     function setGroupsProperty(property, value) {
       groups.forEach(function(group) {
@@ -308,7 +318,8 @@
     /**
      * Removes a group.
      *
-     * @method removeGroup
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} id The group id
      */
     function removeGroup(id) {
@@ -337,10 +348,11 @@
     /**
      * Updates a group property.
      *
-     * @method setProperty
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} id The group id
      * @param {String} property The property to modify
-     * @param {Mixed} value The property value
+     * @param {*} value The property value
      */
     function setProperty(id, property, value) {
       var group = getGroup(id);
@@ -352,7 +364,8 @@
     /**
      * Removes a device from a group.
      *
-     * @method removeDeviceFromGroup
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {Object} device The device to remove
      * @param {String} device.id The device's id
      * @param {String} device.group The device's group
@@ -384,7 +397,8 @@
      * If one of the devices has invalid inputs regarding the preset, preset
      * is considered invalid.
      *
-     * @method validatePreset
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} groupId The group id
      * @param {String} presetId The preset id
      */
@@ -417,10 +431,11 @@
      *
      * Group's schedule should not be in collision with devices' schedule inside the group.
      *
-     * @method isValidSchedule
+     * @memberof module:ov.manage~ManageGroupFactory
+     * @instance
      * @param {String} id The group id
      * @param {Object} schedule The schedule to validate
-     * @return {Error|Null} The error if validation failed, null otherwise
+     * @return {(Error|Null)} The error if validation failed, null otherwise
      */
     function isValidSchedule(id, schedule) {
       var group = getGroup(id);

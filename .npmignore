@@ -42,6 +42,8 @@ ehthumbs.db
 /docs
 /site
 /mkdocs.yml
+/DOC-*.md
+/jsdoc*.js
 
 # Grunt files
 /Gruntfile.js

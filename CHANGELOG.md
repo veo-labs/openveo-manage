@@ -5,6 +5,10 @@
 - No longer tested on NodeJS &lt; 16.3.0 and NPM &lt; 7.15.1
 - Remove continuous integration with Travis
 
+## NEW FEATURES
+
+- Improve code documentation by replacing Yuidoc by JSDoc
+
 ## DEPENDENCIES
 
 - **chai** has been upgraded from 4.2.0 to **4.3.4**
@@ -14,6 +18,7 @@
 - **grunt-contrib-concat** has been removed
 - **grunt-contrib-uglify** has been removed
 - **grunt-contrib-watch** has been removed
+- **grunt-contrib-yuidoc** has been removed
 - **grunt-eslint** has been removed
 - **grunt-gh-pages** has been removed
 - **grunt-mocha-test** has been removed
@@ -24,6 +29,7 @@
 - **perfect-scrollbar** has been upgraded from 1.5.0 to **1.5.2**
 - **shortid** has been replaced by nanoid
 - **sinon** has been upgraded from 9.0.1 to **11.1.2**
+- **yuidoc-theme-blue** has been removed
 
 # 5.0.1 / 2020-12-11
 

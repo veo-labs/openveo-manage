@@ -3,14 +3,11 @@
 (function(app) {
 
   /**
-   * @module ov.manage
-   */
-
-  /**
    * Defines a factory to manage manageables.
    *
    * @class ManageManageableFactory
-   * @static
+   * @memberof module:ov.manage
+   * @inner
    */
   function ManageableFactory($filter) {
 
@@ -21,6 +18,9 @@
      * If schedule is not recurrent the last occurence will start on schedule begin day.
      * If schedule is weekly the last occurence will start on last same day it starts before schedule end day.
      *
+     * @memberof module:ov.manage~ManageManageableFactory
+     * @instance
+     * @private
      * @param {Object} schedule The schedule to get last occurence from
      * @param {Date|String} [schedule.beginDate] The schedule first occurence begin date
      * @param {Date|String} [schedule.endDate] The schedule expected end date if recurrent is specified
@@ -96,7 +96,8 @@
      * A schedule may start on a day and terminates another one or it may also start on a day and terminates the same
      * day one week later.
      *
-     * @method getScheduleOccupiedTimePerDay
+     * @memberof module:ov.manage~ManageManageableFactory
+     * @instance
      * @private
      * @param {Object} schedule Schedule object with:
      * @param {Date} schedule.beginDate The begin date of the schedule
@@ -231,7 +232,8 @@
     /**
      * Checks if a schedule is actually running.
      *
-     * @method isScheduleRunning
+     * @memberof module:ov.manage~ManageManageableFactory
+     * @instance
      * @param {Object} schedule The schedule description object
      * @param {Date} schedule.beginDate The begin date of the schedule
      * @param {Number} schedule.duration The schedule duration (in ms)
@@ -269,38 +271,45 @@
     /**
      * Checks if two schedules are in conflict.
      *
-     * Conflict examples without recurrence:
+     * @example
+     * // Conflict examples without recurrence:
      *
-     * Example 1:
+     * // Example 1
      * [------------]
      * [------------]
      *
-     * Example 2:
+     * @example
+     * // Example 2
      * [------------]
      *              [------------]
      *
-     * Example 3:
+     * @example
+     * // Example 3
      *              [------------]
      * [------------]
      *
-     * Example 4:
+     * @example
+     * // Example 4
      * [------------]
      *   [------------]
      *
-     * Example 5:
+     * @example
+     * // Example 5
      *   [------------]
      * [------------]
      *
-     * Example 6:
+     * @example
+     * // Example 6
      * [------------]
      *   [--------]
      *
-     * Example 7:
+     * @example
+     * // Example 7
      *   [--------]
      * [------------]
      *
      *
-     * Additional conflict examples with daily recurrence:
+     * // Additional conflict examples with daily recurrence:
      *
      * ############################################## EXAMPLE 1 ######################################################
      * | ------------ SUNDAY ------------- || ------------ MONDAY ------------- || ----------- THUESDAY ------------ |
@@ -373,7 +382,7 @@
      *                               [---------- DAILY ----------]        [---------- DAILY ----------]        [------
      *                                                  [-----]
      *
-     * Additional conflict examples with weekly recurrence:
+     * // Additional conflict examples with weekly recurrence:
      *
      * ############################################## EXAMPLE 1 ######################################################
      * | ------------ SUNDAY ------------- || ------------- [..] -------------- || ------------ SUNDAY ------------- |
@@ -436,7 +445,7 @@
      *             [WEEKL]                              [WEEKL]
      *
      *
-     * Additional conflict examples with both daily and weekly recurrences:
+     * // Additional conflict examples with both daily and weekly recurrences:
      *
      * ############################################## EXAMPLE 1 ######################################################
      * | ------------ SUNDAY ------------- || ------------- [..] -------------- || ------------ SUNDAY ------------- |
@@ -488,7 +497,8 @@
      *                                                     [DAILY]                              [DAILY]
      *          [---WEEKL---]                                                                [---WEEKL---]
      *
-     * @method checkSchedulesConflict
+     * @memberof module:ov.manage~ManageManageableFactory
+     * @instance
      * @private
      * @param {Object} schedule1 Schedule object with:
      * @param {Date} schedule1.beginDate The begin date of the schedule
@@ -609,7 +619,8 @@
     /**
      * Adds a manageable historic.
      *
-     * @method addHistoric
+     * @memberof module:ov.manage~ManageManageableFactory
+     * @instance
      * @param {Object} manageable The manageable
      * @param {Object} historic The historic to add
      */
@@ -636,7 +647,8 @@
     /**
      * Removes a manageable historic.
      *
-     * @method removeHistoric
+     * @memberof module:ov.manage~ManageManageableFactory
+     * @instance
      * @param {Object} manageable The manageable
      * @param {String} historicId The historic id
      */
@@ -658,7 +670,8 @@
     /**
      * Removes a manageable's history.
      *
-     * @method removeHistory
+     * @memberof module:ov.manage~ManageManageableFactory
+     * @instance
      * @param {Object} manageable The manageable
      */
     function removeHistory(manageable) {
@@ -669,7 +682,6 @@
     /**
      * Adds a manageable schedule.
      *
-     * @method addSchedule
      * @param {Object} manageable The manageable
      * @param {Object} schedule The schedule
      */
@@ -693,7 +705,8 @@
     /**
      * Removes a manageable's schedule.
      *
-     * @method removeSchedule
+     * @memberof module:ov.manage~ManageManageableFactory
+     * @instance
      * @param {Object} manageable The manageable
      * @param {String} scheduleId The schedule id
      */
@@ -715,10 +728,11 @@
     /**
      * Gets a manageable's preset.
      *
-     * @method getPreset
+     * @memberof module:ov.manage~ManageManageableFactory
+     * @instance
      * @param {Object} manageable The manageable
      * @param {String} presetId The manageable's preset to look for
-     * @return {Object|Null} The preset's configuration or null if not found
+     * @return {(Object|Null)} The preset's configuration or null if not found
      */
     function getPreset(manageable, presetId) {
       if (manageable && presetId && manageable.presets) {
@@ -734,10 +748,11 @@
     /**
      * Checks if a schedule is not in collision with other schedules.
      *
-     * @method isValidSchedule
+     * @memberof module:ov.manage~ManageManageableFactory
+     * @instance
      * @param {Object} schedule The schedule to validate
      * @param {Array} schedules The list of schedules
-     * @return {Error|Null} The error if validation failed, null otherwise
+     * @return {(Error|Null)} The error if validation failed, null otherwise
      */
     function isValidSchedule(schedule, schedules) {
 

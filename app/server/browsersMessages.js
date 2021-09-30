@@ -1,14 +1,13 @@
 'use strict';
 
 /**
- * @module manage
+ * @module manage/browsersMessages
  */
 
 /**
  * Defines the list of socket messages sent by browsers.
  *
- * @class BROWSERS_MESSAGES
- * @static
+ * @namespace
  */
 
 var BROWSERS_MESSAGES = {
@@ -16,190 +15,190 @@ var BROWSERS_MESSAGES = {
   /**
    * A socket connection has been established with the browser.
    *
-   * @property CONNECTED
+   * @const
    * @type String
-   * @default 'connection'
-   * @final
+   * @default
+   * @inner
    */
   CONNECTED: 'connection',
 
   /**
    * Browser asks for the modification of a manageable's name.
    *
-   * @property UPDATE_NAME
+   * @const
    * @type String
-   * @default 'updateName'
-   * @final
+   * @default
+   * @inner
    */
   UPDATE_NAME: 'updateName',
 
   /**
    * Browser asks to remove a manageable.
    *
-   * @property REMOVE
+   * @const
    * @type String
-   * @default 'remove'
-   * @final
+   * @default
+   * @inner
    */
   REMOVE: 'remove',
 
   /**
    * Browser asks to remove a manageable's historic.
    *
-   * @property REMOVE_HISTORIC
+   * @const
    * @type String
-   * @default 'removeHistoric'
-   * @final
+   * @default
+   * @inner
    */
   REMOVE_HISTORIC: 'removeHistoric',
 
   /**
    * Browser asks to add a schedule to a manageable.
    *
-   * @property ADD_SCHEDULE
+   * @const
    * @type String
-   * @default 'addSchedule'
-   * @final
+   * @default
+   * @inner
    */
   ADD_SCHEDULE: 'addSchedule',
 
   /**
    * Browser asks to remove a schedule from a manageable.
    *
-   * @property REMOVE_SCHEDULE
+   * @const
    * @type String
-   * @default 'removeSchedule'
-   * @final
+   * @default
+   * @inner
    */
   REMOVE_SCHEDULE: 'removeSchedule',
 
   /**
    * Browser asks to remove the whole history from a manageable.
    *
-   * @property REMOVE_HISTORY
+   * @const
    * @type String
-   * @default 'removeHistory'
-   * @final
+   * @default
+   * @inner
    */
   REMOVE_HISTORY: 'removeHistory',
 
   /**
    * Browser asks the list of devices.
    *
-   * @property GET_DEVICES
+   * @const
    * @type String
-   * @default 'devices'
-   * @final
+   * @default
+   * @inner
    */
   GET_DEVICES: 'devices',
 
   /**
    * Browser asks devices' settings.
    *
-   * @property GET_DEVICE_SETTINGS
+   * @const
    * @type String
-   * @default 'devices.settings'
-   * @final
+   * @default
+   * @inner
    */
   GET_DEVICE_SETTINGS: 'device.settings',
 
   /**
    * Browser asks a device's state.
    *
-   * @property UPDATE_DEVICE_STATE
+   * @const
    * @type String
-   * @default 'devices.updateState'
-   * @final
+   * @default
+   * @inner
    */
   UPDATE_DEVICE_STATE: 'device.updateState',
 
   /**
    * Browser asks devices' to start a recording session.
    *
-   * @property START_DEVICE_SESSION
+   * @const
    * @type String
-   * @default 'devices.startSession'
-   * @final
+   * @default
+   * @inner
    */
   START_DEVICE_SESSION: 'device.startSession',
 
   /**
    * Browser asks devices' to stop a recording session.
    *
-   * @property STOP_DEVICE_SESSION
+   * @const
    * @type String
-   * @default 'devices.stopSession'
-   * @final
+   * @default
+   * @inner
    */
   STOP_DEVICE_SESSION: 'device.stopSession',
 
   /**
    * Browser asks devices' to index a recording session.
    *
-   * @property INDEX_DEVICE_SESSION
+   * @const
    * @type String
-   * @default 'devices.indexSession'
-   * @final
+   * @default
+   * @inner
    */
   INDEX_DEVICE_SESSION: 'device.indexSession',
 
   /**
    * Browser asks the list of groups.
    *
-   * @property GET_GROUPS
+   * @const
    * @type String
-   * @default 'groups'
-   * @final
+   * @default
+   * @inner
    */
   GET_GROUPS: 'groups',
 
   /**
    * Browser asks to create a new group.
    *
-   * @property CREATE_GROUP
+   * @const
    * @type String
-   * @default 'group.create'
-   * @final
+   * @default
+   * @inner
    */
   CREATE_GROUP: 'group.create',
 
   /**
    * Browser asks to add a device to a group.
    *
-   * @property ADD_DEVICE_TO_GROUP
+   * @const
    * @type String
-   * @default 'group.addDevice'
-   * @final
+   * @default
+   * @inner
    */
   ADD_DEVICE_TO_GROUP: 'group.addDevice',
 
   /**
    * Browser asks to remove a device from a group.
    *
-   * @property REMOVE_DEVICE_FROM_GROUP
+   * @const
    * @type String
-   * @default 'group.removeDevice'
-   * @final
+   * @default
+   * @inner
    */
   REMOVE_DEVICE_FROM_GROUP: 'group.removeDevice',
 
   /**
    * Socket connection with a browser has been lost.
    *
-   * @property DISCONNECTED
+   * @const
    * @type String
-   * @default 'disconnect'
-   * @final
+   * @default
+   * @inner
    */
   DISCONNECTED: 'disconnect',
 
   /**
    * Socket connection with a browser encountered an error.
    *
-   * @property ERROR
+   * @const
    * @type String
-   * @default 'error'
-   * @final
+   * @default
+   * @inner
    */
   ERROR: 'error'
 

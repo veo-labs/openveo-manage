@@ -43,12 +43,11 @@ module.exports = function(grunt) {
   grunt.initConfig(config);
   grunt.config.merge(loadConfig('./tasks'));
 
-  grunt.loadNpmTasks('grunt-contrib-yuidoc');
   grunt.loadNpmTasks('grunt-mkdocs');
 
   grunt.registerMultiTask('rename', openVeoApi.grunt.renameTask(grunt));
 
   // Generate documentation
-  grunt.registerTask('doc', ['mkdocs', 'yuidoc', 'rename:doc']);
+  grunt.registerTask('doc', ['mkdocs', 'rename:doc']);
 
 };

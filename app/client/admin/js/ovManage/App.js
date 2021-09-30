@@ -1,16 +1,15 @@
 'use strict';
 
+/**
+ * Defines components responsible of the manage plugin back end pages.
+ *
+ * It creates two back end pages. One to display the list of devices and groups, the other
+ * one to display the list of devices inside a group.
+ *
+ * @module ov.manage
+ */
 (function(angular) {
 
-  /**
-   * Defines components responsible of the manage plugin back end pages.
-   *
-   * It creates two back end pages. One to display the list of devices and groups, the other
-   * one to display the list of devices inside a group.
-   *
-   * @module ov.manage
-   * @main ov.manage
-   */
   var app = angular.module('ov.manage', [
     'ov.i18n',
     'ov.entity',

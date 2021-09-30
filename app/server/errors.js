@@ -1,14 +1,13 @@
 'use strict';
 
 /**
- * @module manage
+ * @module manage/errors
  */
 
 /**
  * The list of server errors.
  *
- * @class ERRORS
- * @static
+ * @namespace
  */
 
 var ERRORS = {
@@ -18,10 +17,10 @@ var ERRORS = {
   /**
    * Unidentified error.
    *
-   * @property UNKNOWN_ERROR
-   * @type Object
-   * @final
-   * @default 0
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   UNKNOWN_ERROR: {
     code: 0x000,
@@ -31,10 +30,10 @@ var ERRORS = {
   /**
    * Removing a manageable failed.
    *
-   * @property REMOVE_ERROR
-   * @type Object
-   * @final
-   * @default 1
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_ERROR: {
     code: 0x001,
@@ -44,10 +43,10 @@ var ERRORS = {
   /**
    * Removing a group failed, group was not found.
    *
-   * @property REMOVE_GROUP_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 2
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_SCHEDULE_ERROR: {
     code: 0x002,
@@ -57,10 +56,10 @@ var ERRORS = {
   /**
    * Updating device's name failed.
    *
-   * @property UPDATE_DEVICE_NAME_ERROR
-   * @type Object
-   * @final
-   * @default 3
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   UPDATE_DEVICE_NAME_ERROR: {
     code: 0x003,
@@ -70,10 +69,10 @@ var ERRORS = {
   /**
    * Updating group's name failed.
    *
-   * @property UPDATE_GROUP_NAME_ERROR
-   * @type Object
-   * @final
-   * @default 4
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   UPDATE_GROUP_NAME_ERROR: {
     code: 0x004,
@@ -83,10 +82,10 @@ var ERRORS = {
   /**
    * Updating device's name failed, device was not found.
    *
-   * @property UPDATE_DEVICE_NAME_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 5
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   UPDATE_DEVICE_NAME_NOT_FOUND_ERROR: {
     code: 0x005,
@@ -96,10 +95,10 @@ var ERRORS = {
   /**
    * Updating group's name failed, group was not found.
    *
-   * @property UPDATE_GROUP_NAME_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 6
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   UPDATE_GROUP_NAME_NOT_FOUND_ERROR: {
     code: 0x006,
@@ -109,10 +108,10 @@ var ERRORS = {
   /**
    * Starting a device's record failed.
    *
-   * @property START_DEVICE_SESSION_ERROR
-   * @type Object
-   * @final
-   * @default 7
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   START_DEVICE_SESSION_ERROR: {
     code: 0x007,
@@ -122,10 +121,10 @@ var ERRORS = {
   /**
    * Starting a device's record failed, device was not found.
    *
-   * @property START_DEVICE_SESSION_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 8
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   START_DEVICE_SESSION_NOT_FOUND_ERROR: {
     code: 0x008,
@@ -135,10 +134,10 @@ var ERRORS = {
   /**
    * Stopping a device's record failed.
    *
-   * @property STOP_DEVICE_SESSION_ERROR
-   * @type Object
-   * @final
-   * @default 9
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   STOP_DEVICE_SESSION_ERROR: {
     code: 0x009,
@@ -148,10 +147,10 @@ var ERRORS = {
   /**
    * Stopping a device's record failed, device was not found.
    *
-   * @property STOP_DEVICE_SESSION_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 10
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   STOP_DEVICE_SESSION_NOT_FOUND_ERROR: {
     code: 0x00a,
@@ -161,10 +160,10 @@ var ERRORS = {
   /**
    * Indexing a device's record failed.
    *
-   * @property INDEX_DEVICE_SESSION_ERROR
-   * @type Object
-   * @final
-   * @default 11
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   INDEX_DEVICE_SESSION_ERROR: {
     code: 0x00b,
@@ -174,10 +173,10 @@ var ERRORS = {
   /**
    * Indexing a device's record failed, device was not found.
    *
-   * @property INDEX_DEVICE_SESSION_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 12
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   INDEX_DEVICE_SESSION_NOT_FOUND_ERROR: {
     code: 0x00c,
@@ -187,10 +186,10 @@ var ERRORS = {
   /**
    * Updating a device's state failed.
    *
-   * @property UPDATE_DEVICE_STATE_ERROR
-   * @type Object
-   * @final
-   * @default 13
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   UPDATE_DEVICE_STATE_ERROR: {
     code: 0x00d,
@@ -200,10 +199,10 @@ var ERRORS = {
   /**
    * Updating a device's state failed, device was not found.
    *
-   * @property UPDATE_DEVICE_STATE_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 14
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   UPDATE_DEVICE_STATE_NOT_FOUND_ERROR: {
     code: 0x00e,
@@ -213,10 +212,10 @@ var ERRORS = {
   /**
    * Removing an historic from a manageable's history failed.
    *
-   * @property REMOVE_HISTORIC_ERROR
-   * @type Object
-   * @final
-   * @default 15
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_HISTORIC_ERROR: {
     code: 0x00f,
@@ -226,10 +225,10 @@ var ERRORS = {
   /**
    * Removing an historic from a manageable's history failed, manageable was not found.
    *
-   * @property REMOVE_HISTORIC_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 16
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_HISTORIC_NOT_FOUND_ERROR: {
     code: 0x010,
@@ -239,10 +238,10 @@ var ERRORS = {
   /**
    * Removing a manageable's history failed.
    *
-   * @property REMOVE_HISTORY_ERROR
-   * @type Object
-   * @final
-   * @default 17
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_HISTORY_ERROR: {
     code: 0x011,
@@ -252,10 +251,10 @@ var ERRORS = {
   /**
    * Removing a manageable's history failed, manageable was not found.
    *
-   * @property REMOVE_HISTORY_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 18
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_HISTORY_NOT_FOUND_ERROR: {
     code: 0x012,
@@ -265,10 +264,10 @@ var ERRORS = {
   /**
    * Adding a schedule to a manageable failed, schedule is not valid.
    *
-   * @property ADD_SCHEDULE_INVALID_ERROR
-   * @type Object
-   * @final
-   * @default 19
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   ADD_SCHEDULE_INVALID_ERROR: {
     code: 0x013,
@@ -278,10 +277,10 @@ var ERRORS = {
   /**
    * Adding a schedule to a manageable failed, manageable was not found.
    *
-   * @property ADD_SCHEDULE_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 20
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   ADD_SCHEDULE_NOT_FOUND_ERROR: {
     code: 0x014,
@@ -291,10 +290,10 @@ var ERRORS = {
   /**
    * Adding a schedule to a manageable failed.
    *
-   * @property ADD_SCHEDULE_ERROR
-   * @type Object
-   * @final
-   * @default 21
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   ADD_SCHEDULE_ERROR: {
     code: 0x015,
@@ -304,10 +303,10 @@ var ERRORS = {
   /**
    * Removing a schedule from a manageable failed, schedule is actually running.
    *
-   * @property REMOVE_SCHEDULE_RUNNING_ERROR
-   * @type Object
-   * @final
-   * @default 22
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_SCHEDULE_RUNNING_ERROR: {
     code: 0x016,
@@ -317,10 +316,10 @@ var ERRORS = {
   /**
    * Removing a schedule from a manageable failed, manageable or schedule was not found.
    *
-   * @property REMOVE_SCHEDULE_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 23
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_SCHEDULE_NOT_FOUND_ERROR: {
     code: 0x017,
@@ -330,10 +329,10 @@ var ERRORS = {
   /**
    * Creating a group failed.
    *
-   * @property CREATE_GROUP_ERROR
-   * @type Object
-   * @final
-   * @default 24
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   CREATE_GROUP_ERROR: {
     code: 0x018,
@@ -343,10 +342,10 @@ var ERRORS = {
   /**
    * Adding a device to a group failed.
    *
-   * @property ADD_DEVICE_TO_GROUP_ERROR
-   * @type Object
-   * @final
-   * @default 25
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   ADD_DEVICE_TO_GROUP_ERROR: {
     code: 0x019,
@@ -356,10 +355,10 @@ var ERRORS = {
   /**
    * Adding a device to a group failed, device or group was not found.
    *
-   * @property ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 26
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   ADD_DEVICE_TO_GROUP_NOT_FOUND_ERROR: {
     code: 0x01a,
@@ -369,10 +368,10 @@ var ERRORS = {
   /**
    * Adding a device to a group failed, schedules of the device are in conflict with schedules of the group.
    *
-   * @property ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR
-   * @type Object
-   * @final
-   * @default 27
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   ADD_DEVICE_TO_GROUP_SCHEDULES_COLLISION_ERROR: {
     code: 0x01b,
@@ -382,10 +381,10 @@ var ERRORS = {
   /**
    * Removing a manageable failed, manageable was not found.
    *
-   * @property REMOVE_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 28
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_NOT_FOUND_ERROR: {
     code: 0x01c,
@@ -395,10 +394,10 @@ var ERRORS = {
   /**
    * Removing a device from a group failed, device or group was not found.
    *
-   * @property REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR
-   * @type Object
-   * @final
-   * @default 29
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_DEVICE_FROM_GROUP_NOT_FOUND_ERROR: {
     code: 0x01d,
@@ -408,10 +407,10 @@ var ERRORS = {
   /**
    * Removing a device from a group failed.
    *
-   * @property REMOVE_DEVICE_FROM_GROUP_ERROR
-   * @type Object
-   * @final
-   * @default 30
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_DEVICE_FROM_GROUP_ERROR: {
     code: 0x01e,
@@ -423,10 +422,10 @@ var ERRORS = {
   /**
    * Updating manageable's name failed, wrong parameters.
    *
-   * @property UPDATE_NAME_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 256
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   UPDATE_NAME_WRONG_PARAMETERS: {
     code: 0x100,
@@ -436,10 +435,10 @@ var ERRORS = {
   /**
    * Removing a manageable failed, wrong parameters.
    *
-   * @property REMOVE_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 257
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_WRONG_PARAMETERS: {
     code: 0x101,
@@ -449,10 +448,10 @@ var ERRORS = {
   /**
    * Updating a device's state failed, wrong parameters.
    *
-   * @property UPDATE_DEVICE_STATE_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 258
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   UPDATE_DEVICE_STATE_WRONG_PARAMETERS: {
     code: 0x102,
@@ -462,10 +461,10 @@ var ERRORS = {
   /**
    * Removing an historic from a manageable's history failed, wrong parameters.
    *
-   * @property REMOVE_HISTORIC_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 259
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_HISTORIC_WRONG_PARAMETERS: {
     code: 0x103,
@@ -475,10 +474,10 @@ var ERRORS = {
   /**
    * Adding a schedule to a manageable failed, wrong parameters.
    *
-   * @property ADD_SCHEDULE_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 260
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   ADD_SCHEDULE_WRONG_PARAMETERS: {
     code: 0x104,
@@ -488,10 +487,10 @@ var ERRORS = {
   /**
    * Starting a device's record failed, wrong parameters.
    *
-   * @property START_DEVICE_SESSION_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 261
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   START_DEVICE_SESSION_WRONG_PARAMETERS: {
     code: 0x105,
@@ -501,10 +500,10 @@ var ERRORS = {
   /**
    * Stopping a device's record failed, wrong parameters.
    *
-   * @property STOP_DEVICE_SESSION_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 262
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   STOP_DEVICE_SESSION_WRONG_PARAMETERS: {
     code: 0x106,
@@ -514,10 +513,10 @@ var ERRORS = {
   /**
    * Indexing a device's record failed, wrong parameters.
    *
-   * @property INDEX_DEVICE_SESSION_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 263
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   INDEX_DEVICE_SESSION_WRONG_PARAMETERS: {
     code: 0x107,
@@ -527,10 +526,10 @@ var ERRORS = {
   /**
    * Removing a schedule from a manageable failed, wrong parameters.
    *
-   * @property REMOVE_SCHEDULE_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 264
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_SCHEDULE_WRONG_PARAMETERS: {
     code: 0x108,
@@ -540,10 +539,10 @@ var ERRORS = {
   /**
    * Removing the whole history of a manageable failed, wrong parameters.
    *
-   * @property REMOVE_HISTORY_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 265
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_HISTORY_WRONG_PARAMETERS: {
     code: 0x109,
@@ -553,10 +552,10 @@ var ERRORS = {
   /**
    * Gettings device's settings failed, wrong parameters.
    *
-   * @property GET_DEVICE_SETTINGS_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 266
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   GET_DEVICE_SETTINGS_WRONG_PARAMETERS: {
     code: 0x10a,
@@ -566,10 +565,10 @@ var ERRORS = {
   /**
    * Adding a device to a group failed, wrong parameters.
    *
-   * @property ADD_DEVICE_TO_GROUP_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 267
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   ADD_DEVICE_TO_GROUP_WRONG_PARAMETERS: {
     code: 0x10b,
@@ -579,10 +578,10 @@ var ERRORS = {
   /**
    * Removing a device from a group failed, wrong parameters.
    *
-   * @property REMOVE_DEVICE_FROM_GROUP_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 268
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_DEVICE_FROM_GROUP_WRONG_PARAMETERS: {
     code: 0x10c,
@@ -592,10 +591,10 @@ var ERRORS = {
   /**
    * Removing a group failed, wrong parameters.
    *
-   * @property REMOVE_GROUP_WRONG_PARAMETERS
-   * @type Object
-   * @final
-   * @default 269
+   * @const
+   * @type {Object}
+   * @default
+   * @inner
    */
   REMOVE_GROUP_WRONG_PARAMETERS: {
     code: 0x10d,

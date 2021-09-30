@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @module manageables
+ * @module manage/manageables/Manageable
  */
 
 /**
@@ -17,43 +17,46 @@
  * @param {Array} [manageable.schedules] The list of manageable's schedules
  */
 function Manageable(manageable) {
-  Object.defineProperties(this, {
+  Object.defineProperties(this,
 
-    /**
-     * The manageable's id.
-     *
-     * @property id
-     * @type String
-     * @final
-     */
-    id: {value: manageable.id, enumerable: true},
+    /** @lends module:manage/manageables/Manageable~Manageable */
+    {
 
-    /**
-     * The manageable's name.
-     *
-     * @property name
-     * @type String
-     * @final
-     */
-    name: {value: manageable.name, writable: true, enumerable: true},
+      /**
+       * The manageable's id.
+       *
+       * @type {String}
+       * @instance
+       * @readonly
+       */
+      id: {value: manageable.id, enumerable: true},
 
-    /**
-     * The manageable's history.
-     *
-     * @property history
-     * @type Array
-     */
-    history: {value: manageable.history || [], writable: true, enumerable: true},
+      /**
+       * The manageable's name.
+       *
+       * @type {String}
+       * @instance
+       */
+      name: {value: manageable.name, writable: true, enumerable: true},
 
-    /**
-     * The manageable's schedules.
-     *
-     * @property schedules
-     * @type Array
-     */
-    schedules: {value: manageable.schedules || [], writable: true, enumerable: true}
+      /**
+       * The manageable's history.
+       *
+       * @type {Array}
+       * @instance
+       */
+      history: {value: manageable.history || [], writable: true, enumerable: true},
 
-  });
+      /**
+       * The manageable's schedules.
+       *
+       * @type {Array}
+       */
+      schedules: {value: manageable.schedules || [], writable: true, enumerable: true}
+
+    }
+
+  );
 }
 
 module.exports = Manageable;
@@ -64,7 +67,6 @@ module.exports = Manageable;
  * A schedule may start on a day and terminates another one or it may also start on a day and terminates the same day
  * one week later.
  *
- * @method getScheduleOccupiedTimePerDay
  * @param {Object} schedule Schedule object with:
  * @param {Date} schedule.beginDate The begin date of the schedule
  * @param {Number} schedule.duration The schedule duration (in ms)
@@ -198,38 +200,45 @@ Manageable.prototype.getScheduleOccupiedTimePerDay = function(schedule) {
 /**
  * Checks if two schedules are in conflict.
  *
- * Conflict examples without recurrence:
+ * @example
+ * // Conflict examples without recurrence:
  *
- * Example 1:
+ * // Example 1:
  * [------------]
  * [------------]
  *
- * Example 2:
+ * @example
+ * // Example 2:
  * [------------]
  *              [------------]
  *
- * Example 3:
+ * @example
+ * // Example 3:
  *              [------------]
  * [------------]
  *
- * Example 4:
+ * @example
+ * // Example 4:
  * [------------]
  *   [------------]
  *
- * Example 5:
+ * @example
+ * // Example 5:
  *   [------------]
  * [------------]
  *
- * Example 6:
+ * @example
+ * // Example 6:
  * [------------]
  *   [--------]
  *
- * Example 7:
+ * @example
+ * // Example 7:
  *   [--------]
  * [------------]
  *
  *
- * Additional conflict examples with daily recurrence:
+ * // Additional conflict examples with daily recurrence:
  *
  * ############################################## EXAMPLE 1 ######################################################
  * | ------------ SUNDAY ------------- || ------------ MONDAY ------------- || ----------- THUESDAY ------------ |
@@ -302,7 +311,7 @@ Manageable.prototype.getScheduleOccupiedTimePerDay = function(schedule) {
  *                               [---------- DAILY ----------]        [---------- DAILY ----------]        [------
  *                                                  [-----]
  *
- * Additional conflict examples with weekly recurrence:
+ * // Additional conflict examples with weekly recurrence:
  *
  * ############################################## EXAMPLE 1 ######################################################
  * | ------------ SUNDAY ------------- || ------------- [..] -------------- || ------------ SUNDAY ------------- |
@@ -365,7 +374,7 @@ Manageable.prototype.getScheduleOccupiedTimePerDay = function(schedule) {
  *             [WEEKL]                              [WEEKL]
  *
  *
- * Additional conflict examples with both daily and weekly recurrences:
+ * // Additional conflict examples with both daily and weekly recurrences:
  *
  * ############################################## EXAMPLE 1 ######################################################
  * | ------------ SUNDAY ------------- || ------------- [..] -------------- || ------------ SUNDAY ------------- |
@@ -417,7 +426,6 @@ Manageable.prototype.getScheduleOccupiedTimePerDay = function(schedule) {
  *                                                     [DAILY]                              [DAILY]
  *          [---WEEKL---]                                                                [---WEEKL---]
  *
- * @method checkSchedulesConflict
  * @param {Object} schedule1 Schedule object with:
  * @param {Date} schedule1.beginDate The begin date of the schedule
  * @param {Number} schedule1.duration The schedule duration (in ms)
@@ -537,7 +545,6 @@ Manageable.prototype.checkSchedulesConflict = function(schedule1, schedule2) {
 /**
  * Adds an historic to manageable's history.
  *
- * @method addHistoric
  * @param {Object} historic The historic
  * @param {String} historic.id The historic id
  */
@@ -548,9 +555,8 @@ Manageable.prototype.addHistoric = function(historic) {
 /**
  * Removes an historic from manageable's history.
  *
- * @method removeHistoric
  * @param {String} historicId The historic id
- * @return {Object|Null} The removed historic or null if not found
+ * @return {(Object|Null)} The removed historic or null if not found
  */
 Manageable.prototype.removeHistoric = function(historicId) {
   var index = this.history.findIndex(function(historic) {
@@ -565,8 +571,6 @@ Manageable.prototype.removeHistoric = function(historicId) {
 
 /**
  * Removes manageable's history.
- *
- * @method removeHistory
  */
 Manageable.prototype.removeHistory = function() {
   this.history = [];
@@ -575,7 +579,6 @@ Manageable.prototype.removeHistory = function() {
 /**
  * Adds a schedule to manageable's schedules.
  *
- * @method addSchedule
  * @param {Object} schedule The schedule
  * @param {String} schedule.id The schedule id
  */
@@ -586,9 +589,8 @@ Manageable.prototype.addSchedule = function(schedule) {
 /**
  * Removes a schedule from manageable's schedules.
  *
- * @method removeSchedule
  * @param {String} scheduleId The schedule id
- * @return {Object|Null} The removed schedule or null if not found
+ * @return {(Object|Null)} The removed schedule or null if not found
  */
 Manageable.prototype.removeSchedule = function(scheduleId) {
   var index = this.schedules.findIndex(function(schedule) {
@@ -604,9 +606,8 @@ Manageable.prototype.removeSchedule = function(scheduleId) {
 /**
  * Gets a schedule.
  *
- * @method getSchedule
  * @param {String} id The schedule id
- * @return {Object|Undefined} The schedule or null if not found
+ * @return {(Object|Undefined)} The schedule or null if not found
  */
 Manageable.prototype.getSchedule = function(id) {
   return this.schedules.find(function(schedule) {
@@ -617,7 +618,6 @@ Manageable.prototype.getSchedule = function(id) {
 /**
  * Checks if a schedule is not in collision with other schedules.
  *
- * @method isValidSchedule
  * @param {Object} schedule The schedule description object
  * @param {Date} schedule.beginDate The begin date of the schedule
  * @param {Number} schedule.duration The schedule duration (in ms)
@@ -646,7 +646,6 @@ Manageable.prototype.isValidSchedule = function(schedule) {
 /**
  * Checks if a schedule is actually running.
  *
- * @method isScheduleRunning
  * @param {Object} schedule The schedule description object
  * @param {Date} schedule.beginDate The begin date of the schedule
  * @param {Number} schedule.duration The schedule duration (in ms)
@@ -689,8 +688,8 @@ Manageable.prototype.isScheduleRunning = function(schedule) {
  * If schedule is weekly the last occurence will start on last same day it starts before schedule end day.
  *
  * @param {Object} schedule The schedule to get last occurence from
- * @param {Date|String} [schedule.beginDate] The schedule first occurence begin date
- * @param {Date|String} [schedule.endDate] The schedule expected end date if recurrent is specified
+ * @param {(Date|String)} [schedule.beginDate] The schedule first occurence begin date
+ * @param {(Date|String)} [schedule.endDate] The schedule expected end date if recurrent is specified
  * @param {String} [schedule.recurrent] Either "daily" or "weekly"
  * @param {Number} [schedule.duration] Occurences duration
  * @return {Object} The last occurence schedule with:
@@ -761,7 +760,6 @@ Manageable.prototype.getLastScheduleOccurence = function(schedule) {
  *
  * Schedule is considered expired if schedule last occurence end date and time has passed.
  *
- * @method isScheduleExpired
  * @param {Object} schedule The schedule description object
  * @param {Date} schedule.beginDate The begin date of the schedule
  * @param {Number} schedule.duration The schedule duration (in ms)

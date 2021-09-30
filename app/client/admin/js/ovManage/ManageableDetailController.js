@@ -4,14 +4,12 @@
 (function(app) {
 
   /**
-   * @module ov.manage
-   */
-
-  /**
    * Defines the manageable detail controller to manage view displaying details about a manageable.
    *
    * @class ManageManageableDetailController
-   * @static
+   * @memberof module:ov.manage
+   * @inner
+   * @ignore
    */
   function ManageableDetailController(
     $scope,
@@ -37,16 +35,16 @@
     /**
      * The actually selected manageable.
      *
-     * @property selectedManageable
-     * @type Object
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @member {Object}
      */
     self.selectedManageable = null;
 
     /**
      * Begin datepicker options.
      *
-     * @property popupBegin
-     * @type Object
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @member {Object}
      */
     self.popupBegin = {
       opened: false,
@@ -59,8 +57,8 @@
     /**
      * End datepicker options.
      *
-     * @property popupEnd
-     * @type Object
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @member {Object}
      */
     self.popupEnd = {
       opened: false,
@@ -72,24 +70,24 @@
     /**
      * The action tab perfect scrollbar.
      *
-     * @property actionScrollbar
-     * @type PerfectScrollbar
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @member {PerfectScrollbar}
      */
     self.actionScrollbar = null;
 
     /**
      * The detail tab perfect scrollbar.
      *
-     * @property detailScrollbar
-     * @type PerfectScrollbar
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @member {PerfectScrollbar}
      */
     self.detailScrollbar = null;
 
     /**
      * The history tab perfect scrollbar.
      *
-     * @property actionScrollbar
-     * @type PerfectScrollbar
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @member {PerfectScrollbar}
      */
     self.historyScrollbar = null;
 
@@ -97,8 +95,8 @@
     /**
      * Minimum schedule duration allowed.
      *
-     * @property minDuration
-     * @type Date
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @member {Date}
      */
     self.minDuration = new Date();
     self.minDuration.setHours(0);
@@ -110,7 +108,8 @@
     /**
      * Validates that begin and end dates of the new scheduled job are not in conflicts with the other scheduled jobs.
      *
-     * @method validateSchedule
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @private
      * @param {Object} schedule Schedule object with :
      * @param {Date} schedule.beginDate The begin date of the schedule
@@ -147,7 +146,8 @@
     /**
      * Displays an error message for each given errors.
      *
-     * @method displayErrors
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @private
      * @param {Array} errors The list of errors
      * @param {String} message The message to display for each error
@@ -164,7 +164,8 @@
     /**
      * Initializes the tabs scrollBars.
      *
-     * @method initScrollbar
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @private
      */
     function initScrollbar() {
@@ -187,7 +188,8 @@
     /**
      * Resets tabs scrollbars.
      *
-     * @method resetScrollbar
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @private
      */
     function resetScrollbar() {
@@ -205,7 +207,8 @@
     /**
      * Closes the details panel.
      *
-     * @method closeDetail
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      */
     self.closeDetail = function() {
       $scope.manage.showDetail = false;
@@ -232,7 +235,8 @@
     /**
      * Displays the input to update the manageable's name.
      *
-     * @method displayNameForm
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      */
     self.displayNameForm = function() {
       self.selectedManageableName = $filter('translate')(self.selectedManageable.name);
@@ -242,7 +246,8 @@
     /**
      * Updates manageable's name.
      *
-     * @method updateName
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @param {String} name The new manageable name
      */
     self.updateName = function(name) {
@@ -267,7 +272,8 @@
     /**
      * Adds a new schedule.
      *
-     * @method addSchedule
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      */
     self.addSchedule = function() {
       var durationDate = self.itemSchedule.schedule.durationDate;
@@ -311,7 +317,8 @@
      * Validates the end date regarding the begin date.
      * End date should not be inferior to begin date.
      *
-     * @method validateEndDate
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      */
     self.validateEndDate = function() {
       if (self.itemSchedule.schedule.beginDate > self.itemSchedule.schedule.endDate)
@@ -321,7 +328,8 @@
     /**
      * Starts a new recording session on the selected manageable.
      *
-     * @method startRecord
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      */
     self.startRecord = function() {
       var ids = [];
@@ -353,7 +361,8 @@
     /**
      * Stops recording session on the selected manageable.
      *
-     * @method startRecord
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      */
     self.stopRecord = function() {
       var ids = [];
@@ -379,7 +388,8 @@
     /**
      * Creates a new tag on the recording session of the selected manageable.
      *
-     * @method startRecord
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      */
     self.tagRecord = function() {
       var ids = [];
@@ -405,9 +415,10 @@
     /**
      * Gets selected manageable's preset's name.
      *
-     * @method getPresetName
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @param {String} id The preset id
-     * @return {String|Null} The preset name or null if not found
+     * @return {(String|Null)} The preset name or null if not found
      */
     self.getPresetName = function(id) {
       if (id) {
@@ -423,7 +434,8 @@
     /**
      * Resets the action form.
      *
-     * @method resetActionForm
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      */
     self.resetActionForm = function() {
       var beginTimeDate = new Date();
@@ -457,7 +469,8 @@
     /**
      * Removes a schedule from selected manageable.
      *
-     * @method removeSchedule
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @private
      * @param {String} scheduleId The schedule id
      */
@@ -512,7 +525,8 @@
     /**
      * Removes an historic from selected manageable.
      *
-     * @method removeHistoric
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @private
      * @param {String} historicId The historic id
      */
@@ -535,7 +549,8 @@
     /**
      * Removes the whole history.
      *
-     * @method removeHistory
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @private
      */
     function removeHistory() {
@@ -551,7 +566,8 @@
     /**
      * Removes a device.
      *
-     * @method removeDevice
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @private
      * @param {String} id The id of the device to remove
      */
@@ -581,7 +597,8 @@
     /**
      * Opens a modal to remove something.
      *
-     * @method openRemoveModal
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @param {String} id The id of the object to remove
      * @param {String} action The type of action to perform
      */
@@ -629,7 +646,8 @@
      * e.g. It is not possible to start a recording session with slides extraction
      * without a desktop input.
      *
-     * @method validatePreset
+     * @memberof module:ov.manage~ManageManageableDetailController
+     * @instance
      * @param {String} presetId The id of the preset
      */
     self.validatePreset = function(presetId) {

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @module providers
+ * @module manage/providers/GroupProvider
  */
 
 var util = require('util');
@@ -12,9 +12,10 @@ var ManageableProvider = process.requireManage('app/server/providers/ManageableP
  * Defines a GroupProvider to interact with storage to manage groups' entities.
  *
  * @class GroupProvider
- * @extends ManageableProvider
+ * @extends module:manage/providers/ManageableProvider~ManageableProvider
  * @constructor
  * @param {Storage} storage The storage to use to store provider entities
+ * @see {@link https://github.com/veo-labs/openveo-api|OpenVeo API documentation} for more information about Storage
  */
 function GroupProvider(storage) {
   GroupProvider.super_.call(this, storage, 'manage_groups');
@@ -26,16 +27,12 @@ util.inherits(GroupProvider, ManageableProvider);
 /**
  * Adds groups.
  *
- * @method add
- * @async
  * @param {Array} groups The list of groups to store with for each group:
- *   - **String** [id] The group id, generated if not specified
- *   - **String** [name='MANAGE.GROUP.DEFAULT_NAME'] The group name
- *   - **Array** [history] The group history messages
- * @param {Function} [callback] The function to call when it's done
- *   - **Error** The error if an error occurred, null otherwise
- *   - **Number** The total amount of groups inserted
- *   - **Array** The list of added groups
+ * @param {String} [groups[].id] The group id, generated if not specified
+ * @param {String} [groups[].name='MANAGE.GROUP.DEFAULT_NAME'] The group name
+ * @param {Array} [groups[].history] The group history messages
+ * @param {module:manage/providers/GroupProvider~GroupProvider~addCallback} [callback] The function to call when it's
+ * done
  */
 GroupProvider.prototype.add = function(groups, callback) {
   var groupsToAdd = [];
@@ -57,15 +54,12 @@ GroupProvider.prototype.add = function(groups, callback) {
 /**
  * Updates a group.
  *
- * @method updateOne
- * @async
  * @param {ResourceFilter} [filter] Rules to filter group to update
  * @param {String} [name] The group name
  * @param {Array} [history] The group history messages
  * @param {Array} [schedules] The group schedules
- * @param {Function} [callback] The function to call when it's done
- *   - **Error** The error if an error occurred, null otherwise
- *   - **Number** 1 if everything went fine
+ * @param {module:manage/providers/GroupProvider~GroupProvider~updateOneCallback} [callback] The function to call when
+ * it's done
  */
 GroupProvider.prototype.updateOne = function(filter, data, callback) {
   var modifications = {};
@@ -79,10 +73,7 @@ GroupProvider.prototype.updateOne = function(filter, data, callback) {
 /**
  * Creates groups indexes.
  *
- * @method createIndexes
- * @async
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error if something went wrong, null otherwise
+ * @param {callback} callback Function to call when it's done
  */
 GroupProvider.prototype.createIndexes = function(callback) {
   this.storage.createIndexes(this.location, [
@@ -94,3 +85,16 @@ GroupProvider.prototype.createIndexes = function(callback) {
     callback(error);
   });
 };
+
+/**
+ * @callback module:manage/providers/GroupProvider~GroupProvider~addCallback
+ * @param {(Error|null)} error The error if an error occurred, null otherwise
+ * @param {Number} total The total amount of groups inserted
+ * @param {Array} groups The list of added groups
+ */
+
+/**
+ * @callback module:manage/providers/GroupProvider~GroupProvider~updateOneCallback
+ * @param {(Error|null)} error The error if an error occurred, null otherwise
+ * @param {Number} total 1 if everything went fine
+ */

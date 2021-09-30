@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @module providers
+ * @module manage/providers/DeviceProvider
  */
 
 var util = require('util');
@@ -19,38 +19,44 @@ Object.freeze(STATES);
  * Defines a DeviceProvider to interact with storage to manage devices' entities.
  *
  * @class DeviceProvider
- * @extends ManageableProvider
+ * @extends module:manage/providers/ManageableProvider~ManageableProvider
  * @constructor
  * @param {Storage} storage The storage to use to store provider entities
+ * @see {@link https://github.com/veo-labs/openveo-api|OpenVeo API documentation} for more information about Storage
  */
 function DeviceProvider(storage) {
   DeviceProvider.super_.call(this, storage, 'manage_devices');
 
-  Object.defineProperties(this, {
+  Object.defineProperties(this,
 
-    /**
-     * The list of devices' states.
-     *
-     * @property STATES
-     * @type Object
-     * @final
-     */
-    STATES: {value: STATES},
+    /** @lends module:manage/providers/DeviceProvider~DeviceProvider */
+    {
 
-    /**
-     * The list of devices' available states.
-     *
-     * @property AVAILABLE_STATES
-     * @type Array
-     * @final
-     */
-    AVAILABLE_STATES: {value: [
-      STATES.ACCEPTED,
-      STATES.PENDING,
-      STATES.REFUSED
-    ]}
+      /**
+       * The list of devices' states.
+       *
+       * @type {Object}
+       * @instance
+       * @readonly
+       */
+      STATES: {value: STATES},
 
-  });
+      /**
+       * The list of devices' available states.
+       *
+       * @type {Array}
+       * @instance
+       * @readonly
+       */
+      AVAILABLE_STATES: {value: [
+        STATES.ACCEPTED,
+        STATES.PENDING,
+        STATES.REFUSED
+      ]}
+
+    }
+
+  );
 }
 
 module.exports = DeviceProvider;
@@ -59,16 +65,12 @@ util.inherits(DeviceProvider, ManageableProvider);
 /**
  * Adds devices.
  *
- * @method add
- * @async
  * @param {Array} devices The list of devices to store with for each device:
- *   - **String** [id] The device id, generated if not specified
- *   - **String** [name] The device name
- *   - **String** [state] The device default state
- * @param {Function} [callback] The function to call when it's done
- *   - **Error** The error if an error occurred, null otherwise
- *   - **Number** The total amount of devices inserted
- *   - **Array** The list of added devices
+ * @param {String} [devices[].id] The device id, generated if not specified
+ * @param {String} [devices[].name] The device name
+ * @param {String} [devices[].state] The device default state
+ * @param {module:manage/providers/DeviceProvider~DeviceProvider~addCallback} [callback] The function to call when it's
+ * done
  */
 DeviceProvider.prototype.add = function(devices, callback) {
   var devicesToAdd = [];
@@ -96,17 +98,14 @@ DeviceProvider.prototype.add = function(devices, callback) {
 /**
  * Updates a device.
  *
- * @method updateOne
- * @async
  * @param {ResourceFilter} [filter] Rules to filter device to update
  * @param {String} [filter.name] The device name
  * @param {String} [filter.state] The device default state
  * @param {Array} [filter.history] The device history messages
  * @param {Array} [filter.schedules] The device schedules
  * @param {String} [filter.group] The device associated group
- * @param {Function} [callback] The function to call when it's done
- *   - **Error** The error if an error occurred, null otherwise
- *   - **Number** 1 if everything went fine
+ * @param {module:manage/providers/DeviceProvider~DeviceProvider~updateOneCallback} [callback] The function to call
+ * when it's done
  */
 DeviceProvider.prototype.updateOne = function(filter, data, callback) {
   var modifications = {};
@@ -122,10 +121,7 @@ DeviceProvider.prototype.updateOne = function(filter, data, callback) {
 /**
  * Creates devices indexes.
  *
- * @method createIndexes
- * @async
- * @param {Function} callback Function to call when it's done with :
- *  - **Error** An error if something went wrong, null otherwise
+ * @param {callback} callback Function to call when it's done
  */
 DeviceProvider.prototype.createIndexes = function(callback) {
   this.storage.createIndexes(this.location, [
@@ -137,3 +133,16 @@ DeviceProvider.prototype.createIndexes = function(callback) {
     callback(error);
   });
 };
+
+/**
+ * @callback module:manage/providers/DeviceProvider~DeviceProvider~addCallback
+ * @param {(Error|null)} error The error if an error occurred, null otherwise
+ * @param {Number} total The total amount of devices inserted
+ * @param {Array} devices The list of added devices
+ */
+
+/**
+ * @callback module:manage/providers/DeviceProvider~DeviceProvider~updateOneCallback
+ * @param {(Error|null)} error The error if an error occurred, null otherwise
+ * @param {Number} total 1 if everything went fine
+ */

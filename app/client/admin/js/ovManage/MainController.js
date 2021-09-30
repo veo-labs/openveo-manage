@@ -3,14 +3,12 @@
 (function(app) {
 
   /**
-   * @module ov.manage
-   */
-
-  /**
    * Defines the manage controller.
    *
    * @class ManageMainController
-   * @static
+   * @memberof module:ov.manage
+   * @inner
+   * @ignore
    */
   function MainController(
     $q,
@@ -68,7 +66,8 @@
     /**
      * Handles messages from the server informing about a new connected device.
      *
-     * @method handleDeviceConnected
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} device The new connected device information
      */
@@ -82,7 +81,8 @@
     /**
      * Handles messages from the server requesting a manageable to be removed.
      *
-     * @method handleRemoved
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {String} data.id The manageable id
@@ -117,12 +117,13 @@
     /**
      * Handles messages from the server requesting a modification on a manageable.
      *
-     * @method handleUpdated
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {String} data.id The manageable id
      * @param {String} data.key The property to update
-     * @param {Mixed} data.value The property value
+     * @param {*} data.value The property value
      * @param {String} data.type The manageable type
      */
     function handleUpdated(data) {
@@ -139,7 +140,8 @@
     /**
      * Handles messages from the server requesting an historic to be added to the history of a manageable.
      *
-     * @method handleNewHistoric
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {String} data.id The manageable id
@@ -155,7 +157,8 @@
     /**
      * Handles messages from the server requesting an historic to be removed from the history of a manageable.
      *
-     * @method handleRemovedHistoric
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {String} data.id The manageable id
@@ -171,7 +174,8 @@
     /**
      * Handles messages from the server requesting a manageable's history to be removed.
      *
-     * @method handleRemovedHistory
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {String} data.id The manageable id
@@ -186,7 +190,8 @@
     /**
      * Handles messages from the server requesting a schedule to be added to a manageable.
      *
-     * @method handleNewSchedule
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {String} data.id The manageable id
@@ -202,7 +207,8 @@
     /**
      * Handles messages from the server requesting a schedule to be removed from a manageable.
      *
-     * @method handleRemovedSchedule
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {String} data.id The manageable id
@@ -218,7 +224,8 @@
     /**
      * Handles messages from the server requesting state modification on a device.
      *
-     * @method handleDeviceUpdatedState
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {String} data.id The device id
@@ -232,7 +239,8 @@
     /**
      * Handles messages from the server requesting a group to be created.
      *
-     * @method handleGroupCreated
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {Object} data.group The group to add
@@ -245,7 +253,8 @@
     /**
      * Handles messages from the server requesting a device to be added to a group.
      *
-     * @method handleGroupNewDevice
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {String} data.deviceId The device id
@@ -266,7 +275,8 @@
     /**
      * Handles messages from the server requesting a device to be removed from a group.
      *
-     * @method handleGroupRemovedDevice
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @private
      * @param {Object} data Data from server
      * @param {String} data.id The device id
@@ -306,7 +316,8 @@
     /**
      * Defines the active page index.
      *
-     * @method setActivePage
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @param index The tab index
      */
     $scope.setActivePage = function(index) {
@@ -316,7 +327,8 @@
     /**
      * Determines if the passed index is the active page index.
      *
-     * @method isActivePage
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @param index The tab index
      * @return {Boolean} true if the given index is the selected tab index
      */
@@ -327,7 +339,8 @@
     /**
      * Permits to organize the view when the details is opened/closed.
      *
-     * @method organizeLayout
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @param {Boolean} opening ????
      */
     $scope.organizeLayout = function(opening) {
@@ -349,7 +362,8 @@
     /**
      * Navigates to the previous page in browser's history.
      *
-     * @method back
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      */
     $scope.back = function() {
       $scope.manage.showDetail = false;
@@ -362,7 +376,6 @@
     /**
      * Removes a group.
      *
-     * @method removeGroup
      * @param {String} id The id of the group to remove
      */
     $scope.removeGroup = function(id) {
@@ -376,7 +389,8 @@
     /**
      * Removes a device from its group.
      *
-     * @method removeFromGroup
+     * @memberof module:ov.manage~ManageMainController
+     * @instance
      * @param {String} id The id of the device to remove
      */
     $scope.removeFromGroup = function(id) {

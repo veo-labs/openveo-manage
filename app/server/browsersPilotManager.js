@@ -1,14 +1,9 @@
 'use strict';
 
 /**
- * @module manage
- */
-
-/**
  * Holds the browsers' pilot singleton.
  *
- * @class browsersPilotManager
- * @static
+ * @module manage/browsersPilotManager
  */
 
 var BrowserPilot = process.requireManage('app/server/BrowserPilot.js');
@@ -16,8 +11,7 @@ var BrowserPilot = process.requireManage('app/server/BrowserPilot.js');
 /**
  * The browsers' pilot.
  *
- * @property pilot
- * @type BrowserPilot
+ * @type {BrowserPilot}
  * @private
  */
 var pilot = null;
@@ -27,7 +21,7 @@ var pilot = null;
  *
  * @method set
  * @static
- * @param {BrowserPilot} pilot The new browsers' pilot
+ * @param {module:manage/BrowserPilot~BrowserPilot} pilot The new browsers' pilot
  */
 module.exports.set = function(newPilot) {
   if (newPilot && newPilot instanceof BrowserPilot)
@@ -39,7 +33,7 @@ module.exports.set = function(newPilot) {
  *
  * @method get
  * @static
- * @return {BrowserPilot|Null} The browsers' pilot
+ * @return {(module:manage/BrowserPilot~BrowserPilot|Null)} The browsers' pilot
  */
 module.exports.get = function() {
   return pilot;

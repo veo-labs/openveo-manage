@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @module manageables
+ * @module manage/manageables/Group
  */
 
 var util = require('util');
@@ -11,7 +11,7 @@ var Manageable = process.requireManage('app/server/manageables/Manageable.js');
  * Defines a Group.
  *
  * @class Group
- * @extends Manageable
+ * @extends module:manage/manageables/Manageable~Manageable
  * @constructor
  * @param {Object} group A group description object
  * @param {String} group.id The group's id
@@ -23,18 +23,24 @@ var Manageable = process.requireManage('app/server/manageables/Manageable.js');
 function Group(group) {
   Group.super_.call(this, group);
 
-  Object.defineProperties(this, {
+  Object.defineProperties(this,
 
-    /**
-     * The group type.
-     *
-     * @property type
-     * @type String
-     * @final
-     */
-    type: {value: Group.TYPE, enumerable: true}
+    /** @lends module:manage/manageables/Group~Group*/
+    {
 
-  });
+      /**
+       * The group type.
+       *
+       * @type {String}
+       * @default Groupe.TYPE
+       * @instance
+       * @readonly
+       */
+      type: {value: Group.TYPE, enumerable: true}
+
+    }
+
+  );
 }
 
 module.exports = Group;
@@ -43,10 +49,10 @@ util.inherits(Group, Manageable);
 /**
  * Group type.
  *
- * @property TYPE
- * @type String
+ * @memberof module:manage/manageables/Group~Group
+ * @member {String} TYPE
  * @private
- * @final
+ * @const
  * @default 'group'
  */
 Object.defineProperty(Group, 'TYPE', {value: 'group'});
@@ -56,7 +62,6 @@ Object.defineProperty(Group, 'TYPE', {value: 'group'});
  *
  * Group schedule should not be in collision with devices inside the group.
  *
- * @method isValidSchedule
  * @param {Object} schedule The schedule description object
  * @param {Array} devices Group devices
  * @return {Boolean} true if the schedule is not in collision with other schedules

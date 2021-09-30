@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @module manage
+ * @module manage/ScheduleManager
  */
 
 var schedule = require('node-schedule');
@@ -18,18 +18,23 @@ var nanoid = require('nanoid').nanoid;
  * @constructor
  */
 function ScheduleManager() {
-  Object.defineProperties(this, {
+  Object.defineProperties(this,
 
-    /**
-     * The list of registered jobs in the cron.
-     *
-     * @property jobs
-     * @type Array
-     * @final
-     */
-    jobs: {value: []}
+    /** @lends module:manage/ScheduleManager~ScheduleManager */
+    {
 
-  });
+      /**
+       * The list of registered jobs in the cron.
+       *
+       * @type {Array}
+       * @instance
+       * @readonly
+       */
+      jobs: {value: []}
+
+    }
+
+  );
 }
 
 module.exports = ScheduleManager;
@@ -37,7 +42,6 @@ module.exports = ScheduleManager;
 /**
  * Removes a job.
  *
- * @method removeJob
  * @param {String} id The id of the job to remove
  */
 ScheduleManager.prototype.removeJob = function(id) {
@@ -57,7 +61,6 @@ ScheduleManager.prototype.removeJob = function(id) {
 /**
  * Creates a new job.
  *
- * @method addJob
  * @param {Date} date The date to execute the job
  * @param {Date} [endDate] End date for recurrent jobs
  * @param {String} [recurrent] Either "daily" or "weekly"

@@ -3,10 +3,6 @@
 (function(app) {
 
   /**
-   * @module ov.manage
-   */
-
-  /**
    * Defines a factory to manage devices.
    *
    * Devices are categorized by state.
@@ -16,7 +12,8 @@
    * A "pending" device is a connected device not in server's list of known devices.
    *
    * @class ManageDeviceFactory
-   * @static
+   * @memberof module:ov.manage
+   * @inner
    */
   function DeviceFactory(
     $q,
@@ -38,9 +35,10 @@
      *
      * Search is made on all devices, accepted, pending, refused and incoming devices.
      *
-     * @method getDevice
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The device id
-     * @return {Object|Null} The device or null if not found
+     * @return {(Object|Null)} The device or null if not found
      */
     function getDevice(id) {
       var result = null;
@@ -63,7 +61,8 @@
      * Updates device's status message depending on its actual status.
      * Device's status message is a human readable explanation about the device's status.
      *
-     * @method updateDeviceStatusMessage
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @private
      * @param {String} id The device id
      */
@@ -108,7 +107,8 @@
     /**
      * Adds a device historic.
      *
-     * @method addHistoric
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The device id
      * @param {Object} historic The history
      */
@@ -120,7 +120,8 @@
     /**
      * Adds a device schedule.
      *
-     * @method addSchedule
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The device id
      * @param {Object} schedule The schedule
      */
@@ -132,7 +133,8 @@
     /**
      * Removes a device's historic.
      *
-     * @method removeHistoric
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The device id
      * @param {String} historicId The historic id
      */
@@ -144,7 +146,8 @@
     /**
      * Removes a device's history.
      *
-     * @method removeHistory
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The device id
      */
     function removeHistory(id) {
@@ -155,7 +158,8 @@
     /**
      * Removes a device's schedule.
      *
-     * @method removeSchedule
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The device id
      * @param {String} scheduleId The schedule id
      */
@@ -167,7 +171,8 @@
     /**
      * Adds a new device to the manage interface as a connected device.
      *
-     * @method addDevice
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {Object} device The new device description object
      * @param {String} device.id The device's id
      * @param {Array} device.history The device's history
@@ -209,7 +214,8 @@
     /**
      * Gets all devices from server.
      *
-     * @method getDevices
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @return {Promise} A promise resolving with the list of devices categorized
      * by state (either "pending", "accepted" or "refused")
      */
@@ -250,7 +256,8 @@
     /**
      * Removes a device.
      *
-     * @method remove
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The device id
      * @return {Object} The removed device
      */
@@ -284,9 +291,10 @@
     /**
      * Sets a property on all devices.
      *
-     * @method setDevicesProperty
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} property The name of the property to set
-     * @param {Mixed} value The value for the property
+     * @param {*} value The value for the property
      */
     function setDevicesProperty(property, value) {
       devices[DEVICE_STATES.ACCEPTED].forEach(function(device) {
@@ -297,10 +305,11 @@
     /**
      * Updates a device's property.
      *
-     * @method setProperty
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The device id
      * @param {String} property The property to modify
-     * @param {Mixed} value The property value
+     * @param {*} value The property value
      */
     function setProperty(id, property, value) {
       var device = getDevice(id);
@@ -333,7 +342,8 @@
      * Validates a device preset confronting its available inputs.
      * Inputs error is available in device.inputs property.
      *
-     * @method validatePreset
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} deviceId The device id
      * @param {String} presetId The device preset id
      */
@@ -393,7 +403,8 @@
     /**
      * Updates a device's state.
      *
-     * @method updateDeviceState
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The updated device id
      * @param {String} newState The new state of the device
      */
@@ -416,7 +427,8 @@
     /**
      * Gets devices corresponding to the given state.
      *
-     * @method getDevicesByState
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} state The state to look for
      * @return {Array} The list of devices
      */
@@ -429,12 +441,13 @@
      *
      * Device schedule should not be in collision with device's group schedules if inside the group.
      *
-     * @method isValidSchedule
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The device id
      * @param {Object} schedule The schedule to validate
      * @param {Object} [group] The device's group
      * @param {Array} [group.schedules] The group's schedules
-     * @return {Error|Null} The error if validation failed, null otherwise
+     * @return {(Error|Null)} The error if validation failed, null otherwise
      */
     function isValidSchedule(id, schedule, group) {
       var device = getDevice(id);
@@ -461,7 +474,8 @@
     /**
      * Checks if there are collisions between device's schedules and group's schedules.
      *
-     * @method isGroupSchedulesCollision
+     * @memberof module:ov.manage~ManageDeviceFactory
+     * @instance
      * @param {String} id The device id
      * @param {Object} group The group
      * @param {Array} [group.schedules] The group's schedules
