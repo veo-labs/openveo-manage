@@ -27,6 +27,7 @@ const {imageProcessor} = require('@openveo/api');
 const nanoid = require('nanoid').nanoid;
 
 require('../processRequire.js');
+const applicationConf = require('../conf.js');
 
 const environment = process.argv[2];
 
@@ -37,6 +38,26 @@ const environment = process.argv[2];
  */
 function log(message) {
   console.log(`build > ${message}`);
+}
+
+/**
+ * Compiles and concat JavaScript files.
+ *
+ * @param {Array} filesPaths The list of files paths to compile and concat
+ * @param {String} outputPath The file output path
+ * @return {Promise} Promise resolving when JavaScript files have been compiled
+ */
+async function compileJavaScriptFiles(filesPaths, outputPath) {
+  return new Promise((resolve, reject) => {
+    const command = `npx uglifyjs -c -m -o ${outputPath} -- ${filesPaths.join(' ')}`;
+    log(`${process.cwd()} > Compile JavaScript files\n${command}`);
+    exec(command, {cwd: process.cwd()}, (error, stdout, stderr) => {
+      if (error) {
+        return reject(error);
+      }
+      return resolve();
+    });
+  });
 }
 
 /**
@@ -108,6 +129,16 @@ async function main() {
     resolveFilesPaths(iconsFilesPaths, path.join(backOfficeClientPath, 'compass/sass/sprites')),
     path.join(imagesDirectoryPath, 'sprite.png')
   );
+
+  if (environment === 'production') {
+    const outputDirectoryPath = './assets/be/js';
+    const backOfficeClientDirectoryPath = path.join(backOfficeClientPath, 'js');
+
+    await compileJavaScriptFiles(
+      resolveFilesPaths(applicationConf.backOffice.scriptFiles.dev, backOfficeClientDirectoryPath),
+      path.join(outputDirectoryPath, 'openveoManage.js')
+    );
+  }
 }
 
 main();

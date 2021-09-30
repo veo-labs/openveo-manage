@@ -43,8 +43,6 @@ module.exports = function(grunt) {
   grunt.initConfig(config);
   grunt.config.merge(loadConfig('./tasks'));
 
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-eslint');
@@ -56,11 +54,5 @@ module.exports = function(grunt) {
 
   // Generate documentation
   grunt.registerTask('doc', ['remove:doc', 'mkdocs', 'yuidoc', 'rename:doc']);
-
-  // Build the back office
-  grunt.registerTask('build-back-office-client', [
-    'uglify:back-office',
-    'concat:back-office-js'
-  ]);
 
 };

@@ -7,6 +7,8 @@
 ## DEPENDENCIES
 
 - **grunt-contrib-compass** has been removed
+- **grunt-contrib-concat** has been removed
+- **grunt-contrib-uglify** has been removed
 - **grunt-contrib-watch** has been removed
 - **grunt-spritesmith** has been removed
 - **interactjs** has been upgraded from 1.9.7 to **1.10.11**
