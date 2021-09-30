@@ -22,6 +22,7 @@
 - **node-schedule** has been upgraded from 1.3.2 to **2.0.0**
 - **perfect-scrollbar** has been upgraded from 1.5.0 to **1.5.2**
 - **shortid** has been replaced by nanoid
+- **sinon** has been upgraded from 9.0.1 to **11.1.2**
 
 # 5.0.1 / 2020-12-11
 
