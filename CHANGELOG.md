@@ -3,6 +3,7 @@
 ## BREAKING CHANGES
 
 - No longer tested on NodeJS &lt; 16.3.0 and NPM &lt; 7.15.1
+- Remove continuous integration with Travis
 
 ## DEPENDENCIES
 
