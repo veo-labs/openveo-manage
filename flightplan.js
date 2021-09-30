@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint node/no-unpublished-require: 0 */
+
 /**
  * Flightplan plans.
  *

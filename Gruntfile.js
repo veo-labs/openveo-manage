@@ -1,6 +1,6 @@
 'use strict';
 
-/* eslint no-sync: 0 */
+/* eslint node/no-sync: 0 */
 var path = require('path');
 var fs = require('fs');
 var openVeoApi = require('@openveo/api');
@@ -44,7 +44,6 @@ module.exports = function(grunt) {
   grunt.config.merge(loadConfig('./tasks'));
 
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
-  grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-mkdocs');
   grunt.loadNpmTasks('grunt-gh-pages');
 

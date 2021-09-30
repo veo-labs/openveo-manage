@@ -53,4 +53,4 @@ ehthumbs.db
 .gitattributes
 
 # Eslint
-.eslintrc
+.eslintrc.json
