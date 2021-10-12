@@ -50,7 +50,7 @@ function log(message) {
 async function compileJavaScriptFiles(filesPaths, outputPath) {
   return new Promise((resolve, reject) => {
     const command = `npx uglifyjs -c -m -o ${outputPath} -- ${filesPaths.join(' ')}`;
-    log(`${process.cwd()} > Compile JavaScript files\n${command}`);
+    log(`${process.cwd()} > ${command}`);
     exec(command, {cwd: process.cwd()}, (error, stdout, stderr) => {
       if (error) {
         return reject(error);
@@ -66,7 +66,6 @@ async function compileJavaScriptFiles(filesPaths, outputPath) {
  * @return {Promise} Promise resolving when sprite has been generated
  */
 function compileIconsSprite(iconsFilesPaths, outputFilePath) {
-  log(`generate icons sprite to ${outputFilePath}`);
   return util.promisify(imageProcessor.generateSpriteFreely)(
     iconsFilesPaths,
     outputFilePath,
@@ -78,12 +77,20 @@ function compileIconsSprite(iconsFilesPaths, outputFilePath) {
 /**
  * Compiles back office client SCSS files.
  *
+ * @param {String} scssDirectoryPath The path where to find SCSS files
+ * @param {String} outputPath The destination directory path
+ * @param {Boolean} [production] true to build for production, false otherwise
  * @return {Promise} Promise resolving when SCSS files have been compiled
  */
-async function compileScssFiles() {
+async function compileScssFiles(scssDirectoryPath, outputPath, production) {
   return new Promise((resolve, reject) => {
-    const command = `npm run build:scss${environment !== 'production' ? '-development' : ''}`;
-    log(`${process.cwd()} > Compile SCSS files`);
+    const command = `compass compile -c ./compass.rb \
+--force \
+--sass-dir ${scssDirectoryPath} \
+--css-dir ${outputPath} \
+${production ? '-e production -s compressed --no-sourcemap' : ''}
+`;
+    log(`${process.cwd()} > ${command}`);
     exec(command, {cwd: process.cwd()}, (error, stdout, stderr) => {
       if (error) return reject(error);
       console.log(stdout);
@@ -108,8 +115,12 @@ function resolveFilesPaths(filesPaths, prefix) {
  * Builds back office JavaScript files.
  */
 async function main() {
-  const imagesDirectoryPath = './assets/be/images';
+  const assetsPath = './assets';
+  const imagesDirectoryPath = path.join(assetsPath, 'be/images');
+  const backOfficeClientCssPath = path.join(assetsPath, 'be/css');
   const backOfficeClientPath = './app/client/admin';
+  const backOfficeClientScssPath = path.join(backOfficeClientPath, 'compass/sass');
+  const iconsSpriteDistPath = path.join(imagesDirectoryPath, 'sprite.png');
   const iconsFilesPaths = [
     'camera-disconnected.png',
     'camera-ko.png',
@@ -124,19 +135,23 @@ async function main() {
     'screen-ok.png'
   ];
 
-  await compileScssFiles();
+  log(`Compile back office client SCSS files into ${backOfficeClientCssPath}`);
+  await compileScssFiles(backOfficeClientScssPath, backOfficeClientCssPath, environment === 'production');
+
+  log(`Generate icons sprite to ${iconsSpriteDistPath}`);
   await compileIconsSprite(
     resolveFilesPaths(iconsFilesPaths, path.join(backOfficeClientPath, 'compass/sass/sprites')),
-    path.join(imagesDirectoryPath, 'sprite.png')
+    iconsSpriteDistPath
   );
 
   if (environment === 'production') {
-    const outputDirectoryPath = './assets/be/js';
     const backOfficeClientDirectoryPath = path.join(backOfficeClientPath, 'js');
+    const backOfficeClientDistPath = path.join(assetsPath, applicationConf.backOffice.scriptFiles.prod[0]);
 
+    log(`Compile back office client JavaScript files to ${backOfficeClientDistPath}`);
     await compileJavaScriptFiles(
       resolveFilesPaths(applicationConf.backOffice.scriptFiles.dev, backOfficeClientDirectoryPath),
-      path.join(outputDirectoryPath, 'openveoManage.js')
+      backOfficeClientDistPath
     );
   }
 }

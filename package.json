@@ -41,8 +41,6 @@
   "scripts": {
     "build": "./scripts/build.js production",
     "build:development": "./scripts/build.js",
-    "build:scss": "compass compile -c ./compass.rb -e production -s compressed --force --no-sourcemap",
-    "build:scss-development": "compass compile -c ./compass.rb --force",
     "doc": "npm run doc:manage && npm run doc:back-office && npm run doc:server",
     "doc:back-office": "npx jsdoc -c jsdoc-back-office.js -d \"./site/$(echo $npm_package_version)/api/client-back-end\" -p -r",
     "doc:clean": "npx ovRemove ./site",
