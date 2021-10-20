@@ -23,7 +23,7 @@ const os = require('os');
 const path = require('path');
 const util = require('util');
 
-const {imageProcessor} = require('@openveo/api');
+const openVeoApi = require('@openveo/api');
 const nanoid = require('nanoid').nanoid;
 
 require('../processRequire.js');
@@ -66,7 +66,7 @@ async function compileJavaScriptFiles(filesPaths, outputPath) {
  * @return {Promise} Promise resolving when sprite has been generated
  */
 function compileIconsSprite(iconsFilesPaths, outputFilePath) {
-  return util.promisify(imageProcessor.generateSpriteFreely)(
+  return util.promisify(openVeoApi.imageProcessor.generateSpriteFreely)(
     iconsFilesPaths,
     outputFilePath,
     90,
@@ -116,11 +116,17 @@ function resolveFilesPaths(filesPaths, prefix) {
  */
 async function main() {
   const assetsPath = './assets';
-  const imagesDirectoryPath = path.join(assetsPath, 'be/images');
-  const backOfficeClientCssPath = path.join(assetsPath, 'be/css');
-  const backOfficeClientPath = './app/client/admin';
-  const backOfficeClientScssPath = path.join(backOfficeClientPath, 'compass/sass');
-  const iconsSpriteDistPath = path.join(imagesDirectoryPath, 'sprite.png');
+  const buildPath = './build';
+  const backDistPath = path.join(assetsPath, 'be');
+  const backImagesDistPath = path.join(assetsPath, 'be/images');
+  const backCssDistPath = path.join(backDistPath, 'css');
+  const backSourcesPath = './app/client/admin';
+  const backJsPath = path.join(backSourcesPath, 'js');
+  const backScssPath = path.join(backSourcesPath, 'compass/sass');
+  const backScssBuildPath = path.join(buildPath, 'scss');
+  const backMainCssBuildPath = path.join(backScssBuildPath, 'manage.css');
+  const backMainCssDistPath = path.join(backCssDistPath, 'manage.css');
+  const backIconsSpriteDistPath = path.join(backImagesDistPath, 'sprite.png');
   const iconsFilesPaths = [
     'camera-disconnected.png',
     'camera-ko.png',
@@ -135,23 +141,40 @@ async function main() {
     'screen-ok.png'
   ];
 
-  log(`Compile back office client SCSS files into ${backOfficeClientCssPath}`);
-  await compileScssFiles(backOfficeClientScssPath, backOfficeClientCssPath, environment === 'production');
+  log(`Copy back office SCSS files to ${backScssBuildPath}`);
+  await util.promisify(openVeoApi.fileSystem.copy.bind(openVeoApi.fileSystem))(
+    backScssPath,
+    backScssBuildPath
+  );
 
-  log(`Generate icons sprite to ${iconsSpriteDistPath}`);
+  log(`Compile back office client SCSS files into ${backCssDistPath}`);
+  await compileScssFiles(backScssBuildPath, backScssBuildPath, environment === 'production');
+
+  log(`Generate icons sprite to ${backIconsSpriteDistPath}`);
   await compileIconsSprite(
-    resolveFilesPaths(iconsFilesPaths, path.join(backOfficeClientPath, 'compass/sass/sprites')),
-    iconsSpriteDistPath
+    resolveFilesPaths(iconsFilesPaths, path.join(backSourcesPath, 'compass/sass/sprites')),
+    backIconsSpriteDistPath
   );
 
   if (environment === 'production') {
-    const backOfficeClientDirectoryPath = path.join(backOfficeClientPath, 'js');
     const backOfficeClientDistPath = path.join(assetsPath, applicationConf.backOffice.scriptFiles.prod[0]);
+
+    log(`Copy back office CSS files to ${backCssDistPath}`);
+    await util.promisify(openVeoApi.fileSystem.copy.bind(openVeoApi.fileSystem))(
+      backMainCssBuildPath,
+      backMainCssDistPath
+    );
 
     log(`Compile back office client JavaScript files to ${backOfficeClientDistPath}`);
     await compileJavaScriptFiles(
-      resolveFilesPaths(applicationConf.backOffice.scriptFiles.dev, backOfficeClientDirectoryPath),
+      resolveFilesPaths(applicationConf.backOffice.scriptFiles.dev, backJsPath),
       backOfficeClientDistPath
+    );
+  } else {
+    log(`Copy back office CSS and SCSS files to ${backCssDistPath}`);
+    await util.promisify(openVeoApi.fileSystem.copy.bind(openVeoApi.fileSystem))(
+      backScssBuildPath,
+      backCssDistPath
     );
   }
 }
