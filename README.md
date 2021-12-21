@@ -14,7 +14,7 @@ All data are synchronized in real-time in order to keep all devices, connected t
 
 # Documentation
 
-Documentation available on [Github pages](http://veo-labs.github.io/openveo-manage/6.0.0/index.html)
+Documentation available on [Github pages](http://veo-labs.github.io/openveo-manage/6.0.1/index.html)
 
 # Contributors
 
