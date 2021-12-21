@@ -3,6 +3,7 @@
 ## BUG FIXES
 
 - Fix scrollbar which wasn't always working in "Action", "Detail" and "History" tabs of the control panel. This issue first appeared in version 4.0.0.
+- Fix device / group selected background color which wasn't accessible
 
 # 6.0.0 / 2021-11-19
 

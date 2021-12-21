@@ -6,7 +6,7 @@
   width: #{$item-detail-width}px;
   margin-right: -#{$item-detail-width}px;
   transition: all .35s ease;
-  background-color: $selected-grey;
+  background-color: $background-accent;
   overflow: hidden;
   z-index: 3;
 
