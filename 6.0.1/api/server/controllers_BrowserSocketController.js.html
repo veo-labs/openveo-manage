@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/BrowserSocketController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/BrowserSocketController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+/**
+ * @module manage/controllers/BrowserSocketController
+ */
+
+var util = require('util');
+var openVeoApi = require('@openveo/api');
+var BrowserPilot = process.requireManage('app/server/BrowserPilot.js');
+var ERRORS = process.requireManage('app/server/errors.js');
+var BROWSERS_MESSAGES = process.requireManage('app/server/browsersMessages.js');
+var SocketController = openVeoApi.controllers.SocketController;
+var AdvancedEvent = openVeoApi.emitters.AdvancedEvent;
+
+/**
+ * Defines a BrowserSocketController to Handle messages sent by browsers through socket namespace.
+ *
+ * @class BrowserSocketController
+ * @extends SocketController
+ * @constructor
+ * @param {SocketNamespace} namespace The browser's namespace
+ * @see {@link https://github.com/veo-labs/openveo-api|OpenVeo API documentation} for more information about SocketNamespace
+ */
+function BrowserSocketController(namespace) {
+  BrowserSocketController.super_.call(this, namespace);
+
+  Object.defineProperties(this,
+
+    /** @lends module:manage/controllers/BrowserSocketController~BrowserSocketController */
+    {
+
+      /**
+       * The browsers' pilot.
+       *
+       * @type {module:manage/BrowserPilot~BrowserPilot}
+       * @instance
+       * @readonly
+       */
+      pilot: {value: BrowserPilot.get(this.emitter, this.namespace)}
+
+    }
+
+  );
+}
+
+module.exports = BrowserSocketController;
+util.inherits(BrowserSocketController, SocketController);
+
+/**
+ * Handles message informing about a browser requesting a device's name update.
+ *
+ * @param {Object} data Message's datas
+ * @param {String} data.id The manageable id
+ * @param {String} data.name The new manageable's name
+ * @param {String} data.type The manageable's type
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.updateNameAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.UPDATE_NAME, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      id: {type: 'string', required: true},
+      name: {type: 'string', required: true},
+      type: {type: 'string', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.UPDATE_NAME});
+    return callback({
+      error: ERRORS.UPDATE_NAME_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(
+    new AdvancedEvent(BROWSERS_MESSAGES.UPDATE_NAME, data.id, data.name, data.type, callback)
+  );
+};
+
+/**
+ * Handles message informing about a browser requesting a manageable's to be removed.
+ *
+ * @param {Object} data Message's datas
+ * @param {String} data.id The manageable id
+ * @param {String} data.type The manageable's type
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.removeAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.REMOVE, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      id: {type: 'string', required: true},
+      type: {type: 'string', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.REMOVE});
+    return callback({
+      error: ERRORS.REMOVE_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.REMOVE, data.id, data.type, callback));
+};
+
+/**
+ * Handles message informing about a browser requesting a manageable's historic to be removed.
+ *
+ * @param {Object} data Message's datas
+ * @param {String} data.id The manageable id
+ * @param {String} data.historicId The historic id
+ * @param {String} data.type The manageable's type
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.removeHistoricAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.REMOVE_HISTORIC, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      id: {type: 'string', required: true},
+      historicId: {type: 'string', required: true},
+      type: {type: 'string', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.REMOVE_HISTORIC});
+    return callback({
+      error: ERRORS.REMOVE_HISTORIC_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(
+    new AdvancedEvent(BROWSERS_MESSAGES.REMOVE_HISTORIC, data.id, data.historicId, data.type, callback)
+  );
+};
+
+/**
+ * Handles message informing about a browser requesting a schedule to be added to a manageable.
+ *
+ * @param {Object} data Message's datas
+ * @param {String} data.id The manageable id
+ * @param {Object} data.schedule The schedule
+ * @param {String} data.schedule.name The name of the record
+ * @param {(Date|String)} data.schedule.beginDate The begin date, can be either a date or a date literal
+ * @param {Number} data.schedule.duration The duration of the record (in ms)
+ * @param {String} data.schedule.preset The id of the record
+ * @param {(Date|String)} [data.schedule.endDate] The end date, can be either a date or a date literal
+ * @param {Boolean} [data.schedule.recurrent=false] true to execute the schedule every day
+ * @param {Object} data.type The manageable's type
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.addScheduleAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.ADD_SCHEDULE, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      id: {type: 'string', required: true},
+      schedule: {type: 'object', required: true},
+      type: {type: 'string', required: true}
+    });
+
+    // duration should be lesser than 24 hours
+    data.schedule = openVeoApi.util.shallowValidateObject(data.schedule, {
+      name: {type: 'string'},
+      beginDate: {type: 'date', required: true, gt: new Date()},
+      duration: {type: 'number', required: true, lt: 86400000},
+      preset: {type: 'string', required: true},
+      endDate: {type: 'date', gt: new Date(data.schedule.beginDate)},
+      recurrent: {type: 'string'}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.ADD_SCHEDULE});
+    return callback({
+      error: ERRORS.ADD_SCHEDULE_WRONG_PARAMETERS
+    });
+  }
+
+  // Transform timestamp into JavaScript Date objects
+  if (data.schedule.endDate) {
+    data.schedule.endDate = new Date(data.schedule.endDate);
+    data.schedule.endDate.setSeconds(0);
+  }
+
+  data.schedule.beginDate = new Date(data.schedule.beginDate);
+  data.schedule.beginDate.setSeconds(0);
+
+  this.emitter.emitEvent(
+    new AdvancedEvent(BROWSERS_MESSAGES.ADD_SCHEDULE, data.id, data.schedule, data.type, callback)
+  );
+};
+
+/**
+ * Handles message informing about a browser requesting a schedule to be removed from a manageable.
+ *
+ * @param {Object} data Message's datas
+ * @param {String} data.id The manageable id
+ * @param {String} data.scheduleId The schedule id
+ * @param {String} data.type The manageable's type
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.removeScheduleAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.REMOVE_SCHEDULE, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      id: {type: 'string', required: true},
+      scheduleId: {type: 'string', required: true},
+      type: {type: 'string', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.REMOVE_SCHEDULE});
+    return callback({
+      error: ERRORS.REMOVE_SCHEDULE_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(
+    new AdvancedEvent(BROWSERS_MESSAGES.REMOVE_SCHEDULE, data.id, data.scheduleId, data.type, callback)
+  );
+};
+
+/**
+ * Handles message informing about a browser requesting manageable's history to be purged.
+ *
+ * @param {Object} data Message's datas
+ * @param {String} data.id The manageable id
+ * @param {String} data.type The manageable's type
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.removeHistoryAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.REMOVE_HISTORY, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      id: {type: 'string', required: true},
+      type: {type: 'string', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.REMOVE_HISTORY});
+    return callback({
+      error: ERRORS.REMOVE_HISTORY_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.REMOVE_HISTORY, data.id, data.type, callback));
+};
+
+/**
+ * Handles message informing about a browser requesting the list of devices.
+ *
+ * @param {Null} data Nothing
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.getDevicesAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.GET_DEVICES);
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.GET_DEVICES, callback));
+};
+
+/**
+ * Handles message informing about a browser requesting one or several devices' settings.
+ *
+ * @param {Object} data Message's datas
+ * @param {Array} data.ids The list of devices ids which need settings information
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.getDeviceSettingsAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.GET_DEVICE_SETTINGS, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      ids: {type: 'array&lt;string>', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.GET_DEVICE_SETTINGS});
+    return callback({
+      error: ERRORS.GET_DEVICE_SETTINGS_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.GET_DEVICE_SETTINGS, data.ids, callback));
+};
+
+/**
+ * Handles message informing about a browser requesting a device state update.
+ *
+ * @param {Object} data Message's datas
+ * @param {String} data.id The device id
+ * @param {String} data.state The new device state
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.updateDeviceStateAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.UPDATE_DEVICE_STATE, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      id: {type: 'string', required: true},
+      state: {type: 'string', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.UPDATE_DEVICE_STATE});
+    return callback({
+      error: ERRORS.UPDATE_DEVICE_STATE_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(
+    new AdvancedEvent(BROWSERS_MESSAGES.UPDATE_DEVICE_STATE, data.id, data.state, callback)
+  );
+};
+
+/**
+ * Handles message informing about a browser requesting one or several devices to start a new recording session.
+ *
+ * @param {Object} data Message's datas
+ * @param {Array} data.ids The list of devices ids on which a new recording session must be started
+ * @param {String} [data.presetId] The id of the preset for the recording session
+ * @param {String} [data.name] The name of the recording session
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.startDeviceSessionAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.START_DEVICE_SESSION, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      ids: {type: 'array&lt;string>', required: true},
+      presetId: {type: 'string', required: true},
+      name: {type: 'string'}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.START_DEVICE_SESSION});
+    return callback({
+      error: ERRORS.START_DEVICE_SESSION_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(
+    new AdvancedEvent(BROWSERS_MESSAGES.START_DEVICE_SESSION, data.ids, data.presetId, data.name, callback)
+  );
+};
+
+/**
+ * Handles message informing about a browser requesting one or several devices to stop a recording session.
+ *
+ * @param {Object} data Message's datas
+ * @param {Array} data.ids The list of devices ids on which a new recording session must be stopped
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.stopDeviceSessionAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.STOP_DEVICE_SESSION, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      ids: {type: 'array&lt;string>', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.STOP_DEVICE_SESSION});
+    return callback({
+      error: ERRORS.STOP_DEVICE_SESSION_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.STOP_DEVICE_SESSION, data.ids, callback));
+};
+
+/**
+ * Handles message informing about a browser requesting one or several devices to tag their current recording sessions.
+ *
+ * @param {Object} data Message's datas
+ * @param {Array} data.ids The list of devices ids on which a current recording session must be tagged
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.indexDeviceSessionAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.INDEX_DEVICE_SESSION, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      ids: {type: 'array&lt;string>', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.INDEX_DEVICE_SESSION});
+    return callback({
+      error: ERRORS.INDEX_DEVICE_SESSION_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.INDEX_DEVICE_SESSION, data.ids, callback));
+};
+
+/**
+ * Handles message informing about a browser requesting the list of groups.
+ *
+ * @param {Null} data Nothing
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.getGroupsAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.GET_GROUPS);
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.GET_GROUPS, callback));
+};
+
+/**
+ * Handles message informing about a browser requesting the creation of a new group.
+ *
+ * @param {Null} data Nothing
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.createGroupAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.CREATE_GROUP);
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.CREATE_GROUP, callback));
+};
+
+/**
+ * Handles message informing about a browser requesting a device to be added to a group.
+ *
+ * @param {Object} data Message's datas
+ * @param {String} data.deviceId The device id
+ * @param {String} data.groupId The group id
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.addDeviceToGroupAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.ADD_DEVICE_TO_GROUP, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      deviceId: {type: 'string', required: true},
+      groupId: {type: 'string', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.ADD_DEVICE_TO_GROUP});
+    return callback({
+      error: ERRORS.ADD_DEVICE_TO_GROUP_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(
+    new AdvancedEvent(BROWSERS_MESSAGES.ADD_DEVICE_TO_GROUP, data.deviceId, data.groupId, callback)
+  );
+};
+
+/**
+ * Handles message informing about a browser requesting a device to be removed from its group.
+ *
+ * @param {Object} data Message's datas
+ * @param {String} data.id The id of the device
+ * @param {Socket} socket The opened socket
+ * @param {Function} callback The callback to respond to the browser
+ */
+BrowserSocketController.prototype.removeDeviceFromGroupAction = function(data, socket, callback) {
+  process.logger.debug('Browser says : ' + BROWSERS_MESSAGES.REMOVE_DEVICE_FROM_GROUP, {data: data});
+
+  // Validate data
+  try {
+    data = openVeoApi.util.shallowValidateObject(data, {
+      id: {type: 'string', required: true}
+    });
+  } catch (error) {
+    process.logger.warn(error.message, {error: error, event: BROWSERS_MESSAGES.REMOVE_DEVICE_FROM_GROUP});
+    return callback({
+      error: ERRORS.REMOVE_DEVICE_FROM_GROUP_WRONG_PARAMETERS
+    });
+  }
+
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.REMOVE_DEVICE_FROM_GROUP, data.id, callback));
+};
+
+/**
+ * Handles socket's connection.
+ *
+ * Socket's connection has been established with a browser.
+ *
+ * @param {Socket} socket The socket
+ */
+BrowserSocketController.prototype.connectAction = function(socket) {
+  process.logger.info('Browser connected', {socketId: socket.id});
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.CONNECTED, socket));
+};
+
+/**
+ * Handles socket's disconnection.
+ *
+ * Connection with a browser has been lost.
+ *
+ * @param {Socket} socket The socket
+ */
+BrowserSocketController.prototype.disconnectAction = function(socket) {
+  process.logger.info('Browser disconnected', {socketId: socket.id});
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.DISCONNECTED, socket));
+};
+
+/**
+ * Handles socket's connection errors.
+ *
+ * An error occurred on socket's communication.
+ *
+ * @param {Error} error The error
+ * @param {Socket} socket The socket
+ */
+BrowserSocketController.prototype.errorAction = function(error, socket) {
+  process.logger.error('Error in browser communication', {socketId: socket.id, error: error});
+  this.emitter.emitEvent(new AdvancedEvent(BROWSERS_MESSAGES.ERROR, error, socket));
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-manage_BrowserPilot.html">manage/BrowserPilot</a></li><li><a href="module-manage_browsersMessages.html">manage/browsersMessages</a></li><li><a href="module-manage_browsersPilotManager.html">manage/browsersPilotManager</a></li><li><a href="module-manage_controllers_BrowserSocketController.html">manage/controllers/BrowserSocketController</a></li><li><a href="module-manage_errors.html">manage/errors</a></li><li><a href="module-manage_manageables_Cache.html">manage/manageables/Cache</a></li><li><a href="module-manage_manageables_Device.html">manage/manageables/Device</a></li><li><a href="module-manage_manageables_Group.html">manage/manageables/Group</a></li><li><a href="module-manage_manageables_Manageable.html">manage/manageables/Manageable</a></li><li><a href="module-manage_ManagePlugin.html">manage/ManagePlugin</a></li><li><a href="module-manage_Manager.html">manage/Manager</a></li><li><a href="module-manage_providers_DeviceProvider.html">manage/providers/DeviceProvider</a></li><li><a href="module-manage_providers_GroupProvider.html">manage/providers/GroupProvider</a></li><li><a href="module-manage_providers_ManageableProvider.html">manage/providers/ManageableProvider</a></li><li><a href="module-manage_ScheduleManager.html">manage/ScheduleManager</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-manage_browsersMessages-BROWSERS_MESSAGES.html">manage/browsersMessages~BROWSERS_MESSAGES</a></li><li><a href="module-manage_errors-ERRORS.html">manage/errors~ERRORS</a></li></ul><h3>Classes</h3><ul><li><a href="module-manage_BrowserPilot-BrowserPilot.html">manage/BrowserPilot~BrowserPilot</a></li><li><a href="module-manage_controllers_BrowserSocketController-BrowserSocketController.html">manage/controllers/BrowserSocketController~BrowserSocketController</a></li><li><a href="module-manage_manageables_Cache-Cache.html">manage/manageables/Cache~Cache</a></li><li><a href="module-manage_manageables_Device-Device.html">manage/manageables/Device~Device</a></li><li><a href="module-manage_manageables_Group-Group.html">manage/manageables/Group~Group</a></li><li><a href="module-manage_manageables_Manageable-Manageable.html">manage/manageables/Manageable~Manageable</a></li><li><a href="module-manage_ManagePlugin-ManagePlugin.html">manage/ManagePlugin~ManagePlugin</a></li><li><a href="module-manage_Manager-Manager.html">manage/Manager~Manager</a></li><li><a href="module-manage_providers_DeviceProvider-DeviceProvider.html">manage/providers/DeviceProvider~DeviceProvider</a></li><li><a href="module-manage_providers_GroupProvider-GroupProvider.html">manage/providers/GroupProvider~GroupProvider</a></li><li><a href="module-manage_providers_ManageableProvider-ManageableProvider.html">manage/providers/ManageableProvider~ManageableProvider</a></li><li><a href="module-manage_ScheduleManager-ScheduleManager.html">manage/ScheduleManager~ScheduleManager</a></li></ul><h3>Events</h3><ul><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:ADD_DEVICE_TO_GROUP">manage/BrowserPilot~BrowserPilot#ADD_DEVICE_TO_GROUP</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:ADD_SCHEDULE">manage/BrowserPilot~BrowserPilot#ADD_SCHEDULE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:CREATE_GROUP">manage/BrowserPilot~BrowserPilot#CREATE_GROUP</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:ERROR">manage/BrowserPilot~BrowserPilot#ERROR</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:GET_DEVICES">manage/BrowserPilot~BrowserPilot#GET_DEVICES</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:GET_DEVICES_SETTINGS">manage/BrowserPilot~BrowserPilot#GET_DEVICES_SETTINGS</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:GET_GROUPS">manage/BrowserPilot~BrowserPilot#GET_GROUPS</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:INDEX_DEVICE_SESSION">manage/BrowserPilot~BrowserPilot#INDEX_DEVICE_SESSION</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE">manage/BrowserPilot~BrowserPilot#REMOVE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_DEVICE_FROM_GROUP">manage/BrowserPilot~BrowserPilot#REMOVE_DEVICE_FROM_GROUP</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_HISTORIC">manage/BrowserPilot~BrowserPilot#REMOVE_HISTORIC</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_HISTORY">manage/BrowserPilot~BrowserPilot#REMOVE_HISTORY</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_SCHEDULE">manage/BrowserPilot~BrowserPilot#REMOVE_SCHEDULE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:START_DEVICE_SESSION">manage/BrowserPilot~BrowserPilot#START_DEVICE_SESSION</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:STOP_DEVICE_SESSION">manage/BrowserPilot~BrowserPilot#STOP_DEVICE_SESSION</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:UPDATE_DEVICE_STATE">manage/BrowserPilot~BrowserPilot#UPDATE_DEVICE_STATE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:UPDATE_NAME">manage/BrowserPilot~BrowserPilot#UPDATE_NAME</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Dec 21 2021 15:21:16 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

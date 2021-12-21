@@ -1,0 +1,2256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: GroupProvider</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: GroupProvider</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-manage_providers_GroupProvider.html">manage/providers/GroupProvider</a>~</span>GroupProvider<span class="signature">(storage)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>GroupProvider</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="GroupProvider"><span class="type-signature"></span>new GroupProvider<span class="signature">(storage)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Defines a GroupProvider to interact with storage to manage groups' entities.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>storage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Storage</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The storage to use to store provider entities</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_GroupProvider.js.html">providers/GroupProvider.js</a>, <a href="providers_GroupProvider.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://github.com/veo-labs/openveo-api">OpenVeo API documentation</a> for more information about Storage</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="module-manage_providers_ManageableProvider-ManageableProvider.html">module:manage/providers/ManageableProvider~ManageableProvider</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(groups, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Adds groups.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>groups</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The list of groups to store with for each group:</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The group id, generated if not specified</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'MANAGE.GROUP.DEFAULT_NAME'
+                
+                </td>
+            
+
+            <td class="description last"><p>The group name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>history</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The group history messages</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-manage_providers_GroupProvider-GroupProvider.html#~addCallback">module:manage/providers/GroupProvider~GroupProvider~addCallback</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The function to call when it's
+done</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_GroupProvider.js.html">providers/GroupProvider.js</a>, <a href="providers_GroupProvider.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addHistoric"><span class="type-signature"></span>addHistoric<span class="signature">(id, historic, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Adds a new historic to manageable's history.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The manageable item id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>historic</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An historic description object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-manage_providers_ManageableProvider-ManageableProvider.html#~addHistoricCallback">module:manage/providers/ManageableProvider~ManageableProvider~addHistoricCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The function to
+call when it's done</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="module-manage_providers_ManageableProvider-ManageableProvider.html#addHistoric">module:manage/providers/ManageableProvider~ManageableProvider#addHistoric</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_ManageableProvider.js.html">providers/ManageableProvider.js</a>, <a href="providers_ManageableProvider.js.html#line105">line 105</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addSchedule"><span class="type-signature"></span>addSchedule<span class="signature">(id, schedule, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Adds a new schedule to manageable.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The manageable id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>schedule</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A schedule description object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-manage_providers_ManageableProvider-ManageableProvider.html#~addScheduleCallback">module:manage/providers/ManageableProvider~ManageableProvider~addScheduleCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The function to
+call when it's done</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="module-manage_providers_ManageableProvider-ManageableProvider.html#addSchedule">module:manage/providers/ManageableProvider~ManageableProvider#addSchedule</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_ManageableProvider.js.html">providers/ManageableProvider.js</a>, <a href="providers_ManageableProvider.js.html#line140">line 140</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createIndexes"><span class="type-signature"></span>createIndexes<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Creates groups indexes.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#callback">callback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to call when it's done</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_GroupProvider.js.html">providers/GroupProvider.js</a>, <a href="providers_GroupProvider.js.html#line78">line 78</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeHistoric"><span class="type-signature"></span>removeHistoric<span class="signature">(id, historicId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Removes an entry from a manageable's history.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The manageable id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>historicId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The historic id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-manage_providers_ManageableProvider-ManageableProvider.html#~removeHistoricCallback">module:manage/providers/ManageableProvider~ManageableProvider~removeHistoricCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The function
+to call when it's done</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="module-manage_providers_ManageableProvider-ManageableProvider.html#removeHistoric">module:manage/providers/ManageableProvider~ManageableProvider#removeHistoric</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_ManageableProvider.js.html">providers/ManageableProvider.js</a>, <a href="providers_ManageableProvider.js.html#line117">line 117</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeHistory"><span class="type-signature"></span>removeHistory<span class="signature">(id, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Removes an entry from a manageable's history.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The manageable id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-manage_providers_ManageableProvider-ManageableProvider.html#~removeHistoryCallback">module:manage/providers/ManageableProvider~ManageableProvider~removeHistoryCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The function
+to call when it's done</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="module-manage_providers_ManageableProvider-ManageableProvider.html#removeHistory">module:manage/providers/ManageableProvider~ManageableProvider#removeHistory</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_ManageableProvider.js.html">providers/ManageableProvider.js</a>, <a href="providers_ManageableProvider.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeSchedule"><span class="type-signature"></span>removeSchedule<span class="signature">(id, scheduleId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Removes a manageable's schedule.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The manageable id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scheduleId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The schedule id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-manage_providers_ManageableProvider-ManageableProvider.html#~removeScheduleCallback">module:manage/providers/ManageableProvider~ManageableProvider~removeScheduleCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The function
+to call when it's done</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="module-manage_providers_ManageableProvider-ManageableProvider.html#removeSchedule">module:manage/providers/ManageableProvider~ManageableProvider#removeSchedule</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_ManageableProvider.js.html">providers/ManageableProvider.js</a>, <a href="providers_ManageableProvider.js.html#line153">line 153</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateOne"><span class="type-signature"></span>updateOne<span class="signature">(filter<span class="signature-attributes">opt</span>, name<span class="signature-attributes">opt</span>, history<span class="signature-attributes">opt</span>, schedules<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Updates a group.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>filter</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ResourceFilter</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Rules to filter group to update</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The group name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>history</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The group history messages</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>schedules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The group schedules</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-manage_providers_GroupProvider-GroupProvider.html#~updateOneCallback">module:manage/providers/GroupProvider~GroupProvider~updateOneCallback</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The function to call when
+it's done</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_GroupProvider.js.html">providers/GroupProvider.js</a>, <a href="providers_GroupProvider.js.html#line64">line 64</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+
+    
+
+    
+    <h4 class="name" id="~addCallback"><span class="type-signature"></span>addCallback<span class="signature">(error, total, groups)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The error if an error occurred, null otherwise</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>total</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The total amount of groups inserted</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>groups</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The list of added groups</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_GroupProvider.js.html">providers/GroupProvider.js</a>, <a href="providers_GroupProvider.js.html#line89">line 89</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+                
+
+    
+
+    
+    <h4 class="name" id="~updateOneCallback"><span class="type-signature"></span>updateOneCallback<span class="signature">(error, total)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The error if an error occurred, null otherwise</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>total</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>1 if everything went fine</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="providers_GroupProvider.js.html">providers/GroupProvider.js</a>, <a href="providers_GroupProvider.js.html#line96">line 96</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-manage_BrowserPilot.html">manage/BrowserPilot</a></li><li><a href="module-manage_browsersMessages.html">manage/browsersMessages</a></li><li><a href="module-manage_browsersPilotManager.html">manage/browsersPilotManager</a></li><li><a href="module-manage_controllers_BrowserSocketController.html">manage/controllers/BrowserSocketController</a></li><li><a href="module-manage_errors.html">manage/errors</a></li><li><a href="module-manage_manageables_Cache.html">manage/manageables/Cache</a></li><li><a href="module-manage_manageables_Device.html">manage/manageables/Device</a></li><li><a href="module-manage_manageables_Group.html">manage/manageables/Group</a></li><li><a href="module-manage_manageables_Manageable.html">manage/manageables/Manageable</a></li><li><a href="module-manage_ManagePlugin.html">manage/ManagePlugin</a></li><li><a href="module-manage_Manager.html">manage/Manager</a></li><li><a href="module-manage_providers_DeviceProvider.html">manage/providers/DeviceProvider</a></li><li><a href="module-manage_providers_GroupProvider.html">manage/providers/GroupProvider</a></li><li><a href="module-manage_providers_ManageableProvider.html">manage/providers/ManageableProvider</a></li><li><a href="module-manage_ScheduleManager.html">manage/ScheduleManager</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-manage_browsersMessages-BROWSERS_MESSAGES.html">manage/browsersMessages~BROWSERS_MESSAGES</a></li><li><a href="module-manage_errors-ERRORS.html">manage/errors~ERRORS</a></li></ul><h3>Classes</h3><ul><li><a href="module-manage_BrowserPilot-BrowserPilot.html">manage/BrowserPilot~BrowserPilot</a></li><li><a href="module-manage_controllers_BrowserSocketController-BrowserSocketController.html">manage/controllers/BrowserSocketController~BrowserSocketController</a></li><li><a href="module-manage_manageables_Cache-Cache.html">manage/manageables/Cache~Cache</a></li><li><a href="module-manage_manageables_Device-Device.html">manage/manageables/Device~Device</a></li><li><a href="module-manage_manageables_Group-Group.html">manage/manageables/Group~Group</a></li><li><a href="module-manage_manageables_Manageable-Manageable.html">manage/manageables/Manageable~Manageable</a></li><li><a href="module-manage_ManagePlugin-ManagePlugin.html">manage/ManagePlugin~ManagePlugin</a></li><li><a href="module-manage_Manager-Manager.html">manage/Manager~Manager</a></li><li><a href="module-manage_providers_DeviceProvider-DeviceProvider.html">manage/providers/DeviceProvider~DeviceProvider</a></li><li><a href="module-manage_providers_GroupProvider-GroupProvider.html">manage/providers/GroupProvider~GroupProvider</a></li><li><a href="module-manage_providers_ManageableProvider-ManageableProvider.html">manage/providers/ManageableProvider~ManageableProvider</a></li><li><a href="module-manage_ScheduleManager-ScheduleManager.html">manage/ScheduleManager~ScheduleManager</a></li></ul><h3>Events</h3><ul><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:ADD_DEVICE_TO_GROUP">manage/BrowserPilot~BrowserPilot#ADD_DEVICE_TO_GROUP</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:ADD_SCHEDULE">manage/BrowserPilot~BrowserPilot#ADD_SCHEDULE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:CREATE_GROUP">manage/BrowserPilot~BrowserPilot#CREATE_GROUP</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:ERROR">manage/BrowserPilot~BrowserPilot#ERROR</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:GET_DEVICES">manage/BrowserPilot~BrowserPilot#GET_DEVICES</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:GET_DEVICES_SETTINGS">manage/BrowserPilot~BrowserPilot#GET_DEVICES_SETTINGS</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:GET_GROUPS">manage/BrowserPilot~BrowserPilot#GET_GROUPS</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:INDEX_DEVICE_SESSION">manage/BrowserPilot~BrowserPilot#INDEX_DEVICE_SESSION</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE">manage/BrowserPilot~BrowserPilot#REMOVE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_DEVICE_FROM_GROUP">manage/BrowserPilot~BrowserPilot#REMOVE_DEVICE_FROM_GROUP</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_HISTORIC">manage/BrowserPilot~BrowserPilot#REMOVE_HISTORIC</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_HISTORY">manage/BrowserPilot~BrowserPilot#REMOVE_HISTORY</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_SCHEDULE">manage/BrowserPilot~BrowserPilot#REMOVE_SCHEDULE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:START_DEVICE_SESSION">manage/BrowserPilot~BrowserPilot#START_DEVICE_SESSION</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:STOP_DEVICE_SESSION">manage/BrowserPilot~BrowserPilot#STOP_DEVICE_SESSION</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:UPDATE_DEVICE_STATE">manage/BrowserPilot~BrowserPilot#UPDATE_DEVICE_STATE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:UPDATE_NAME">manage/BrowserPilot~BrowserPilot#UPDATE_NAME</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Dec 21 2021 15:21:17 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
