@@ -1,3 +1,9 @@
+# 6.0.1 / YYYY-MM-DD
+
+## BUG FIXES
+
+- Fix scrollbar which wasn't always working in "Action", "Detail" and "History" tabs of the control panel. This issue first appeared in version 4.0.0.
+
 # 6.0.0 / 2021-11-19
 
 ## BREAKING CHANGES

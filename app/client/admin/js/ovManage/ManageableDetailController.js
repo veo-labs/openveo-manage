@@ -220,16 +220,6 @@
       $timeout(function() {
         $scope.setActivePage(0);
       }, 350);
-
-      // Destroy scrollbars
-      if (self.actionScrollbar) {
-        self.actionScrollbar.destroy();
-        self.detailScrollbar.destroy();
-        self.historyScrollbar.destroy();
-        self.actionScrollbar = null;
-        self.detailScrollbar = null;
-        self.historyScrollbar = null;
-      }
     };
 
     /**
