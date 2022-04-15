@@ -1454,6 +1454,11 @@ Manager.prototype.removeGroup = function(id, callback) {
       // Remove device group from cache
       device.group = null;
 
+      addDeviceHistoric.call(self, device, 'MANAGE.HISTORY.REMOVE_DEVICE_FROM_GROUP', {
+        name: device.name,
+        groupName: group.name
+      });
+
       self.deviceProvider.updateOne(new ResourceFilter().equal('id', device.id), {group: null}, callback);
     });
   });

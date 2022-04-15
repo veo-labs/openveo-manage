@@ -1,3 +1,9 @@
+# 6.1.0 / YYYY-MM-DD
+
+## NEW FEATURES
+
+- Add a new message to the historic of all devices in a group when the group is removed
+
 # 6.0.1 / 2021-12-21
 
 ## BUG FIXES
