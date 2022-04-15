@@ -3,6 +3,7 @@
 ## NEW FEATURES
 
 - Add a new message to the historic of all devices in a group when the group is removed
+- Add a new message to group historic when a device belonging to the group is removed
 
 # 6.0.1 / 2021-12-21
 

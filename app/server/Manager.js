@@ -1401,6 +1401,7 @@ Manager.prototype.removeDevice = function(id, callback) {
   });
 
   if (device.group) {
+    var group = this.cache.get(device.group);
     var devicesInTheGroup = self.cache.getManageablesByProperty('group', device.group);
 
     if (devicesInTheGroup.length === 1) {
@@ -1411,6 +1412,11 @@ Manager.prototype.removeDevice = function(id, callback) {
         self.removeGroup(device.group, callback);
       });
 
+    } else {
+      addGroupHistoric.call(self, group, 'MANAGE.HISTORY.REMOVE_DEVICE_FROM_GROUP', {
+        name: device.name,
+        groupName: group.name
+      });
     }
   }
 
