@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: providers/DeviceProvider.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: providers/DeviceProvider.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+/**
+ * @module manage/providers/DeviceProvider
+ */
+
+var util = require('util');
+var nanoid = require('nanoid').nanoid;
+var ManageableProvider = process.requireManage('app/server/providers/ManageableProvider.js');
+
+var STATES = {
+  ACCEPTED: 'accepted',
+  PENDING: 'pending',
+  REFUSED: 'refused'
+};
+Object.freeze(STATES);
+
+/**
+ * Defines a DeviceProvider to interact with storage to manage devices' entities.
+ *
+ * @class DeviceProvider
+ * @extends module:manage/providers/ManageableProvider~ManageableProvider
+ * @constructor
+ * @param {Storage} storage The storage to use to store provider entities
+ * @see {@link https://github.com/veo-labs/openveo-api|OpenVeo API documentation} for more information about Storage
+ */
+function DeviceProvider(storage) {
+  DeviceProvider.super_.call(this, storage, 'manage_devices');
+
+  Object.defineProperties(this,
+
+    /** @lends module:manage/providers/DeviceProvider~DeviceProvider */
+    {
+
+      /**
+       * The list of devices' states.
+       *
+       * @type {Object}
+       * @instance
+       * @readonly
+       */
+      STATES: {value: STATES},
+
+      /**
+       * The list of devices' available states.
+       *
+       * @type {Array}
+       * @instance
+       * @readonly
+       */
+      AVAILABLE_STATES: {value: [
+        STATES.ACCEPTED,
+        STATES.PENDING,
+        STATES.REFUSED
+      ]}
+
+    }
+
+  );
+}
+
+module.exports = DeviceProvider;
+util.inherits(DeviceProvider, ManageableProvider);
+
+/**
+ * Adds devices.
+ *
+ * @param {Array} devices The list of devices to store with for each device:
+ * @param {String} [devices[].id] The device id, generated if not specified
+ * @param {String} [devices[].name] The device name
+ * @param {String} [devices[].state] The device default state
+ * @param {module:manage/providers/DeviceProvider~DeviceProvider~addCallback} [callback] The function to call when it's
+ * done
+ */
+DeviceProvider.prototype.add = function(devices, callback) {
+  var devicesToAdd = [];
+
+  for (var i = 0; i &lt; devices.length; i++) {
+    var device = devices[i];
+
+    if (!device.state)
+      device.state = this.STATES.PENDING;
+    else if (this.AVAILABLE_STATES.indexOf(device.state) &lt; 0)
+      return this.executeCallback(callback, new Error('Invalid device state ' + device.state));
+
+    devicesToAdd.push({
+      id: device.id || nanoid(),
+      name: '',
+      state: device.state,
+      history: [],
+      schedules: []
+    });
+  }
+
+  DeviceProvider.super_.prototype.add.call(this, devicesToAdd, callback);
+};
+
+/**
+ * Updates a device.
+ *
+ * @param {ResourceFilter} [filter] Rules to filter device to update
+ * @param {String} [filter.name] The device name
+ * @param {String} [filter.state] The device default state
+ * @param {Array} [filter.history] The device history messages
+ * @param {Array} [filter.schedules] The device schedules
+ * @param {String} [filter.group] The device associated group
+ * @param {module:manage/providers/DeviceProvider~DeviceProvider~updateOneCallback} [callback] The function to call
+ * when it's done
+ */
+DeviceProvider.prototype.updateOne = function(filter, data, callback) {
+  var modifications = {};
+  if (data.name) modifications.name = data.name;
+  if (data.state &amp;&amp; this.AVAILABLE_STATES.indexOf(data.state) >= 0) modifications.state = data.state;
+  if (data.history) modifications.history = data.history;
+  if (data.schedules) modifications.schedules = data.schedules;
+  if (Object.prototype.hasOwnProperty.call(data, 'group')) modifications.group = data.group;
+
+  DeviceProvider.super_.prototype.updateOne.call(this, filter, modifications, callback);
+};
+
+/**
+ * Creates devices indexes.
+ *
+ * @param {callback} callback Function to call when it's done
+ */
+DeviceProvider.prototype.createIndexes = function(callback) {
+  this.storage.createIndexes(this.location, [
+    {key: {id: 1}, name: 'byId'}
+  ], function(error, result) {
+    if (result &amp;&amp; result.note)
+      process.logger.debug('Create devices indexes : ' + result.note);
+
+    callback(error);
+  });
+};
+
+/**
+ * @callback module:manage/providers/DeviceProvider~DeviceProvider~addCallback
+ * @param {(Error|null)} error The error if an error occurred, null otherwise
+ * @param {Number} total The total amount of devices inserted
+ * @param {Array} devices The list of added devices
+ */
+
+/**
+ * @callback module:manage/providers/DeviceProvider~DeviceProvider~updateOneCallback
+ * @param {(Error|null)} error The error if an error occurred, null otherwise
+ * @param {Number} total 1 if everything went fine
+ */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-manage_BrowserPilot.html">manage/BrowserPilot</a></li><li><a href="module-manage_browsersMessages.html">manage/browsersMessages</a></li><li><a href="module-manage_browsersPilotManager.html">manage/browsersPilotManager</a></li><li><a href="module-manage_controllers_BrowserSocketController.html">manage/controllers/BrowserSocketController</a></li><li><a href="module-manage_errors.html">manage/errors</a></li><li><a href="module-manage_manageables_Cache.html">manage/manageables/Cache</a></li><li><a href="module-manage_manageables_Device.html">manage/manageables/Device</a></li><li><a href="module-manage_manageables_Group.html">manage/manageables/Group</a></li><li><a href="module-manage_manageables_Manageable.html">manage/manageables/Manageable</a></li><li><a href="module-manage_ManagePlugin.html">manage/ManagePlugin</a></li><li><a href="module-manage_Manager.html">manage/Manager</a></li><li><a href="module-manage_providers_DeviceProvider.html">manage/providers/DeviceProvider</a></li><li><a href="module-manage_providers_GroupProvider.html">manage/providers/GroupProvider</a></li><li><a href="module-manage_providers_ManageableProvider.html">manage/providers/ManageableProvider</a></li><li><a href="module-manage_ScheduleManager.html">manage/ScheduleManager</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-manage_browsersMessages-BROWSERS_MESSAGES.html">manage/browsersMessages~BROWSERS_MESSAGES</a></li><li><a href="module-manage_errors-ERRORS.html">manage/errors~ERRORS</a></li></ul><h3>Classes</h3><ul><li><a href="module-manage_BrowserPilot-BrowserPilot.html">manage/BrowserPilot~BrowserPilot</a></li><li><a href="module-manage_controllers_BrowserSocketController-BrowserSocketController.html">manage/controllers/BrowserSocketController~BrowserSocketController</a></li><li><a href="module-manage_manageables_Cache-Cache.html">manage/manageables/Cache~Cache</a></li><li><a href="module-manage_manageables_Device-Device.html">manage/manageables/Device~Device</a></li><li><a href="module-manage_manageables_Group-Group.html">manage/manageables/Group~Group</a></li><li><a href="module-manage_manageables_Manageable-Manageable.html">manage/manageables/Manageable~Manageable</a></li><li><a href="module-manage_ManagePlugin-ManagePlugin.html">manage/ManagePlugin~ManagePlugin</a></li><li><a href="module-manage_Manager-Manager.html">manage/Manager~Manager</a></li><li><a href="module-manage_providers_DeviceProvider-DeviceProvider.html">manage/providers/DeviceProvider~DeviceProvider</a></li><li><a href="module-manage_providers_GroupProvider-GroupProvider.html">manage/providers/GroupProvider~GroupProvider</a></li><li><a href="module-manage_providers_ManageableProvider-ManageableProvider.html">manage/providers/ManageableProvider~ManageableProvider</a></li><li><a href="module-manage_ScheduleManager-ScheduleManager.html">manage/ScheduleManager~ScheduleManager</a></li></ul><h3>Events</h3><ul><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:ADD_DEVICE_TO_GROUP">manage/BrowserPilot~BrowserPilot#ADD_DEVICE_TO_GROUP</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:ADD_SCHEDULE">manage/BrowserPilot~BrowserPilot#ADD_SCHEDULE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:CREATE_GROUP">manage/BrowserPilot~BrowserPilot#CREATE_GROUP</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:ERROR">manage/BrowserPilot~BrowserPilot#ERROR</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:GET_DEVICES">manage/BrowserPilot~BrowserPilot#GET_DEVICES</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:GET_DEVICES_SETTINGS">manage/BrowserPilot~BrowserPilot#GET_DEVICES_SETTINGS</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:GET_GROUPS">manage/BrowserPilot~BrowserPilot#GET_GROUPS</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:INDEX_DEVICE_SESSION">manage/BrowserPilot~BrowserPilot#INDEX_DEVICE_SESSION</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE">manage/BrowserPilot~BrowserPilot#REMOVE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_DEVICE_FROM_GROUP">manage/BrowserPilot~BrowserPilot#REMOVE_DEVICE_FROM_GROUP</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_HISTORIC">manage/BrowserPilot~BrowserPilot#REMOVE_HISTORIC</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_HISTORY">manage/BrowserPilot~BrowserPilot#REMOVE_HISTORY</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:REMOVE_SCHEDULE">manage/BrowserPilot~BrowserPilot#REMOVE_SCHEDULE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:START_DEVICE_SESSION">manage/BrowserPilot~BrowserPilot#START_DEVICE_SESSION</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:STOP_DEVICE_SESSION">manage/BrowserPilot~BrowserPilot#STOP_DEVICE_SESSION</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:UPDATE_DEVICE_STATE">manage/BrowserPilot~BrowserPilot#UPDATE_DEVICE_STATE</a></li><li><a href="module-manage_BrowserPilot-BrowserPilot.html#event:UPDATE_NAME">manage/BrowserPilot~BrowserPilot#UPDATE_NAME</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Apr 19 2022 09:38:30 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
